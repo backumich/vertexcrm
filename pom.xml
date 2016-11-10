@@ -7,10 +7,14 @@
     <groupId>com.vertex</groupId>
     <artifactId>vertexcrm</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
 
     <modules>
         <module>utils</module>
         <module>web</module>
     </modules>
+
+
 
 </project>
