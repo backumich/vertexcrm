@@ -4,6 +4,8 @@
     <title>$Title$</title>
 </head>
 <body>
+<p><a href="registration.jsp">Registration</a></p>
+
 $END$
 </body>
 </html>
