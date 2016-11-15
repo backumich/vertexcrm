@@ -8,14 +8,14 @@ public class MySQLDataSourse {
 
     private DataSource dataSource = new MysqlDataSource();
 
-    public MySQLDataSourse(String url,String user, String password) {
-        ((MysqlDataSource)dataSource).setURL(url);
-        ((MysqlDataSource)dataSource).setUser(user);
-        ((MysqlDataSource)dataSource).setPassword(password);
+    public MySQLDataSourse(String url, String user, String password) {
+        ((MysqlDataSource) dataSource).setURL(url);
+        ((MysqlDataSource) dataSource).setUser(user);
+        ((MysqlDataSource) dataSource).setPassword(password);
     }
-    
-    
-@SuppressWarnings("unused")
+
+
+    @SuppressWarnings("unused")
     public DataSource getDataSource() {
         return dataSource;
     }
