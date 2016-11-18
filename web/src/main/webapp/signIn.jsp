@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
 
-    <title>Vertex CRM</title>
+    <title>Sign In</title>
     <meta name="keywords" content=""/>
     <meta name="description" content=""/>
     <!--[if lt IE 9]>
@@ -22,15 +22,19 @@
         <div class="registration">
             <div id="registration-form">
                 <div class="reg-form">
-                    <h3><span></span>Welcome to Vertex CRM</h3>
-                    <br>
+                    <h3><span></span>Sign In</h3>
 
                     <div class="errorSummary">
                     </div>
+                    <p><label>E-mail <span></span></label><input type="text" value="" id="reg_email"></p>
 
-                    <h3><a href="registration.jsp">Sign up</a></h3>
-                    <h3><a href="signIn.jsp">Sign in</a></h3>
+                    <p><label>Password <span></span></label><input type="password" value="" maxlength="32"
+                                                                   id="reg_password"></p>
 
+                    <div id="btRegistration" class="row-button">
+                        <input type="button" value="Sign In"></div>
+
+                    <br>
                 </div>
             </div>
         </div>
