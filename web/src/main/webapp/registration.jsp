@@ -13,43 +13,44 @@
 
     <script src="js/index.js"></script>
     <link rel="stylesheet" type="text/css" href="css/registration.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="css/registration.css"/>-->
 </head>
 
 <body>
 
 <div class="wrapper">
-    <main class="content">
-        <div class="registration">
-            <div id="registration-form">
-                <div class="reg-form">
-                    <h3><span></span>Create User Account</h3>
+   <main class="content">
+       <div class="registration">
+           <div id="registration-form">
+               <div class="reg-form">
+                   <h3><span></span>Create User Account</h3>
 
-                    <div class="errorSummary">
-                    </div>
-                    <p><label>E-mail <span>*</span></label><input type="text" value="" id="reg_email"></p>
+                   <div class="errorSummary">
+                   </div>
+                   <p><label>E-mail <span>*</span></label><input type="text" value="" id="reg_email"></p>
 
-                    <p><label>Password <span>*</span></label><input type="password" value="" maxlength="32"
-                                                                    id="reg_password"></p>
+                   <p><label>Password <span>*</span></label><input type="password" value="" maxlength="32"
+                                                                   id="reg_password"></p>
 
-                    <p><label>Confirm password<span>*</span></label><input type="password" id="verifyPassword"></p>
+                   <p><label>Confirm password<span>*</span></label><input type="password" id="verifyPassword"></p>
 
-                    <p><label>First name <span>*</span></label><input type="text" id="firstName" maxlength="255"
-                                                                      size="60"></p>
-
-                    <p><label>Last name <span>*</span></label><input type="text" id="lastName" maxlength="255"
+                   <p><label>First name <span>*</span></label><input type="text" id="firstName" maxlength="255"
                                                                      size="60"></p>
 
-                    <p><label>Phone <span></span></label><input type="text" value="" id="phone" maxlength="255"
-                                                                 size="60"></p>
+                   <p><label>Last name <span>*</span></label><input type="text" id="lastName" maxlength="255"
+                                                                    size="60"></p>
 
-                    <div id="btRegistration" class="row-button">
-                        <input type="button" value="Sign Up"></div>
+                   <p><label>Phone <span></span></label><input type="text" value="" id="phone" maxlength="255"
+                                                                size="60"></p>
 
-                    <br>
-                </div>
-            </div>
-        </div>
-    </main>
+                   <div id="btRegistration" class="row-button">
+                       <input type="button" value="Sign Up"></div>
+
+                   <br>
+               </div>
+           </div>
+       </div>
+   </main>
 </div>
 <!-- .wrapper -->
 
