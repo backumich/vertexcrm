@@ -146,7 +146,6 @@ public class User {
         return result;
     }
 
-
     @Override
     public String toString() {
         return "User{" +
