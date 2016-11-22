@@ -2,10 +2,11 @@ package ua.com.vertex.context;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.*;
+import ua.com.vertex.dao.CertificateDaoInf;
+import ua.com.vertex.dao.impl.Certificate;
+import ua.com.vertex.dao.impl.CertificateDaoRealization;
 
 import javax.sql.DataSource;
 
@@ -25,6 +26,14 @@ public class MainContext {
 
     @Value("${password}")
     String password;
+
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext(MainContext.class);
+        CertificateDaoInf certificateDaoInf =  ctx.getBean(CertificateDaoRealization.class);
+        Certificate test = certificateDaoInf.getCertificateById(2);
+        System.out.println(test);
+        certificateDaoInf.getAllCertificateByUserId(1).forEach(System.out::println);
+    }
 
     @Bean
     public DataSource dataSource() {
