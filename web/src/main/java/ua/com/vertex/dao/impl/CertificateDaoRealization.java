@@ -2,7 +2,6 @@ package ua.com.vertex.dao.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,8 +20,9 @@ public class CertificateDaoRealization implements CertificateDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Qualifier("dataSource")
-    public void setJdbcTemplate(DataSource dataSource) {
+    //todo: you should name method as setDataSource to avoid qualifier.
+//    @Qualifier("dataSource")
+    public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 

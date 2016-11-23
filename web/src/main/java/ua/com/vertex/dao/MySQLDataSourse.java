@@ -4,6 +4,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import javax.sql.DataSource;
 
+//todo: please delete this class!
 public class MySQLDataSourse {
 
     private DataSource dataSource = new MysqlDataSource();

@@ -8,7 +8,7 @@ import java.util.List;
 public interface CertificateDaoInf {
 
     Certificate getCertificateById(int certificateId);
-    List<Certificate> getAllCertificateByUserId(int userId);
 
+    List<Certificate> getAllCertificateByUserId(int userId);
 
 }

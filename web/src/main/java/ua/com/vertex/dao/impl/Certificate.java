@@ -3,16 +3,23 @@ package ua.com.vertex.dao.impl;
 
 import java.time.LocalDate;
 
+//todo: please place this class to special package
 public class Certificate {
+
+//    todo: Shouldn't user have certificate Id and certificate shouldn't know it's user?
     private int certificationId;
     private int userId;
     private LocalDate certificationDate;
     private String courseName;
     private String language;
 
+    //todo: design it please as a plane java bean: 1. public constructor without parameters, 2. getters-setters for fields
+    // todo: 3. private fields
+    // todo: you can keep builder
     private Certificate() {
     }
 
+    // todo: synchronized probably could be skipped
     @SuppressWarnings("WeakerAccess")
     public synchronized int getCertificationId() {
         return certificationId;
