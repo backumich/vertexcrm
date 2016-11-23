@@ -6,8 +6,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.CertificateDaoInf;
-
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +20,6 @@ public class CertificateDaoRealization implements CertificateDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    //todo: you should name method as setDataSource to avoid qualifier.
-//    @Qualifier("dataSource")
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
@@ -46,7 +44,6 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Certificate.Builder()
                     .setCertificationId(resultSet.getInt("certification_id"))
-                    .setUserId(resultSet.getInt("user_id"))
                     .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
                     .setCourseName(resultSet.getString("course_name"))
                     .setLanguage(resultSet.getString("language"))
