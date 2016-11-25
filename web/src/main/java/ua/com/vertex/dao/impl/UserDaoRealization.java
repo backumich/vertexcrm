@@ -59,5 +59,6 @@ public class UserDaoRealization implements UserDaoInf {
         UserDaoInf dao = context.getBean(UserDaoRealization.class);
         User user = dao.getUser(12);
         System.out.println(user);
+
     }
 }
