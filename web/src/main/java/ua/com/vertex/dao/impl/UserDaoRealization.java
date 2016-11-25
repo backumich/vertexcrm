@@ -1,11 +1,14 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.context.MainContext;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -37,16 +40,24 @@ public class UserDaoRealization implements UserDaoInf {
 
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder().
-                    setUserId(resultSet.getLong("user_id")).
-                    setEmail(resultSet.getString("email")).
-                    setPassword(resultSet.getString("password")).
-                    setFirstName(resultSet.getString("first_name")).
-                    setLastName(resultSet.getString("last_name")).
-                    setPassportScan(resultSet.getBlob("passport_scan")).
-                    setPhoto(resultSet.getBlob("photo")).
-                    setDiscount(resultSet.getInt("discount")).
-                    setPhone(resultSet.getString("phone")).getInstance();
+            return new User.Builder()
+                    .setUserId(resultSet.getInt("user_id"))
+                    .setEmail(resultSet.getString("email"))
+                    .setPassword(resultSet.getString("password"))
+                    .setFirstName(resultSet.getString("first_name"))
+                    .setLastName(resultSet.getString("last_name"))
+                    .setPassportScan(resultSet.getBlob("passport_scan"))
+                    .setPhoto(resultSet.getBlob("photo"))
+                    .setDiscount(resultSet.getInt("discount"))
+                    .setPhone(resultSet.getString("phone"))
+                    .getInstance();
         }
+    }
+
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
+        UserDaoInf dao = context.getBean(UserDaoRealization.class);
+        User user = dao.getUser(12);
+        System.out.println(user);
     }
 }
