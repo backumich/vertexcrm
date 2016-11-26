@@ -11,6 +11,7 @@ import ua.com.vertex.dao.UserDaoInf;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class UserDaoRealization implements UserDaoInf {
@@ -33,6 +34,12 @@ public class UserDaoRealization implements UserDaoInf {
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
         jdbcTemplate.update(query, new MapSqlParameterSource("id", id));
+    }
+
+    @Override
+    public List<Integer> getAllUserIds() {
+        String query = "SELECT user_id FROM Users order by user_id";
+        return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
