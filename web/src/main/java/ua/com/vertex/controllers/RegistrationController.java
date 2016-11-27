@@ -8,8 +8,7 @@ import ua.com.vertex.models.User;
 
 @Controller
 public class RegistrationController {
-    @Autowired
-    MySQLDataSource mySQLDataSource;
+
 
     //@RequestMapping("/registration") // Обрабатывать запросы на получение главной страницы
     @RequestMapping(value = "/RegistrationUser", method = RequestMethod.POST)
@@ -32,7 +31,8 @@ public class RegistrationController {
                 .setPhone(phone)
                 .build();
 
-        MySQLDataSource mySQLDataSource = new MySQLDataSource();
+
+        MySQLDataSource mySQLDataSource = new MySQLDataSource("jdbc:mysql://seadev.tk:3306/db1", "user1", "111");
         mySQLDataSource.addUser(user);
 
         return "home";
