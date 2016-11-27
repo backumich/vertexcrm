@@ -6,7 +6,7 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.CertificateDaoInf;
 import ua.com.vertex.dao.UserDaoInf;
-import ua.com.vertex.logic.interfaces.UnregisteredPageLogic;
+import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Service
-public class UnregisteredPageLogicImpl implements UnregisteredPageLogic {
+public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     private UserDaoInf userDao;
     private CertificateDaoInf certificateDao;
 
