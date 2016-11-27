@@ -30,7 +30,7 @@
 
                     <h3><a href="registration.jsp">Sign up</a></h3>
                     <h3><a href="signIn.jsp">Sign in</a></h3>
-                    <h3><a href="unregistered.jsp">For unregistered users</a></h3>
+                    <h3><a href="certificateDetails.jsp">For unregistered users</a></h3>
 
                 </div>
             </div>

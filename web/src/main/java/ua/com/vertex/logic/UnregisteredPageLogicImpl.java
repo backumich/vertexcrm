@@ -47,7 +47,7 @@ public class UnregisteredPageLogicImpl implements UnregisteredPageLogic {
         try (PrintWriter writer = resp.getWriter()) {
             if (certificateID == -1) {
                 writer.print("<h2>Incorrect User ID! </h2>");
-                writer.print("<h2><a href=\"/unregistered.jsp\">Try again!<a/></h2>");
+                writer.print("<h2><a href=\"/certificateDetails.jsp\">Try again!<a/></h2>");
             } else {
                 try {
                     cert = certificateDao.getCertificateById(certificateID);
@@ -58,7 +58,7 @@ public class UnregisteredPageLogicImpl implements UnregisteredPageLogic {
 
                 if (cert == null) {
                     writer.print("<h2>Incorrect User ID! </h2>");
-                    writer.print("<h2><a href=\"/unregistered.jsp\">Try again!<a/></h2>");
+                    writer.print("<h2><a href=\"/certificateDetails.jsp\">Try again!<a/></h2>");
                 } else {
                     writer.print("<h1>Certificate Details:</h1>");
                     writer.printf("<h2>Certification ID: %05d<br>" +

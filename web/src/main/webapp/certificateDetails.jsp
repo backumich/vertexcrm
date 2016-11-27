@@ -30,7 +30,7 @@
 <body>
 
 <div>
-    <form method="get" action="${pageContext.request.contextPath}/unregistered">
+    <form method="get" action="${pageContext.request.contextPath}/certificateDetails">
         <div class="block1">
             <h2>Enter certificate ID:</h2>
             <input type="text" name="certificationId">

@@ -18,7 +18,7 @@ public class CertificateDetailsPageController {
         this.logic = logic;
     }
 
-    @RequestMapping(value = "/unregistered")
+    @RequestMapping(value = "/certificateDetails")
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         logic.getCertificateDetails(req, resp);
     }
