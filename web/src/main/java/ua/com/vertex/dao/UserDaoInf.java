@@ -3,6 +3,8 @@ package ua.com.vertex.dao;
 
 import ua.com.vertex.beans.User;
 
+import java.util.List;
+
 public interface UserDaoInf {
 
     @SuppressWarnings("unused")
@@ -10,4 +12,6 @@ public interface UserDaoInf {
 
     @SuppressWarnings("unused")
     void deleteUser(long id);
+
+    List<Integer> getAllUserIds();
 }
