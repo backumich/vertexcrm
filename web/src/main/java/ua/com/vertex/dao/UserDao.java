@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainContext;
-import ua.com.vertex.dao.impl.UserDaoRealization;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -131,6 +130,11 @@ public class UserDao implements UserDaoInf {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    @Override
+    public List<Integer> getAllUserIds() {
+        return null;
     }
 
     public void addUser(User user) {
