@@ -1,5 +1,7 @@
 package ua.com.vertex.beans;
 
+import ua.com.vertex.logic.ImageManager;
+
 import java.io.File;
 import java.sql.Blob;
 import java.util.Objects;

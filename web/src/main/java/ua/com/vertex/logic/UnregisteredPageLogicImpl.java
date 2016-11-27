@@ -1,7 +1,7 @@
 package ua.com.vertex.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.CertificateDaoInf;
@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@Component
-@SuppressWarnings("Duplicates")
+@Service
 public class UnregisteredPageLogicImpl implements UnregisteredPageLogic {
     private UserDaoInf userDao;
     private CertificateDaoInf certificateDao;

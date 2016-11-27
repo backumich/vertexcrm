@@ -1,4 +1,4 @@
-package ua.com.vertex.beans;
+package ua.com.vertex.logic;
 
 import org.apache.commons.io.IOUtils;
 
