@@ -64,7 +64,7 @@ public class UserDaoRealization implements UserDaoInf {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
         UserDaoInf dao = context.getBean(UserDaoRealization.class);
-        User user = dao.getUser(12);
+        User user = dao.getUser(9);
         System.out.println(user);
 
     }

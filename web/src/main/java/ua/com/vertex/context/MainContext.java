@@ -16,7 +16,6 @@ import java.util.Properties;
 public class MainContext {
 
     private static final String DB_PROPERTIES = "db.properties";
-    private static final String SVA605DB_PROPERTIES = "db.properties";
 
     @Bean
     public DataSource dataSource() throws Exception {
@@ -24,7 +23,7 @@ public class MainContext {
     }
 
     private Properties getDbProperties() throws IOException {
-        final ClassPathResource classPathResource = new ClassPathResource(SVA605DB_PROPERTIES);
+        final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
 
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
         factoryBean.setLocation(classPathResource);

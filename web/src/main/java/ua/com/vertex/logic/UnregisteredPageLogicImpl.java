@@ -1,32 +1,36 @@
-package ua.com.vertex.controllers;
+package ua.com.vertex.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.CertificateDao;
+import ua.com.vertex.dao.CertificateDaoInf;
 import ua.com.vertex.dao.UserDaoInf;
+import ua.com.vertex.logic.interfaces.UnregisteredPageLogic;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@SuppressWarnings("Duplicates")
 @Component
-@WebServlet(urlPatterns = "/unregistered")
-public class JspServlet2 extends HttpServlet {
+@SuppressWarnings("Duplicates")
+public class UnregisteredPageLogicImpl implements UnregisteredPageLogic {
     private UserDaoInf userDao;
+    private CertificateDaoInf certificateDao;
 
     @Autowired
-    private void userDao(UserDaoInf userDao) {
+    void setUserDao(UserDaoInf userDao) {
         this.userDao = userDao;
     }
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @Autowired
+    void setCertificateDao(CertificateDaoInf certificateDao) {
+        this.certificateDao = certificateDao;
+    }
+
+    @Override
+    public void getCertificateDetails(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
 
@@ -37,22 +41,22 @@ public class JspServlet2 extends HttpServlet {
             certificateID = -1;
         }
 
-//        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
-//        UserDao userDao = context.getBean(UserDao.class);
-        CertificateDao cDao = new CertificateDao();
-        Certificate cert;
-        User user;
-        System.out.println("userDao: " + userDao);
+        Certificate cert = null;
+        User user = null;
 
         try (PrintWriter writer = resp.getWriter()) {
             if (certificateID == -1) {
                 writer.print("<h2>Incorrect User ID! </h2>");
                 writer.print("<h2><a href=\"/unregistered.jsp\">Try again!<a/></h2>");
             } else {
-                cert = cDao.getCertificate(certificateID);
-                user = userDao.getUser(cert.getUserId());
+                try {
+                    cert = certificateDao.getCertificateById(certificateID);
+                    user = userDao.getUser(cert.getUserId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                if (cert.getCertificationId() == 0) {
+                if (cert == null) {
                     writer.print("<h2>Incorrect User ID! </h2>");
                     writer.print("<h2><a href=\"/unregistered.jsp\">Try again!<a/></h2>");
                 } else {
@@ -64,7 +68,8 @@ public class JspServlet2 extends HttpServlet {
                                     "Certification Date: %s<br>" +
                                     "Course Name: %s<br>" +
                                     "Language: %s</h2>",
-                            cert.getCertificationId(), cert.getUserId(), user.getFirstName(), user.getLastName(),
+                            cert.getCertificationId(), cert.getUserId(),
+                            user == null ? "-" : user.getFirstName(), user == null ? "-" : user.getLastName(),
                             cert.getCertificationDate(), cert.getCourseName(), cert.getLanguage());
 
                     writer.print("<a href=\"javascript:history.back();\"><h3>Back</h3></a>");
