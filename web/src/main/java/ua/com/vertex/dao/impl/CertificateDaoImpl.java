@@ -7,7 +7,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.dao.CertificateDaoInf;
+import ua.com.vertex.dao.CertificateDao;
+
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 @Repository
-public class CertificateDaoRealization implements CertificateDaoInf {
+public class CertificateDaoImpl implements CertificateDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -24,15 +25,13 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @SuppressWarnings("SqlDialectInspection")
+
     public List<Certificate> getAllCertificateByUserId(int userId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
-
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
-    @SuppressWarnings("SqlDialectInspection")
     public Certificate getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";

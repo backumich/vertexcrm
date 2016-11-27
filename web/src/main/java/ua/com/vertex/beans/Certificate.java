@@ -3,6 +3,7 @@ package ua.com.vertex.beans;
 
 import java.time.LocalDate;
 
+
 public class Certificate {
 
     private int certificationId;

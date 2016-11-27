@@ -17,11 +17,6 @@ public class MainContext {
 
     private static final String DB_PROPERTIES = "db.properties";
 
-    @Bean
-    public DataSource dataSource() throws Exception {
-        return BasicDataSourceFactory.createDataSource(getDbProperties());
-    }
-
     private Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
@@ -29,4 +24,10 @@ public class MainContext {
         factoryBean.afterPropertiesSet();
         return factoryBean.getObject();
     }
+
+    @Bean
+    public DataSource dataSource() throws Exception {
+        return BasicDataSourceFactory.createDataSource(getDbProperties());
+    }
+
 }
