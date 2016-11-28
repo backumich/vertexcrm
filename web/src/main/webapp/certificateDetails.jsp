@@ -112,19 +112,12 @@
         </div>
     </form>
 
-    <c:set var="certificateIsNull" value="${certificateIsNull}"/>
     <h3>${certificateIsNull}</h3>
-    <c:set var="certificationId" value="${certificationId}"/>
     <h3>${certificationId}</h3>
-    <c:set var="userFirstName" value="${userFirstName}"/>
     <h3>${userFirstName}</h3>
-    <c:set var="userLastName" value="${userLastName}"/>
     <h3>${userLastName}</h3>
-    <c:set var="certificationDate" value="${certificationDate}"/>
     <h3>${certificationDate}</h3>
-    <c:set var="courseName" value="${courseName}"/>
     <h3>${courseName}</h3>
-    <c:set var="language" value="${language}"/>
     <h3>${language}</h3>
 
 </div>
