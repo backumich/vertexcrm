@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
-<html lang="en" charset="UTF-8">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -116,8 +116,6 @@
     <h3>${certificateIsNull}</h3>
     <c:set var="certificationId" value="${certificationId}"/>
     <h3>${certificationId}</h3>
-    <c:set var="userId" value="${userId}"/>
-    <h3>${userId}</h3>
     <c:set var="userFirstName" value="${userFirstName}"/>
     <h3>${userFirstName}</h3>
     <c:set var="userLastName" value="${userLastName}"/>

@@ -41,7 +41,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         HttpSession session = req.getSession();
         session.removeAttribute("certificateIsNull");
         session.removeAttribute("certificationId");
-        session.removeAttribute("userId");
         session.removeAttribute("userFirstName");
         session.removeAttribute("userLastName");
         session.removeAttribute("certificationDate");
@@ -60,7 +59,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         } else {
 
             session.setAttribute("certificationId", format("Certification ID: %05d<br>", cert.getCertificationId()));
-            session.setAttribute("userId", format("User ID: %05d<br>", cert.getUserId()));
             session.setAttribute("userFirstName", format("User First Name: %s<br>",
                     user == null ? "-" : user.getFirstName()));
             session.setAttribute("userLastName", format("User Last Name: %s<br>",
