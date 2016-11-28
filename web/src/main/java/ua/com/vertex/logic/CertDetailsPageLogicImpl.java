@@ -35,13 +35,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
 
-        int certificateID;
-        try {
-            certificateID = Integer.parseInt(req.getParameter("certificationId"));
-        } catch (NumberFormatException e) {
-            certificateID = -1;
-        }
-
         Certificate cert = null;
         User user = null;
 
@@ -56,7 +49,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         session.removeAttribute("language");
 
         try {
-            cert = certificateDao.getCertificateById(certificateID);
+            cert = certificateDao.getCertificateById(Integer.parseInt(req.getParameter("certificationId")));
             user = userDao.getUser(cert.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
