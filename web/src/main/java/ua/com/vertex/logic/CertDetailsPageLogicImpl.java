@@ -10,8 +10,10 @@ import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
+
+import static java.lang.String.format;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
@@ -43,38 +45,39 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         Certificate cert = null;
         User user = null;
 
-        try (PrintWriter writer = resp.getWriter()) {
-            if (certificateID == -1) {
-                writer.print("<h2>Incorrect User ID! </h2>");
-                writer.print("<h2><a href=\"/certificateDetails.jsp\">Try again!<a/></h2>");
-            } else {
-                try {
-                    cert = certificateDao.getCertificateById(certificateID);
-                    user = userDao.getUser(cert.getUserId());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        HttpSession session = req.getSession();
+        session.removeAttribute("certificateIsNull");
+        session.removeAttribute("certificationId");
+        session.removeAttribute("userId");
+        session.removeAttribute("userFirstName");
+        session.removeAttribute("userLastName");
+        session.removeAttribute("certificationDate");
+        session.removeAttribute("courseName");
+        session.removeAttribute("language");
 
-                if (cert == null) {
-                    writer.print("<h2>Incorrect User ID! </h2>");
-                    writer.print("<h2><a href=\"/certificateDetails.jsp\">Try again!<a/></h2>");
-                } else {
-                    writer.print("<h1>Certificate Details:</h1>");
-                    writer.printf("<h2>Certification ID: %05d<br>" +
-                                    "User ID: %05d<br>" +
-                                    "User First Name: %s<br>" +
-                                    "User Last Name: %s<br>" +
-                                    "Certification Date: %s<br>" +
-                                    "Course Name: %s<br>" +
-                                    "Language: %s</h2>",
-                            cert.getCertificationId(), cert.getUserId(),
-                            user == null ? "-" : user.getFirstName(), user == null ? "-" : user.getLastName(),
-                            cert.getCertificationDate(), cert.getCourseName(), cert.getLanguage());
-
-                    writer.print("<a href=\"javascript:history.back();\"><h3>Back</h3></a>");
-                    writer.print("<a href=\"/\"><h3>Home</h3></a>");
-                }
-            }
+        try {
+            cert = certificateDao.getCertificateById(certificateID);
+            user = userDao.getUser(cert.getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        if (cert == null) {
+            session.setAttribute("certificateIsNull", "Incorrect User ID! Try again!");
+        } else {
+
+            session.setAttribute("certificationId", format("Certification ID: %05d<br>", cert.getCertificationId()));
+            session.setAttribute("userId", format("User ID: %05d<br>", cert.getUserId()));
+            session.setAttribute("userFirstName", format("User First Name: %s<br>",
+                    user == null ? "-" : user.getFirstName()));
+            session.setAttribute("userLastName", format("User Last Name: %s<br>",
+                    user == null ? "-" : user.getLastName()));
+            session.setAttribute("certificationDate", format("Certification Date: %s<br>",
+                    cert.getCertificationDate()));
+            session.setAttribute("courseName", format("Course Name: %s<br>", cert.getCourseName()));
+            session.setAttribute("language", format("Programming Language: %s", cert.getLanguage()));
+        }
+
+        resp.sendRedirect("/certificateDetails.jsp");
     }
 }
