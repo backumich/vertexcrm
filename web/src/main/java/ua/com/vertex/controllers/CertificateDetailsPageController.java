@@ -21,5 +21,6 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/certificateDetails")
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         logic.getCertificateDetails(req, resp);
+        resp.sendRedirect("/certificateDetails.jsp");
     }
 }

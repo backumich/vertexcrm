@@ -70,7 +70,5 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             session.setAttribute("courseName", format("Course Name: %s<br>", cert.getCourseName()));
             session.setAttribute("language", format("Programming Language: %s", cert.getLanguage()));
         }
-
-        resp.sendRedirect("/certificateDetails.jsp");
     }
 }
