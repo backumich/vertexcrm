@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -20,10 +21,10 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
             a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
+                m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
@@ -66,10 +67,10 @@
         });
 
         var n = d.getElementsByTagName("script")[0],
-                s = d.createElement("script"),
-                f = function () {
-                    n.parentNode.insertBefore(s, n);
-                };
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
@@ -101,13 +102,30 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5">
 
-        ${userIds}
+<div>
+    <form method="get" action="${pageContext.request.contextPath}/certificateDetails">
+        <div class="block1">
+            <h2>Enter certificate ID:</h2>
+            <input type="number" name="certificationId">
+            <input type="submit" value="Send">
+        </div>
+    </form>
 
-    </div>
+    <h3>${certificateIsNull}</h3>
+    <h3>${certificationId}</h3>
+    <h3>${userFirstName}</h3>
+    <h3>${userLastName}</h3>
+    <h3>${certificationDate}</h3>
+    <h3>${courseName}</h3>
+    <h3>${language}</h3>
+
 </div>
+<br>
+
+
+<a href="javascript:history.back();"><h3>Back</h3></a>
+<a href="/"><h3>Home</h3></a>
 <div class="footer">
     <div class="container">
         <div class="right">
