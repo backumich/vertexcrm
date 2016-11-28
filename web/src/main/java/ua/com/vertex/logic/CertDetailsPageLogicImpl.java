@@ -17,16 +17,12 @@ import static java.lang.String.format;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-    private UserDaoInf userDao;
-    private CertificateDaoInf certificateDao;
+    private final UserDaoInf userDao;
+    private final CertificateDaoInf certificateDao;
 
     @Autowired
-    void setUserDao(UserDaoInf userDao) {
+    public CertDetailsPageLogicImpl(UserDaoInf userDao, CertificateDaoInf certificateDao) {
         this.userDao = userDao;
-    }
-
-    @Autowired
-    void setCertificateDao(CertificateDaoInf certificateDao) {
         this.certificateDao = certificateDao;
     }
 

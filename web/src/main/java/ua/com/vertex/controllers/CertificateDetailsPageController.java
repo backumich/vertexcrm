@@ -11,10 +11,10 @@ import java.io.IOException;
 
 @Controller
 public class CertificateDetailsPageController {
-    private CertDetailsPageLogic logic;
+    private final CertDetailsPageLogic logic;
 
     @Autowired
-    private void setLogic(CertDetailsPageLogic logic) {
+    public CertificateDetailsPageController(CertDetailsPageLogic logic) {
         this.logic = logic;
     }
 
