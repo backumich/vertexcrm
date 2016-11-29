@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoRealization implements CertificateDaoInf {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -23,7 +24,7 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @SuppressWarnings("SqlDialectInspection")
+    @Override
     public List<Certificate> getAllCertificateByUserId(int userId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
@@ -31,7 +32,7 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
-    @SuppressWarnings("SqlDialectInspection")
+    @Override
     public Certificate getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
@@ -54,7 +55,7 @@ public class CertificateDaoRealization implements CertificateDaoInf {
 //    public static void main(String[] args) {
 //        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
 //        CertificateDaoRealization dao = context.getBean(CertificateDaoRealization.class);
-//        Certificate cert = dao.getCertificateById(3);
+//        Certificate cert = dao.getCertificateById(1);
 //        System.out.println(cert);
 //
 //    }

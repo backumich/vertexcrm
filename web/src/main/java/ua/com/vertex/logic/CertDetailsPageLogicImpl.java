@@ -47,7 +47,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             cert = certificateDao.getCertificateById(Integer.parseInt(req.getParameter("certificationId")));
             user = userDao.getUser(cert.getUserId());
         } catch (Exception e) {
-            session.setAttribute("certificateIsNull", "Incorrect User ID! Try again!");
+            session.setAttribute("certificateIsNull", "Incorrect Certificate ID! Try again!");
             return;
         }
 

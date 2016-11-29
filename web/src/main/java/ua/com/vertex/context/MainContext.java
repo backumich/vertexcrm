@@ -22,11 +22,6 @@ public class MainContext {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
     }
 
-//    @Bean
-//    public Logger setLogger() {
-//        return Logger.getRootLogger();
-//    }
-
     private Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
 

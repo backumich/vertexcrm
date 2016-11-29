@@ -1,11 +1,14 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.context.MainContext;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -14,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("SqlDialectInspection")
 public class UserDaoRealization implements UserDaoInf {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -23,14 +27,14 @@ public class UserDaoRealization implements UserDaoInf {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @SuppressWarnings("SqlDialectInspection")
+    @Override
     public User getUser(long id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
-    @SuppressWarnings("SqlDialectInspection")
+    @Override
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
         jdbcTemplate.update(query, new MapSqlParameterSource("id", id));
@@ -58,13 +62,12 @@ public class UserDaoRealization implements UserDaoInf {
         }
     }
 
-
-//    public static void main(String[] args) {
-//        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
-//        UserDaoRealization dao = context.getBean(UserDaoRealization.class);
-//        User user = dao.getUser(12);
-//        System.out.println(user);
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
+        UserDaoRealization dao = context.getBean(UserDaoRealization.class);
+        User user = dao.getUser(50);
+        System.out.println(user);
 //        ImageManager.saveImageToFileSystem(new File("d:/retrievedPhoto.jpg"), user.getPhoto());
 
-//    }
+    }
 }
