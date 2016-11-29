@@ -1,8 +1,5 @@
 package ua.com.vertex.beans;
 
-import ua.com.vertex.logic.ImageManager;
-
-import java.io.File;
 import java.sql.Blob;
 import java.util.Objects;
 
@@ -52,18 +49,8 @@ public class User {
             return this;
         }
 
-        public Builder setPassportScan(File file) {
-            user.setPassportScan(file);
-            return this;
-        }
-
         public Builder setPassportScan(Blob blob) {
             user.setPassportScan(blob);
-            return this;
-        }
-
-        public Builder setPhoto(File file) {
-            user.setPhoto(file);
             return this;
         }
 
@@ -115,11 +102,11 @@ public class User {
         return Objects.hash(userId, email, firstName, lastName);
     }
 
-    public synchronized int getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public synchronized void setUserId(int userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -131,59 +118,51 @@ public class User {
         this.email = email;
     }
 
-    public synchronized String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public synchronized void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public synchronized String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public synchronized void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public synchronized String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public synchronized void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public synchronized Blob getPassportScan() {
+    public Blob getPassportScan() {
         return passportScan;
     }
 
-    public synchronized void setPassportScan(File file) {
-        this.passportScan = ImageManager.getImage(file);
-    }
-
-    public synchronized void setPassportScan(Blob blob) {
+    public void setPassportScan(Blob blob) {
         this.passportScan = blob;
     }
 
-    public synchronized Blob getPhoto() {
+    public Blob getPhoto() {
         return photo;
     }
 
-    public synchronized void setPhoto(File file) {
-        this.photo = ImageManager.getImage(file);
-    }
-
-    public synchronized void setPhoto(Blob blob) {
+    public void setPhoto(Blob blob) {
         this.photo = blob;
     }
 
-    public synchronized int getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public synchronized void setDiscount(int discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

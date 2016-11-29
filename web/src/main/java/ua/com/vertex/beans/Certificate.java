@@ -45,7 +45,7 @@ public class Certificate {
             return this;
         }
 
-        public synchronized Certificate getInstance() {
+        public Certificate getInstance() {
             return instance;
         }
     }
@@ -78,43 +78,43 @@ public class Certificate {
         return Objects.hash(certificationId, userId, certificationDate, courseName, language);
     }
 
-    public synchronized int getCertificationId() {
+    public int getCertificationId() {
         return certificationId;
     }
 
-    public synchronized void setCertificationId(int certificationId) {
+    public void setCertificationId(int certificationId) {
         this.certificationId = certificationId;
     }
 
-    public synchronized int getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public synchronized void setUserId(int userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public synchronized LocalDate getCertificationDate() {
+    public LocalDate getCertificationDate() {
         return certificationDate;
     }
 
-    public synchronized void setCertificationDate(LocalDate certificationDate) {
+    public void setCertificationDate(LocalDate certificationDate) {
         this.certificationDate = certificationDate;
     }
 
-    public synchronized String getCourseName() {
+    public String getCourseName() {
         return courseName;
     }
 
-    public synchronized void setCourseName(String courseName) {
+    public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
 
-    public synchronized String getLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public synchronized void setLanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 }
