@@ -3,6 +3,7 @@ package ua.com.vertex.dao.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -43,6 +44,12 @@ public class UserDaoRealization implements UserDaoInf {
     public List<Integer> getAllUserIds() {
         String query = "SELECT user_id FROM Users order by user_id";
         return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        String query = "SELECT * FROM Users order by user_id";
+        return jdbcTemplate.query(query, new UserRowMapping());
     }
 
     private static final class UserRowMapping implements RowMapper<User> {

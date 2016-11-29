@@ -34,6 +34,14 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
+    public List<Certificate> getAllCertificateWithUserNotNull() {
+        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
+                + "FROM Certificate WHERE user_id IS NOT NULL ";
+
+        return jdbcTemplate.query(query, new CertificateRowMapper());
+    }
+
+
     @SuppressWarnings("SqlDialectInspection")
     public Certificate getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
