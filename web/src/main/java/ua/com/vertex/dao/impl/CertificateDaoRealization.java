@@ -1,14 +1,11 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.context.MainContext;
 import ua.com.vertex.dao.CertificateDaoInf;
 
 import javax.sql.DataSource;
@@ -54,11 +51,11 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         }
     }
 
-    public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
-        CertificateDaoRealization dao = context.getBean(CertificateDaoRealization.class);
-        Certificate cert = dao.getCertificateById(3);
-        System.out.println(cert);
-
-    }
+//    public static void main(String[] args) {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
+//        CertificateDaoRealization dao = context.getBean(CertificateDaoRealization.class);
+//        Certificate cert = dao.getCertificateById(3);
+//        System.out.println(cert);
+//
+//    }
 }

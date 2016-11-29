@@ -31,8 +31,8 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         resp.setContentType("text/html");
         resp.setCharacterEncoding("utf-8");
 
-        Certificate cert = null;
-        User user = null;
+        Certificate cert;
+        User user;
 
         HttpSession session = req.getSession();
         session.removeAttribute("certificateIsNull");
@@ -47,22 +47,18 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             cert = certificateDao.getCertificateById(Integer.parseInt(req.getParameter("certificationId")));
             user = userDao.getUser(cert.getUserId());
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (cert == null) {
             session.setAttribute("certificateIsNull", "Incorrect User ID! Try again!");
-        } else {
-
-            session.setAttribute("certificationId", format("Certification ID: %05d<br>", cert.getCertificationId()));
-            session.setAttribute("userFirstName", format("User First Name: %s<br>",
-                    user == null ? "-" : user.getFirstName()));
-            session.setAttribute("userLastName", format("User Last Name: %s<br>",
-                    user == null ? "-" : user.getLastName()));
-            session.setAttribute("certificationDate", format("Certification Date: %s<br>",
-                    cert.getCertificationDate()));
-            session.setAttribute("courseName", format("Course Name: %s<br>", cert.getCourseName()));
-            session.setAttribute("language", format("Programming Language: %s", cert.getLanguage()));
+            return;
         }
+
+        session.setAttribute("certificationId", format("Certification ID: %05d<br>", cert.getCertificationId()));
+        session.setAttribute("userFirstName", format("User First Name: %s<br>",
+                user == null ? "-" : user.getFirstName()));
+        session.setAttribute("userLastName", format("User Last Name: %s<br>",
+                user == null ? "-" : user.getLastName()));
+        session.setAttribute("certificationDate", format("Certification Date: %s<br>",
+                cert.getCertificationDate()));
+        session.setAttribute("courseName", format("Course Name: %s<br>", cert.getCourseName()));
+        session.setAttribute("language", format("Programming Language: %s", cert.getLanguage()));
     }
 }
