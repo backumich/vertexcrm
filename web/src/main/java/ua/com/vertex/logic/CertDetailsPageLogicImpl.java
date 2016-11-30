@@ -26,8 +26,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         this.certificateDao = certificateDao;
     }
 
-    // TODO: tests covering all methods
-
     @Override
     public HttpSession getCertificateDetails(HttpSession session, String certificationId) {
         Certificate cert;
