@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Controller
 public class CertificateDetailsPageController {
-    private final Logger logger = Logger.getLogger(CertificateDetailsPageController.class);
+    private static final Logger LOGGER = Logger.getLogger(CertificateDetailsPageController.class);
     private final CertDetailsPageLogic logic;
 
     @Autowired
@@ -21,7 +21,6 @@ public class CertificateDetailsPageController {
         this.logic = logic;
     }
 
-    // TODO: testing with 'verify'
     @RequestMapping(value = "/certificateDetails")
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
@@ -29,14 +28,9 @@ public class CertificateDetailsPageController {
 
         try {
             logic.getCertificateDetails(session, certificationId);
-        } catch (IOException e) {
-            logger.error(e);
-        }
-
-        try {
             resp.sendRedirect("/certificateDetails.jsp");
         } catch (IOException e) {
-            logger.error(e);
+            LOGGER.error(e);
         }
     }
 }

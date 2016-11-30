@@ -5,5 +5,5 @@ import java.io.IOException;
 
 public interface CertDetailsPageLogic {
 
-    HttpSession getCertificateDetails(HttpSession session, String certificationId) throws IOException;
+    void getCertificateDetails(HttpSession session, String certificationId) throws IOException;
 }

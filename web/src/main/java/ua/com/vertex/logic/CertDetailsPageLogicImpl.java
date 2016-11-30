@@ -16,7 +16,7 @@ import static java.lang.String.format;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-    private final Logger logger = Logger.getLogger(CertDetailsPageLogicImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(CertDetailsPageLogicImpl.class);
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
 
@@ -27,27 +27,26 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     }
 
     @Override
-    public HttpSession getCertificateDetails(HttpSession session, String certificationId) {
+    public void getCertificateDetails(HttpSession session, String certificationId) {
         Certificate cert;
         User user = null;
         clearSessionAttributes(session);
 
         try {
             cert = certificateDao.getCertificateById(Integer.parseInt(certificationId));
-        } catch (EmptyResultDataAccessException e) {
-            logger.debug("No certificate with this ID was found", e);
+        } catch (EmptyResultDataAccessException | NumberFormatException e) {
+            LOGGER.debug("No certificate with this ID was found", e);
             session.setAttribute("certificateIsNull", "Incorrect Certificate ID! Try again!");
-            return session;
+            return;
         }
         try {
             user = userDao.getUser(cert.getUserId());
         } catch (EmptyResultDataAccessException e) {
-            logger.debug("No user is assigned to this certificate ID", e);
+            LOGGER.debug("No user is assigned to this certificate ID", e);
             session.setAttribute("certificateIsNull", "No user is assigned to this certificate ID");
         }
 
         setSessionAttributes(session, cert, user);
-        return session;
     }
 
     private void clearSessionAttributes(HttpSession session) {

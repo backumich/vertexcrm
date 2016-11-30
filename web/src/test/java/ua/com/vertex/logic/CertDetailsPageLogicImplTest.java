@@ -26,6 +26,7 @@ public class CertDetailsPageLogicImplTest {
     @Autowired
     private CertificateDaoInf certificateDao;
     private HttpSession session;
+    private CertDetailsPageLogicImpl logic;
 
     @Test
     public void userDaoShouldNotBeNull() {
@@ -40,13 +41,14 @@ public class CertDetailsPageLogicImplTest {
     @Before
     public void setUp() {
         session = new MockHttpSession();
+        logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
     }
 
     @Test
     public void sessionAttributesForCertificateStoredInDBShouldBeSetAndNotNull() {
-        CertDetailsPageLogicImpl logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
         String certificateId = "1";
         logic.getCertificateDetails(session, certificateId);
+        assertNull(session.getAttribute("certificateIsNull"));
         assertNotNull(session.getAttribute("certificationId"));
         assertNotNull(session.getAttribute("userFirstName"));
         assertNotNull(session.getAttribute("userLastName"));
@@ -57,9 +59,21 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void sessionAttributesForCertificateNotStoredInDBShouldBeNull() {
-        CertDetailsPageLogicImpl logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
         String certificateId = String.valueOf(Integer.MAX_VALUE);
         logic.getCertificateDetails(session, certificateId);
+        assertNotNull(session.getAttribute("certificateIsNull"));
+        assertNull(session.getAttribute("certificationId"));
+        assertNull(session.getAttribute("userFirstName"));
+        assertNull(session.getAttribute("userLastName"));
+        assertNull(session.getAttribute("certificationDate"));
+        assertNull(session.getAttribute("courseName"));
+        assertNull(session.getAttribute("language"));
+    }
+
+    @Test
+    public void sessionAttributesForCertificateIdNullShouldBeNull() {
+        logic.getCertificateDetails(session, null);
+        assertNotNull(session.getAttribute("certificateIsNull"));
         assertNull(session.getAttribute("certificationId"));
         assertNull(session.getAttribute("userFirstName"));
         assertNull(session.getAttribute("userLastName"));
