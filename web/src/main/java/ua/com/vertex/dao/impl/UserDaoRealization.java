@@ -1,14 +1,12 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.context.MainContext;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -23,8 +21,15 @@ public class UserDaoRealization implements UserDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
+    @Profile("dev")
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Autowired
+    @Profile("test")
+    public void setTestDataSource(DataSource testDataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(testDataSource);
     }
 
     @Override
@@ -62,12 +67,12 @@ public class UserDaoRealization implements UserDaoInf {
         }
     }
 
-    public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
-        UserDaoRealization dao = context.getBean(UserDaoRealization.class);
-        User user = dao.getUser(50);
-        System.out.println(user);
+//    public static void main(String[] args) {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
+//        UserDaoRealization dao = context.getBean(UserDaoRealization.class);
+//        User user = dao.getUser(50);
+//        System.out.println(user);
 //        ImageManager.saveImageToFileSystem(new File("d:/retrievedPhoto.jpg"), user.getPhoto());
-
-    }
+//
+//    }
 }

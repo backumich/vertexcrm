@@ -5,6 +5,7 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
@@ -13,6 +14,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
+@Profile("dev")
 public class MainContext {
 
     private static final String DB_PROPERTIES = "db.properties";
@@ -22,7 +24,7 @@ public class MainContext {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
     }
 
-    private Properties getDbProperties() throws IOException {
+    public Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
 
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
