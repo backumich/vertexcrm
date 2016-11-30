@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserDao {
 
     @SuppressWarnings("unused")
-    User getUser(int id);
+    User getUser(long id);
 
     @SuppressWarnings("unused")
     void deleteUser(long id);

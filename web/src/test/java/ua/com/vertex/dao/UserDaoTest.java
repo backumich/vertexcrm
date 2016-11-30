@@ -1,12 +1,9 @@
 package ua.com.vertex.dao;
 
-import static org.junit.Assert.*;
-
-
 public class UserDaoTest {
     @org.junit.Test
     public void getUser() throws Exception {
-
+        System.out.println("Getting user fromDB");
     }
 
     @org.junit.Test

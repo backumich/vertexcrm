@@ -19,9 +19,11 @@ public class MainContext {
 
     private Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
+
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
         factoryBean.setLocation(classPathResource);
         factoryBean.afterPropertiesSet();
+
         return factoryBean.getObject();
     }
 
