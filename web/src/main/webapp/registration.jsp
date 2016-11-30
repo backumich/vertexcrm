@@ -26,6 +26,7 @@
                    <h3><span></span>Create User Account</h3>
 
                    <div class="errorSummary">
+                       ${yes}
                    </div>
                    <p><label>E-mail <span>*</span></label><input type="text" value="" id="reg_email"></p>
 

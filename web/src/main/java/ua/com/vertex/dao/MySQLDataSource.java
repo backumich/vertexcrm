@@ -1,7 +1,7 @@
 package ua.com.vertex.dao;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import ua.com.vertex.models.User;
+import ua.com.vertex.models._User;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -19,7 +19,7 @@ public class MySQLDataSource {
         ((MysqlDataSource) dataSource).setPassword(password);
     }
 
-    public void addUser(User user) {
+    public void addUser(_User user) {
 
         String sql = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (?,?,?,?,?)";
         Connection conn = null;
@@ -28,6 +28,7 @@ public class MySQLDataSource {
             conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             //ps.setInt(1, user.getCustId());
+
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getFirstName());

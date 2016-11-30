@@ -1,21 +1,22 @@
 package ua.com.vertex.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ua.com.vertex.dao.MySQLDataSource;
-import ua.com.vertex.models.User;
+import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Controller
 public class RegistrationController {
-    @Autowired
-    MySQLDataSource mySQLDataSource;
 
-    //@RequestMapping("/registration") // Обрабатывать запросы на получение главной страницы
+    @Autowired
+    private RegistrationUserLogic registrationUserLogic;
+
     @RequestMapping(value = "/RegistrationUser", method = RequestMethod.POST)
 
     @ResponseBody
-    public String registrationUser(@RequestParam String email, String password, String verifyPassword, String firstName, String lastName, String phone) {
+    public ModelAndView registrationUser(@RequestParam String email, String password, String verifyPassword, String firstName, String lastName, String phone) {
         System.out.println(email);
         System.out.println(password);
         System.out.println(verifyPassword);
@@ -24,18 +25,27 @@ public class RegistrationController {
         System.out.println(phone);
 
 
-        User user = User.newBuilder()
-                .setEmail(email)
-                .setPassword(password)
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setPhone(phone)
-                .build();
 
-        MySQLDataSource mySQLDataSource = new MySQLDataSource();
-        mySQLDataSource.addUser(user);
 
-        return "home";
+            ModelAndView result = new ModelAndView("redirect:registration.jsp");
+            result.addObject(("yes"),registrationUserLogic.registrationUser());
+            return result;
+            //result.addObject("userIds", userLogic.getAllUserIds());
+
+
+//        User user = User.newBuilder()
+//                .setEmail(email)
+//                .setPassword(password)
+//                .setFirstName(firstName)
+//                .setLastName(lastName)
+//                .setPhone(phone)
+//                .build();
+//
+//
+//        MySQLDataSource mySQLDataSource = new MySQLDataSource("jdbc:mysql://seadev.tk:3306/db1", "user1", "111");
+//        mySQLDataSource.addUser(user);
+
+        //return "home";
     }
 }
 
