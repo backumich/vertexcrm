@@ -20,12 +20,6 @@ public class CertificateDaoImpl implements CertificateDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
-
     public List<Certificate> getAllCertificateByUserId(int userId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
@@ -40,6 +34,7 @@ public class CertificateDaoImpl implements CertificateDao {
     }
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
+
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Certificate.Builder()
                     .setCertificationId(resultSet.getInt("certification_id"))
@@ -49,5 +44,10 @@ public class CertificateDaoImpl implements CertificateDao {
                     .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

@@ -14,9 +14,10 @@ import ua.com.vertex.logic.UserLogic;
 @Controller
 public class UserController {
 
+    public static final String CERTIFICATES = "certificates";
     private final UserLogic userLogic;
 
-    private static final Logger loger = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserLogic userLogic) {
@@ -26,13 +27,7 @@ public class UserController {
     @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
     public String getAllCertificateByUserId(@RequestParam("userId") int userId, Model model) {
-        loger.trace("Test");
-        loger.debug("Test");
-        loger.info("Test");
-        loger.warn("Test");
-        loger.error("Test");
-        loger.fatal("Test");
-        model.addAttribute("certificates", userLogic.getAllCertificateByUserId(userId));
+        model.addAttribute(CERTIFICATES, userLogic.getAllCertificateByUserId(userId));
         return "user.jsp";
     }
 
