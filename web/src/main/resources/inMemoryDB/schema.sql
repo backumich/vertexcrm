@@ -17,6 +17,11 @@ CREATE TABLE Certificate
   user_id            INT,
   certification_date DATE         NOT NULL,
   course_name        VARCHAR(500) NOT NULL,
-  language           VARCHAR(255) NOT NULL,
-  CONSTRAINT FK_Certificate_user_id FOREIGN KEY (user_id) REFERENCES Users (user_id)
+  language           VARCHAR(255) NOT NULL
 );
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone)
+VALUES ('111', 'email', 'password', 'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('222', '111', '2016-12-1', 'Java Professional', 'Java')
