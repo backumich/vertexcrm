@@ -30,6 +30,11 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
+    @Override
+    public User getUser(long id) {
+        return null;
+    }
+
     @SuppressWarnings("SqlDialectInspection")
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";

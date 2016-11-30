@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class Certificate {
 
     private int certificationId;
+    private int userId;
     private LocalDate certificationDate;
     private String courseName;
     private String language;
@@ -56,6 +57,16 @@ public class Certificate {
     }
 
     @SuppressWarnings("WeakerAccess")
+    public int getUserId() {
+        return userId;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @SuppressWarnings("WeakerAccess")
     public LocalDate getCertificationDate() {
         return certificationDate;
     }
@@ -94,6 +105,11 @@ public class Certificate {
 
         public Builder setCertificationId(int id) {
             instance.setCertificationId(id);
+            return this;
+        }
+
+        public Builder setUserId(int userId) {
+            instance.setUserId(userId);
             return this;
         }
 

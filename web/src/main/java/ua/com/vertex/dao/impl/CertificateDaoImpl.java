@@ -43,6 +43,7 @@ public class CertificateDaoImpl implements CertificateDao {
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Certificate.Builder()
                     .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(resultSet.getInt("user_id"))
                     .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
                     .setCourseName(resultSet.getString("course_name"))
                     .setLanguage(resultSet.getString("language"))
