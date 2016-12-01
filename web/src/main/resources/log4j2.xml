@@ -15,3 +15,6 @@
         </Root>
     </Loggers>
 </Configuration>
+
+
+        <!--TRACE < DEBUG < INFO < WARN < ERROR < FATAL-->

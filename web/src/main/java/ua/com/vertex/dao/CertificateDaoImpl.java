@@ -1,6 +1,7 @@
 package ua.com.vertex.dao;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +18,7 @@ import java.util.List;
 @Repository
 @SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoImpl implements CertificateDaoInf {
-    private static final Logger LOGGER = Logger.getLogger(CertificateDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
