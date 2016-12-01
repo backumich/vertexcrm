@@ -1,5 +1,6 @@
 package ua.com.vertex.dao.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,20 +16,16 @@ import java.util.List;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
-public class CertificateDaoRealization implements CertificateDaoInf {
-
+public class CertificateDaoImpl implements CertificateDaoInf {
+    private static final Logger LOGGER = Logger.getLogger(CertificateDaoImpl.class);
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
 
     @Override
     public List<Certificate> getAllCertificateByUserId(int userId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
 
+        LOGGER.debug("Retrieving certificates by user ID");
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
@@ -36,6 +33,8 @@ public class CertificateDaoRealization implements CertificateDaoInf {
     public Certificate getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
+
+        LOGGER.debug("Retrieving certificate by certificate ID");
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }
@@ -50,5 +49,10 @@ public class CertificateDaoRealization implements CertificateDaoInf {
                     .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

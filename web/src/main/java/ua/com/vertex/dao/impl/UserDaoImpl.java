@@ -15,19 +15,14 @@ import java.util.List;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
-public class UserDaoRealization implements UserDaoInf {
-
+public class UserDaoImpl implements UserDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
 
     @Override
     public User getUser(long id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
+
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
@@ -57,5 +52,10 @@ public class UserDaoRealization implements UserDaoInf {
                     .setPhone(resultSet.getString("phone"))
                     .getInstance();
         }
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

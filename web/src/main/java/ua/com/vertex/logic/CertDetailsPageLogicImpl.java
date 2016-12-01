@@ -1,13 +1,11 @@
 package ua.com.vertex.logic;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.CertificateDetailsPageController;
 import ua.com.vertex.dao.CertificateDaoInf;
 import ua.com.vertex.dao.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
@@ -18,15 +16,9 @@ import static java.lang.String.format;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
+    private static final Logger LOGGER = Logger.getLogger(CertDetailsPageLogicImpl.class);
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
-
-    @Autowired
-    public CertDetailsPageLogicImpl(UserDaoInf userDao, CertificateDaoInf certificateDao) {
-        this.userDao = userDao;
-        this.certificateDao = certificateDao;
-    }
 
     @Override
     public void getCertificateDetails(HttpSession session, String certificationId) {
@@ -34,17 +26,18 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         User user = null;
         clearSessionAttributes(session);
 
+        LOGGER.debug("Accessing certificateDao");
         try {
             cert = certificateDao.getCertificateById(Integer.parseInt(certificationId));
         } catch (EmptyResultDataAccessException | NumberFormatException e) {
-            LOGGER.debug("No certificate with this ID was found", e);
             session.setAttribute("certificateIsNull", "Incorrect Certificate ID! Try again!");
             return;
         }
+
+        LOGGER.debug("Accessing userDao");
         try {
             user = userDao.getUser(cert.getUserId());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("No user is assigned to this certificate ID", e);
             session.setAttribute("certificateIsNull", "No user is assigned to this certificate ID");
         }
 
@@ -70,5 +63,11 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         session.setAttribute("certificationDate", format("Certification Date: %s", cert.getCertificationDate()));
         session.setAttribute("courseName", format("Course Name: %s", cert.getCourseName()));
         session.setAttribute("language", format("Programming Language: %s", cert.getLanguage()));
+    }
+
+    @Autowired
+    public CertDetailsPageLogicImpl(UserDaoInf userDao, CertificateDaoInf certificateDao) {
+        this.userDao = userDao;
+        this.certificateDao = certificateDao;
     }
 }
