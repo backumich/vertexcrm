@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Controller
@@ -24,13 +25,22 @@ public class RegistrationController {
         System.out.println(lastName);
         System.out.println(phone);
 
+        User user = new User
+                .Builder()
+                .setEmail(email)
+                .setPassword(password)
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setPhone(phone)
+                .getInstance();
+
+        registrationUserLogic.registrationUser(user);
 
 
-
-            ModelAndView result = new ModelAndView("redirect:registration.jsp");
-            result.addObject(("yes"),registrationUserLogic.registrationUser());
-            return result;
-            //result.addObject("userIds", userLogic.getAllUserIds());
+//        ModelAndView result = new ModelAndView("redirect:registration.jsp");
+//        result.addObject(("yes"), registrationUserLogic.registrationUser());
+        return null;
+        //result.addObject("userIds", userLogic.getAllUserIds());
 
 
 //        User user = User.newBuilder()
