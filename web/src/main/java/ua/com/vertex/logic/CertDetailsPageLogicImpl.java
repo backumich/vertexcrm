@@ -1,11 +1,13 @@
 package ua.com.vertex.logic;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.CertificateDetailsPageController;
 import ua.com.vertex.dao.CertificateDaoInf;
 import ua.com.vertex.dao.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
@@ -16,7 +18,7 @@ import static java.lang.String.format;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-    private static final Logger LOGGER = Logger.getLogger(CertDetailsPageLogicImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
 
