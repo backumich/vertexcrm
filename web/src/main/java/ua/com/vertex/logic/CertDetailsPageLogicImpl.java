@@ -6,8 +6,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.CertificateDaoInf;
-import ua.com.vertex.dao.UserDaoInf;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.http.HttpSession;

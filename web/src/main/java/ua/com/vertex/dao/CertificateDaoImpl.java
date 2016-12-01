@@ -1,4 +1,4 @@
-package ua.com.vertex.dao.impl;
+package ua.com.vertex.dao;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.dao.CertificateDaoInf;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;

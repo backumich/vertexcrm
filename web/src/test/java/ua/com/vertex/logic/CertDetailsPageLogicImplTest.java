@@ -9,8 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.com.vertex.context.TestContext;
-import ua.com.vertex.dao.CertificateDaoInf;
-import ua.com.vertex.dao.UserDaoInf;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.servlet.http.HttpSession;
 
