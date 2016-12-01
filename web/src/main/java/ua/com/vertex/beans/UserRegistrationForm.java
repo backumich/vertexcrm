@@ -14,7 +14,7 @@ public class UserRegistrationForm {
 
     @NotNull
     @Email
-    @Size(min = 5, max = 255)
+    @Size(min = 6, max = 255)
     @NotEmpty
     private String email;
 
