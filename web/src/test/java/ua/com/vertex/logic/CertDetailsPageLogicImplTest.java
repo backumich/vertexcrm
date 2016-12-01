@@ -61,7 +61,7 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void sessionAttributesForCertificateNotStoredInDBShouldBeNull() {
-        String certificateId = String.valueOf(Integer.MAX_VALUE);
+        String certificateId = "1000";
         logic.getCertificateDetails(session, certificateId);
         assertNotNull(session.getAttribute("certificateIsNull"));
         assertNull(session.getAttribute("certificationId"));

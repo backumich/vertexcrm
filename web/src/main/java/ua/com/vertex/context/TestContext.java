@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 public class TestContext {
 
     @Bean
-    public DataSource testDataSource() {
+    public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder
                 .setType(EmbeddedDatabaseType.HSQL)

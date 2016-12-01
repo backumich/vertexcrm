@@ -1,7 +1,6 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,15 +20,8 @@ public class CertificateDaoRealization implements CertificateDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Profile("dev")
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
-    @Autowired
-    @Profile("test")
-    public void setTestDataSource(DataSource testDataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(testDataSource);
     }
 
     @Override
@@ -59,12 +51,4 @@ public class CertificateDaoRealization implements CertificateDaoInf {
                     .getInstance();
         }
     }
-
-//    public static void main(String[] args) {
-//        ApplicationContext context = new AnnotationConfigApplicationContext(MainContext.class);
-//        CertificateDaoRealization dao = context.getBean(CertificateDaoRealization.class);
-//        Certificate cert = dao.getCertificateById(1);
-//        System.out.println(cert);
-//
-//    }
 }
