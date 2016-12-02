@@ -1,11 +1,14 @@
 package ua.com.vertex.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.logic.RegistrationUserLogicImpl;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Controller
@@ -14,8 +17,10 @@ public class RegistrationController {
     @Autowired
     private RegistrationUserLogic registrationUserLogic;
 
-    @RequestMapping(value = "/RegistrationUser", method = RequestMethod.POST)
+    @Autowired
+    private RegistrationUserLogicImpl validator;
 
+    @RequestMapping(value = "/RegistrationUser", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView registrationUser(@RequestParam String email, String password, String verifyPassword, String firstName, String lastName, String phone) {
         System.out.println(email);
@@ -33,6 +38,9 @@ public class RegistrationController {
                 .setLastName(lastName)
                 .setPhone(phone)
                 .getInstance();
+
+
+        //registrationUserValidator.validate(user, validator);
 
         registrationUserLogic.registrationUser(user);
 
@@ -57,5 +65,7 @@ public class RegistrationController {
 
         //return "home";
     }
+
+
 }
 

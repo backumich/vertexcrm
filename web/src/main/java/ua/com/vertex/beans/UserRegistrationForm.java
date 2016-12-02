@@ -1,21 +1,15 @@
 package ua.com.vertex.beans;
 
-import com.sun.istack.internal.NotNull;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 
 @Component
 public class UserRegistrationForm {
     private int userID;
 
-    @NotNull
-    @Email
-    @Size(min = 6, max = 255)
-    @NotEmpty
+    @NotNull(message = "Email должно быть задано")
     private String email;
 
 
