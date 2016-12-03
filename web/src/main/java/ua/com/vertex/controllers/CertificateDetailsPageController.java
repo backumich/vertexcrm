@@ -17,7 +17,7 @@ public class CertificateDetailsPageController {
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
     private final CertDetailsPageLogic logic;
 
-    @RequestMapping(value = "/certificateDetails")
+    @RequestMapping(value = "/showCertificateDetails")
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         String certificationId = req.getParameter("certificationId");
@@ -26,6 +26,21 @@ public class CertificateDetailsPageController {
         try {
             logic.getCertificateDetails(session, certificationId);
             resp.sendRedirect("/certificateDetails.jsp");
+        } catch (IOException e) {
+            LOGGER.error(e, e);
+        }
+    }
+
+    @RequestMapping(value = "/showUserPhoto")
+    public void showUserPhoto(HttpServletRequest req, HttpServletResponse resp) {
+        HttpSession session = req.getSession();
+        String userId = session.getAttribute("userId").toString();
+
+        LOGGER.debug("Controller invokes logic");
+        try {
+            byte[] userPhoto = logic.getUserPhoto(userId);
+            resp.setContentType("image/jpeg");
+            resp.getOutputStream().write(userPhoto);
         } catch (IOException e) {
             LOGGER.error(e, e);
         }

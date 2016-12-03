@@ -1,4 +1,4 @@
-package ua.com.vertex.logic;
+package ua.com.vertex.util;
 
 import org.apache.commons.io.IOUtils;
 
@@ -13,6 +13,18 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 public class ImageManager {
+    public static byte[] convertBlobToBytes(Blob blob) {
+        byte[] data = {};
+
+        try (InputStream is = blob.getBinaryStream()) {
+            data = IOUtils.toByteArray(is);
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
     public static void saveImageToFileSystem(File file, Blob image) {
         byte[] data = convertBlobToBytes(image);
         try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -24,23 +36,16 @@ public class ImageManager {
         }
     }
 
-    public static Blob getImage(File file) {
-        Blob blob = null;
+    public static Blob getImageFromFileSystem(File file) throws SQLException {
+        byte[] bytes = {};
+        Blob blob = new SerialBlob(bytes);
+
         try {
             blob = new SerialBlob(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        return blob;
-    }
 
-    public static byte[] convertBlobToBytes(Blob blob) {
-        byte[] data = new byte[0];
-        try (InputStream is = blob.getBinaryStream()) {
-            data = IOUtils.toByteArray(is);
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-        return data;
+        return blob;
     }
 }

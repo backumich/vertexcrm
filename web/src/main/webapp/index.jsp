@@ -101,25 +101,32 @@
         </div>
     </div>
 </div>
-<div class="wrapper">
-    <main class="content">
-        <div class="registration">
-            <div id="registration-form">
-                <div class="reg-form">
-                    <h3><span></span>Welcome to Vertex CRM</h3>
-                    <br>
+<div class="page gray-page mh100">
+    <div class="container pt1_5">
 
-                    <div class="errorSummary">
+        <main class="content">
+            <div class="registration">
+                <div id="registration-form">
+                    <div class="reg-form">
+                        <h3><span></span>Welcome to Vertex CRM</h3>
+                        <br>
+
+                        <div class="errorSummary">
+                        </div>
+
+                        <h3><a href="registration.jsp">Sign up</a></h3>
+                        <h3><a href="signIn.jsp">Sign in</a></h3>
+                        <h3><a href="certificateDetails.jsp">Get certificate details by certificate ID</a></h3>
+
                     </div>
-
-                    <h3><a href="registration.jsp">Sign up</a></h3>
-                    <h3><a href="signIn.jsp">Sign in</a></h3>
-                    <h3><a href="certificateDetails.jsp">For unregistered users: get certificate details</a></h3>
-
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
+
+    </div>
+</div>
+<div class="wrapper">
+
 </div>
 <div class="footer">
     <div class="container">

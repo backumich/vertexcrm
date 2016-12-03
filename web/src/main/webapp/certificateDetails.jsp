@@ -103,29 +103,45 @@
     </div>
 </div>
 
-<div>
-    <form method="get" action="${pageContext.request.contextPath}/certificateDetails">
-        <div class="block1">
-            <h2>Enter certificate ID:</h2>
-            <input type="number" name="certificationId">
-            <input type="submit" value="Send">
-        </div>
-    </form>
+<div class="page gray-page mh100">
+    <div class="container pt1_5">
 
-    <h3>${certificateIsNull}</h3>
-    <h3>${certificationId}</h3>
-    <h3>${userFirstName}</h3>
-    <h3>${userLastName}</h3>
-    <h3>${certificationDate}</h3>
-    <h3>${courseName}</h3>
-    <h3>${language}</h3>
+        <form method="get" action="${pageContext.request.contextPath}/showCertificateDetails">
+            <div class="block1">
+                <h2>Enter certificate ID:</h2>
+                <input type="number" name="certificationId">
+                <input type="submit" value="Send">
+            </div>
+        </form>
+        <br>
+
+        <c:if test="${!empty certificateIsNull}">
+            <h3>${certificateIsNull}</h3>
+        </c:if>
+
+        <h3>${certificationId}</h3>
+        <h3>${userFirstName}</h3>
+        <h3>${userLastName}</h3>
+        <h3>${certificationDate}</h3>
+        <h3>${courseName}</h3>
+        <h3>${language}</h3>
+
+        <c:if test="${!empty userPhoto}">
+            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
+                <div class="block1">
+                    <input type="submit" value="Show Certificate Holder Photo">
+                </div>
+            </form>
+        </c:if>
+        <br>
+
+    </div>
+    <a href="javascript:history.back();"><h3>Back</h3></a>
+    <a href="/"><h3>Home</h3></a>
 
 </div>
-<br>
+</div>
 
-
-<a href="javascript:history.back();"><h3>Back</h3></a>
-<a href="/"><h3>Home</h3></a>
 <div class="footer">
     <div class="container">
         <div class="right">

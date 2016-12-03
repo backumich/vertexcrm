@@ -9,4 +9,3 @@ buildNumber.properties
 .mvn/timing.properties
 *.iml
 /.idea/
-/web/src/main/resources/sva605db.properties
