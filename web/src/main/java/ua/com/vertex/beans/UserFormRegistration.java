@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 
 @Component
-public class UserRegistrationForm {
+public class UserFormRegistration {
     private int userID;
 
     @NotNull(message = "Email должно быть задано")
@@ -23,7 +23,7 @@ public class UserRegistrationForm {
     private String phone;
 
 
-    public UserRegistrationForm() {
+    public UserFormRegistration() {
     }
 
     public int getUserID() {
@@ -68,7 +68,7 @@ public class UserRegistrationForm {
     }
 
     public static Builder newBuilder() {
-        return new UserRegistrationForm().new Builder();
+        return new UserFormRegistration().new Builder();
     }
 
     public class Builder {
@@ -76,57 +76,57 @@ public class UserRegistrationForm {
         }
 
         public Builder setUserID(int userID) {
-            UserRegistrationForm.this.userID = userID;
+            UserFormRegistration.this.userID = userID;
             return this;
         }
 
         public Builder setEmail(String email) {
-            UserRegistrationForm.this.email = email;
+            UserFormRegistration.this.email = email;
             return this;
         }
 
         public Builder setPassword(String password) {
-            UserRegistrationForm.this.password = password;
+            UserFormRegistration.this.password = password;
             return this;
         }
 
         public Builder setVerifyPassword(String verifyPassword) {
-            UserRegistrationForm.this.verifyPassword = verifyPassword;
+            UserFormRegistration.this.verifyPassword = verifyPassword;
             return this;
         }
 
         public Builder setFirstName(String firstName) {
-            UserRegistrationForm.this.firstName = firstName;
+            UserFormRegistration.this.firstName = firstName;
             return this;
         }
 
         public Builder setLastName(String lastName) {
-            UserRegistrationForm.this.lastName = lastName;
+            UserFormRegistration.this.lastName = lastName;
             return this;
         }
 
         public Builder setPassportScan(BufferedImage passportScan) {
-            UserRegistrationForm.this.passportScan = passportScan;
+            UserFormRegistration.this.passportScan = passportScan;
             return this;
         }
 
         public Builder setPhoto(BufferedImage photo) {
-            UserRegistrationForm.this.photo = photo;
+            UserFormRegistration.this.photo = photo;
             return this;
         }
 
         public Builder setDiscount(int discount) {
-            UserRegistrationForm.this.discount = discount;
+            UserFormRegistration.this.discount = discount;
             return this;
         }
 
         public Builder setPhone(String phone) {
-            UserRegistrationForm.this.phone = phone;
+            UserFormRegistration.this.phone = phone;
             return this;
         }
 
-        public UserRegistrationForm build() {
-            return UserRegistrationForm.this;
+        public UserFormRegistration build() {
+            return UserFormRegistration.this;
         }
 
     }
@@ -136,7 +136,7 @@ public class UserRegistrationForm {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserRegistrationForm that = (UserRegistrationForm) o;
+        UserFormRegistration that = (UserFormRegistration) o;
 
         if (userID != that.userID) return false;
         if (discount != that.discount) return false;

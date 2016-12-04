@@ -10,4 +10,6 @@ public interface RegistrationUserLogic {
     void validationUserPassword();
 
     void validationUserPasswordComplexity();
+
+    User encryptPassword(User user);
 }

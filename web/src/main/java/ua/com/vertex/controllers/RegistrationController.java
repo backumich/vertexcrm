@@ -39,31 +39,10 @@ public class RegistrationController {
                 .setPhone(phone)
                 .getInstance();
 
-
-        //registrationUserValidator.validate(user, validator);
-
+        user = registrationUserLogic.encryptPassword(user);
         registrationUserLogic.registrationUser(user);
 
-
-//        ModelAndView result = new ModelAndView("redirect:registration.jsp");
-//        result.addObject(("yes"), registrationUserLogic.registrationUser());
         return null;
-        //result.addObject("userIds", userLogic.getAllUserIds());
-
-
-//        User user = User.newBuilder()
-//                .setEmail(email)
-//                .setPassword(password)
-//                .setFirstName(firstName)
-//                .setLastName(lastName)
-//                .setPhone(phone)
-//                .build();
-//
-//
-//        MySQLDataSource mySQLDataSource = new MySQLDataSource("jdbc:mysql://seadev.tk:3306/db1", "user1", "111");
-//        mySQLDataSource.addUser(user);
-
-        //return "home";
     }
 
 

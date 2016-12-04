@@ -11,7 +11,10 @@ import ua.com.vertex.dao.UserDaoInf;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 @Repository
 public class UserDaoRealization implements UserDaoInf {
@@ -41,6 +44,33 @@ public class UserDaoRealization implements UserDaoInf {
         String query = "SELECT user_id FROM Users order by user_id";
         return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
     }
+
+
+    @Override
+    @SuppressWarnings("SqlDialectInspection")
+    public void registrationUser(User user) {
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
+//        jdbcTemplate.update(query,new Object[]{user.getEmail(),
+//                user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhone()});
+
+
+        Map namedParameters = new HashMap();
+        namedParameters.put("email", user.getEmail());
+        namedParameters.put("password", user.getPassword());
+        namedParameters.put("first_name", user.getFirstName());
+        namedParameters.put("last_name", user.getLastName());
+        namedParameters.put("phone", user.getPhone());
+
+
+        jdbcTemplate.update(query, namedParameters);
+
+//        jdbcTemplate.update(query, user.getEmail(),
+//                user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhone());
+
+
+    }
+
+
 
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {

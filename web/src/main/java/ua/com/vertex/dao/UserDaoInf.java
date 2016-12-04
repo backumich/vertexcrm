@@ -14,4 +14,6 @@ public interface UserDaoInf {
     void deleteUser(long id);
 
     List<Integer> getAllUserIds();
+
+    void registrationUser(User user);
 }
