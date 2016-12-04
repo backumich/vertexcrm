@@ -112,11 +112,7 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void getUserPhotoForNonExistingUserShouldReturnZeroLengthArray() throws IOException {
-        String certificateId = "222";
         String userId = "1000";
-        logic.getCertificateDetails(session, certificateId);
         assertEquals(logic.getUserPhoto(userId).length, 0);
     }
-
-//
 }
