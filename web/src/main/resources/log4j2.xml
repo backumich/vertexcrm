@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug">
+<Configuration status="warn" name="MyApp" packages="">
     <Appenders>
-        <!--<Console name="Console" target="SYSTEM_OUT">-->
-        <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
-        <!--</Console>-->
-        <File name="File" fileName="logs/vertex-crm.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %5p - %c.%M  - %m.%n"/>
-        </File>
+        <RollingFile name="RollingFile" fileName="logs/vertex-app.log"
+                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100 KB"/>
+            </Policies>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="debug">
-            <AppenderRef ref="File"/>
-            <!--<AppenderRef ref="Console"/>-->
+            <AppenderRef ref="RollingFile"/>
         </Root>
     </Loggers>
 </Configuration>
