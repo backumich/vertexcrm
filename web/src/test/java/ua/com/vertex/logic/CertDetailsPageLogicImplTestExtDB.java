@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.com.vertex.context.TestContextExtDb;
+import ua.com.vertex.context.TestMainContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestContextExtDb.class)
+@ContextConfiguration(classes = TestMainContext.class)
 @ActiveProfiles("testExternalDb")
 public class CertDetailsPageLogicImplTestExtDB {
 

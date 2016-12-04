@@ -16,7 +16,6 @@ import java.util.Properties;
 @ComponentScan("ua.com.vertex")
 @Import(WebMvcContext.class)
 public class MainContext {
-
     private static final String DB_PROPERTIES = "db.properties";
 
     @Bean

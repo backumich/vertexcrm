@@ -8,7 +8,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.com.vertex.context.TestContext;
+import ua.com.vertex.context.TestMainContext;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.ServletOutputStream;
@@ -22,8 +22,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestContext.class)
-@ActiveProfiles("test")
+@ContextConfiguration(classes = TestMainContext.class)
+@ActiveProfiles("testEmbeddedDb")
 public class CertificateDetailsPageControllerTest {
 
     @Autowired
