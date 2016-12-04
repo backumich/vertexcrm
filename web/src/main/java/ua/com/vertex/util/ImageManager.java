@@ -16,12 +16,13 @@ public class ImageManager {
     public static byte[] convertBlobToBytes(Blob blob) {
         byte[] data = {};
 
-        try (InputStream is = blob.getBinaryStream()) {
-            data = IOUtils.toByteArray(is);
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
+        if (blob != null) {
+            try (InputStream is = blob.getBinaryStream()) {
+                data = IOUtils.toByteArray(is);
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
         }
-
         return data;
     }
 
