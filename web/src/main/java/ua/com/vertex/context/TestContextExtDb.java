@@ -17,10 +17,6 @@ import java.util.Properties;
 @Profile("testExternalDb")
 public class TestContextExtDb {
 
-    {
-        System.out.println("=================================");
-    }
-
     @Bean
     public DataSource dataSource() throws Exception {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
