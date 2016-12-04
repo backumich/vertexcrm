@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestMainContext.class)
-@ActiveProfiles("testEmbeddedDb")
+@ActiveProfiles("test")
 public class CertificateDetailsPageControllerTest {
 
     @Autowired

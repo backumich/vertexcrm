@@ -1,6 +1,5 @@
 package ua.com.vertex.beans;
 
-import java.sql.Blob;
 import java.util.Objects;
 
 public class User {
@@ -9,8 +8,8 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private Blob passportScan;
-    private Blob photo;
+    private byte[] passportScan;
+    private byte[] photo;
     private int discount;
     private String phone;
 
@@ -49,13 +48,13 @@ public class User {
             return this;
         }
 
-        public Builder setPassportScan(Blob blob) {
-            user.setPassportScan(blob);
+        public Builder setPassportScan(byte[] data) {
+            user.setPassportScan(data);
             return this;
         }
 
-        public Builder setPhoto(Blob blob) {
-            user.setPhoto(blob);
+        public Builder setPhoto(byte[] data) {
+            user.setPhoto(data);
             return this;
         }
 
@@ -142,20 +141,20 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Blob getPassportScan() {
+    public byte[] getPassportScan() {
         return passportScan;
     }
 
-    public void setPassportScan(Blob blob) {
-        this.passportScan = blob;
+    public void setPassportScan(byte[] data) {
+        this.passportScan = data;
     }
 
-    public Blob getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Blob blob) {
-        this.photo = blob;
+    public void setPhoto(byte[] data) {
+        this.photo = data;
     }
 
     public int getDiscount() {

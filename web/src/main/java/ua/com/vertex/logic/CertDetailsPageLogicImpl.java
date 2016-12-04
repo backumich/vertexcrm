@@ -10,7 +10,6 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
-import ua.com.vertex.util.ImageManager;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -80,7 +79,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         byte[] userPhoto = {};
         User user;
 
-        LOGGER.debug("Accessing userDao, photo of UserID=" + userId);
+        LOGGER.debug("Accessing userDao, UserID=" + userId);
         try {
             user = userDao.getUser(Integer.parseInt(userId));
         } catch (EmptyResultDataAccessException e) {
@@ -88,10 +87,12 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             return userPhoto;
         }
 
+        LOGGER.debug("Retrieving user photo, UserID=" + userId);
         if (user != null) {
-            userPhoto = ImageManager.convertBlobToBytes(user.getPhoto());
+            userPhoto = user.getPhoto();
         }
-        return userPhoto;
+
+        return userPhoto == null ? new byte[0] : userPhoto;
     }
 
     @Autowired

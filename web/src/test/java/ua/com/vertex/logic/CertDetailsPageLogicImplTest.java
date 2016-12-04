@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestMainContext.class)
-@ActiveProfiles("testEmbeddedDb")
+@ActiveProfiles("test")
 public class CertDetailsPageLogicImplTest {
 
     @Autowired
@@ -77,7 +77,7 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void sessionAttributesForCertificateStoredInDBWithoutUserAssignedShouldNotBeNull() {
-        String certificateId = "333";
+        String certificateId = "500";
         logic.getCertificateDetails(session, certificateId);
         assertNotNull(session.getAttribute("certificateIsNull"));
         assertNotNull(session.getAttribute("certificationId"));
@@ -104,8 +104,8 @@ public class CertDetailsPageLogicImplTest {
 
     @Test()
     public void getUserPhotoForExistingUserWithNoPhotoShouldReturnZeroLengthArray() throws IOException {
-        String certificateId = "222";
-        String userId = "22";
+        String certificateId = "333";
+        String userId = "33";
         logic.getCertificateDetails(session, certificateId);
         assertEquals(logic.getUserPhoto(userId).length, 0);
     }
@@ -114,5 +114,12 @@ public class CertDetailsPageLogicImplTest {
     public void getUserPhotoForNonExistingUserShouldReturnZeroLengthArray() throws IOException {
         String userId = "1000";
         assertEquals(logic.getUserPhoto(userId).length, 0);
+    }
+
+    @Test()
+    public void getUserPhotoForExistingUserWithPhotoShouldReturnNonZeroLengthArray() throws IOException {
+        CertDetailsPageLogicImpl logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
+        String userId = "22";
+        assertEquals(logic.getUserPhoto(userId).length, 1);
     }
 }
