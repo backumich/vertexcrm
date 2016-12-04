@@ -26,7 +26,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        LOGGER.debug("Retrieving certificates by user ID");
+        LOGGER.debug("Retrieving certificates by userID=" + userId);
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
@@ -35,7 +35,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug("Retrieving certificate by certificate ID");
+        LOGGER.debug("Retrieving certificate by certificateID=" + certificateId);
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }

@@ -29,7 +29,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         User user = null;
         clearSessionAttributes(session);
 
-        LOGGER.debug("Accessing certificateDao to get certificate details");
+        LOGGER.debug("Accessing certificateDao, certificateID=" + certificationId);
         try {
             cert = certificateDao.getCertificateById(Integer.parseInt(certificationId));
         } catch (EmptyResultDataAccessException | NumberFormatException e) {
@@ -37,8 +37,8 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             return;
         }
 
-        LOGGER.debug("Accessing userDao to get certificate holder details");
         try {
+            LOGGER.debug("Accessing userDao, userID=" + cert.getUserId());
             user = userDao.getUser(cert.getUserId());
         } catch (EmptyResultDataAccessException e) {
             session.setAttribute("certificateIsNull", "No holder is assigned to this certificate ID");
@@ -80,7 +80,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         byte[] userPhoto = {};
         User user;
 
-        LOGGER.debug("Accessing userDao to get certificate holder photo");
+        LOGGER.debug("Accessing userDao, photo of UserID=" + userId);
         try {
             user = userDao.getUser(Integer.parseInt(userId));
         } catch (EmptyResultDataAccessException e) {
