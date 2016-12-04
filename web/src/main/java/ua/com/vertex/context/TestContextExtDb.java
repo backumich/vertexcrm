@@ -5,7 +5,6 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
@@ -14,18 +13,15 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
-@Import(WebMvcContext.class)
-public class MainContext {
-
-    private static final String DB_PROPERTIES = "db.properties";
-
+public class TestContextExtDb {
     @Bean
     public DataSource dataSource() throws Exception {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
     }
 
+    @Bean
     public Properties getDbProperties() throws IOException {
-        final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
+        final ClassPathResource classPathResource = new ClassPathResource("testDBDoNotChange.properties");
 
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
         factoryBean.setLocation(classPathResource);
