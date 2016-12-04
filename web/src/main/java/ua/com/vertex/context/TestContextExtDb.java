@@ -5,6 +5,7 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
@@ -13,7 +14,13 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
+@Profile("testExternalDb")
 public class TestContextExtDb {
+
+    {
+        System.out.println("=================================");
+    }
+
     @Bean
     public DataSource dataSource() throws Exception {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
