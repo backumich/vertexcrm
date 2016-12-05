@@ -1,6 +1,8 @@
 package ua.com.vertex.dao.impl;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,11 +20,19 @@ import java.util.List;
 @Repository
 public class CertificateDaoImpl implements CertificateDao {
 
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
+
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<Certificate> getAllCertificateByUserId(int userId) {
+
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
+
+        LOGGER.info("Call - jdbcTemplate.query ");
+        LOGGER.warn("Call - jdbcTemplate.query ");
+        LOGGER.error("Call - jdbcTemplate.query ");
+        LOGGER.fatal("Call - jdbcTemplate.query ");
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
@@ -31,6 +41,11 @@ public class CertificateDaoImpl implements CertificateDao {
                 + "FROM Certificate WHERE certification_id =:certificateId";
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
@@ -44,10 +59,5 @@ public class CertificateDaoImpl implements CertificateDao {
                     .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
-    }
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

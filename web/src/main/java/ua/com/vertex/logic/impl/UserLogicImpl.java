@@ -1,5 +1,7 @@
 package ua.com.vertex.logic.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
@@ -13,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserLogicImpl implements UserLogic {
 
+    private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     private final CertificateDao certificateDao;
-
     private final UserDao userDao;
 
     @Autowired
@@ -24,6 +26,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     public List<Certificate> getAllCertificateByUserId(int userId) {
+        LOGGER.info("Call - certificateDao.getAllCertificateByUserId(userId);>");
         return certificateDao.getAllCertificateByUserId(userId);
     }
 

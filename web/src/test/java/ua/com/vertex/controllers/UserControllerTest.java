@@ -21,12 +21,12 @@ import static ua.com.vertex.controllers.UserController.CERTIFICATES;
 
 public class UserControllerTest {
 
-    UserController underTest;
+    private UserController underTest;
 
     @Mock
     UserLogic userLogic;
 
-    Model model;
+    private Model model;
 
     @Before
     public void setUp() throws Exception {
@@ -44,7 +44,7 @@ public class UserControllerTest {
     @Test
     public void getAllCertificateByUserIdShouldReturnAppropriateString() {
         String result = underTest.getAllCertificateByUserId(222, model);
-        assertEquals("Maybe mapping for this method was changed", "user.jsp", result);
+        assertEquals("Maybe mapping for this method was changed", "user", result);
     }
 
     @Test
