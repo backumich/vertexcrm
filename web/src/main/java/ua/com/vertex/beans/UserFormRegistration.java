@@ -2,17 +2,13 @@ package ua.com.vertex.beans;
 
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.awt.image.BufferedImage;
 
 @Component
 public class UserFormRegistration {
     private int userID;
 
-    @NotNull(message = "Email должно быть задано")
     private String email;
-
-
     private String password;
     private String verifyPassword;
     private String firstName;

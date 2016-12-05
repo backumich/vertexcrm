@@ -28,7 +28,7 @@
                     <div class="errorSummary">
                     </div>
 
-                    <h3><a href="registration.jsp">Sign up</a></h3>
+                    <h3><a href="registration">Sign up</a></h3>
                     <h3><a href="signIn.jsp">Sign in</a></h3>
 
                 </div>

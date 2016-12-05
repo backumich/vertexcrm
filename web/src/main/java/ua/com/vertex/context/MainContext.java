@@ -52,7 +52,8 @@ public class MainContext extends WebMvcConfigurerAdapter {
     @Bean
     public InternalResourceViewResolver getInternalResourceViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/pages/");
+//        resolver.setPrefix("/WEB-INF/pages/");
+        resolver.setPrefix("/");
         resolver.setSuffix(".jsp");
         return resolver;
     }

@@ -1,65 +1,55 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta charset="utf-8"/>
-
-    <title></title>
-    <meta name="keywords" content=""/>
-    <meta name="description" content=""/>
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-
-    <script src="js/index.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/registration.css"/>
-    <!--<link rel="stylesheet" type="text/css" href="css/registration.css"/>-->
+    <link href="<c:url value="css/registration.css" />" rel="stylesheet">
+    <%--<link rel="stylesheet" type="text/css" href="css/registration.css"/>--%>
+    <%--<script src="js/index.js"></script>--%>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
 </head>
 
 <body>
-
-<div class="wrapper">
-   <main class="content">
-       <div class="registration">
-           <div id="registration-form">
-               <div class="reg-form">
-                   <h3><span></span>Create User Account</h3>
-
-                   <div class="errorSummary">
-                       ${yes}
-                   </div>
-                   <p><label>E-mail <span>*</span></label><input type="text" value="" id="reg_email"></p>
-
-                   <p><label>Password <span>*</span></label><input type="password" value="" maxlength="32"
-                                                                   id="reg_password"></p>
-
-                   <p><label>Confirm password<span>*</span></label><input type="password" id="verifyPassword"></p>
-
-                   <p><label>First name <span>*</span></label><input type="text" id="firstName" maxlength="255"
-                                                                     size="60"></p>
-
-                   <p><label>Last name <span>*</span></label><input type="text" id="lastName" maxlength="255"
-                                                                    size="60"></p>
-
-                   <p><label>Phone <span></span></label><input type="text" value="" id="phone" maxlength="255"
-                                                                size="60"></p>
-
-                   <div id="btRegistration" class="row-button">
-                       <input type="button" value="Sign Up"></div>
-
-                   <br>
-               </div>
-           </div>
-       </div>
-   </main>
+<div align="center">
+    <form:form action="registration" method="post" commandName="user">
+        <table border="0">
+            <tr>
+                <td colspan="2" align="center"><h2>Registration new user</h2></td>
+            </tr>
+            <tr>
+                <td>E-mail:</td>
+                <td><form:input path="email"/></td>
+            </tr>
+            <tr>
+                <td>Password:</td>
+                <td><form:password path="password"/></td>
+            </tr>
+            <tr>
+                <td>Repeat password:</td>
+                <td><form:password path="verifyPassword"/></td>
+            </tr>
+            <tr>
+                <td>First name:</td>
+                <td><form:input path="firstName"/></td>
+            </tr>
+            <tr>
+                <td>Last name:</td>
+                <td><form:input path="lastName"/></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><form:input path="phone"/></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="Register"/></td>
+            </tr>
+        </table>
+    </form:form>
 </div>
-<!-- .wrapper -->
 
-<footer class="footer">
-    Welcome to Vertex CRM (:
-</footer>
-<!-- .footer -->
-
-<div id="overlay" class="overlay" style="display:none;"></div>
 </body>
 </html>
