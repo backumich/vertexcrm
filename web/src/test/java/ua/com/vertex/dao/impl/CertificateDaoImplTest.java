@@ -17,7 +17,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyInt;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
@@ -30,7 +29,7 @@ public class CertificateDaoImplTest {
 
     @Test
     public void getAllCertificateByUserIdReturnNotNull() throws Exception {
-        List<Certificate> result = underTest.getAllCertificateByUserId(anyInt());
+        List<Certificate> result = underTest.getAllCertificateByUserId(-1);
 
         assertNotNull("Maybe method was changed", result);
     }
