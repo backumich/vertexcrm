@@ -1,4 +1,4 @@
-package ua.com.vertex.logic.impl;
+package ua.com.vertex.logic;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.CertificateDao;
 import ua.com.vertex.dao.UserDao;
-import ua.com.vertex.logic.UserLogic;
 
 import java.util.List;
 import java.util.stream.Collectors;

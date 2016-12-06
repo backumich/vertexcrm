@@ -16,10 +16,10 @@ public class MainTestContext {
 
     @Bean
     DataSource dataSource() {
-        return new EmbeddedDatabaseBuilder()
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        return builder
                 .setType(EmbeddedDatabaseType.H2)
-                .addScript("db/sql/create-db.sql")
-                .addScript("db/sql/insert-data.sql")
+                .addScript("db/create-db.sql")
                 .build();
     }
 }

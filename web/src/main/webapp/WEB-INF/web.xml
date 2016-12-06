@@ -39,13 +39,19 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <welcome-file-list>
-        <welcome-file>user.jsp</welcome-file>
-    </welcome-file-list>
-
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>main</param-value>
+    </context-param>
+
+    <welcome-file-list>
+        <welcome-file>user.jsp</welcome-file>
+    </welcome-file-list>
+
 
 </web-app>

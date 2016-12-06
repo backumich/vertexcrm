@@ -30,9 +30,6 @@ public class CertificateDaoImpl implements CertificateDao {
                 + "FROM Certificate WHERE user_id =:userId";
 
         LOGGER.info("Call - jdbcTemplate.query ");
-        LOGGER.warn("Call - jdbcTemplate.query ");
-        LOGGER.error("Call - jdbcTemplate.query ");
-        LOGGER.fatal("Call - jdbcTemplate.query ");
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 

@@ -6,10 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -17,9 +13,14 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
-public class MainContext extends WebMvcConfigurerAdapter {
+public class MainContext {
 
     private static final String DB_PROPERTIES = "db.properties";
+
+    @Bean
+    public DataSource dataSource() throws Exception {
+        return BasicDataSourceFactory.createDataSource(getDbProperties());
+    }
 
     private Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
@@ -30,29 +31,5 @@ public class MainContext extends WebMvcConfigurerAdapter {
 
         return factoryBean.getObject();
     }
-
-    @Bean
-    public DataSource dataSource() throws Exception {
-        return BasicDataSourceFactory.createDataSource(getDbProperties());
-    }
-
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(31556926);
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
-
-    @Bean
-    public InternalResourceViewResolver getInternalResourceViewResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-//        resolver.setPrefix("/WEB-INF/pages/");
-        resolver.setSuffix(".jsp");
-        return resolver;
-    }
-
 
 }
