@@ -26,12 +26,16 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-//    public ModelAndView processRegistration(@ModelAttribute("userFormRegistration") UserFormRegistration userFormRegistration) {
     public ModelAndView processRegistration(@Valid @ModelAttribute("userFormRegistration") UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
+
+        if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
+            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
+        }
 
         if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
             bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
         }
+
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registration");
             modelAndView.addObject("userFormRegistration", userFormRegistration);

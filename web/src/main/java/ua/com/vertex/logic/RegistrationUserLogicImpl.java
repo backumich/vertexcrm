@@ -46,7 +46,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     }
 
     @Override
-    public void checkEmailAlreadyExists(UserFormRegistration userFormRegistration) {
-        userDaoRealization.isRegisteredEmail(userFormRegistration);
+    public int checkEmailAlreadyExists(UserFormRegistration userFormRegistration) {
+        return userDaoRealization.isRegisteredEmail(userFormRegistration.getEmail());
     }
 }

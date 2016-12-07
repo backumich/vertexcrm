@@ -12,5 +12,5 @@ public interface RegistrationUserLogic {
 
     User userFormRegistrationToUser(UserFormRegistration userFormRegistration);
 
-    void checkEmailAlreadyExists(UserFormRegistration userFormRegistration);
+    int checkEmailAlreadyExists(UserFormRegistration userFormRegistration);
 }

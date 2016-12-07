@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -17,16 +16,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @Repository
 public class UserDaoRealization implements UserDaoInf {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private JdbcTemplate jdbcTemplateQ;
+    private JdbcTemplate jdbcTemplateReg;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.jdbcTemplateReg = new JdbcTemplate(dataSource);
     }
 
     @SuppressWarnings("SqlDialectInspection")
@@ -50,24 +49,15 @@ public class UserDaoRealization implements UserDaoInf {
 
     @Override
     @SuppressWarnings("SqlDialectInspection")
-    public void isRegisteredEmail(UserFormRegistration userFormRegistration) {
-        String query = "SELECT count(*) FROM USERS WHERE email=:id";
-
-
-//        int count = getJdbcTemplate().queryForObject(
-//                sql, new Object[] { username }, Integer.class);
-
-        //jdbcTemplate.update(query);
+    public int isRegisteredEmail(String email) {
+        String query = "SELECT count(*) FROM Users WHERE email=?";
+        return jdbcTemplateReg.queryForObject(query, Integer.class, email);
     }
-
 
     @Override
     @SuppressWarnings("SqlDialectInspection")
     public void registrationUser(User user) {
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
-//        jdbcTemplate.update(query,new Object[]{user.getEmail(),
-//                user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhone()});
-
 
         Map namedParameters = new HashMap();
         namedParameters.put("email", user.getEmail());
@@ -75,16 +65,8 @@ public class UserDaoRealization implements UserDaoInf {
         namedParameters.put("first_name", user.getFirstName());
         namedParameters.put("last_name", user.getLastName());
         namedParameters.put("phone", user.getPhone());
-
-
         jdbcTemplate.update(query, namedParameters);
-
-//        jdbcTemplate.update(query, user.getEmail(),
-//                user.getPassword(), user.getFirstName(), user.getLastName(), user.getPhone());
-
-
     }
-
 
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -101,3 +83,4 @@ public class UserDaoRealization implements UserDaoInf {
         }
     }
 }
+
