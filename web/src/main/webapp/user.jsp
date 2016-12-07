@@ -20,6 +20,7 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -38,17 +39,9 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
     </style>
 </head>
@@ -108,13 +101,17 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        <form method="get" action="/getCertificateByUserId">
-            <input type="number" name="userId" value="certificateId"/>
+        <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
+            <label>
+                <input type="number" name="userId" value="certificateId"/>
+            </label>
             <input type="submit" name="enter" value="enter"/>
         </form>
-
+        <c:if test="${listCertificatesIsEmpty==true}">
+            <h1>You do not have certificates!!!</h1>
+        </c:if>
         <c:if test="${!empty certificates}">
-            <table class="item-table">
+            <table class="active" width="500">
                 <tr>
                     <th>Certification Id</th>
                     <th>Certification Date</th>

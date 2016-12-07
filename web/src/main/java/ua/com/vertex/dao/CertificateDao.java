@@ -10,6 +10,6 @@ public interface CertificateDao {
     @SuppressWarnings("unused")
     Certificate getCertificateById(int certificateId);
 
-    List<Certificate> getAllCertificateByUserId(int userId);
+    List<Certificate> getAllCertificatesByUserId(int userId);
 
 }

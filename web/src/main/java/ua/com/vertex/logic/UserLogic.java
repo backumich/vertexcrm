@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserLogic {
 
-    List<Certificate> getAllCertificateByUserId(int userId);
+    List<Certificate> getAllCertificatesByUserId(int userId);
 
     List<String> getAllUserIds();
 

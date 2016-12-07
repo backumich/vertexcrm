@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.com.vertex.dao.impl.CertificateDaoImpl;
 import ua.com.vertex.dao.impl.UserDaoImpl;
+import ua.com.vertex.logic.impl.UserLogicImpl;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyInt;
@@ -27,13 +28,13 @@ public class UserLogicImplTest {
 
     @Test
     public void getAllCertificateByUserIdIsCalledOnCertificateDao() throws Exception {
-        userLogic.getAllCertificateByUserId(anyInt());
-        verify(certificateDao).getAllCertificateByUserId(anyInt());
+        userLogic.getAllCertificatesByUserId(anyInt());
+        verify(certificateDao).getAllCertificatesByUserId(anyInt());
     }
 
     @Test
     public void getAllCertificateByUserIdNeverReturnNull() throws Exception {
-        assertNotNull("Maybe mapping for this method was changed", userLogic.getAllCertificateByUserId(anyInt()));
+        assertNotNull("Maybe mapping for this method was changed", userLogic.getAllCertificatesByUserId(anyInt()));
     }
 
 }
