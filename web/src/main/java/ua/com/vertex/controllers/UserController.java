@@ -26,15 +26,13 @@ public class UserController {
 
     @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
+    // TODO: 07.12.2016  Maybe to change the method name into getAllCertificatesByUserId ("s" is missing)
     public String getAllCertificateByUserId(@RequestParam("userId") int userId, Model model) {
-
-
+        
         LOGGER.info("Request to '/getCertificateByUserId', call  - model.addAttribute()");
-
         model.addAttribute(CERTIFICATES, userLogic.getAllCertificateByUserId(userId));
-
+        // TODO: 07.12.2016 I think you need to return cetrificates.jsp, because you get all the certificates, but not all the users 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
-
         return "user";
     }
 

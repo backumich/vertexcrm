@@ -30,11 +30,12 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
+    // TODO: 07.12.2016  I think we need to delete this override method
     @Override
     public User getUser(long id) {
         return null;
     }
-
+    // TODO: 07.12.2016 User Id is int
     @SuppressWarnings("SqlDialectInspection")
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
