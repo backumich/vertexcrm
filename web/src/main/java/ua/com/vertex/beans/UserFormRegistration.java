@@ -2,12 +2,15 @@ package ua.com.vertex.beans;
 
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.Size;
 import java.awt.image.BufferedImage;
+
 
 @Component
 public class UserFormRegistration {
     private int userID;
 
+    @Size(min = 5, message = "123")
     private String email;
     private String password;
     private String verifyPassword;

@@ -23,14 +23,17 @@
             <tr>
                 <td>E-mail:</td>
                 <td><form:input path="email"/></td>
+                <td><form:errors path="email"/></td>
             </tr>
             <tr>
                 <td>Password:</td>
                 <td><form:password path="password"/></td>
+                <td><form:errors path="password"/></td>
             </tr>
             <tr>
                 <td>Repeat password:</td>
                 <td><form:password path="verifyPassword"/></td>
+                <td><form:errors path="verifyPassword"/></td>
             </tr>
             <tr>
                 <td>First name:</td>

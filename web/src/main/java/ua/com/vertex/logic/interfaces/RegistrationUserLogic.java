@@ -1,6 +1,8 @@
 package ua.com.vertex.logic.interfaces;
 
 import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserFormRegistration;
+
 
 public interface RegistrationUserLogic {
     String registrationUser(User user);
@@ -11,5 +13,7 @@ public interface RegistrationUserLogic {
 
     void validationUserPasswordComplexity();
 
-    User encryptPassword(User user);
+    UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration);
+
+    User userFormRegistrationToUser(UserFormRegistration userFormRegistration);
 }

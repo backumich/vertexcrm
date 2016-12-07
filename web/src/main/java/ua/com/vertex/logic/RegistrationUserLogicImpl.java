@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.dao.impl.UserDaoRealization;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
@@ -38,9 +39,25 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic, Validat
     }
 
     @Override
-    public User encryptPassword(User user) {
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+    public UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration) {
+
+        userFormRegistration.newBuilder().setPassword(DigestUtils.md5Hex(userFormRegistration.getPassword())).build();
+        //user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         //DigestUtils.md5Hex(user.getPassword());
+        return userFormRegistration;
+    }
+
+    @Override
+    public User userFormRegistrationToUser(UserFormRegistration userFormRegistration) {
+
+        User user = new User
+                .Builder()
+                .setEmail(userFormRegistration.getEmail())
+                .setPassword(userFormRegistration.getPassword())
+                .setFirstName(userFormRegistration.getFirstName())
+                .setLastName(userFormRegistration.getLastName())
+                .setPhone(userFormRegistration.getPhone())
+                .getInstance();
         return user;
     }
 

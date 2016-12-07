@@ -2,14 +2,15 @@ package ua.com.vertex.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
@@ -49,17 +50,25 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView processRegistration(@ModelAttribute("user") User user) {
+    public ModelAndView processRegistration(@Valid @ModelAttribute("user") UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
 
-        user = registrationUserLogic.encryptPassword(user);
-        registrationUserLogic.registrationUser(user);
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("user", userFormRegistration);
+            return modelAndView;
+        }
+
+        userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
+        //registrationUserLogic.registrationUser(user);
+
+
 
 //        System.out.println("username: " + user.getEmail());
 //        System.out.println("password: " + user.getPassword());
 //        System.out.println("birth date: " + user.getFirstName());
 //        System.out.println("profession: " + user.getLastName());
 
-        return new ModelAndView("registrationSuccess", "user", user);
+        return new ModelAndView("registrationSuccess", "user", userFormRegistration);
         //return "registrationSuccess";
     }
 }
