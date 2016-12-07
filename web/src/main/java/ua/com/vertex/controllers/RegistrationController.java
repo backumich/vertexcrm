@@ -2,6 +2,7 @@ package ua.com.vertex.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +11,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(value = "/registration")
@@ -19,48 +20,31 @@ public class RegistrationController {
     @Autowired
     private RegistrationUserLogic registrationUserLogic;
 
-
-//    @RequestMapping(value = "/RegistrationUser", method = RequestMethod.POST)
-//    @ResponseBody
-//    public ModelAndView registrationUser(@RequestParam String email, String password, String verifyPassword, String firstName, String lastName, String phone) {
-//        System.out.println(email);
-//        System.out.println(password);
-//        System.out.println(verifyPassword);
-//        System.out.println(firstName);
-//        System.out.println(lastName);
-//        System.out.println(phone);
-//        User user = new User
-//                .Builder()
-//                .setEmail(email)
-//                .setPassword(password)
-//                .setFirstName(firstName)
-//                .setLastName(lastName)
-//                .setPhone(phone)
-//                .getInstance();
-//
-//        user = registrationUserLogic.encryptPassword(user);
-//        registrationUserLogic.registrationUser(user);
-//        return null;
-//    }
-
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView viewRegistrationForm(Map<String, Object> model) {
-        return new ModelAndView("registration", "user", new UserFormRegistration());
+    public ModelAndView viewRegistrationForm(ModelAndView modelAndView) {
+        return new ModelAndView("registration", "userFormRegistration", new UserFormRegistration());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView processRegistration(@ModelAttribute("user") User user) {
+//    public ModelAndView processRegistration(@ModelAttribute("userFormRegistration") UserFormRegistration userFormRegistration) {
+    public ModelAndView processRegistration(@Valid @ModelAttribute("userFormRegistration") UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
 
-        user = registrationUserLogic.encryptPassword(user);
+        if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
+            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
+        }
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("userFormRegistration", userFormRegistration);
+            return modelAndView;
+        }
+
+        userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
+
+        User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
+
         registrationUserLogic.registrationUser(user);
 
-//        System.out.println("username: " + user.getEmail());
-//        System.out.println("password: " + user.getPassword());
-//        System.out.println("birth date: " + user.getFirstName());
-//        System.out.println("profession: " + user.getLastName());
-
-        return new ModelAndView("registrationSuccess", "user", user);
-        //return "registrationSuccess";
+        return new ModelAndView("registrationSuccess", "userFormRegistration", userFormRegistration);
     }
 }
 

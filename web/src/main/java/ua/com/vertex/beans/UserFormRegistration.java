@@ -1,130 +1,83 @@
 package ua.com.vertex.beans;
 
-import org.springframework.stereotype.Component;
+import org.hibernate.validator.constraints.Email;
 
-import java.awt.image.BufferedImage;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-@Component
 public class UserFormRegistration {
-    private int userID;
-
+    @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
+    @Email
     private String email;
-    private String password;
-    private String verifyPassword;
-    private String firstName;
-    private String lastName;
-    private BufferedImage passportScan;
-    private BufferedImage photo;
-    private int discount;
-    private String phone;
 
+    @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
+    private String password;
+
+    @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
+    private String verifyPassword;
+
+    //@NotEmpty
+    @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
+    private String firstName;
+
+    //@NotEmpty
+    @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
+    private String lastName;
+
+    //@NotEmpty
+    @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
+    @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)", message = "Invalid telephone number format")
+    private String phone;
 
     public UserFormRegistration() {
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getVerifyPassword() {
         return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
     }
 
-    public BufferedImage getPassportScan() {
-        return passportScan;
-    }
-
-    public BufferedImage getPhoto() {
-        return photo;
-    }
-
-    public int getDiscount() {
-        return discount;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public static Builder newBuilder() {
-        return new UserFormRegistration().new Builder();
-    }
-
-    public class Builder {
-        private Builder() {
-        }
-
-        public Builder setUserID(int userID) {
-            UserFormRegistration.this.userID = userID;
-            return this;
-        }
-
-        public Builder setEmail(String email) {
-            UserFormRegistration.this.email = email;
-            return this;
-        }
-
-        public Builder setPassword(String password) {
-            UserFormRegistration.this.password = password;
-            return this;
-        }
-
-        public Builder setVerifyPassword(String verifyPassword) {
-            UserFormRegistration.this.verifyPassword = verifyPassword;
-            return this;
-        }
-
-        public Builder setFirstName(String firstName) {
-            UserFormRegistration.this.firstName = firstName;
-            return this;
-        }
-
-        public Builder setLastName(String lastName) {
-            UserFormRegistration.this.lastName = lastName;
-            return this;
-        }
-
-        public Builder setPassportScan(BufferedImage passportScan) {
-            UserFormRegistration.this.passportScan = passportScan;
-            return this;
-        }
-
-        public Builder setPhoto(BufferedImage photo) {
-            UserFormRegistration.this.photo = photo;
-            return this;
-        }
-
-        public Builder setDiscount(int discount) {
-            UserFormRegistration.this.discount = discount;
-            return this;
-        }
-
-        public Builder setPhone(String phone) {
-            UserFormRegistration.this.phone = phone;
-            return this;
-        }
-
-        public UserFormRegistration build() {
-            return UserFormRegistration.this;
-        }
-
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override
@@ -134,47 +87,53 @@ public class UserFormRegistration {
 
         UserFormRegistration that = (UserFormRegistration) o;
 
-        if (userID != that.userID) return false;
-        if (discount != that.discount) return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (verifyPassword != null ? !verifyPassword.equals(that.verifyPassword) : that.verifyPassword != null)
             return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (passportScan != null ? !passportScan.equals(that.passportScan) : that.passportScan != null) return false;
-        if (photo != null ? !photo.equals(that.photo) : that.photo != null) return false;
         return phone != null ? phone.equals(that.phone) : that.phone == null;
     }
 
     @Override
     public int hashCode() {
-        int result = userID;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
+        int result = email != null ? email.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (verifyPassword != null ? verifyPassword.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (passportScan != null ? passportScan.hashCode() : 0);
-        result = 31 * result + (photo != null ? photo.hashCode() : 0);
-        result = 31 * result + discount;
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UserRegistrationForm{" +
-                "userID=" + userID +
-                ", email='" + email + '\'' +
+        return "UserFormRegistration{" +
+                "email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", verifyPassword='" + verifyPassword + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", passportScan=" + passportScan +
-                ", photo=" + photo +
-                ", discount=" + discount +
                 ", phone='" + phone + '\'' +
                 '}';
     }
 }
+
+//^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
+//
+//        18005551234
+//        1 800 555 1234
+//        +1 800 555-1234
+//        +86 800 555 1234
+//        1-800-555-1234
+//        1 (800) 555-1234
+//        (800)555-1234
+//        (800) 555-1234
+//        (800)5551234
+//        800-555-1234
+//        800.555.1234
+//        800 555 1234x5678
+//        8005551234 x5678
+//        1    800    555-1234
+//        1----800----555-1234

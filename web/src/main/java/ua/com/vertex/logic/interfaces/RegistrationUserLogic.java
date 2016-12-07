@@ -1,15 +1,16 @@
 package ua.com.vertex.logic.interfaces;
 
 import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserFormRegistration;
 
 public interface RegistrationUserLogic {
     String registrationUser(User user);
 
-    void validationUserEmail();
+    boolean isMatchPassword(UserFormRegistration userFormRegistration);
 
-    void validationUserPassword();
+    UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration);
 
-    void validationUserPasswordComplexity();
+    User userFormRegistrationToUser(UserFormRegistration userFormRegistration);
 
-    User encryptPassword(User user);
+    void checkEmailAlreadyExists(UserFormRegistration userFormRegistration);
 }

@@ -1,11 +1,7 @@
 package ua.com.vertex.beans;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
 import java.sql.Blob;
 
-@Component
 public class User {
 
     private long userId;
