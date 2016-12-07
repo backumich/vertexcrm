@@ -20,3 +20,146 @@
 16:40:30.667 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
 16:40:30.683 [main] INFO  ua.com.vertex.logic.UserLogicImpl (UserLogicImpl.java:28) - Call - certificateDao.getAllCertificateByUserId(userId);>
 16:40:30.683 [main] INFO  ua.com.vertex.logic.UserLogicImpl (UserLogicImpl.java:28) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:06:02.972 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:06:03.050 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:06:03.112 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:06:03.112 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:06:03.128 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:06:03.128 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:06:07.268 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:06:07.408 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:06:07.611 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:06:07.642 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:06:07.642 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:08:42.510 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:08:42.525 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:08:42.541 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:08:42.541 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:08:42.541 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:08:42.556 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:08:43.742 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:08:43.804 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:08:43.976 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:08:44.007 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:08:44.007 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:09:54.809 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:09:54.825 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:09:54.838 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:09:54.839 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:09:54.845 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:09:54.853 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:09:56.137 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:09:56.190 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:09:56.347 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:09:56.372 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:09:56.374 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:11:56.038 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:11:56.053 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:11:56.065 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:11:56.066 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:11:56.073 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:11:56.082 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:11:57.309 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:11:57.356 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:11:57.514 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:11:57.543 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:11:57.544 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:13:00.360 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:13:00.375 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:13:00.391 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:13:00.391 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:13:00.391 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:31) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:13:00.391 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:34) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:13:01.592 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:13:01.654 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:13:01.827 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:13:01.843 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:13:01.858 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:29:46.559 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:29:46.575 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:29:46.590 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:29:46.590 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:29:46.590 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:29:46.606 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:29:47.902 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:29:47.949 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:29:48.120 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:29:48.136 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:29:48.136 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:31:23.892 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:31:23.908 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:31:23.920 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:31:23.921 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:31:23.936 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:31:23.939 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:31:25.247 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:31:25.297 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:31:25.444 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:31:25.472 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:31:25.474 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:36:35.724 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:36:35.739 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:36:35.755 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:36:35.755 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:36:35.755 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:36:35.771 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:36:36.987 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:36:37.034 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:36:37.175 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:36:37.206 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:36:37.206 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:38:11.503 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:38:11.518 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:38:11.529 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:38:11.529 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:38:11.537 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:38:11.547 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:38:12.808 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:38:12.865 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:38:13.010 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:38:13.036 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:38:13.038 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:40:03.168 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:40:03.184 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:40:03.199 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:40:03.199 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:40:03.215 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:40:03.215 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:40:04.416 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:40:04.479 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:40:04.635 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:40:04.666 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:40:04.666 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:41:31.532 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:41:31.547 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:41:31.561 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:41:31.561 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:41:31.576 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:41:31.578 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:41:32.852 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:41:32.892 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:41:33.040 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:41:33.072 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:41:33.074 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:50:01.942 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:50:01.958 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:50:01.973 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:50:01.973 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:50:01.989 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:50:01.989 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:50:03.133 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:50:03.180 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:50:03.320 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:50:03.351 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:50:03.367 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:56:42.866 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:56:42.866 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:56:42.881 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:56:42.881 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:56:42.897 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:35) - Request to '/getCertificateByUserId', call  - model.addAttribute()
+19:56:42.897 [main] INFO  ua.com.vertex.controllers.UserController (UserController.java:43) - Request to '/getCertificateByUserId' return 'user.jsp' 
+19:56:44.145 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:56:44.192 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:56:44.348 [main] INFO  ua.com.vertex.dao.impl.CertificateDaoImpl (CertificateDaoImpl.java:32) - Call - jdbcTemplate.query 
+19:56:44.395 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
+19:56:44.395 [main] INFO  ua.com.vertex.logic.impl.UserLogicImpl (UserLogicImpl.java:29) - Call - certificateDao.getAllCertificateByUserId(userId);>
