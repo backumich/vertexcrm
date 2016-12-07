@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.CertificateDaoInf;
+
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,6 +40,18 @@ public class CertificateDaoRealization implements CertificateDaoInf {
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }
+
+    public void assignCertificateToUser(int userId, int certificateId) {
+
+
+        String query = "UPDATE Certificate SET user_id=:userId WHERE  certification_id=:certificateId";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource("userId", userId);
+        parameterSource.addValue("certificateId", certificateId);
+        jdbcTemplate.update(query, parameterSource);
+
+    }
+
+
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
