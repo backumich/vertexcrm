@@ -29,7 +29,8 @@ public class CertificateDaoImpl implements CertificateDao {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        LOGGER.info("Call - jdbcTemplate.query ");
+        LOGGER.info("Getting all certificates for user with id: " + userId);
+        // TODO: 08.12.16 extract constants please
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 

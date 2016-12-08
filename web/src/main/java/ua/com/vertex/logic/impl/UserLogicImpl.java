@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class UserLogicImpl implements UserLogic {
 
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+
     private final CertificateDao certificateDao;
     private final UserDao userDao;
 
@@ -26,7 +27,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     public List<Certificate> getAllCertificatesByUserId(int userId) {
-        LOGGER.info("Call - certificateDao.getAllCertificateByUserId(userId);>");
+        LOGGER.info(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
         return certificateDao.getAllCertificatesByUserId(userId);
     }
 

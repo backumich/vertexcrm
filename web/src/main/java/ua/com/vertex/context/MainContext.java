@@ -13,6 +13,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
+//todo: where is import of context?
 public class MainContext {
 
     private static final String DB_PROPERTIES = "db.properties";

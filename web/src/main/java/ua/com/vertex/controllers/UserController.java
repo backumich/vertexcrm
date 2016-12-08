@@ -21,7 +21,9 @@ public class UserController {
     public static final String CERTIFICATES = "certificates";
     @SuppressWarnings("WeakerAccess")
     public static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
+
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+
     private final UserLogic userLogic;
 
     @Autowired
@@ -29,7 +31,6 @@ public class UserController {
         this.userLogic = userLogic;
     }
 
-    @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
     public String getAllCertificatesByUserId(@RequestParam("userId") int userId, Model model) {
 
@@ -41,6 +42,7 @@ public class UserController {
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
+        // TODO: 08.12.16 Could you please extract a constant from this literal
         return "user";
     }
 

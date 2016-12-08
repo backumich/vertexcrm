@@ -3,10 +3,6 @@
     <Appenders>
         <File name="FILE" fileName="logs/logs.log">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} (%F:%L) - %m%n"/>
-            <!--<Policies>-->
-            <!--<TimeBasedTriggeringPolicy/>-->
-            <!--<SizeBasedTriggeringPolicy size="1M"/>-->
-            <!--</Policies>-->
         </File>
         <Console name="CONSOLE" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} (%F:%L) - %m%n"/>

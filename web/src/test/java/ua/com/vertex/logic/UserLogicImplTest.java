@@ -15,9 +15,9 @@ import static org.mockito.Mockito.verify;
 public class UserLogicImplTest {
 
     @Mock
-    CertificateDaoImpl certificateDao;
+    private CertificateDaoImpl certificateDao;
     @Mock
-    UserDaoImpl userDao;
+    private UserDaoImpl userDao;
     private UserLogicImpl userLogic;
 
     @Before
@@ -28,13 +28,14 @@ public class UserLogicImplTest {
 
     @Test
     public void getAllCertificateByUserIdIsCalledOnCertificateDao() throws Exception {
-        userLogic.getAllCertificatesByUserId(anyInt());
-        verify(certificateDao).getAllCertificatesByUserId(anyInt());
+        userLogic.getAllCertificatesByUserId(1);
+        verify(certificateDao).getAllCertificatesByUserId(1);
     }
 
     @Test
     public void getAllCertificateByUserIdNeverReturnNull() throws Exception {
-        assertNotNull("Maybe mapping for this method was changed", userLogic.getAllCertificatesByUserId(anyInt()));
+        // TODO: 08.12.16 change message please
+        assertNotNull("Maybe mapping for this method was changed", userLogic.getAllCertificatesByUserId(-1));
     }
 
 }
