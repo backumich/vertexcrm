@@ -76,7 +76,7 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-                "User ID: %s%n" +
+                "User ID: %05d%n" +
                         "E-mail: %s%n" +
                         "First Name: %s%n" +
                         "Last Name: %s%n" +

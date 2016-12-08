@@ -118,6 +118,9 @@
         <c:if test="${!empty certificateIsNull}">
             <h3>${certificateIsNull}</h3>
         </c:if>
+        <c:if test="${!empty userIsNull}">
+            <h3>${userIsNull}</h3>
+        </c:if>
 
         <h3>${certificationId}</h3>
         <h3>${userFirstName}</h3>

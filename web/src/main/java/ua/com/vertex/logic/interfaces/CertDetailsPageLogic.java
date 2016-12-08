@@ -1,11 +1,11 @@
 package ua.com.vertex.logic.interfaces;
 
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.User;
 
 public interface CertDetailsPageLogic {
 
-    void getCertificateDetails(HttpSession session, String certificationId) throws IOException;
+    Certificate getCertificateDetails(int certificationId);
 
-    byte[] getUserPhoto(String userId) throws IOException;
+    User getUserDetails(int userId);
 }
