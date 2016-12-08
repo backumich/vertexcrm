@@ -37,13 +37,13 @@ public class UserControllerTest {
 
     @Test
     public void getAllCertificateByUserIdIsCalledOnUserLogic() throws Exception {
-        underTest.getAllCertificateByUserId(111, model);
-        verify(userLogic).getAllCertificateByUserId(anyInt());
+        underTest.getAllCertificatesByUserId(111, model);
+        verify(userLogic).getAllCertificatesByUserId(anyInt());
     }
 
     @Test
     public void getAllCertificateByUserIdShouldReturnAppropriateString() {
-        String result = underTest.getAllCertificateByUserId(222, model);
+        String result = underTest.getAllCertificatesByUserId(222, model);
         assertEquals("Maybe mapping for this method was changed", "user", result);
     }
 
@@ -52,9 +52,9 @@ public class UserControllerTest {
         ArrayList<Certificate> certificates = new ArrayList<>();
         certificates.add(new Certificate.Builder().getInstance());
 
-        when(userLogic.getAllCertificateByUserId(333)).thenReturn(certificates);
+        when(userLogic.getAllCertificatesByUserId(333)).thenReturn(certificates);
 
-        underTest.getAllCertificateByUserId(333, model);
+        underTest.getAllCertificatesByUserId(333, model);
 
         Object actualResult = model.asMap().get(CERTIFICATES);
 

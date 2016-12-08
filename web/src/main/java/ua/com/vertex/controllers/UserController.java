@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.UserLogic;
+
+import java.util.List;
 
 
 @Controller
@@ -16,6 +19,8 @@ public class UserController {
 
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATES = "certificates";
+    @SuppressWarnings("WeakerAccess")
+    public static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
     private final UserLogic userLogic;
 
@@ -26,15 +31,16 @@ public class UserController {
 
     @SuppressWarnings("SpringMVCViewInspection")
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
-    public String getAllCertificateByUserId(@RequestParam("userId") int userId, Model model) {
-
+    public String getAllCertificatesByUserId(@RequestParam("userId") int userId, Model model) {
 
         LOGGER.info("Request to '/getCertificateByUserId', call  - model.addAttribute()");
 
-        model.addAttribute(CERTIFICATES, userLogic.getAllCertificateByUserId(userId));
+        List<Certificate> result = userLogic.getAllCertificatesByUserId(userId);
+        model.addAttribute(CERTIFICATES, result);
+
+        model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
-
         return "user";
     }
 

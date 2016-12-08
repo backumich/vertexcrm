@@ -24,7 +24,7 @@ public class CertificateDaoImpl implements CertificateDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<Certificate> getAllCertificateByUserId(int userId) {
+    public List<Certificate> getAllCertificatesByUserId(int userId) {
 
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";

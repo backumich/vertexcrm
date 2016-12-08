@@ -29,14 +29,14 @@ public class CertificateDaoImplTest {
 
     @Test
     public void getAllCertificateByUserIdReturnNotNull() throws Exception {
-        List<Certificate> result = underTest.getAllCertificateByUserId(-1);
+        List<Certificate> result = underTest.getAllCertificatesByUserId(-1);
 
         assertNotNull("Maybe method was changed", result);
     }
 
     @Test
     public void getAllCertificateByUserIdReturnNotEmpty() throws Exception {
-        List<Certificate> result = underTest.getAllCertificateByUserId(1);
+        List<Certificate> result = underTest.getAllCertificatesByUserId(1);
 
         assertFalse(result.isEmpty());
 
@@ -54,7 +54,7 @@ public class CertificateDaoImplTest {
                 .getInstance());
 
         assertEquals("Maybe mapping for this method was changed",
-                certificates, underTest.getAllCertificateByUserId(1));
+                certificates, underTest.getAllCertificatesByUserId(1));
     }
 
 }
