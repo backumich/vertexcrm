@@ -16,15 +16,12 @@ public class UserFormRegistration {
     @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
     private String verifyPassword;
 
-    //@NotEmpty
     @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
     private String firstName;
 
-    //@NotEmpty
     @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
     private String lastName;
 
-    //@NotEmpty
     @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)", message = "Invalid telephone number format")
     private String phone;
