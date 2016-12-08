@@ -70,7 +70,6 @@ public class CertificateDetailsPageController {
         session.removeAttribute("certificateIsNull");
         session.removeAttribute("userIsNull");
         session.removeAttribute("certificationId");
-        session.removeAttribute("userId");
         session.removeAttribute("userFirstName");
         session.removeAttribute("userLastName");
         session.removeAttribute("userPhoto");
@@ -81,8 +80,6 @@ public class CertificateDetailsPageController {
 
     private void setSessionAttributes(HttpSession session, Certificate cert, User user) {
         session.setAttribute("certificationId", format("Certification ID: %05d", cert.getCertificationId()));
-        session.setAttribute("userId",
-                user == null ? "-" : user.getUserId());
         session.setAttribute("userFirstName", format("User First Name: %s",
                 user == null ? "-" : user.getFirstName()));
         session.setAttribute("userLastName", format("User Last Name: %s",

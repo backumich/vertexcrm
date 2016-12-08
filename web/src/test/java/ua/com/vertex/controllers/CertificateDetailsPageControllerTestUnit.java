@@ -134,7 +134,6 @@ public class CertificateDetailsPageControllerTestUnit {
 
         assertNull(session.getAttribute("certificateIsNull"));
         assertEquals(session.getAttribute("certificationId"), "Certification ID: 00100");
-        assertEquals(session.getAttribute("userId"), 10);
         assertEquals(session.getAttribute("userFirstName"), "User First Name: John");
         assertEquals(session.getAttribute("userLastName"), "User Last Name: Smith");
         assertEquals(session.getAttribute("userPhoto"), "");
