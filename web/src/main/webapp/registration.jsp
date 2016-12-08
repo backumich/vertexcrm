@@ -10,12 +10,12 @@
     <%--<link rel="stylesheet" type="text/css" href="css/registration.css"/>--%>
     <%--<script src="js/index.js"></script>--%>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Insert title here</title>
+    <title>Registration new user</title>
 </head>
 
 <body>
 <div align="center">
-    <form:form action="registration" method="post" commandName="user">
+    <form:form action="registration" method="post" commandName="userFormRegistration">
         <table border="0">
             <tr>
                 <td colspan="2" align="center"><h2>Registration new user</h2></td>
@@ -38,14 +38,17 @@
             <tr>
                 <td>First name:</td>
                 <td><form:input path="firstName"/></td>
+                <td><form:errors path="firstName"/></td>
             </tr>
             <tr>
                 <td>Last name:</td>
                 <td><form:input path="lastName"/></td>
+                <td><form:errors path="lastName"/></td>
             </tr>
             <tr>
                 <td>Phone:</td>
                 <td><form:input path="phone"/></td>
+                <td><form:errors path="phone"/></td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><input type="submit" value="Register"/></td>

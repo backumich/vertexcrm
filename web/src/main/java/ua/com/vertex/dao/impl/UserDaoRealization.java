@@ -1,11 +1,13 @@
 package ua.com.vertex.dao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class UserDaoRealization implements UserDaoInf {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateQ;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -43,6 +46,18 @@ public class UserDaoRealization implements UserDaoInf {
     public List<Integer> getAllUserIds() {
         String query = "SELECT user_id FROM Users order by user_id";
         return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
+    }
+
+    @Override
+    @SuppressWarnings("SqlDialectInspection")
+    public void isRegisteredEmail(UserFormRegistration userFormRegistration) {
+        String query = "SELECT count(*) FROM USERS WHERE email=:id";
+
+
+//        int count = getJdbcTemplate().queryForObject(
+//                sql, new Object[] { username }, Integer.class);
+
+        //jdbcTemplate.update(query);
     }
 
 
@@ -69,7 +84,6 @@ public class UserDaoRealization implements UserDaoInf {
 
 
     }
-
 
 
     private static final class UserRowMapping implements RowMapper<User> {
