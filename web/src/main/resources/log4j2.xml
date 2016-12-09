@@ -4,7 +4,7 @@
         <RollingFile name="RollingFile" fileName="logs/vertex-app.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+                <Pattern>"%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} (%F:%L) - %m%n"</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -18,6 +18,5 @@
         </Root>
     </Loggers>
 </Configuration>
-
 
         <!--TRACE < DEBUG < INFO < WARN < ERROR < FATAL-->

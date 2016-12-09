@@ -19,7 +19,7 @@ public class TestMainContext {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder
                 .setType(EmbeddedDatabaseType.H2)
-                .addScript("inMemoryDB/schema.sql")
+                .addScript("embeddedDB.sql")
                 .build();
     }
 }
