@@ -104,4 +104,6 @@ public class CertificateDetailsPageControllerTestUnit {
         controller.showUserPhoto(response);
         verify(stream).write(data);
     }
+
+
 }

@@ -37,6 +37,9 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
 
         if (user != null) {
             storage.setImageData(user.getPhoto());
+            if (user.getPhoto() != null)
+                user.setPhoto(new byte[0]);
+            user.setPassportScan(null);
         }
 
         return user;

@@ -17,7 +17,7 @@ import ua.com.vertex.context.TestMainContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestMainContext.class)
@@ -82,5 +82,30 @@ public class CertDetailsPageLogicImplTest {
 
         certificate = logic.getCertificateDetails(certificateId);
         logic.getUserDetails(certificate.getUserId());
+    }
+
+    @Test
+    public void getUserDetailsForUserWithPhotoShouldReturnUserWithEmptyPhotoAndNullPassportScan() {
+        Certificate certificate;
+        User user;
+        int certificateId = 222;
+
+        certificate = logic.getCertificateDetails(certificateId);
+        user = logic.getUserDetails(certificate.getUserId());
+
+        assertEquals(user.getPhoto().length, 0);
+        assertNull(user.getPassportScan());
+    }
+
+    @Test
+    public void getUserDetailsForUserWithoutPhotoShouldReturnUserWithNullPhoto() {
+        Certificate certificate;
+        User user;
+        int certificateId = 333;
+
+        certificate = logic.getCertificateDetails(certificateId);
+        user = logic.getUserDetails(certificate.getUserId());
+
+        assertNull(user.getPhoto());
     }
 }
