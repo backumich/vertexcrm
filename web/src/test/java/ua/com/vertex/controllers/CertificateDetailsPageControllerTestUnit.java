@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
@@ -19,12 +19,9 @@ import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("Duplicates")
@@ -45,7 +42,8 @@ public class CertificateDetailsPageControllerTestUnit {
     @Mock
     private HttpServletResponse response;
 
-    private HttpSession session;
+    @Mock
+    private Model model;
 
     private CertificateDetailsPageController controller;
 
@@ -53,50 +51,45 @@ public class CertificateDetailsPageControllerTestUnit {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        session = new MockHttpSession();
         controller = new CertificateDetailsPageController(logic, storage);
     }
 
     @Test
-    public void doGetInvokesRedirectInAfterRetrievingCertificateAndUser() throws IOException {
+    public void doGetFillsOutModelAttributesAfterRetrievingCertificateAndUser() {
         Certificate certificate = mock(Certificate.class);
+        User user = mock(User.class);
 
         when(request.getParameter("certificationId")).thenReturn("222");
-        when(request.getSession()).thenReturn(session);
         when(logic.getCertificateDetails(222)).thenReturn(certificate);
         when(certificate.getUserId()).thenReturn(22);
-        when(logic.getUserDetails(222)).thenReturn(new User.Builder().getInstance());
+        when(logic.getUserDetails(22)).thenReturn(user);
 
-        controller.doGet(request, response);
-        verify(response).sendRedirect("/certificateDetails.jsp");
+        controller.doGet(request, model);
+        verify(model).addAttribute("certificate", certificate);
+        verify(model).addAttribute("user", user);
+        verify(model).addAttribute("result", "result");
     }
 
     @Test
-    public void doGetInvokesRedirectAfterCertificateException() throws IOException {
+    public void doGetFillsOutModelAttributesAfterRequestedParameterNumberFormatException() {
+        when(request.getParameter("certificationId")).thenReturn("");
+
+        controller.doGet(request, model);
+        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
+    }
+
+    @Test
+    public void doGetFillsOutModelAttributesAfterCertificateException() {
         when(request.getParameter("certificationId")).thenReturn("0");
-        when(request.getSession()).thenReturn(session);
         when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet(request, response);
-        verify(response).sendRedirect("/certificateDetails.jsp");
+        controller.doGet(request, model);
+        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
     @Test
-    public void doGetFillsOutCertificateAttributesAfterCertificateEmptyResultDataAccessException()
-            throws IOException {
-        when(request.getParameter("certificationId")).thenReturn("0");
-        when(request.getSession()).thenReturn(session);
-        when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
-
-        controller.doGet(request, response);
-        assertEquals("Attribute may have been changed",
-                session.getAttribute("certificateIsNull"), "No such certificate! Try again!");
-    }
-
-    @Test
-    public void doGetFillsOutUserAttributesAfterUserEmptyResultDataAccessException() throws IOException {
+    public void doGetFillsOutModelAttributesAfterUserException() {
         when(request.getParameter("certificationId")).thenReturn("500");
-        when(request.getSession()).thenReturn(session);
         when(logic.getCertificateDetails(500)).thenReturn(new Certificate.Builder()
                 .setCertificationId(500)
                 .setCertificationDate(LocalDate.now())
@@ -105,41 +98,8 @@ public class CertificateDetailsPageControllerTestUnit {
                 .getInstance());
         when(logic.getUserDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet(request, response);
-        assertEquals("Attribute may have been changed",
-                session.getAttribute("userIsNull"), "No holder is assigned to this certificate ID");
-    }
-
-    @Test
-    public void doGetFillsOutSessionAttributes() throws IOException {
-        Certificate certificate = mock(Certificate.class);
-
-        when(request.getParameter("certificationId")).thenReturn("100");
-        when(request.getSession()).thenReturn(session);
-        when(logic.getCertificateDetails(100)).thenReturn(new Certificate.Builder()
-                .setCertificationId(100)
-                .setUserId(10)
-                .setCertificationDate(LocalDate.now())
-                .setCourseName("Java Professional")
-                .setLanguage("Java")
-                .getInstance());
-        when(certificate.getUserId()).thenReturn(10);
-        when(logic.getUserDetails(10)).thenReturn(new User.Builder()
-                .setUserId(10)
-                .setFirstName("John")
-                .setLastName("Smith")
-                .getInstance());
-
-        controller.doGet(request, response);
-
-        assertNull(session.getAttribute("certificateIsNull"));
-        assertEquals(session.getAttribute("certificationId"), "Certification ID: 00100");
-        assertEquals(session.getAttribute("userFirstName"), "User First Name: John");
-        assertEquals(session.getAttribute("userLastName"), "User Last Name: Smith");
-        assertEquals(session.getAttribute("userPhoto"), "");
-        assertEquals(session.getAttribute("certificationDate"), "Certification Date: " + LocalDate.now());
-        assertEquals(session.getAttribute("courseName"), "Course Name: Java Professional");
-        assertEquals(session.getAttribute("language"), "Programming Language: Java");
+        controller.doGet(request, model);
+        model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
     }
 
     @Test
@@ -153,6 +113,4 @@ public class CertificateDetailsPageControllerTestUnit {
         controller.showUserPhoto(response);
         verify(stream).write(data);
     }
-
-
 }

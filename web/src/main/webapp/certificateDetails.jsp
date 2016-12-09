@@ -122,14 +122,16 @@
             <h3>${userIsNull}</h3>
         </c:if>
 
-        <h3>${certificationId}</h3>
-        <h3>${userFirstName}</h3>
-        <h3>${userLastName}</h3>
-        <h3>${certificationDate}</h3>
-        <h3>${courseName}</h3>
-        <h3>${language}</h3>
+        <c:if test="${!empty result}">
+            <h3>Certification ID: ${certificate.certificationId}</h3>
+            <h3>User First Name: ${user.firstName}</h3>
+            <h3>User Last Name: ${user.lastName}</h3>
+            <h3>Certification Date: ${certificate.certificationDate}</h3>
+            <h3>Course Name: ${certificate.courseName}</h3>
+            <h3>Programming Language: ${certificate.language}</h3>
+        </c:if>
 
-        <c:if test="${!empty userPhoto}">
+        <c:if test="${!empty user.photo}">
             <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
                 <div class="block1">
                     <input type="submit" value="Show Certificate Holder Photo">
