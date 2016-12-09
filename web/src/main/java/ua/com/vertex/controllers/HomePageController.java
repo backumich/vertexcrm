@@ -18,11 +18,11 @@ public class HomePageController {
     private UserLogic userLogic;
 
     @GetMapping
-    public ModelAndView showHomePage() {
+    public String showHomePage() {
         ModelAndView result = new ModelAndView("redirect:home.jsp");
         result.addObject("userIds", userLogic.getAllUserIds());
 
-        return result;
+        return result.toString();
 
     }
 }

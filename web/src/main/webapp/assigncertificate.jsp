@@ -1,5 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html lang="en">
@@ -106,7 +108,8 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        <form method="get" action="${pageContext.request.contextPath}/assigncertificate">
+
+        <form method="get" action="${pageContext.request.contextPath}/showAssignCertificatePage">
             <div class="block1">
                 <h3>Добавить сертификат пользователю</h3>
                 <br/>
@@ -119,7 +122,12 @@
                 <label>
                     <input name="CertificateID" type="text" value=""/>
                 </label>
-                <h3><input name="Assign" type="submit" value="Assign"/></h3>
+                <h3><input name="Assign" type="submit" value="Enter"/></h3>
+                ${updatedColumCount}
+
+
+
+
             </div>
         </form>
 

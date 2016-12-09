@@ -13,6 +13,6 @@ public interface CertificateDaoInf {
     @SuppressWarnings("unused")
     List<Certificate> getAllCertificateByUserId(int userId);
 
-    void assignCertificateToUser(int userId, int certificateId);
+    int assignCertificateToUser(int userId, int certificateId);
 
 }

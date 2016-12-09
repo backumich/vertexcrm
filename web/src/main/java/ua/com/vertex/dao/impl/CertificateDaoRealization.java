@@ -41,14 +41,12 @@ public class CertificateDaoRealization implements CertificateDaoInf {
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }
 
-    public void assignCertificateToUser(int userId, int certificateId) {
-
-
+    public int assignCertificateToUser(int userId, int certificateId) {
         String query = "UPDATE Certificate SET user_id=:userId WHERE  certification_id=:certificateId";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource("userId", userId);
         parameterSource.addValue("certificateId", certificateId);
-        jdbcTemplate.update(query, parameterSource);
-
+        int toReturn = jdbcTemplate.update(query, parameterSource);
+        return toReturn;
     }
 
 
