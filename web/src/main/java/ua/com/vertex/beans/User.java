@@ -1,6 +1,7 @@
 package ua.com.vertex.beans;
 
-import java.sql.Blob;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class User {
 
@@ -9,12 +10,11 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private Blob passportScan;
-    private Blob photo;
+    private byte[] passportScan;
+    private byte[] photo;
     private int discount;
     private String phone;
 
-    @SuppressWarnings("WeakerAccess")
     public User() {
     }
 
@@ -32,119 +32,95 @@ public class User {
                 '}';
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-
-        return getUserId() == user.getUserId() &&
-                getDiscount() == user.getDiscount() && getEmail().equals(user.getEmail())
-                && getPassword().equals(user.getPassword()) && getFirstName().equals(user.getFirstName())
-                && getLastName().equals(user.getLastName()) && getPassportScan().equals(user.getPassportScan())
-                && getPhoto().equals(user.getPhoto()) && getPhone().equals(user.getPhone());
-
+        return userId == user.userId &&
+                discount == user.discount &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Arrays.equals(passportScan, user.passportScan) &&
+                Arrays.equals(photo, user.photo) &&
+                Objects.equals(phone, user.phone);
     }
 
+    @Override
     public int hashCode() {
-        int result = (int) (getUserId() ^ (getUserId() >>> 32));
-        result = 31 * result + getEmail().hashCode();
-        result = 31 * result + getPassword().hashCode();
-        result = 31 * result + getFirstName().hashCode();
-        result = 31 * result + getLastName().hashCode();
-        result = 31 * result + getPassportScan().hashCode();
-        result = 31 * result + getPhoto().hashCode();
-        result = 31 * result + getDiscount();
-        result = 31 * result + getPhone().hashCode();
-        return result;
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone);
     }
 
-    @SuppressWarnings("WeakerAccess")
     public long getUserId() {
         return userId;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getEmail() {
         return email;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getPassword() {
         return password;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getFirstName() {
         return firstName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getLastName() {
         return lastName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public Blob getPassportScan() {
+    public byte[] getPassportScan() {
         return passportScan;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void setPassportScan(Blob passportScan) {
+    public void setPassportScan(byte[] passportScan) {
         this.passportScan = passportScan;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public Blob getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void setPhoto(Blob photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public int getDiscount() {
         return discount;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setDiscount(int discount) {
         this.discount = discount;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getPhone() {
         return phone;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -182,12 +158,12 @@ public class User {
             return this;
         }
 
-        public Builder setPassportScan(Blob passportScan) {
+        public Builder setPassportScan(byte[] passportScan) {
             instance.setPassportScan(passportScan);
             return this;
         }
 
-        public Builder setPhoto(Blob photo) {
+        public Builder setPhoto(byte[] photo) {
             instance.setPhoto(photo);
             return this;
         }
@@ -202,7 +178,7 @@ public class User {
             return this;
         }
 
-        public synchronized User getInstance() {
+        public User getInstance() {
             return instance;
         }
     }
