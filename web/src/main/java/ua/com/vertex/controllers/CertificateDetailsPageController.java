@@ -7,12 +7,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -26,8 +26,7 @@ public class CertificateDetailsPageController {
     private static final String PAGE_JSP = "certificateDetails";
 
     @RequestMapping(value = "/showCertificateDetails")
-    public String doGet(HttpServletRequest request, Model model) {
-        String requestedId = request.getParameter("certificationId");
+    public String doGet(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
         try {
             certificationId = Integer.parseInt(requestedId);

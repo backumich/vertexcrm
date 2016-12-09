@@ -17,7 +17,6 @@ import ua.com.vertex.context.TestMainContext;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -35,9 +34,6 @@ public class CertificateDetailsPageControllerTestUnit {
 
     @Mock
     private ImageStorage storage;
-
-    @Mock
-    private HttpServletRequest request;
 
     @Mock
     private HttpServletResponse response;
@@ -59,12 +55,11 @@ public class CertificateDetailsPageControllerTestUnit {
         Certificate certificate = mock(Certificate.class);
         User user = mock(User.class);
 
-        when(request.getParameter("certificationId")).thenReturn("222");
         when(logic.getCertificateDetails(222)).thenReturn(certificate);
         when(certificate.getUserId()).thenReturn(22);
         when(logic.getUserDetails(22)).thenReturn(user);
 
-        controller.doGet(request, model);
+        controller.doGet("222", model);
         verify(model).addAttribute("certificate", certificate);
         verify(model).addAttribute("user", user);
         verify(model).addAttribute("result", "result");
@@ -72,24 +67,20 @@ public class CertificateDetailsPageControllerTestUnit {
 
     @Test
     public void doGetFillsOutModelAttributesAfterRequestedParameterNumberFormatException() {
-        when(request.getParameter("certificationId")).thenReturn("");
-
-        controller.doGet(request, model);
+        controller.doGet("", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
     @Test
     public void doGetFillsOutModelAttributesAfterCertificateException() {
-        when(request.getParameter("certificationId")).thenReturn("0");
         when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet(request, model);
+        controller.doGet("0", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
     @Test
     public void doGetFillsOutModelAttributesAfterUserException() {
-        when(request.getParameter("certificationId")).thenReturn("500");
         when(logic.getCertificateDetails(500)).thenReturn(new Certificate.Builder()
                 .setCertificationId(500)
                 .setCertificationDate(LocalDate.now())
@@ -98,7 +89,7 @@ public class CertificateDetailsPageControllerTestUnit {
                 .getInstance());
         when(logic.getUserDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet(request, model);
+        controller.doGet("500", model);
         model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
     }
 
