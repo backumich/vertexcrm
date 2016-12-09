@@ -5,7 +5,7 @@ import ua.com.vertex.beans.User;
 
 import java.util.List;
 
-public interface UserDaoInf {
+public interface UserDao {
 
     @SuppressWarnings("unused")
     User getUser(long id);
@@ -14,4 +14,5 @@ public interface UserDaoInf {
     void deleteUser(long id);
 
     List<Integer> getAllUserIds();
+
 }

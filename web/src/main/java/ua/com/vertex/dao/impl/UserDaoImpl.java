@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.UserDaoInf;
+import ua.com.vertex.dao.UserDao;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class UserDaoRealization implements UserDaoInf {
+public class UserDaoImpl implements UserDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -24,12 +24,18 @@ public class UserDaoRealization implements UserDaoInf {
     }
 
     @SuppressWarnings("SqlDialectInspection")
-    public User getUser(long id) {
+    public User getUser(int id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
+    // TODO: 07.12.2016  I think we need to delete this override method
+    @Override
+    public User getUser(long id) {
+        return null;
+    }
+    // TODO: 07.12.2016 User Id is int
     @SuppressWarnings("SqlDialectInspection")
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
@@ -45,7 +51,7 @@ public class UserDaoRealization implements UserDaoInf {
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             return new User.Builder().
-                    setUserId(resultSet.getLong("user_id")).
+                    setUserId(resultSet.getInt("user_id")).
                     setEmail(resultSet.getString("email")).
                     setPassword(resultSet.getString("password")).
                     setFirstName(resultSet.getString("first_name")).

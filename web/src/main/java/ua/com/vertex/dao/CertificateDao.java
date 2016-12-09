@@ -5,12 +5,11 @@ import ua.com.vertex.beans.Certificate;
 
 import java.util.List;
 
-public interface CertificateDaoInf {
+public interface CertificateDao {
 
     @SuppressWarnings("unused")
     Certificate getCertificateById(int certificateId);
 
-    @SuppressWarnings("unused")
     List<Certificate> getAllCertificateByUserId(int userId);
 
     int assignCertificateToUser(int userId, int certificateId);

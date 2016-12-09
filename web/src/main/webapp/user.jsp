@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
-<html lang="en" charset="UTF-8">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -105,11 +108,31 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        ${userIds}
-<<<<<<< HEAD
-        <a href="./user.jsp">click here</a>
-=======
->>>>>>> origin/dev
+        <form method="get" action="/getCertificateByUserId">
+            <input type="number" name="userId" value="certificateId"/>
+            <input type="submit" name="enter" value="enter"/>
+        </form>
+
+        <c:if test="${!empty certificates}">
+            <table class="item-table">
+                <tr>
+                    <th>Certification Id</th>
+                    <th>Certification Date</th>
+                    <th>Course Name</th>
+                    <th>Language</th>
+                </tr>
+
+                <c:forEach items="${certificates}" var="certificate">
+                    <tr>
+                        <td>${certificate.certificationId}</td>
+                        <td>${certificate.certificationDate}</td>
+                        <td>${certificate.courseName}</td>
+                        <td>${certificate.language}</td>
+                    </tr>
+                </c:forEach>
+
+            </table>
+        </c:if>
 
     </div>
 </div>

@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>
@@ -16,8 +15,11 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>ua.com.vertex.context.MainContext</param-value>
     </context-param>
-
     <display-name>VertexCRM</display-name>
+
+    <!--<listener>-->
+    <!--<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+    <!--</listener>-->
 
     <servlet>
         <servlet-name>appServlet</servlet-name>
@@ -37,15 +39,19 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
-
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>main</param-value>
+    </context-param>
+
+    <welcome-file-list>
+        <welcome-file>user.jsp</welcome-file>
+    </welcome-file-list>
+
+
 </web-app>

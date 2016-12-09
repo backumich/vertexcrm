@@ -31,4 +31,5 @@ public class MainContext {
 
         return factoryBean.getObject();
     }
+
 }

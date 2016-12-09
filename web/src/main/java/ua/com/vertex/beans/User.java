@@ -4,7 +4,7 @@ import java.sql.Blob;
 
 public class User {
 
-    private long userId;
+    private int userId;
     private String email;
     private String password;
     private String firstName;
@@ -47,7 +47,7 @@ public class User {
     }
 
     public int hashCode() {
-        int result = (int) (getUserId() ^ (getUserId() >>> 32));
+        int result = 0;
         result = 31 * result + getEmail().hashCode();
         result = 31 * result + getPassword().hashCode();
         result = 31 * result + getFirstName().hashCode();
@@ -60,12 +60,12 @@ public class User {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setUserId(long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -157,7 +157,7 @@ public class User {
             instance = new User();
         }
 
-        public Builder setUserId(long userId) {
+        public Builder setUserId(int userId) {
             instance.setUserId(userId);
             return this;
         }
