@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.logic.UserLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.ArrayList;
 
@@ -24,6 +24,7 @@ public class UserControllerTest {
     private UserController underTest;
 
     @Mock
+    private
     UserLogic userLogic;
 
     private Model model;

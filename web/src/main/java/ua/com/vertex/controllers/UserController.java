@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.logic.UserLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.List;
 
@@ -20,7 +20,11 @@ public class UserController {
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATES = "certificates";
     @SuppressWarnings("WeakerAccess")
+    public static final String USER_JSP = "user";
+
+    @SuppressWarnings("WeakerAccess")
     public static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
+
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -42,8 +46,8 @@ public class UserController {
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
-        // TODO: 08.12.16 Could you please extract a constant from this literal
-        return "user";
+
+        return USER_JSP;
     }
 
 

@@ -1,4 +1,4 @@
-package ua.com.vertex.dao.impl;
+package ua.com.vertex.dao;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.dao.CertificateDao;
+import ua.com.vertex.dao.interfaces.CertificateDao;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -20,25 +20,32 @@ import java.util.List;
 @Repository
 public class CertificateDaoImpl implements CertificateDao {
 
+    @SuppressWarnings("WeakerAccess")
+    public static final String USER_ID = "userId";
+    @SuppressWarnings("WeakerAccess")
+    public static final String CERTIFICATE_ID = "certificateId";
+
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @SuppressWarnings("SqlResolve")
     public List<Certificate> getAllCertificatesByUserId(int userId) {
 
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        LOGGER.info("Getting all certificates for user with id: " + userId);
-        // TODO: 08.12.16 extract constants please
-        return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
+        LOGGER.debug("Getting all certificates for user with id: " + userId);
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
     }
 
+    @SuppressWarnings("SqlResolve")
     public Certificate getCertificateById(int certificateId) {
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certification_id =:certificateId";
+        String query = "SELECT certification_id, user_id, certification_date, course_name, language " +
+                "FROM Certificate WHERE certification_id =:certificateId";
         return jdbcTemplate.queryForObject(query,
-                new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
+                new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
     }
 
     @Autowired

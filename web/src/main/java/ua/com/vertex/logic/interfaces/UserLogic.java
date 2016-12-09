@@ -1,4 +1,4 @@
-package ua.com.vertex.logic;
+package ua.com.vertex.logic.interfaces;
 
 
 import ua.com.vertex.beans.Certificate;

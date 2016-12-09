@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.logic.UserLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 
 @Controller

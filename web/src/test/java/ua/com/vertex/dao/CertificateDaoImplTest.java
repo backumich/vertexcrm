@@ -1,4 +1,4 @@
-package ua.com.vertex.dao.impl;
+package ua.com.vertex.dao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.CertificateDao;
+import ua.com.vertex.dao.interfaces.CertificateDao;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,18 +24,21 @@ import static org.junit.Assert.assertNotNull;
 public class CertificateDaoImplTest {
 
     @Autowired
+    private
     CertificateDao underTest;
 
 
     @Test
     public void getAllCertificateByUserIdReturnNotNull() throws Exception {
-        List<Certificate> result = underTest.getAllCertificatesByUserId(-1);
 
+        List<Certificate> result = underTest.getAllCertificatesByUserId(-1);
         assertNotNull("Maybe method was changed", result);
+
     }
 
     @Test
     public void getAllCertificateByUserIdReturnNotEmpty() throws Exception {
+
         List<Certificate> result = underTest.getAllCertificatesByUserId(1);
 
         assertFalse(result.isEmpty());
@@ -44,7 +47,9 @@ public class CertificateDaoImplTest {
 
     @Test
     public void getAllCertificateByUserIdReturnCorectData() throws Exception {
+
         ArrayList<Certificate> certificates = new ArrayList<>();
+
         certificates.add(new Certificate.Builder()
                 .setCertificationId(1)
                 .setUserId(1)
@@ -53,7 +58,7 @@ public class CertificateDaoImplTest {
                 .setLanguage("Java")
                 .getInstance());
 
-        assertEquals("Maybe mapping for this method was changed",
+        assertEquals("Maybe method was changed",
                 certificates, underTest.getAllCertificatesByUserId(1));
     }
 

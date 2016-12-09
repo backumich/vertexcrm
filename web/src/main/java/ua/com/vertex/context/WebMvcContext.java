@@ -15,11 +15,13 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Profile("main")
 public class WebMvcContext extends WebMvcConfigurerAdapter {
 
+    @SuppressWarnings("WeakerAccess")
+    public static final int CACHE_PERIOD = 31556926;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //todo: all magic numbers should be at least set as constants.
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(31556926);
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/").setCachePeriod(CACHE_PERIOD);
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(CACHE_PERIOD);
     }
 
     @Override

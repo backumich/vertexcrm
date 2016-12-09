@@ -1,13 +1,13 @@
-package ua.com.vertex.logic.impl;
+package ua.com.vertex.logic;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.dao.CertificateDao;
-import ua.com.vertex.dao.UserDao;
-import ua.com.vertex.logic.UserLogic;
+import ua.com.vertex.dao.interfaces.CertificateDao;
+import ua.com.vertex.dao.interfaces.UserDao;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     public List<Certificate> getAllCertificatesByUserId(int userId) {
-        LOGGER.info(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
         return certificateDao.getAllCertificatesByUserId(userId);
     }
 

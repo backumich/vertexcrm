@@ -1,4 +1,4 @@
-package ua.com.vertex.dao;
+package ua.com.vertex.dao.interfaces;
 
 
 import ua.com.vertex.beans.Certificate;
