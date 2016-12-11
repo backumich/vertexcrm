@@ -1,5 +1,7 @@
 package ua.com.vertex.dao.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.UserController;
 import ua.com.vertex.dao.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -18,6 +21,8 @@ import java.util.Map;
 
 @Repository
 public class UserDaoRealization implements UserDaoInf {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
     private JdbcTemplate jdbcTemplateReg;
@@ -50,6 +55,7 @@ public class UserDaoRealization implements UserDaoInf {
     @Override
     @SuppressWarnings("SqlDialectInspection")
     public int isRegisteredEmail(String email) {
+        LOGGER.info("Running queries existence test E-mail to a database");
         String query = "SELECT count(*) FROM Users WHERE email=?";
         return jdbcTemplateReg.queryForObject(query, Integer.class, email);
     }
@@ -57,6 +63,9 @@ public class UserDaoRealization implements UserDaoInf {
     @Override
     @SuppressWarnings("SqlDialectInspection")
     public void registrationUser(User user) {
+
+        LOGGER.info("Adding a new user in the database");
+
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
 
         Map namedParameters = new HashMap();
