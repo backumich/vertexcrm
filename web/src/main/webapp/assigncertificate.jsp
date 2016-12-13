@@ -109,18 +109,18 @@
     <div class="container pt1_5">
 
 
-        <form method="get" action="${pageContext.request.contextPath}/showAssignCertificatePage">
+        <form method="get" action="${pageContext.request.contextPath}/assigncertificate">
             <div class="block1">
                 <h3>Добавить сертификат пользователю</h3>
                 <br/>
                 User ID:
                 <label>
-                    <input name="UserID" type="text" value=""/>
+                    <input name="userId" type="number" value=""/>
                 </label>
                 <br/>
                 Certificate ID:
                 <label>
-                    <input name="CertificateID" type="text" value=""/>
+                    <input name="certificateId" type="number" value=""/>
                 </label>
                 <h3><input name="Assign" type="submit" value="Enter"/></h3>
                 ${updatedColumCount}

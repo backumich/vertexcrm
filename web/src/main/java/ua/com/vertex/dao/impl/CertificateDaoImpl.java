@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.CertificateDao;
+
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,10 +46,6 @@ public class CertificateDaoImpl implements CertificateDao {
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
 
     public int assignCertificateToUser(int userId, int certificateId) {
         String query = "UPDATE Certificate SET user_id=:userId WHERE  certification_id=:certificateId";
