@@ -13,6 +13,8 @@ import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
+    public RegistrationUserLogicImpl() {
+    }
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 

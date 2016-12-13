@@ -33,14 +33,12 @@ public class UserDaoRealization implements UserDaoInf {
         this.jdbcTemplateReg = new JdbcTemplate(dataSource);
     }
 
-    @SuppressWarnings("SqlDialectInspection")
     public User getUser(long id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
     }
 
-    @SuppressWarnings("SqlDialectInspection")
     public void deleteUser(long id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
         jdbcTemplate.update(query, new MapSqlParameterSource("id", id));
@@ -53,7 +51,6 @@ public class UserDaoRealization implements UserDaoInf {
     }
 
     @Override
-    @SuppressWarnings("SqlDialectInspection")
     public int isRegisteredEmail(String email) {
         LOGGER.info("Running queries existence test E-mail to a database");
         String query = "SELECT count(*) FROM Users WHERE email=?";
@@ -61,7 +58,6 @@ public class UserDaoRealization implements UserDaoInf {
     }
 
     @Override
-    @SuppressWarnings("SqlDialectInspection")
     public void registrationUser(User user) {
 
         LOGGER.info("Adding a new user in the database");
@@ -90,6 +86,11 @@ public class UserDaoRealization implements UserDaoInf {
                     setDiscount(resultSet.getInt("discount")).
                     setPhone(resultSet.getString("phone")).getInstance();
         }
+    }
+
+    public UserDaoRealization(NamedParameterJdbcTemplate jdbcTemplate, JdbcTemplate jdbcTemplateReg) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.jdbcTemplateReg = jdbcTemplateReg;
     }
 }
 
