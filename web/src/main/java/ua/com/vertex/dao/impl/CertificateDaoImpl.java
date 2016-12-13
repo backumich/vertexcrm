@@ -51,8 +51,8 @@ public class CertificateDaoImpl implements CertificateDao {
         String query = "UPDATE Certificate SET user_id=:userId WHERE  certification_id=:certificateId";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource("userId", userId);
         parameterSource.addValue("certificateId", certificateId);
-        int toReturn = jdbcTemplate.update(query, parameterSource);
-        return toReturn;
+        return jdbcTemplate.update(query, parameterSource);
+
     }
 
 
