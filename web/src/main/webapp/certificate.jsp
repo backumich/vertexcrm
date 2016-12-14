@@ -101,42 +101,23 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
+        <table class="active" width="500">
+            <tr>
+                <th>Certification Id</th>
+                <th>User Id</th>
+                <th>Certification Date</th>
+                <th>Course Name</th>
+                <th>Language</th>
+            </tr>
+            <tr>
+                <td>${certificate.certificationId}</td>
+                <td>${certificate.userId}</td>
+                <td>${certificate.certificationDate}</td>
+                <td>${certificate.courseName}</td>
+                <td>${certificate.language}</td>
+            </tr>
+        </table>
 
-        <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
-            <label>
-                <input type="number" name="userId" value="certificateId"/>
-            </label>
-            <input type="submit" name="enter" value="enter"/>
-        </form>
-        <c:if test="${listCertificatesIsEmpty==true}">
-            <h1>You do not have certificates!!!</h1>
-        </c:if>
-        <c:if test="${!empty certificates}">
-            <table class="active" width="500">
-                <tr>
-                    <th>Certification Id</th>
-                    <th>Certification Date</th>
-                    <th>Course Name</th>
-                    <th>Details</th>
-                </tr>
-
-                <c:forEach items="${certificates}" var="certificate">
-                    <tr>
-                        <td>${certificate.certificationId}</td>
-                        <td>${certificate.certificationDate}</td>
-                        <td>${certificate.courseName}</td>
-                        <td>
-                            <form action="${pageContext.request.contextPath}/getCertificateDetails" method="get">
-                                <button type="submit" name="certificateDetails" value="${certificate.certificationId}"
-                                        class="btn-link">Details
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-
-            </table>
-        </c:if>
 
     </div>
 </div>

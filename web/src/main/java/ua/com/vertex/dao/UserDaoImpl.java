@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @SuppressWarnings({"unused", "SqlResolve"})
+    @SuppressWarnings({"unused"})
     public User getUser(int id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
@@ -31,7 +31,6 @@ public class UserDaoImpl implements UserDao {
     }
 
 
-    @SuppressWarnings({"SqlResolve"})
     public void deleteUser(int id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
         jdbcTemplate.update(query, new MapSqlParameterSource("id", id));

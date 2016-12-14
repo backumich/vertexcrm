@@ -29,20 +29,18 @@ public class CertificateDaoImpl implements CertificateDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @SuppressWarnings("SqlResolve")
     public List<Certificate> getAllCertificatesByUserId(int userId) {
 
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
+        String query = "SELECT certification_id, certification_date, course_name "
                 + "FROM Certificate WHERE user_id =:userId";
 
         LOGGER.debug("Getting all certificates for user with id: " + userId);
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-    @SuppressWarnings("SqlResolve")
     public Certificate getCertificateById(int certificateId) {
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language " +
+        String query = "SELECT certification_id,user_id, certification_date, course_name, language " +
                 "FROM Certificate WHERE certification_id =:certificateId";
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
@@ -64,5 +62,19 @@ public class CertificateDaoImpl implements CertificateDao {
                     .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
+    }
+
+    private static final class ShortCertificateRowMapper implements RowMapper<Certificate> {
+
+        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Certificate.Builder()
+                    .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(0)
+                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
+                    .setCourseName(resultSet.getString("course_name"))
+                    .setLanguage(null)
+                    .getInstance();
+        }
+
     }
 }

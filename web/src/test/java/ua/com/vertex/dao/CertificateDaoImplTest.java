@@ -52,10 +52,10 @@ public class CertificateDaoImplTest {
 
         certificates.add(new Certificate.Builder()
                 .setCertificationId(1)
-                .setUserId(1)
+                .setUserId(0)
                 .setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional")
-                .setLanguage("Java")
+                .setLanguage(null)
                 .getInstance());
 
         assertEquals("Maybe method was changed",

@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 @ComponentScan("ua.com.vertex")
 public class MainTestContext {
 
+
     @Bean
     DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();

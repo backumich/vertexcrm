@@ -33,7 +33,7 @@ public class Certificate {
 
         if (getCertificationId() != that.getCertificationId()) return false;
         if (getCertificationDate().equals(that.getCertificationDate()))
-            if (getCourseName().equals(that.getCourseName())) if (getLanguage().equals(that.getLanguage())) return true;
+            if (getCourseName().equals(that.getCourseName())) return true;
         return false;
 
     }
