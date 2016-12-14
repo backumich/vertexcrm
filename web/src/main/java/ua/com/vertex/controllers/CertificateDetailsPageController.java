@@ -19,29 +19,20 @@ import java.io.IOException;
 @Controller
 public class CertificateDetailsPageController {
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
+    private static final String PAGE_JSP = "certificateDetails";
 
     private final CertDetailsPageLogic logic;
     private ImageStorage storage;
 
-    private static final String PAGE_JSP = "certificateDetails";
-
     @RequestMapping(value = "/showCertificateDetails")
     public String doGet(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
-        try {
-            certificationId = Integer.parseInt(requestedId);
-        } catch (NumberFormatException e) {
-            model.addAttribute("certificateIsNull", "No such certificate! Try again!");
-            return PAGE_JSP;
-        }
-
         Certificate certificate;
         User user = null;
-
-        LOGGER.debug("Invoking logic to get certificate ID " + certificationId);
         try {
+            certificationId = Integer.parseInt(requestedId);
             certificate = logic.getCertificateDetails(certificationId);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (NumberFormatException | EmptyResultDataAccessException e) {
             model.addAttribute("certificateIsNull", "No such certificate! Try again!");
             return PAGE_JSP;
         }
