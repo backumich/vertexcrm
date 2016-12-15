@@ -36,7 +36,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void viewRegistrationForm_checkReturnViewName() throws Exception {
-        RegistrationController registrationController = new RegistrationController();
+        RegistrationController registrationController = new RegistrationController(registrationUserLogic);
         ModelAndView modelAndView = registrationController.viewRegistrationForm();
         Assert.assertEquals("registration", modelAndView.getViewName());
     }

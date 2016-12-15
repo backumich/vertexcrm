@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.UserDaoInf;
+import ua.com.vertex.dao.UserDaoRealizationInf;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserDaoRealization implements UserDaoInf {
+public class UserDaoRealizationRealization implements UserDaoRealizationInf {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -86,11 +86,6 @@ public class UserDaoRealization implements UserDaoInf {
                     setDiscount(resultSet.getInt("discount")).
                     setPhone(resultSet.getString("phone")).getInstance();
         }
-    }
-
-    public UserDaoRealization(NamedParameterJdbcTemplate jdbcTemplate, JdbcTemplate jdbcTemplateReg) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.jdbcTemplateReg = jdbcTemplateReg;
     }
 }
 

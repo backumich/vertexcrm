@@ -10,8 +10,8 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.controllers.RegistrationController;
-import ua.com.vertex.dao.UserDaoInf;
-import ua.com.vertex.dao.impl.UserDaoRealization;
+import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.impl.UserDaoRealizationRealization;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -22,10 +22,10 @@ import static org.mockito.Mockito.when;
 public class RegistrationUserLogicImplTest {
 
 //    @Autowired
-//    private UserDaoInf userDao;
+//    private UserDaoRealizationInf userDao;
 
     @Mock
-    private UserDaoInf userDaoInf;
+    private UserDaoRealizationInf userDaoRealizationInf;
 
     @Mock
     private UserFormRegistration userFormRegistration;
@@ -34,7 +34,7 @@ public class RegistrationUserLogicImplTest {
     private RegistrationUserLogicImpl registrationUserLogic;
 
     @Mock
-    private UserDaoRealization userDaoRealization;
+    private UserDaoRealizationRealization userDaoRealization;
 
     private RegistrationController controller;
 
@@ -44,11 +44,10 @@ public class RegistrationUserLogicImplTest {
         registrationUserLogic = new RegistrationUserLogicImpl();
     }
 
-//    @Test
+    //    @Test
 //    public void userDaoShouldNotBeNull() {
 //        assertNotNull(userDao);
 //    }
-
     @Test
     public void userFormRegistrationShouldNotBeNull() {
         UserFormRegistration userFormRegistration = new UserFormRegistration();
@@ -138,7 +137,7 @@ public class RegistrationUserLogicImplTest {
     @Test
     public void checkEmailAlreadyExists_True() {
 
-        //UserDaoRealization stream = mock(UserDaoRealization.class);
+        //UserDaoRealizationRealization stream = mock(UserDaoRealizationRealization.class);
 
         //UserFormRegistration userFormRegistration = new UserFormRegistration();
 

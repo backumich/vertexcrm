@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.impl.UserDaoRealization;
+import ua.com.vertex.dao.impl.UserDaoRealizationRealization;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Component
@@ -19,7 +19,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
-    private UserDaoRealization userDaoRealization;
+    private UserDaoRealizationRealization userDaoRealization;
 
     @Override
     public String registrationUser(User user) {
