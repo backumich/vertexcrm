@@ -13,7 +13,11 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 @Controller
 public class CertificateDetails {
 
-    private static final String CERTIFICATE_DETAIL = "certificate";
+    @SuppressWarnings("WeakerAccess")
+    public static final String CERTIFICATE_DETAIL = "certificate";
+
+    @SuppressWarnings("WeakerAccess")
+    public static final String CERTIFICATE_JSP = "certificate";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetails.class);
 
@@ -25,10 +29,10 @@ public class CertificateDetails {
     }
 
     @RequestMapping(value = "/getCertificateDetails", method = RequestMethod.GET)
-    public ModelAndView certificateDetails(@RequestParam("certificateDetails") int certificateId) {
+    public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
         LOGGER.info("Request to '/getCertificateDetails' ");
         ModelAndView result = new ModelAndView();
-        result.setViewName("certificate");
+        result.setViewName(CERTIFICATE_JSP);
         result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId));
         LOGGER.info("Request to '/getCertificateDetails' return 'certificate.jsp' ");
         return result;

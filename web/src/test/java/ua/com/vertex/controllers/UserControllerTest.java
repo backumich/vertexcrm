@@ -23,11 +23,10 @@ public class UserControllerTest {
 
     private UserController underTest;
 
-    @Mock
-    private
-    UserLogic userLogic;
-
     private Model model;
+
+    @Mock
+    private UserLogic userLogic;
 
     @Before
     public void setUp() throws Exception {

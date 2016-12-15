@@ -12,13 +12,13 @@ import static org.mockito.Mockito.verify;
 
 public class UserLogicImplTest {
 
+    private UserLogicImpl userLogic;
+
     @Mock
     private CertificateDaoImpl certificateDao;
 
     @Mock
     private UserDaoImpl userDao;
-
-    private UserLogicImpl userLogic;
 
     @Before
     public void setUp() throws Exception {
@@ -28,17 +28,13 @@ public class UserLogicImplTest {
 
     @Test
     public void getAllCertificateByUserIdIsCalledOnCertificateDao() throws Exception {
-
         userLogic.getAllCertificatesByUserId(1);
         verify(certificateDao).getAllCertificatesByUserId(1);
-
     }
 
     @Test
     public void getAllCertificateByUserIdNeverReturnNull() throws Exception {
-
         assertNotNull("Maybe method was changed", userLogic.getAllCertificatesByUserId(-1));
-
     }
 
 }
