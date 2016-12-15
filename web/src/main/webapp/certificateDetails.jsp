@@ -145,7 +145,6 @@
     <a href="/"><h3>Home</h3></a>
 
 </div>
-</div>
 
 <div class="footer">
     <div class="container">

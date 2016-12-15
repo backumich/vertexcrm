@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
@@ -22,12 +23,15 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SuppressWarnings("Duplicates")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestMainContext.class)
 @ActiveProfiles("test")
-public class CertificateDetailsPageControllerTestUnit {
+public class CertificateDetailsPageControllerTestFunctional {
 
     @Mock
     private CertDetailsPageLogic logic;
@@ -48,6 +52,21 @@ public class CertificateDetailsPageControllerTestUnit {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         controller = new CertificateDetailsPageController(logic, storage);
+    }
+
+    @Test
+    public void webMvcShouldReturnCorrectView() throws Exception {
+        Certificate certificate = mock(Certificate.class);
+        User user = mock(User.class);
+
+        when(logic.getCertificateDetails(222)).thenReturn(certificate);
+        when(certificate.getUserId()).thenReturn(22);
+        when(logic.getUserDetails(22)).thenReturn(user);
+
+        MockMvc mockMvc = standaloneSetup(controller).build();
+        mockMvc.perform(get("/showCertificateDetails")
+                .param("certificationId", "222"))
+                .andExpect(view().name("certificateDetails"));
     }
 
     @Test

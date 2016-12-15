@@ -30,7 +30,9 @@ public class CertificateDetailsPageController {
         Certificate certificate;
         User user = null;
         try {
+            LOGGER.debug("Parsing requested certificate ID=" + requestedId);
             certificationId = Integer.parseInt(requestedId);
+            LOGGER.debug("Invoking logic to get certificate ID=" + certificationId);
             certificate = logic.getCertificateDetails(certificationId);
         } catch (NumberFormatException | EmptyResultDataAccessException e) {
             model.addAttribute("certificateIsNull", "No such certificate! Try again!");
@@ -38,7 +40,7 @@ public class CertificateDetailsPageController {
         }
         model.addAttribute("certificate", certificate);
 
-        LOGGER.debug("Invoking logic to get user ID " + certificationId);
+        LOGGER.debug("Invoking logic to get user ID=" + certificationId);
         try {
             user = logic.getUserDetails(certificate.getUserId());
         } catch (EmptyResultDataAccessException e) {
