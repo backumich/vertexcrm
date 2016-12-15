@@ -27,22 +27,22 @@ public class Certificate {
 
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Certificate)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Certificate that = (Certificate) o;
 
-        if (getCertificationId() != that.getCertificationId()) return false;
-        if (getCertificationDate().equals(that.getCertificationDate()))
-            if (getCourseName().equals(that.getCourseName())) return true;
-        return false;
-
+        return certificationId == that.certificationId && userId == that.userId &&
+                (certificationDate != null ? certificationDate.equals(that.certificationDate) : that.certificationDate == null) &&
+                (courseName != null ? courseName.equals(that.courseName) : that.courseName == null) &&
+                (language != null ? language.equals(that.language) : that.language == null);
     }
 
     public int hashCode() {
-        int result = getCertificationId();
-        result = 31 * result + getCertificationDate().hashCode();
-        result = 31 * result + getCourseName().hashCode();
-        result = 31 * result + getLanguage().hashCode();
+        int result = certificationId;
+        result = 31 * result + userId;
+        result = 31 * result + (certificationDate != null ? certificationDate.hashCode() : 0);
+        result = 31 * result + (courseName != null ? courseName.hashCode() : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
         return result;
     }
 
