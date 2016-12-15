@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class UserDaoRealization implements UserDaoRealizationInf {
+public class UserDaoRealizationRealization implements UserDaoRealizationInf {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
