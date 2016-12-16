@@ -17,16 +17,16 @@ public class CertificateDaoLogger {
 
     @Pointcut("execution(* ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(int))" +
             "&& args(certificateId))")
-    public void getCertificateById(int certificateId) {
+    public void aspectForGetCertificateById(int certificateId) {
     }
 
-    @Before("getCertificateById(certificateId)")
+    @Before("aspectForGetCertificateById(certificateId)")
     public void before(int certificateId) {
         LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
                 "- Retrieving certificate by certificateID=" + certificateId + System.lineSeparator());
     }
 
-    @AfterReturning("getCertificateById(certificateId)")
+    @AfterReturning("aspectForGetCertificateById(certificateId)")
     public void after(int certificateId) {
         LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
                 "- Exiting method" + System.lineSeparator());

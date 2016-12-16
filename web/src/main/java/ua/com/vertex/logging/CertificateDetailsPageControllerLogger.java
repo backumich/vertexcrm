@@ -17,60 +17,46 @@ public class CertificateDetailsPageControllerLogger {
 
     @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..)) " +
             "&& args(requestedId, model))")
-    public void doGet(String requestedId, Model model) {
+    public void aspectForDoGet(String requestedId, Model model) {
     }
 
-    @Before("doGet(requestedId, model)")
-    public void before(String requestedId, Model model) {
+    @Before("aspectForDoGet(requestedId, model)")
+    public void beforeDoGet(String requestedId, Model model) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
                 "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
     }
 
-    @AfterReturning("doGet(requestedId, model)")
-    public void afterReturning(String requestedId, Model model) {
+    @AfterReturning("aspectForDoGet(requestedId, model)")
+    public void afterReturningDoGet(String requestedId, Model model) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
                 "- Exiting method" + System.lineSeparator());
     }
 
-    @AfterThrowing(value = "doGet(requestedId, model)", throwing = "e")
-    public void afterThrowing(String requestedId, Model model, Exception e) {
+    @AfterThrowing(value = "aspectForDoGet(requestedId, model)", throwing = "e")
+    public void afterThrowingDoGet(String requestedId, Model model, Exception e) {
         LOGGER.error(e, e);
     }
 
 
     @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
             "&& args(response))")
-    public void showUserPhoto(HttpServletResponse response) {
+    public void aspectForShowUserPhoto(HttpServletResponse response) {
     }
 
-    @Before("showUserPhoto(response)")
-    public void before1(HttpServletResponse response) {
+    @Before("aspectForShowUserPhoto(response)")
+    public void beforeShowUserPhoto(HttpServletResponse response) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
                 "- Transferring image to jsp" + System.lineSeparator());
     }
 
-    @AfterReturning("showUserPhoto(response)")
-    public void afterReturning1(HttpServletResponse response) {
+    @AfterReturning("aspectForShowUserPhoto(response)")
+    public void afterReturningShowUserPhoto(HttpServletResponse response) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
                 "- Exiting method" + System.lineSeparator());
     }
 
-    @AfterThrowing(value = "showUserPhoto(response)", throwing = "e")
-    public void afterThrowing1(HttpServletResponse response, Exception e) {
+    @AfterThrowing(value = "aspectForShowUserPhoto(response)", throwing = "e")
+    public void afterThrowingShowUserPhoto(HttpServletResponse response, Exception e) {
         LOGGER.error(e, e);
     }
-
-//    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..)) " +
-//            "&& args(requestedId, model))")
-//    public void doGet(ProceedingJoinPoint jp, String requestedId, Model model) {
-//        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
-//                "- Passing requested certificate ID");
-//        try {
-//            jp.proceed();
-//        } catch (Throwable throwable) {
-////            LOGGER.error(e, e);
-//        }
-//        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
-//                "- Exiting method");
-//    }
 }

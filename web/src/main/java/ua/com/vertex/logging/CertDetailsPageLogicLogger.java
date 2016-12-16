@@ -14,22 +14,22 @@ public class CertDetailsPageLogicLogger {
 
     @Pointcut("execution(* ua.com.vertex.logic.CertDetailsPageLogicImpl.getCertificateDetails(int))" +
             "&& args(certificationId))")
-    public void getCertificateDetails(int certificationId) {
+    public void aspectForGetCertificateDetails(int certificationId) {
     }
 
-    @Before("getCertificateDetails(certificationId)")
+    @Before("aspectForGetCertificateDetails(certificationId)")
     public void before(int certificationId) {
         LOGGER.debug("ua.com.vertex.logic.CertDetailsPageLogicImpl.getCertificateDetails(..) " +
                 "- Invoking logic to retrieve certificate ID=" + certificationId + System.lineSeparator());
     }
 
-    @AfterReturning("getCertificateDetails(certificationId)")
+    @AfterReturning("aspectForGetCertificateDetails(certificationId)")
     public void afterReturning(int certificationId) {
         LOGGER.debug("ua.com.vertex.logic.CertDetailsPageLogicImpl.getCertificateDetails(..) " +
                 "- Exiting method" + System.lineSeparator());
     }
 
-    @AfterThrowing(value = "getCertificateDetails(certificationId)", throwing = "e")
+    @AfterThrowing(value = "aspectForGetCertificateDetails(certificationId)", throwing = "e")
     public void afterThrowing(int certificationId, Exception e) {
         LOGGER.error(e, e);
     }
