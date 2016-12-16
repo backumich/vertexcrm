@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 @Configuration
 @Import(MainContext.class)
 @Profile("test")
-public class TestMainContext {
+public class MainTestContext {
 
     @Bean
     public DataSource dataSource() {

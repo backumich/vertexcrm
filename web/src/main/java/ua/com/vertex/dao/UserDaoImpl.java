@@ -21,15 +21,15 @@ public class UserDaoImpl implements UserDaoInf {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public User getUser(long id) {
+    public User getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
 
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", id), new UserRowMapping());
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", userId), new UserRowMapping());
     }
 
     @Override
-    public void deleteUser(long id) {
+    public void deleteUser(int id) {
         String query = "DELETE FROM Users WHERE user_id=:id";
         jdbcTemplate.update(query, new MapSqlParameterSource("id", id));
     }

@@ -1,7 +1,5 @@
 package ua.com.vertex.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,7 +16,6 @@ import java.util.List;
 @Repository
 @SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoImpl implements CertificateDaoInf {
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
@@ -26,7 +23,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        LOGGER.debug("Retrieving certificates by userID=" + userId);
         return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new CertificateRowMapper());
     }
 
@@ -35,7 +31,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug("Retrieving certificate by certificateID=" + certificateId);
         return jdbcTemplate.queryForObject(query,
                 new MapSqlParameterSource("certificateId", certificateId), new CertificateRowMapper());
     }

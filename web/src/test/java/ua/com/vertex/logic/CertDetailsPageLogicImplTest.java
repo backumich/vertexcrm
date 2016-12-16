@@ -13,14 +13,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.context.TestMainContext;
+import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestMainContext.class)
+@ContextConfiguration(classes = MainTestContext.class)
 @ActiveProfiles("test")
 public class CertDetailsPageLogicImplTest {
 

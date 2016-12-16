@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.context.TestMainContext;
+import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.ServletOutputStream;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @SuppressWarnings("Duplicates")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestMainContext.class)
+@ContextConfiguration(classes = MainTestContext.class)
 @ActiveProfiles("test")
 public class CertificateDetailsPageControllerTestFunctional {
 
@@ -85,7 +85,15 @@ public class CertificateDetailsPageControllerTestFunctional {
     }
 
     @Test
-    public void doGetFillsOutModelAttributesAfterRequestedParameterNumberFormatException() {
+    public void doGetFillsOutModelAttributesAfterNegativeValueRequestedId() {
+        when(logic.getCertificateDetails(-1)).thenThrow(new NumberFormatException());
+
+        controller.doGet("-1", model);
+        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
+    }
+
+    @Test
+    public void doGetFillsOutModelAttributesAfterRequestedIdNumberFormatException() {
         controller.doGet("", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }

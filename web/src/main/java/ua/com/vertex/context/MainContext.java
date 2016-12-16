@@ -2,10 +2,7 @@ package ua.com.vertex.context;
 
 import org.apache.commons.dbcp.BasicDataSourceFactory;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
@@ -15,6 +12,7 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("ua.com.vertex")
 @Import(WebMvcContext.class)
+@EnableAspectJAutoProxy
 public class MainContext {
     private static final String DB_PROPERTIES = "db.properties";
 

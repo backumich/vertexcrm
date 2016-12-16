@@ -8,10 +8,10 @@ import java.util.List;
 public interface UserDaoInf {
 
     @SuppressWarnings("unused")
-    User getUser(long id);
+    User getUser(int id);
 
     @SuppressWarnings("unused")
-    void deleteUser(long id);
+    void deleteUser(int id);
 
     List<Integer> getAllUserIds();
 }

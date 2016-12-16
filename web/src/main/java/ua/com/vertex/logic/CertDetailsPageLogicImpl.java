@@ -1,7 +1,5 @@
 package ua.com.vertex.logic;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
@@ -13,16 +11,14 @@ import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-    private static final Logger LOGGER = LogManager.getLogger(CertDetailsPageLogicImpl.class);
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
     private ImageStorage storage;
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {
+        if (certificationId < 0) throw new NumberFormatException();
         Certificate certificate;
-
-        LOGGER.debug("Accessing certificateDao, certificateID=" + certificationId);
         certificate = certificateDao.getCertificateById(certificationId);
 
         return certificate;
@@ -31,8 +27,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     @Override
     public User getUserDetails(int userId) {
         User user;
-
-        LOGGER.debug("Accessing userDao, userID=" + userId);
         user = userDao.getUser(userId);
 
         if (user != null) {

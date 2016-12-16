@@ -1,7 +1,5 @@
 package ua.com.vertex.controllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -18,7 +16,6 @@ import java.io.IOException;
 
 @Controller
 public class CertificateDetailsPageController {
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
     private static final String PAGE_JSP = "certificateDetails";
 
     private final CertDetailsPageLogic logic;
@@ -29,10 +26,9 @@ public class CertificateDetailsPageController {
         int certificationId;
         Certificate certificate;
         User user = null;
+
         try {
-            LOGGER.debug("Parsing requested certificate ID=" + requestedId);
             certificationId = Integer.parseInt(requestedId);
-            LOGGER.debug("Invoking logic to get certificate ID=" + certificationId);
             certificate = logic.getCertificateDetails(certificationId);
         } catch (NumberFormatException | EmptyResultDataAccessException e) {
             model.addAttribute("certificateIsNull", "No such certificate! Try again!");
@@ -40,14 +36,12 @@ public class CertificateDetailsPageController {
         }
         model.addAttribute("certificate", certificate);
 
-        LOGGER.debug("Invoking logic to get user ID=" + certificationId);
         try {
             user = logic.getUserDetails(certificate.getUserId());
         } catch (EmptyResultDataAccessException e) {
             model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
         }
         model.addAttribute("user", user);
-
         model.addAttribute("result", "result");
 
         return PAGE_JSP;
@@ -55,13 +49,12 @@ public class CertificateDetailsPageController {
 
     @RequestMapping(value = "/showUserPhoto")
     public void showUserPhoto(HttpServletResponse resp) {
-        LOGGER.debug("Transferring image to jsp");
         try {
             byte[] userPhoto = storage.getImageData();
             resp.setContentType("image/jpeg");
             resp.getOutputStream().write(userPhoto);
         } catch (IOException e) {
-            LOGGER.error(e, e);
+            e.printStackTrace();
         }
     }
 

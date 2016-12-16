@@ -8,9 +8,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
 
@@ -19,12 +19,12 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
 @ActiveProfiles("test")
-public class UserDaoTest {
+public class CertificateDaoTest {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    private UserDaoInf userDao;
+    private CertificateDaoInf certificateDao;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -37,14 +37,14 @@ public class UserDaoTest {
     }
 
     @Test
-    public void daoShouldReturnUserExistingInDatabase() {
-        User user;
-        user = userDao.getUser(22);
-        assertNotNull(user);
+    public void daoShouldReturnCertificateExistingInDatabase() {
+        Certificate certificate;
+        certificate = certificateDao.getCertificateById(222);
+        assertNotNull(certificate);
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void daoShouldThrowExceptionForCertificateNotExistingInDatabase() {
-        userDao.getUser(0);
+        certificateDao.getCertificateById(0);
     }
 }
