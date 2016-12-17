@@ -15,7 +15,7 @@ public interface UserDaoRealizationInf {
 
     List<Integer> getAllUserIds();
 
-    void registrationUser(User user);
+    int registrationUser(User user);
 
     int isRegisteredEmail(String email);
 }

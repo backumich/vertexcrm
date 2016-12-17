@@ -3,10 +3,12 @@ package ua.com.vertex.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.controllers.UserController;
@@ -15,9 +17,7 @@ import ua.com.vertex.dao.UserDaoRealizationInf;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class UserDaoRealizationRealization implements UserDaoRealizationInf {
@@ -25,12 +25,12 @@ public class UserDaoRealizationRealization implements UserDaoRealizationInf {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private JdbcTemplate jdbcTemplateReg;
+    //private JdbcTemplate jdbcTemplateReg;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.jdbcTemplateReg = new JdbcTemplate(dataSource);
+        //this.jdbcTemplateReg = new JdbcTemplate(dataSource);
     }
 
     public User getUser(long id) {
@@ -53,24 +53,44 @@ public class UserDaoRealizationRealization implements UserDaoRealizationInf {
     @Override
     public int isRegisteredEmail(String email) {
         LOGGER.info("Running queries existence test E-mail to a database");
-        String query = "SELECT count(*) FROM Users WHERE email=?";
-        return jdbcTemplateReg.queryForObject(query, Integer.class, email);
+
+        String sql = "SELECT count(*) FROM Users WHERE email = :email";
+
+        SqlParameterSource namedParameters = new MapSqlParameterSource("email", email);
+
+        return this.jdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
+
+//        String query = "SELECT count(*) FROM Users WHERE email=?";
+//        int result = jdbcTemplateReg.queryForObject(query, Integer.class, email);
+//        return result;
     }
 
     @Override
-    public void registrationUser(User user) {
+    public int registrationUser(User user) {
 
         LOGGER.info("Adding a new user in the database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("email", user.getEmail());
+        namedParameters.addValue("password", user.getPassword());
+        namedParameters.addValue("first_name", user.getFirstName());
+        namedParameters.addValue("last_name", user.getLastName());
+        namedParameters.addValue("phone", user.getPhone());
+        jdbcTemplate.update(query, namedParameters, keyHolder);
 
-        Map namedParameters = new HashMap();
-        namedParameters.put("email", user.getEmail());
-        namedParameters.put("password", user.getPassword());
-        namedParameters.put("first_name", user.getFirstName());
-        namedParameters.put("last_name", user.getLastName());
-        namedParameters.put("phone", user.getPhone());
-        jdbcTemplate.update(query, namedParameters);
+        Number id = keyHolder.getKey();
+
+        return id.intValue();
+
+//        Map namedParameters = new HashMap();
+//        namedParameters.put("email", user.getEmail());
+//        namedParameters.put("password", user.getPassword());
+//        namedParameters.put("first_name", user.getFirstName());
+//        namedParameters.put("last_name", user.getLastName());
+//        namedParameters.put("phone", user.getPhone());
+//        jdbcTemplate.update(query, namedParameters);
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
