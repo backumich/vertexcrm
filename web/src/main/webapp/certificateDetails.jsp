@@ -141,8 +141,8 @@
         <br>
 
     </div>
-    <a href="javascript:history.back();"><h3>Back</h3></a>
-    <a href="/"><h3>Home</h3></a>
+    <a href="javascript:history.back();">Back</a> |
+    <a href="<c:url value="/" />">Home</a>
 
 </div>
 

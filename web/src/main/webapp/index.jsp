@@ -114,9 +114,9 @@
                         <div class="errorSummary">
                         </div>
 
-                        <h3><a href="registration.jsp">Sign up</a></h3>
-                        <h3><a href="signIn.jsp">Sign in</a></h3>
-                        <h3><a href="certificateDetails.jsp">Get certificate details by certificate ID</a></h3>
+                        <a href="registration.jsp">Sign up</a> |
+                        <a href="signIn.jsp">Sign in</a> |
+                        <a href="certificateDetails.jsp">Get certificate details by certificate ID</a>
 
                     </div>
                 </div>
