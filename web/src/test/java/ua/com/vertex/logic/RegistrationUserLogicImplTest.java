@@ -11,7 +11,7 @@ import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.controllers.RegistrationController;
 import ua.com.vertex.dao.UserDaoRealizationInf;
-import ua.com.vertex.dao.impl.UserDaoRealizationRealization;
+import ua.com.vertex.dao.impl.UserDaoRealization;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -34,7 +34,7 @@ public class RegistrationUserLogicImplTest {
     private RegistrationUserLogicImpl registrationUserLogic;
 
     @Mock
-    private UserDaoRealizationRealization userDaoRealization;
+    private UserDaoRealization userDaoRealization;
 
     private RegistrationController controller;
 

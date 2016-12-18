@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.impl.UserDaoRealizationRealization;
+import ua.com.vertex.dao.impl.UserDaoRealization;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
+
+import java.sql.SQLException;
 
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
@@ -19,12 +21,18 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
-    private UserDaoRealizationRealization userDaoRealization;
+    private UserDaoRealization userDaoRealization;
 
     @Override
-    public String registrationUser(User user) {
-        userDaoRealization.registrationUser(user);
-        return null;
+    public int registrationUser(User user) {
+        try {
+            return userDaoRealization.registrationUser(user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        ///int userID = userDaoRealization.registrationUser(user);
+        //int userID = userDaoRealization.registrationUser(user);
+        //return userID;
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Repository
-public class UserDaoRealizationRealization implements UserDaoRealizationInf {
+public class UserDaoRealization implements UserDaoRealizationInf {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -66,7 +66,7 @@ public class UserDaoRealizationRealization implements UserDaoRealizationInf {
     }
 
     @Override
-    public int registrationUser(User user) {
+    public int registrationUser(User user) throws SQLException {
 
         LOGGER.info("Adding a new user in the database");
 

@@ -4,7 +4,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 
 public interface RegistrationUserLogic {
-    String registrationUser(User user);
+    int registrationUser(User user);
 
     boolean isMatchPassword(UserFormRegistration userFormRegistration);
 
