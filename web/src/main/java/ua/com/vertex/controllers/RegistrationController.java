@@ -21,7 +21,7 @@ public class RegistrationController {
     private RegistrationUserLogic registrationUserLogic;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView viewRegistrationForm(ModelAndView modelAndView) {
+    public ModelAndView viewRegistrationForm(/*ModelAndView modelAndView*/) {
         return new ModelAndView("registration", "userFormRegistration", new UserFormRegistration());
     }
 
