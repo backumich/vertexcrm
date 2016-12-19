@@ -30,7 +30,7 @@ public class CertDetailsPageLogicLogger {
     }
 
     @AfterThrowing(value = "aspectForGetCertificateDetails(certificationId)", throwing = "e")
-    public void afterThrowing(int certificationId, Exception e) {
+    public void afterThrowing(int certificationId, Throwable e) {
         LOGGER.error(e, e);
     }
 }

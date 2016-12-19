@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
@@ -63,7 +64,9 @@ public class CertificateDetailsPageControllerTestFunctional {
         when(certificate.getUserId()).thenReturn(22);
         when(logic.getUserDetails(22)).thenReturn(user);
 
-        MockMvc mockMvc = standaloneSetup(controller).build();
+        MockMvc mockMvc = standaloneSetup(controller)
+                .setSingleView(new InternalResourceView("certificateDetails"))
+                .build();
         mockMvc.perform(get("/showCertificateDetails")
                 .param("certificationId", "222"))
                 .andExpect(view().name("certificateDetails"));
