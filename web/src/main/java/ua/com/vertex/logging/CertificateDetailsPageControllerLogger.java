@@ -17,25 +17,26 @@ public class CertificateDetailsPageControllerLogger {
 
     @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
             "&& args(requestedId, model))")
-    public void aspectForDoGet(String requestedId, Model model) {
+    public void aspectForShowCertificateDetails(String requestedId, Model model) {
     }
 
-    @Before("aspectForDoGet(requestedId, model)")
-    public void beforeDoGet(String requestedId, Model model) {
+    @Before("aspectForShowCertificateDetails(requestedId, model)")
+    public void beforeShowCertificateDetails(String requestedId, Model model) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
                 "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
     }
 
-    @AfterReturning("aspectForDoGet(requestedId, model)")
-    public void afterReturningDoGet(String requestedId, Model model) {
+    @AfterReturning("aspectForShowCertificateDetails(requestedId, model)")
+    public void afterShowCertificateDetails(String requestedId, Model model) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
                 "- Exiting method" + System.lineSeparator());
     }
 
-    @AfterThrowing(value = "aspectForDoGet(requestedId, model)", throwing = "e")
-    public void afterThrowingDoGet(String requestedId, Model model, Exception e) {
-        LOGGER.error(e, e);
+    @AfterThrowing(value = "aspectForShowCertificateDetails(requestedId, model)", throwing = "t")
+    public void afterThrowingShowCertificateDetails(String requestedId, Model model, Throwable t) {
+        LOGGER.error(t, t);
     }
+
 
 
     @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
@@ -55,8 +56,8 @@ public class CertificateDetailsPageControllerLogger {
                 "- Exiting method" + System.lineSeparator());
     }
 
-    @AfterThrowing(value = "aspectForShowUserPhoto(response)", throwing = "e")
-    public void afterThrowingShowUserPhoto(HttpServletResponse response, Exception e) {
-        LOGGER.error(e, e);
+    @AfterThrowing(value = "aspectForShowUserPhoto(response)", throwing = "t")
+    public void afterThrowingShowUserPhoto(HttpServletResponse response, Throwable t) {
+        LOGGER.error(t, t);
     }
 }
