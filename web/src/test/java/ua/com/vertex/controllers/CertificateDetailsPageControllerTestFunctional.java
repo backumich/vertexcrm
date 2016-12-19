@@ -9,6 +9,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.InternalResourceView;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @SuppressWarnings("Duplicates")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
+@WebAppConfiguration
 @ActiveProfiles("test")
 public class CertificateDetailsPageControllerTestFunctional {
 
