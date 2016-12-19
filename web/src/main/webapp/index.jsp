@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -116,7 +117,7 @@
 
                         <a href="registration.jsp">Sign up</a> |
                         <a href="signIn.jsp">Sign in</a> |
-                        <a href="certificateDetails.jsp">Get certificate details by certificate ID</a>
+                        <a href="<c:url value="/certificateDetails" />">Get certificate details by certificate ID</a>
 
                     </div>
                 </div>

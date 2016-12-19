@@ -81,7 +81,7 @@ public class CertificateDetailsPageControllerTestFunctional {
         when(certificate.getUserId()).thenReturn(22);
         when(logic.getUserDetails(22)).thenReturn(user);
 
-        controller.doGet("222", model);
+        controller.showCertificateDetails("222", model);
         verify(model).addAttribute("certificate", certificate);
         verify(model).addAttribute("user", user);
         verify(model).addAttribute("result", "result");
@@ -91,13 +91,13 @@ public class CertificateDetailsPageControllerTestFunctional {
     public void doGetFillsOutModelAttributesAfterNegativeValueRequestedId() {
         when(logic.getCertificateDetails(-1)).thenThrow(new NumberFormatException());
 
-        controller.doGet("-1", model);
+        controller.showCertificateDetails("-1", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
     @Test
     public void doGetFillsOutModelAttributesAfterRequestedIdNumberFormatException() {
-        controller.doGet("", model);
+        controller.showCertificateDetails("", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
@@ -105,7 +105,7 @@ public class CertificateDetailsPageControllerTestFunctional {
     public void doGetFillsOutModelAttributesAfterCertificateException() {
         when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet("0", model);
+        controller.showCertificateDetails("0", model);
         verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
     }
 
@@ -119,7 +119,7 @@ public class CertificateDetailsPageControllerTestFunctional {
                 .getInstance());
         when(logic.getUserDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
-        controller.doGet("500", model);
+        controller.showCertificateDetails("500", model);
         model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
     }
 

@@ -16,13 +16,18 @@ import java.io.IOException;
 
 @Controller
 public class CertificateDetailsPageController {
+    private final CertDetailsPageLogic logic;
+    private final ImageStorage storage;
+
     private static final String PAGE_JSP = "certificateDetails";
 
-    private final CertDetailsPageLogic logic;
-    private ImageStorage storage;
+    @RequestMapping(value = "/certificateDetails")
+    public String goToCertificateDetails() {
+        return PAGE_JSP;
+    }
 
     @RequestMapping(value = "/showCertificateDetails")
-    public String doGet(@RequestParam("certificationId") String requestedId, Model model) {
+    public String showCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
         Certificate certificate;
         User user = null;

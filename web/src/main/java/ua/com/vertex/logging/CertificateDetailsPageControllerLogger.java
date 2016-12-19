@@ -15,20 +15,20 @@ public class CertificateDetailsPageControllerLogger {
 
     private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
-    @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..)) " +
+    @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
             "&& args(requestedId, model))")
     public void aspectForDoGet(String requestedId, Model model) {
     }
 
     @Before("aspectForDoGet(requestedId, model)")
     public void beforeDoGet(String requestedId, Model model) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
+        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
                 "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
     }
 
     @AfterReturning("aspectForDoGet(requestedId, model)")
     public void afterReturningDoGet(String requestedId, Model model) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.doGet(..) " +
+        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
                 "- Exiting method" + System.lineSeparator());
     }
 
