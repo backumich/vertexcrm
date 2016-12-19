@@ -21,11 +21,6 @@ public class CertificateDetailsPageController {
 
     private static final String PAGE_JSP = "certificateDetails";
 
-    @RequestMapping(value = "/certificateDetails")
-    public String goToCertificateDetails() {
-        return PAGE_JSP;
-    }
-
     @RequestMapping(value = "/showCertificateDetails")
     public String showCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
