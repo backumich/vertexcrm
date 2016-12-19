@@ -23,7 +23,6 @@ public class UserDaoRealizationTest {
     @Autowired
     private UserDaoRealizationInf underTest;
 
-
     @Test
     public void isRegisteredEmailReturnNotZero() throws Exception {
         int result = underTest.isRegisteredEmail("email1");
@@ -68,6 +67,4 @@ public class UserDaoRealizationTest {
         User user = new User();
         underTest.registrationUser(user);
     }
-
-
 }

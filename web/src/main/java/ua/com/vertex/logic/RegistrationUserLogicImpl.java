@@ -30,9 +30,6 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        ///int userID = userDaoRealization.registrationUser(user);
-        //int userID = userDaoRealization.registrationUser(user);
-        //return userID;
     }
 
     @Override

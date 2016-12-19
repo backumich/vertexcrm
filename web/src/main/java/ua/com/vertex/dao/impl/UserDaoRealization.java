@@ -25,12 +25,10 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    //private JdbcTemplate jdbcTemplateReg;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        //this.jdbcTemplateReg = new JdbcTemplate(dataSource);
     }
 
     public User getUser(long id) {
@@ -55,14 +53,8 @@ public class UserDaoRealization implements UserDaoRealizationInf {
         LOGGER.info("Running queries existence test E-mail to a database");
 
         String sql = "SELECT count(*) FROM Users WHERE email = :email";
-
         SqlParameterSource namedParameters = new MapSqlParameterSource("email", email);
-
         return this.jdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
-
-//        String query = "SELECT count(*) FROM Users WHERE email=?";
-//        int result = jdbcTemplateReg.queryForObject(query, Integer.class, email);
-//        return result;
     }
 
     @Override
@@ -83,14 +75,6 @@ public class UserDaoRealization implements UserDaoRealizationInf {
         Number id = keyHolder.getKey();
 
         return id.intValue();
-
-//        Map namedParameters = new HashMap();
-//        namedParameters.put("email", user.getEmail());
-//        namedParameters.put("password", user.getPassword());
-//        namedParameters.put("first_name", user.getFirstName());
-//        namedParameters.put("last_name", user.getLastName());
-//        namedParameters.put("phone", user.getPhone());
-//        jdbcTemplate.update(query, namedParameters);
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
