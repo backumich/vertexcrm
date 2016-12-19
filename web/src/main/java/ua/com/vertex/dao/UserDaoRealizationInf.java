@@ -3,9 +3,10 @@ package ua.com.vertex.dao;
 
 import ua.com.vertex.beans.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public interface UserDaoInf {
+public interface UserDaoRealizationInf {
 
     @SuppressWarnings("unused")
     User getUser(long id);
@@ -15,7 +16,7 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds();
 
-    void registrationUser(User user);
+    int registrationUser(User user) throws SQLException;
 
     int isRegisteredEmail(String email);
 }
