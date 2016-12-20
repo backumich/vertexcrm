@@ -13,7 +13,7 @@ import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
-    private ImageStorage storage;
+    private final ImageStorage storage;
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {

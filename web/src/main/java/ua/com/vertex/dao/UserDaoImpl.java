@@ -18,20 +18,22 @@ import java.util.List;
 @Repository
 @SuppressWarnings("SqlDialectInspection")
 public class UserDaoImpl implements UserDaoInf {
+    private static final String USER_ID = "userId";
+
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     public User getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
-                "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
+                "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("id", userId), new UserRowMapping());
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(int userId) {
         String query = "DELETE FROM Users WHERE user_id=:id";
-        jdbcTemplate.update(query, new MapSqlParameterSource("id", id));
+        jdbcTemplate.update(query, new MapSqlParameterSource(USER_ID, userId));
     }
 
     @Override

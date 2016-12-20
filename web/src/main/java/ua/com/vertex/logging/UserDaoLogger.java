@@ -29,6 +29,6 @@ public class UserDaoLogger {
     @AfterReturning("aspectForGetUser(userId)")
     public void after(int userId) {
         LOGGER.debug("ua.com.vertex.dao.UserDaoImpl.getUser(..) " +
-                "- Exiting method" + System.lineSeparator());
+                "- UserID=" + userId + " retrieved" + System.lineSeparator());
     }
 }

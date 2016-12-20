@@ -29,7 +29,7 @@ public class CertificateDetailsPageControllerLogger {
     @AfterReturning("aspectForShowCertificateDetails(requestedId, model)")
     public void afterShowCertificateDetails(String requestedId, Model model) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
-                "- Exiting method" + System.lineSeparator());
+                "- Certificate ID=" + requestedId + " was (not) displayed" + System.lineSeparator());
     }
 
     @AfterThrowing(value = "aspectForShowCertificateDetails(requestedId, model)", throwing = "t")
@@ -47,13 +47,13 @@ public class CertificateDetailsPageControllerLogger {
     @Before("aspectForShowUserPhoto(response)")
     public void beforeShowUserPhoto(HttpServletResponse response) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                "- Transferring image to jsp" + System.lineSeparator());
+                "- Retrieving photo" + System.lineSeparator());
     }
 
     @AfterReturning("aspectForShowUserPhoto(response)")
     public void afterReturningShowUserPhoto(HttpServletResponse response) {
         LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                "- Exiting method" + System.lineSeparator());
+                "- Photo sent to view" + System.lineSeparator());
     }
 
     @AfterThrowing(value = "aspectForShowUserPhoto(response)", throwing = "t")

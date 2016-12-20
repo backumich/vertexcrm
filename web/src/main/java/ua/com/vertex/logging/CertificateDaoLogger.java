@@ -29,6 +29,6 @@ public class CertificateDaoLogger {
     @AfterReturning("aspectForGetCertificateById(certificateId)")
     public void after(int certificateId) {
         LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
-                "- Exiting method" + System.lineSeparator());
+                "- CertificateID=" + certificateId + " retrieved" + System.lineSeparator());
     }
 }
