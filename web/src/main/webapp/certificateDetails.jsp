@@ -106,44 +106,65 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        <form method="get" action="${pageContext.request.contextPath}/showCertificateDetails">
-            <div class="block1">
-                <h2>Enter certificate ID:</h2>
+
+        <div align="center">
+            <h2>Enter certificate ID:</h2><br>
+
+            <form method="get" action="${pageContext.request.contextPath}/showCertificateDetails">
                 <input type="number" name="certificationId">
                 <input type="submit" value="Send">
-            </div>
-        </form>
-        <br>
-
-        <c:if test="${!empty certificateIsNull}">
-            <h3>${certificateIsNull}</h3>
-        </c:if>
-        <c:if test="${!empty userIsNull}">
-            <h3>${userIsNull}</h3>
-        </c:if>
-
-        <c:if test="${!empty result}">
-            <h3>Certification ID: ${certificate.certificationId}</h3>
-            <h3>User First Name: ${user.firstName}</h3>
-            <h3>User Last Name: ${user.lastName}</h3>
-            <h3>Certification Date: ${certificate.certificationDate}</h3>
-            <h3>Course Name: ${certificate.courseName}</h3>
-            <h3>Programming Language: ${certificate.language}</h3>
-        </c:if>
-
-        <c:if test="${!empty user.photo}">
-            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
-                <div class="block1">
-                    <input type="submit" value="Show Certificate Holder Photo">
-                </div>
             </form>
-        </c:if>
-        <br>
+            <br>
+            <br>
 
+            <c:if test="${!empty certificateIsNull}">
+                <h3>${certificateIsNull}</h3>
+            </c:if>
+            <c:if test="${!empty userIsNull}">
+                <h3>${userIsNull}</h3>
+            </c:if>
+
+            <c:if test="${!empty result}">
+                <table>
+                    <tr>
+                        <td>Certification ID:</td>
+                        <td>${certificate.certificationId}</td>
+                    </tr>
+                    <tr>
+                        <td>User First Name:</td>
+                        <td>${user.firstName}</td>
+                    </tr>
+                    <tr>
+                        <td>User Last Name:</td>
+                        <td>${user.lastName}</td>
+                    </tr>
+                    <tr>
+                        <td>Certification Date:</td>
+                        <td>${certificate.certificationDate}</td>
+                    </tr>
+                    <tr>
+                        <td>Course Name:</td>
+                        <td>${certificate.courseName}</td>
+                    </tr>
+                    <tr>
+                        <td>Programming Language:</td>
+                        <td>${certificate.language}</td>
+                    </tr>
+                </table>
+                <br>
+            </c:if>
+
+            <c:if test="${!empty user.photo}">
+                <br>
+                <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
+                    <input type="submit" value="Show Certificate Holder Photo">
+                </form>
+            </c:if>
+            <br>
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
-    <a href="javascript:history.back();">Back</a> |
-    <a href="<c:url value="/" />">Home</a>
-
 </div>
 
 <div class="footer">
