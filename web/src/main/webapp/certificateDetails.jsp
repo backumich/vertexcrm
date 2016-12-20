@@ -1,5 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -17,6 +19,7 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -35,17 +38,9 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
     </style>
 </head>
@@ -75,6 +70,7 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -106,11 +102,10 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-
         <div align="center">
             <h2>Enter certificate ID:</h2><br>
 
-            <form method="get" action="${pageContext.request.contextPath}/showCertificateDetails">
+            <form method="post" action="${pageContext.request.contextPath}/showCertificateDetails">
                 <input type="number" name="certificationId">
                 <input type="submit" value="Send">
             </form>
@@ -120,6 +115,7 @@
             <c:if test="${!empty certificateIsNull}">
                 <h3>${certificateIsNull}</h3>
             </c:if>
+
             <c:if test="${!empty userIsNull}">
                 <h3>${userIsNull}</h3>
             </c:if>
