@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 @Component

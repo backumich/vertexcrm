@@ -1,4 +1,4 @@
-package ua.com.vertex.dao;
+package ua.com.vertex.dao.interfaces;
 
 
 import org.springframework.dao.DataAccessException;

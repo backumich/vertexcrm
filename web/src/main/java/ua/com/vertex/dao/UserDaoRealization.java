@@ -1,4 +1,4 @@
-package ua.com.vertex.dao.impl;
+package ua.com.vertex.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;

@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 
 import static org.junit.Assert.assertEquals;
 
