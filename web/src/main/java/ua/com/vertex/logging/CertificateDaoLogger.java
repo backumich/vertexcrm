@@ -2,33 +2,26 @@ package ua.com.vertex.logging;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-@SuppressWarnings("ArgNamesWarningsInspection")
 @Component
 @Aspect
 public class CertificateDaoLogger {
 
     private final static Logger LOGGER = LogManager.getLogger(CertificateDaoLogger.class);
 
-    @Pointcut("execution(* ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(int))" +
-            "&& args(certificateId))")
-    public void aspectForGetCertificateById(int certificateId) {
-    }
-
-    @Before("aspectForGetCertificateById(certificateId)")
-    public void before(int certificateId) {
+    @Around("execution(* ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..)) " +
+            "&& args(certificateId)")
+    public Object aspectForGetCertificateById(ProceedingJoinPoint jp, int certificateId) throws Throwable {
+        Object object;
         LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
                 "- Retrieving certificate by certificateID=" + certificateId + System.lineSeparator());
-    }
-
-    @AfterReturning("aspectForGetCertificateById(certificateId)")
-    public void after(int certificateId) {
+        object = jp.proceed();
         LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
                 "- CertificateID=" + certificateId + " retrieved" + System.lineSeparator());
+        return object;
     }
 }

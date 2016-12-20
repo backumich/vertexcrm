@@ -2,62 +2,49 @@ package ua.com.vertex.logging;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletResponse;
 
-@SuppressWarnings("ArgNamesWarningsInspection")
 @Component
 @Aspect
 public class CertificateDetailsPageControllerLogger {
 
     private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
-    @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
-            "&& args(requestedId, model))")
-    public void aspectForShowCertificateDetails(String requestedId, Model model) {
+    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
+            "&& args(requestedId, model)")
+    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
+        Object object = new Object();
+        try {
+            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
+                    "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
+            object = jp.proceed();
+            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
+                    "- Certificate ID=" + requestedId + " was (not) displayed" + System.lineSeparator());
+        } catch (Throwable t) {
+            LOGGER.error(t, t);
+        }
+        return object;
     }
 
-    @Before("aspectForShowCertificateDetails(requestedId, model)")
-    public void beforeShowCertificateDetails(String requestedId, Model model) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
-                "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
-    }
-
-    @AfterReturning("aspectForShowCertificateDetails(requestedId, model)")
-    public void afterShowCertificateDetails(String requestedId, Model model) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
-                "- Certificate ID=" + requestedId + " was (not) displayed" + System.lineSeparator());
-    }
-
-    @AfterThrowing(value = "aspectForShowCertificateDetails(requestedId, model)", throwing = "t")
-    public void afterThrowingShowCertificateDetails(String requestedId, Model model, Throwable t) {
-        LOGGER.error(t, t);
-    }
-
-
-
-    @Pointcut("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
-            "&& args(response))")
-    public void aspectForShowUserPhoto(HttpServletResponse response) {
-    }
-
-    @Before("aspectForShowUserPhoto(response)")
-    public void beforeShowUserPhoto(HttpServletResponse response) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                "- Retrieving photo" + System.lineSeparator());
-    }
-
-    @AfterReturning("aspectForShowUserPhoto(response)")
-    public void afterReturningShowUserPhoto(HttpServletResponse response) {
-        LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                "- Photo sent to view" + System.lineSeparator());
-    }
-
-    @AfterThrowing(value = "aspectForShowUserPhoto(response)", throwing = "t")
-    public void afterThrowingShowUserPhoto(HttpServletResponse response, Throwable t) {
-        LOGGER.error(t, t);
+    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
+            "&& args(response)")
+    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, HttpServletResponse response) {
+        Object object = new Object();
+        try {
+            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
+                    "- Retrieving photo" + System.lineSeparator());
+            object = jp.proceed();
+            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
+                    "- Photo sent to view" + System.lineSeparator());
+        } catch (Throwable t) {
+            LOGGER.error(t, t);
+        }
+        return object;
     }
 }
