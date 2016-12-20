@@ -4,41 +4,38 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.impl.UserDaoRealization;
+import ua.com.vertex.dao.UserDaoRealizationInf;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
-
-import java.sql.SQLException;
 
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
-    public RegistrationUserLogicImpl() {
-    }
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
+    private UserDaoRealizationInf userDaoRealization;
+
+    public RegistrationUserLogicImpl() {
+    }
+
     @Autowired
-    private UserDaoRealization userDaoRealization;
+    public RegistrationUserLogicImpl(UserDaoRealizationInf userDaoRealization) {
+        this.userDaoRealization = userDaoRealization;
+    }
 
     @Override
-    public int registrationUser(User user) {
-        try {
-            return userDaoRealization.registrationUser(user);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public int registrationUser(User user) throws DataAccessException {
+        return userDaoRealization.registrationUser(user);
     }
 
     @Override
     public boolean isMatchPassword(UserFormRegistration userFormRegistration) {
         LOGGER.info("Check for a match on the password");
-        if (userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword())) {
-            return true;
-        }
-        return false;
+        return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
     }
 
     @Override

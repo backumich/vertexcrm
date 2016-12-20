@@ -4,6 +4,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +28,6 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    @Autowired
     private RegistrationUserLogic registrationUserLogic;
 
     public RegistrationController() {
@@ -76,7 +76,7 @@ public class RegistrationController {
             modelAndView.addObject("userID", userID);
             modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
             modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
-        } catch (RuntimeException e) {
+        } catch (DataAccessException e) {
             return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
         }
 

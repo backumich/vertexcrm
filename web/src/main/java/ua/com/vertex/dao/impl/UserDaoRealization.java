@@ -3,6 +3,7 @@ package ua.com.vertex.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -58,11 +59,12 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     }
 
     @Override
-    public int registrationUser(User user) throws SQLException {
+    public int registrationUser(User user) throws DataAccessException {
 
         LOGGER.info("Adding a new user in the database");
 
-        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) " +
+                "VALUES (:email, :password, :first_name, :last_name, :phone)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("email", user.getEmail());

@@ -110,7 +110,7 @@
         <div align="center">
             <table border="0">
                 <tr>
-                    <td colspan="2" align="center"><h2>I'm sorry, something went wrong. Try to register later.</td>
+                    <td colspan="2" align="center"><h2>I'm sorry, something went wrong. Try to register later.</h2></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><h2>${userFormRegistration.email}</h2></td>
