@@ -25,13 +25,11 @@ public class ImageStorageLogger {
     }
 
     @Around("execution(* ua.com.vertex.beans.ImageStorage.setImageData(..)) && args(imageData)")
-    public Object aroundForGetImageData(ProceedingJoinPoint jp, byte[] imageData) throws Throwable {
-        Object object;
+    public void aroundForGetImageData(ProceedingJoinPoint jp, byte[] imageData) throws Throwable {
         LOGGER.debug("ua.com.vertex.beans.ImageStorage.setImageData(..) " +
                 "- Setting byte array data" + System.lineSeparator());
-        object = jp.proceed();
+        jp.proceed();
         LOGGER.debug("ua.com.vertex.beans.ImageStorage.setImageData(..) " +
                 "- Byte array data set" + System.lineSeparator());
-        return object;
     }
 }

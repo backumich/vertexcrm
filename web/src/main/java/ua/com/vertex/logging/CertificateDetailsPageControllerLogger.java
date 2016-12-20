@@ -34,7 +34,7 @@ public class CertificateDetailsPageControllerLogger {
 
     @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
             "&& args(response)")
-    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, HttpServletResponse response) {
+    public Object aspectForShowUserPhoto(ProceedingJoinPoint jp, HttpServletResponse response) {
         Object object = new Object();
         try {
             LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
