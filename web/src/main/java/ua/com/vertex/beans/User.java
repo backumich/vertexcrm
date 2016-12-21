@@ -68,7 +68,7 @@ public class User {
             return this;
         }
 
-        public synchronized User getInstance() {
+        public User getInstance() {
             return user;
         }
     }
