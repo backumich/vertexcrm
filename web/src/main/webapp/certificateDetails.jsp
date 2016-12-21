@@ -171,7 +171,6 @@
 
 
         <c:if test="${!empty user.photo}">
-            <br>
             <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
                 <input class="style3" type="submit" value="Show Certificate Holder Photo">
             </form>
