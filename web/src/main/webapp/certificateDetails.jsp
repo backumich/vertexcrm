@@ -42,6 +42,24 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
+    .error {
+        color: red;
+    }
+
+    .style1 {
+        font-size: 125%;
+        font-weight: bold;
+    }
+
+    .style2 {
+        font-size: 115%;
+        line-height: 2;
+    }
+
+    .style3 {
+        color: black;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -100,28 +118,28 @@
 </div>
 
 <div class="page gray-page mh100">
-    <div class="container pt1_5">
+    <div class="container pt1_5" align="center">
 
-        <div align="center">
-            <h2>Enter certificate ID:</h2><br>
+        <span class="style1">Enter certificate ID:</span><br><br>
 
-            <form method="post" action="${pageContext.request.contextPath}/showCertificateDetails">
-                <input type="number" name="certificationId">
-                <input type="submit" value="Send">
-            </form>
-            <br>
-            <br>
+        <form class="style3" method="post" action="${pageContext.request.contextPath}/showCertificateDetails">
+            <input type="number" name="certificationId">
+            <input type="submit" value="Send">
+        </form>
+        <br>
+        <br>
 
-            <c:if test="${!empty certificateIsNull}">
-                <h3>${certificateIsNull}</h3>
-            </c:if>
+        <c:if test="${!empty certificateIsNull}">
+            <h3><span class="error">${certificateIsNull}</span></h3>
+        </c:if>
 
-            <c:if test="${!empty userIsNull}">
-                <h3>${userIsNull}</h3>
-            </c:if>
+        <c:if test="${!empty userIsNull}">
+            <h3>${userIsNull}</h3>
+        </c:if>
 
+        <div class="style2">
             <c:if test="${!empty result}">
-                <table>
+                <table width="300">
                     <tr>
                         <td>Certification ID:</td>
                         <td>${certificate.certificationId}</td>
@@ -149,17 +167,19 @@
                 </table>
                 <br>
             </c:if>
-
-            <c:if test="${!empty user.photo}">
-                <br>
-                <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
-                    <input type="submit" value="Show Certificate Holder Photo">
-                </form>
-            </c:if>
-            <br>
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
         </div>
+
+
+        <c:if test="${!empty user.photo}">
+            <br>
+            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
+                <input class="style3" type="submit" value="Show Certificate Holder Photo">
+            </form>
+        </c:if>
+        <br>
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
+
     </div>
 </div>
 
