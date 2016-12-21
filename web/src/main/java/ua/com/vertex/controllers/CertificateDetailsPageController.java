@@ -31,7 +31,7 @@ public class CertificateDetailsPageController {
             certificationId = Integer.parseInt(requestedId);
             certificate = logic.getCertificateDetails(certificationId);
         } catch (NumberFormatException | EmptyResultDataAccessException e) {
-            model.addAttribute("certificateIsNull", "No such certificate! Try again!");
+            model.addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
             return PAGE_JSP;
         }
         model.addAttribute("certificate", certificate);
@@ -39,7 +39,7 @@ public class CertificateDetailsPageController {
         try {
             user = logic.getUserDetails(certificate.getUserId());
         } catch (EmptyResultDataAccessException e) {
-            model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
+            model.addAttribute("userIsNull", "No holder is assigned to this certificate ID!");
         }
         model.addAttribute("user", user);
         model.addAttribute("result", "result");

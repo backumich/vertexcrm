@@ -44,6 +44,7 @@
     }
 
     .error {
+        font-size: 125%;
         color: red;
     }
 
