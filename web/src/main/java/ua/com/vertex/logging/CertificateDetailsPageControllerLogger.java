@@ -16,9 +16,10 @@ public class CertificateDetailsPageControllerLogger {
 
     private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
-    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
-            "&& args(requestedId, model)")
-    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
+    @Around(value =
+            "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
+                    "&& args(requestedId, model)", argNames = "jp, requestedId, model")
+    public Object around(ProceedingJoinPoint jp, String requestedId, Model model) {
         Object object = new Object();
         try {
             LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
