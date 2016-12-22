@@ -43,9 +43,14 @@
         margin-left: 0 !important;
     }
 
-    .error {
+    .errorText {
         font-size: 125%;
         color: red;
+    }
+
+    .errorField {
+        background-color: #ffcccc;
+        border: 2px solid red;
     }
 
     .style1 {
@@ -124,25 +129,31 @@
         <span class="style1">Enter certificate ID:</span><br><br>
 
         <form class="style3" method="post" action="${pageContext.request.contextPath}/showCertificateDetails">
-            <input type="number" name="certificationId">
+            <c:choose>
+                <c:when test="${empty certificateIsNull}">
+                    <input type="number" name="certificationId">
+                </c:when>
+                <c:otherwise>
+                    <input type="number" name="certificationId" class="errorField">
+                </c:otherwise>
+            </c:choose>
             <input type="submit" value="Send">
         </form>
-        <br>
-        <br>
+        <br><br>
 
         <c:if test="${!empty certificateIsNull}">
-            <h3><span class="error">${certificateIsNull}</span></h3>
+            <h3><span class="errorText">${certificateIsNull}</span></h3>
         </c:if>
 
         <c:if test="${!empty userIsNull}">
-            <h3><span class="error">${userIsNull}</span></h3>
+            <h3><span class="errorText">${userIsNull}</span></h3>
         </c:if>
 
         <div class="style2">
             <c:if test="${!empty result}">
                 <table width="300">
                     <tr>
-                        <td>Certification ID:</td>
+                        <td>Certificate ID:</td>
                         <td>${String.format("%05d", certificate.certificationId)}</td>
                     </tr>
                     <tr>
