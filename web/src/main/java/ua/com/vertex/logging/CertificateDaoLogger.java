@@ -11,17 +11,22 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class CertificateDaoLogger {
 
-    private final static Logger LOGGER = LogManager.getLogger(CertificateDaoLogger.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoLogger.class);
 
     @Around("execution(* ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..)) " +
             "&& args(certificateId)")
     public Object aspectForGetCertificateById(ProceedingJoinPoint jp, int certificateId) throws Throwable {
         Object object;
-        LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
-                "- Retrieving certificate by certificateID=" + certificateId + System.lineSeparator());
+
+        LOGGER.debug(compose(jp) + " - Retrieving certificate by certificateID=" + certificateId
+                + System.lineSeparator());
         object = jp.proceed();
-        LOGGER.debug("ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..) " +
-                "- CertificateID=" + certificateId + " retrieved" + System.lineSeparator());
+        LOGGER.debug(compose(jp) + " - CertificateID=" + certificateId + " retrieved" + System.lineSeparator());
+
         return object;
+    }
+
+    private String compose(ProceedingJoinPoint jp) {
+        return "class: " + jp.getSignature().getDeclaringType() + "; method: " + jp.getSignature().getName();
     }
 }

@@ -11,17 +11,20 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class UserDaoLogger {
 
-    private final static Logger LOGGER = LogManager.getLogger(UserDaoLogger.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoLogger.class);
 
     @Around("execution(* ua.com.vertex.dao.UserDaoImpl.getUser(..))" +
             "&& args(userId)")
     public Object aspectForGetUser(ProceedingJoinPoint jp, int userId) throws Throwable {
         Object object;
-        LOGGER.debug("ua.com.vertex.dao.UserDaoImpl.getUser(..) " +
-                "- Retrieving user by userID=" + userId + System.lineSeparator());
+
+        LOGGER.debug(compose(jp) + " - Retrieving user by userID=" + userId + System.lineSeparator());
         object = jp.proceed();
-        LOGGER.debug("ua.com.vertex.dao.UserDaoImpl.getUser(..) " +
-                "- UserID=" + userId + " retrieved" + System.lineSeparator());
+        LOGGER.debug(compose(jp) + " - UserID=" + userId + " retrieved" + System.lineSeparator());
         return object;
+    }
+
+    private String compose(ProceedingJoinPoint jp) {
+        return "class: " + jp.getSignature().getDeclaringType() + "; method: " + jp.getSignature().getName();
     }
 }

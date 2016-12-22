@@ -135,7 +135,7 @@
         </c:if>
 
         <c:if test="${!empty userIsNull}">
-            <h3>${userIsNull}</h3>
+            <h3><span class="error">${userIsNull}</span></h3>
         </c:if>
 
         <div class="style2">
@@ -143,7 +143,7 @@
                 <table width="300">
                     <tr>
                         <td>Certification ID:</td>
-                        <td>${certificate.certificationId}</td>
+                        <td>${String.format("%05d", certificate.certificationId)}</td>
                     </tr>
                     <tr>
                         <td>User First Name:</td>

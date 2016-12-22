@@ -14,22 +14,23 @@ import javax.servlet.http.HttpServletResponse;
 @Aspect
 public class CertificateDetailsPageControllerLogger {
 
-    private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
     @Around(value =
             "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
                     "&& args(requestedId, model)", argNames = "jp, requestedId, model")
-    public Object around(ProceedingJoinPoint jp, String requestedId, Model model) {
+    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
         Object object = new Object();
+
         try {
-            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
-                    "- Passing requested certificate ID=" + requestedId + System.lineSeparator());
+            LOGGER.debug(compose(jp) + " - Passing requested certificate ID=" + requestedId + System.lineSeparator());
             object = jp.proceed();
-            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..) " +
-                    "- Certificate ID=" + requestedId + " was (not) displayed" + System.lineSeparator());
+            LOGGER.debug(compose(jp) + " - Certificate ID=" + requestedId + " was (not) displayed"
+                    + System.lineSeparator());
         } catch (Throwable t) {
             LOGGER.error(t, t);
         }
+
         return object;
     }
 
@@ -37,15 +38,19 @@ public class CertificateDetailsPageControllerLogger {
             "&& args(response)")
     public Object aspectForShowUserPhoto(ProceedingJoinPoint jp, HttpServletResponse response) {
         Object object = new Object();
+
         try {
-            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                    "- Retrieving photo" + System.lineSeparator());
+            LOGGER.debug(compose(jp) + " - Retrieving photo" + System.lineSeparator());
             object = jp.proceed();
-            LOGGER.debug("ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..) " +
-                    "- Photo sent to view" + System.lineSeparator());
+            LOGGER.debug(compose(jp) + " - Photo sent to view" + System.lineSeparator());
         } catch (Throwable t) {
             LOGGER.error(t, t);
         }
+
         return object;
+    }
+
+    private String compose(ProceedingJoinPoint jp) {
+        return "class: " + jp.getSignature().getDeclaringType() + "; method: " + jp.getSignature().getName();
     }
 }
