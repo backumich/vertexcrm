@@ -94,13 +94,13 @@ public class CertificateDetailsPageControllerTestFunctional {
         when(logic.getCertificateDetails(-1)).thenThrow(new NumberFormatException());
 
         controller.showCertificateDetails("-1", model);
-        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
+        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
     }
 
     @Test
     public void doGetFillsOutModelAttributesAfterRequestedIdNumberFormatException() {
         controller.showCertificateDetails("", model);
-        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
+        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
     }
 
     @Test
@@ -108,7 +108,7 @@ public class CertificateDetailsPageControllerTestFunctional {
         when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
 
         controller.showCertificateDetails("0", model);
-        verify(model).addAttribute("certificateIsNull", "No such certificate! Try again!");
+        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
     }
 
     @Test
