@@ -16,6 +16,7 @@ public class CertificateDaoLogger {
     @Around("execution(* ua.com.vertex.dao.CertificateDaoImpl.getCertificateById(..)) " +
             "&& args(certificateId)")
     public Object aspectForGetCertificateById(ProceedingJoinPoint jp, int certificateId) throws Throwable {
+
         Object object;
 
         LOGGER.debug(compose(jp) + " - Retrieving certificate by certificateID=" + certificateId

@@ -128,7 +128,7 @@
 
         <span class="style1">Enter certificate ID:</span><br><br>
 
-        <form class="style3" method="post" action="${pageContext.request.contextPath}/showCertificateDetails">
+        <form class="style3" method="post" action="${pageContext.request.contextPath}/processCertificateDetails">
             <c:choose>
                 <c:when test="${empty certificateIsNull}">
                     <input type="number" name="certificationId">

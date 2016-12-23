@@ -16,11 +16,13 @@ public class UserDaoLogger {
     @Around("execution(* ua.com.vertex.dao.UserDaoImpl.getUser(..))" +
             "&& args(userId)")
     public Object aspectForGetUser(ProceedingJoinPoint jp, int userId) throws Throwable {
+
         Object object;
 
         LOGGER.debug(compose(jp) + " - Retrieving user by userID=" + userId + System.lineSeparator());
         object = jp.proceed();
         LOGGER.debug(compose(jp) + " - UserID=" + userId + " retrieved" + System.lineSeparator());
+
         return object;
     }
 

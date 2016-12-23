@@ -21,8 +21,8 @@ public class CertificateDetailsPageController {
 
     private static final String PAGE_JSP = "certificateDetails";
 
-    @RequestMapping(value = "/showCertificateDetails")
-    public String showCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
+    @RequestMapping(value = "/processCertificateDetails")
+    public String processCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
         Certificate certificate;
         User user = null;

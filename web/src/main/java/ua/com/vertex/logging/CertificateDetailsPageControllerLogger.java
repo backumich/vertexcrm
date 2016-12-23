@@ -17,11 +17,11 @@ public class CertificateDetailsPageControllerLogger {
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
     @Around(value =
-            "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showCertificateDetails(..)) " +
+            "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.processCertificateDetails(..)) " +
                     "&& args(requestedId, model)", argNames = "jp, requestedId, model")
-    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
-        Object object = new Object();
+    public Object aspectForProcessCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
 
+        Object object = new Object();
         try {
             LOGGER.debug(compose(jp) + " - Passing requested certificate ID=" + requestedId + System.lineSeparator());
             object = jp.proceed();
@@ -37,8 +37,8 @@ public class CertificateDetailsPageControllerLogger {
     @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
             "&& args(response)")
     public Object aspectForShowUserPhoto(ProceedingJoinPoint jp, HttpServletResponse response) {
-        Object object = new Object();
 
+        Object object = new Object();
         try {
             LOGGER.debug(compose(jp) + " - Retrieving photo" + System.lineSeparator());
             object = jp.proceed();
