@@ -27,7 +27,13 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
+        User user;
+        try {
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
+        } catch (Exception e) {
+            return new User();
+        }
+        return user;
     }
 
     @Override

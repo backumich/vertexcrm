@@ -30,26 +30,28 @@ public class CertificateDetailsPageController {
     public String processCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
         Certificate certificate;
-        User user = null;
+        User user = new User();
 
         try {
             certificationId = Integer.parseInt(requestedId);
-            certificate = logic.getCertificateDetails(certificationId);
         } catch (NumberFormatException | EmptyResultDataAccessException e) {
-            model.addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
-            //todo get read of multiple returns
+            model.addAttribute("error", "Wrong entry! Enter an integer value!");
             return PAGE_JSP;
         }
-        model.addAttribute("certificate", certificate);
 
-        try {
+        certificate = logic.getCertificateDetails(certificationId);
+        if (certificate.getCertificationId() != 0) {
+            model.addAttribute("certificate", certificate);
             user = logic.getUserDetails(certificate.getUserId());
-        } catch (EmptyResultDataAccessException e) {
-            model.addAttribute("userIsNull", "No holder is assigned to this certificate ID!");
+        } else {
+            model.addAttribute("error", "No certificate with this ID! Try again!");
         }
-        model.addAttribute("user", user);
-        //todo: redundant attribute
-        model.addAttribute("result", "result");
+
+        if (user.getUserId() != 0) {
+            model.addAttribute("user", user);
+        } else {
+            model.addAttribute("error", "No holder is assigned to this certificate ID!");
+        }
 
         return PAGE_JSP;
     }

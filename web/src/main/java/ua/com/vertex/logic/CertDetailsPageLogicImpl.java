@@ -17,7 +17,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {
-        Certificate certificate = null;
+        Certificate certificate = new Certificate();
         if (certificationId > 0) {
             certificate = certificateDao.getCertificateById(certificationId);
         }
@@ -25,18 +25,9 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     }
 
     @Override
-    //todo: take a look on this method again please
     public User getUserDetails(int userId) {
-        User user;
-        user = userDao.getUser(userId);
-
-        if (user != null) {
-            storage.setImageData(user.getPhoto());
-            if (user.getPhoto() != null) {
-                user.setPhoto(new byte[0]);
-            }
-            user.setPassportScan(null);
-        }
+        User user = userDao.getUser(userId);
+        storage.setImageData(user.getPhoto());
 
         return user;
     }

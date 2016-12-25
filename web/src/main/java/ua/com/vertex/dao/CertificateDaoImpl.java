@@ -34,9 +34,14 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        //todo wrap with try-catch
-        return jdbcTemplate.queryForObject(query,
-                new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
+        Certificate certificate;
+        try {
+            certificate = jdbcTemplate.queryForObject(query,
+                    new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
+        } catch (Exception e) {
+            return new Certificate();
+        }
+        return certificate;
     }
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {

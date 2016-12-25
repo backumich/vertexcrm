@@ -13,8 +13,7 @@ public class User {
     private int discount;
     private String phone;
 
-    //todo: make it public
-    private User() {
+    public User() {
     }
 
     public static class Builder {

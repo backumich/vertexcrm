@@ -129,28 +129,23 @@
         <span class="style1">Enter certificate ID:</span><br><br>
 
         <form class="style3" method="post" action="${pageContext.request.contextPath}/processCertificateDetails">
-            <c:choose>
-                <c:when test="${empty certificateIsNull}">
-                    <input type="number" name="certificationId">
-                </c:when>
-                <c:otherwise>
-                    <input type="number" name="certificationId" class="errorField">
-                </c:otherwise>
-            </c:choose>
+
+            <c:if test="${empty error}">
+                <input type="number" name="certificationId">
+            </c:if>
+            <c:if test="${!empty error}">
+                <input type="number" name="certificationId" class="errorField">
+            </c:if>
             <input type="submit" value="Send">
         </form>
         <br><br>
 
-        <c:if test="${!empty certificateIsNull}">
-            <h3><span class="errorText">${certificateIsNull}</span></h3>
-        </c:if>
-
-        <c:if test="${!empty userIsNull}">
-            <h3><span class="errorText">${userIsNull}</span></h3>
+        <c:if test="${!empty error}">
+            <h3><span class="errorText">${error}</span></h3>
         </c:if>
 
 
-        <c:if test="${!empty certificate && !empty user}">
+        <c:if test="${!empty certificate}">
             <div class="style2">
                 <table width="300">
                     <tr>

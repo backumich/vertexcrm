@@ -2,21 +2,15 @@ package ua.com.vertex.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
 import javax.servlet.ServletOutputStream;
@@ -29,13 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-// todo: get rid of junk
-//@SuppressWarnings("Duplicates")
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = MainTestContext.class)
-@WebAppConfiguration
-//@ActiveProfiles("test")
-public class CertificateDetailsPageControllerTestFunctional {
+public class CertificateDetailsPageControllerTest {
 
     @Mock
     private CertDetailsPageLogic logic;
@@ -137,6 +125,4 @@ public class CertificateDetailsPageControllerTestFunctional {
         controller.showUserPhoto(response);
         verify(stream).write(data);
     }
-
-
 }

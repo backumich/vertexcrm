@@ -10,8 +10,7 @@ public class Certificate {
     private String courseName;
     private String language;
 
-    //todo: make it public
-    private Certificate() {
+    public Certificate() {
     }
 
     public static class Builder {
