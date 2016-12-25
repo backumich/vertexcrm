@@ -32,17 +32,15 @@ public class CertificateDetails {
         this.certificateLogic = certificateLogic;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @RequestMapping(value = "/getCertificateDetails", method = RequestMethod.GET)
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
         LOGGER.info("Request to '/getCertificateDetails' ");
-        boolean noCertificateError = false;
         ModelAndView result = new ModelAndView(CERTIFICATE_JSP);
         try {
             result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId));
         } catch (EmptyResultDataAccessException e) {
             LOGGER.error("No certificate with the id = " + certificateId);
-            result.addObject(EMPTY_RESULT, !noCertificateError);
+            result.addObject(EMPTY_RESULT, true);
         }
 
         LOGGER.info("Request to '/getCertificateDetails' return 'certificate.jsp' ");
