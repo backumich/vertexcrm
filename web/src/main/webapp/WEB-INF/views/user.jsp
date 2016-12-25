@@ -10,16 +10,16 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="../../css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/slick.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
+    <script async="" src="../../javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -101,27 +101,43 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
-        <c:if test="${emptyResult}">
-            <h1>No certificate with going !!!</h1>
+
+        <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
+            <label>
+                <input type="number" name="userId" value="certificateId"/>
+            </label>
+            <input type="submit" name="enter" value="enter"/>
+        </form>
+        <c:if test="${listCertificatesIsEmpty==true}">
+            <h1>You do not have certificates!!!</h1>
         </c:if>
-        <c:if test="${!emptyResult}">
+        <c:if test="${!empty certificates}">
             <table class="active" width="500">
                 <tr>
                     <th>Certification Id</th>
-                    <th>User Id</th>
                     <th>Certification Date</th>
                     <th>Course Name</th>
-                    <th>Language</th>
+                    <th>Details</th>
                 </tr>
-                <tr>
-                    <td>${certificate.certificationId}</td>
-                    <td>${certificate.userId}</td>
-                    <td>${certificate.certificationDate}</td>
-                    <td>${certificate.courseName}</td>
-                    <td>${certificate.language}</td>
-                </tr>
+
+                <c:forEach items="${certificates}" var="certificate">
+                    <tr>
+                        <td>${certificate.certificationId}</td>
+                        <td>${certificate.certificationDate}</td>
+                        <td>${certificate.courseName}</td>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/getCertificateDetails" method="get">
+                                <button type="submit" name="certificateDetails" value="${certificate.certificationId}"
+                                        class="btn-link">Details
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+
             </table>
         </c:if>
+
     </div>
 </div>
 <div class="footer">
@@ -178,11 +194,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+<script src="../../javascript/typed.js"></script>
+<script src="../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../javascript/main.js"></script>
 
 </body>
 </html>
