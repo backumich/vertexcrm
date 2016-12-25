@@ -101,24 +101,27 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
-        <table class="active" width="500">
-            <tr>
-                <th>Certification Id</th>
-                <th>User Id</th>
-                <th>Certification Date</th>
-                <th>Course Name</th>
-                <th>Language</th>
-            </tr>
-            <tr>
-                <td>${certificate.certificationId}</td>
-                <td>${certificate.userId}</td>
-                <td>${certificate.certificationDate}</td>
-                <td>${certificate.courseName}</td>
-                <td>${certificate.language}</td>
-            </tr>
-        </table>
-
-
+        <c:if test="${emptyResult}">
+            <h1>No certificate with going !!!</h1>
+        </c:if>
+        <c:if test="${!emptyResult}">
+            <table class="active" width="500">
+                <tr>
+                    <th>Certification Id</th>
+                    <th>User Id</th>
+                    <th>Certification Date</th>
+                    <th>Course Name</th>
+                    <th>Language</th>
+                </tr>
+                <tr>
+                    <td>${certificate.certificationId}</td>
+                    <td>${certificate.userId}</td>
+                    <td>${certificate.certificationDate}</td>
+                    <td>${certificate.courseName}</td>
+                    <td>${certificate.language}</td>
+                </tr>
+            </table>
+        </c:if>
     </div>
 </div>
 <div class="footer">

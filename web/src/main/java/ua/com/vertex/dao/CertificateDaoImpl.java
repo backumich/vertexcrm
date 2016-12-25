@@ -4,6 +4,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -39,7 +40,7 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-    public Certificate getCertificateById(int certificateId) {
+    public Certificate getCertificateById(int certificateId) throws EmptyResultDataAccessException {
         String query = "SELECT certification_id,user_id, certification_date, course_name, language " +
                 "FROM Certificate WHERE certification_id =:certificateId";
         return jdbcTemplate.queryForObject(query,
