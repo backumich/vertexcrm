@@ -10,6 +10,7 @@ public class Certificate {
     private String courseName;
     private String language;
 
+    //todo: make it public
     private Certificate() {
     }
 

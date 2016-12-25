@@ -17,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = MainTestContext.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+//todo: write real integration test or delete it
 public class CertificateDetailsPageControllerTestIntegration {
 
     @Autowired

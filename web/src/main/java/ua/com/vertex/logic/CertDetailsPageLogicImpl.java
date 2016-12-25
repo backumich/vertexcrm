@@ -17,22 +17,24 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {
-        if (certificationId < 0) throw new NumberFormatException();
-        Certificate certificate;
-        certificate = certificateDao.getCertificateById(certificationId);
-
+        Certificate certificate = null;
+        if (certificationId > 0) {
+            certificate = certificateDao.getCertificateById(certificationId);
+        }
         return certificate;
     }
 
     @Override
+    //todo: take a look on this method again please
     public User getUserDetails(int userId) {
         User user;
         user = userDao.getUser(userId);
 
         if (user != null) {
             storage.setImageData(user.getPhoto());
-            if (user.getPhoto() != null)
+            if (user.getPhoto() != null) {
                 user.setPhoto(new byte[0]);
+            }
             user.setPassportScan(null);
         }
 

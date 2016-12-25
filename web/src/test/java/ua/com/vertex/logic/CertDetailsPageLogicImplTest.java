@@ -72,6 +72,7 @@ public class CertDetailsPageLogicImplTest {
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
+    //todo: fix it please
     public void accessToCertificateNotStoredInDBShouldThrowEmptyResultDataAccessException() {
         int certificateId = 0;
         logic.getCertificateDetails(certificateId);

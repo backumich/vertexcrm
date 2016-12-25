@@ -149,8 +149,9 @@
             <h3><span class="errorText">${userIsNull}</span></h3>
         </c:if>
 
-        <div class="style2">
-            <c:if test="${!empty result}">
+
+        <c:if test="${!empty certificate && !empty user}">
+            <div class="style2">
                 <table width="300">
                     <tr>
                         <td>Certificate ID:</td>
@@ -178,8 +179,8 @@
                     </tr>
                 </table>
                 <br>
-            </c:if>
-        </div>
+            </div>
+        </c:if>
 
 
         <c:if test="${!empty user.photo}">

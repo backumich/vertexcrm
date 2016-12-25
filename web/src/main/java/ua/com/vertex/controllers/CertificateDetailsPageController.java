@@ -21,6 +21,11 @@ public class CertificateDetailsPageController {
 
     private static final String PAGE_JSP = "certificateDetails";
 
+    @RequestMapping(value = "/" + PAGE_JSP)
+    public String showCertificateDetailsPage(){
+        return PAGE_JSP;
+    }
+
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
         int certificationId;
@@ -32,6 +37,7 @@ public class CertificateDetailsPageController {
             certificate = logic.getCertificateDetails(certificationId);
         } catch (NumberFormatException | EmptyResultDataAccessException e) {
             model.addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
+            //todo get read of multiple returns
             return PAGE_JSP;
         }
         model.addAttribute("certificate", certificate);
@@ -42,6 +48,7 @@ public class CertificateDetailsPageController {
             model.addAttribute("userIsNull", "No holder is assigned to this certificate ID!");
         }
         model.addAttribute("user", user);
+        //todo: redundant attribute
         model.addAttribute("result", "result");
 
         return PAGE_JSP;

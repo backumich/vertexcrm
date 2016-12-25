@@ -29,11 +29,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@SuppressWarnings("Duplicates")
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+// todo: get rid of junk
+//@SuppressWarnings("Duplicates")
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = MainTestContext.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 public class CertificateDetailsPageControllerTestFunctional {
 
     @Mock

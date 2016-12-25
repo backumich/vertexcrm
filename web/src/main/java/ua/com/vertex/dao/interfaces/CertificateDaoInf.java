@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CertificateDaoInf {
 
+    //todo delete if doesn't used
     @SuppressWarnings("unused")
     Certificate getCertificateById(int certificateId);
 
