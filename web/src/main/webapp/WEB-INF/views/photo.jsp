@@ -1,7 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -9,17 +8,16 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="../../css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/slick.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
+    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
+    <script async="" src="../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -38,37 +36,17 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
+    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
-    }
-
-    .errorText {
-        font-size: 125%;
-        color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .style1 {
-        font-size: 125%;
-        font-weight: bold;
-    }
-
-    .style2 {
-        font-size: 115%;
-        line-height: 2;
-    }
-
-    .style3 {
-        color: black;
-    }
-
-    .up-padding {
-        padding-top: 100px;
+        margin-left: 0px !important;
     }
     </style>
 </head>
@@ -98,7 +76,6 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -126,74 +103,20 @@
         </div>
     </div>
 </div>
-
 <div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+    <div class="container pt1_5" align="center">
 
-        <span class="style1">Enter certificate ID:</span><br><br>
-
-        <sf:form cssClass="style3" method="post" action="processCertificateDetails" commandName="certificate">
-            <c:if test="${empty error}">
-                <sf:input type="number" path="certificationId"/>
-            </c:if>
-            <c:if test="${!empty error}">
-                <input type="number" name="certificationId" class="errorField">
-            </c:if>
-            <input type="submit" value="Send">
-        </sf:form>
+        <img src="data:image/jpeg;base64,${image}" alt="image">
         <br><br>
-
-        <c:if test="${!empty error}">
-            <h3><span class="errorText">${error}</span></h3>
-        </c:if>
-
-        <c:if test="${empty error && certificate.certificationId > 0}">
-            <div class="style2">
-                <table width="300">
-                    <tr>
-                        <td>Certification ID:</td>
-                        <td>${String.format("%05d", certificate.certificationId)}</td>
-                    </tr>
-                    <tr>
-                        <td>User First Name:</td>
-                        <td>${user.firstName}</td>
-                    </tr>
-                    <tr>
-                        <td>User Last Name:</td>
-                        <td>${user.lastName}</td>
-                    </tr>
-                    <tr>
-                        <td>Certification Date:</td>
-                        <td>${certificate.certificationDate}</td>
-                    </tr>
-                    <tr>
-                        <td>Course Name:</td>
-                        <td>${certificate.courseName}</td>
-                    </tr>
-                    <tr>
-                        <td>Programming Language:</td>
-                        <td>${certificate.language}</td>
-                    </tr>
-                </table>
-            </div>
-            <br>
-        </c:if>
-
-
-        <c:if test="${!empty user.photo}">
-            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
-                <input class="style3" type="submit" value="Show Certificate Holder Photo">
-            </form>
-        </c:if>
-        <br>
 
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/" />">Home</a>
 
     </div>
 </div>
+<div class="wrapper">
 
-
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -248,11 +171,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+<script src="../../javascript/typed.js"></script>
+<script src="../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../javascript/main.js"></script>
 
 </body>
 </html>

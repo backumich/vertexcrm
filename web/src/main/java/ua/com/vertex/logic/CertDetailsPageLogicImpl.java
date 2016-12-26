@@ -17,11 +17,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {
-        Certificate certificate = new Certificate();
-        if (certificationId > 0) {
-            certificate = certificateDao.getCertificateById(certificationId);
-        }
-        return certificate;
+        return certificateDao.getCertificateById(certificationId);
     }
 
     @Override

@@ -17,11 +17,9 @@ public class CertificateDaoLogger {
             "&& args(certificateId)")
     public Object aspectForGetCertificateById(ProceedingJoinPoint jp, int certificateId) throws Throwable {
 
-        Object object;
-
         LOGGER.debug(compose(jp) + " - Retrieving certificate by certificateID=" + certificateId
                 + System.lineSeparator());
-        object = jp.proceed();
+        Object object = jp.proceed();
         LOGGER.debug(compose(jp) + " - CertificateID=" + certificateId + " retrieved" + System.lineSeparator());
 
         return object;

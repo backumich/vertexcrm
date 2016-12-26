@@ -16,11 +16,10 @@ public class CertDetailsPageLogicLogger {
     @Around("execution(* ua.com.vertex.logic.CertDetailsPageLogicImpl.getCertificateDetails(..))" +
             "&& args(certificationId))")
     public Object aspectForGetCertificateDetails(ProceedingJoinPoint jp, int certificationId) throws Throwable {
-        Object object;
 
         LOGGER.debug(compose(jp) + " - Invoking logic to retrieve certificate ID=" + certificationId
                 + System.lineSeparator());
-        object = jp.proceed();
+        Object object = jp.proceed();
         LOGGER.debug(compose(jp) + " - Certificate ID=" + certificationId + " retrieved" + System.lineSeparator());
 
         return object;
@@ -29,10 +28,9 @@ public class CertDetailsPageLogicLogger {
     @Around("execution(* ua.com.vertex.logic.CertDetailsPageLogicImpl.getUserDetails(..))" +
             "&& args(userId))")
     public Object aspectForGetUserDetails(ProceedingJoinPoint jp, int userId) throws Throwable {
-        Object object;
 
         LOGGER.debug(compose(jp) + " - Invoking logic to retrieve user ID=" + userId + System.lineSeparator());
-        object = jp.proceed();
+        Object object = jp.proceed();
         LOGGER.debug(compose(jp) + " - User ID=" + userId + " retrieved" + System.lineSeparator());
 
         return object;

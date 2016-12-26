@@ -17,10 +17,8 @@ public class UserDaoLogger {
             "&& args(userId)")
     public Object aspectForGetUser(ProceedingJoinPoint jp, int userId) throws Throwable {
 
-        Object object;
-
         LOGGER.debug(compose(jp) + " - Retrieving user by userID=" + userId + System.lineSeparator());
-        object = jp.proceed();
+        Object object = jp.proceed();
         LOGGER.debug(compose(jp) + " - UserID=" + userId + " retrieved" + System.lineSeparator());
 
         return object;

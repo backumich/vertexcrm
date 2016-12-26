@@ -7,8 +7,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
-
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.validation.BindingResult;
+import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.User;
 
 @Component
 @Aspect
@@ -16,37 +17,47 @@ public class CertificateDetailsPageControllerLogger {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageControllerLogger.class);
 
-    @Around(value =
-            "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.processCertificateDetails(..)) " +
-                    "&& args(requestedId, model)", argNames = "jp, requestedId, model")
-    public Object aspectForProcessCertificateDetails(ProceedingJoinPoint jp, String requestedId, Model model) {
+    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController" +
+            ".showCertificateDetailsPage(..)) && args(model)")
+    public Object aspectForShowCertificateDetails(ProceedingJoinPoint jp, Model model) throws Throwable {
 
-        Object object = new Object();
-        try {
-            LOGGER.debug(compose(jp) + " - Passing requested certificate ID=" + requestedId + System.lineSeparator());
-            object = jp.proceed();
-            LOGGER.debug(compose(jp) + " - Certificate ID=" + requestedId + " was (not) displayed"
-                    + System.lineSeparator());
-        } catch (Throwable t) {
-            LOGGER.error(t, t);
-        }
-
+        LOGGER.debug(compose(jp) + " - Invoking certificate details form" + System.lineSeparator());
+        Object object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Certificate details form sent" + System.lineSeparator());
         return object;
     }
 
-    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..)) " +
-            "&& args(response)")
-    public Object aspectForShowUserPhoto(ProceedingJoinPoint jp, HttpServletResponse response) {
+    @Around(value = "execution(* ua.com.vertex.controllers.CertificateDetailsPageController" +
+            ".processCertificateDetails(..)) && args(certificate, result, model)",
+            argNames = "jp, certificate, result, model")
+    public Object aspectForProcessCertificateDetails(ProceedingJoinPoint jp, Certificate certificate,
+                                                     BindingResult result, Model model) throws Throwable {
 
-        Object object = new Object();
-        try {
-            LOGGER.debug(compose(jp) + " - Retrieving photo" + System.lineSeparator());
-            object = jp.proceed();
-            LOGGER.debug(compose(jp) + " - Photo sent to view" + System.lineSeparator());
-        } catch (Throwable t) {
-            LOGGER.error(t, t);
-        }
+        LOGGER.debug(compose(jp) + " - Passing requested certificate ID=" + certificate.getCertificationId()
+                + System.lineSeparator());
+        Object object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Certificate ID=" + certificate.getCertificationId() + " was (not) displayed"
+                + System.lineSeparator());
+        return object;
+    }
 
+    @Around(value = "execution(* ua.com.vertex.controllers.CertificateDetailsPageController.setModel(..)) " +
+            "&& args(certificate, user, model)", argNames = "jp, certificate, user, model")
+    public Object aspectForSetModel(ProceedingJoinPoint jp, Certificate certificate,
+                                    User user, Model model) throws Throwable {
+        LOGGER.debug(compose(jp) + " - Setting model attributes" + System.lineSeparator());
+        Object object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Model attributes set" + System.lineSeparator());
+        return object;
+    }
+
+    @Around("execution(* ua.com.vertex.controllers.CertificateDetailsPageController.showUserPhoto(..))" +
+            "&& args(model)")
+    public Object aspectForShowUserPhoto(ProceedingJoinPoint jp, Model model) throws Throwable {
+
+        LOGGER.debug(compose(jp) + " - Retrieving photo" + System.lineSeparator());
+        Object object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Photo sent to view" + System.lineSeparator());
         return object;
     }
 

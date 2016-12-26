@@ -1,50 +1,69 @@
 package ua.com.vertex.controllers;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @Controller
 public class CertificateDetailsPageController {
     private final CertDetailsPageLogic logic;
     private final ImageStorage storage;
 
+    private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
+
     private static final String PAGE_JSP = "certificateDetails";
+    private static final String ERROR_JSP = "error";
+    private static final String PHOTO_JSP = "photo";
 
     @RequestMapping(value = "/" + PAGE_JSP)
-    public String showCertificateDetailsPage(){
+    public String showCertificateDetailsPage(Model model) {
+        try {
+            model.addAttribute(new Certificate());
+        } catch (Throwable t) {
+            LOGGER.error(t, t);
+            return ERROR_JSP;
+        }
         return PAGE_JSP;
     }
 
     @RequestMapping(value = "/processCertificateDetails")
-    public String processCertificateDetails(@RequestParam("certificationId") String requestedId, Model model) {
-        int certificationId;
-        Certificate certificate;
-        User user = new User();
-
-        try {
-            certificationId = Integer.parseInt(requestedId);
-        } catch (NumberFormatException | EmptyResultDataAccessException e) {
-            model.addAttribute("error", "Wrong entry! Enter an integer value!");
+    public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
+                                            BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("error", "Entered value must be > 0");
             return PAGE_JSP;
         }
 
-        certificate = logic.getCertificateDetails(certificationId);
+        try {
+            int certificationId = certificate.getCertificationId();
+            certificate = logic.getCertificateDetails(certificationId);
+            User user = logic.getUserDetails(certificate.getUserId());
+            setModel(certificate, user, model);
+        } catch (Throwable t) {
+            LOGGER.error(t, t);
+            return ERROR_JSP;
+        }
+
+        return PAGE_JSP;
+    }
+
+    public void setModel(Certificate certificate, User user, Model model) {
         if (certificate.getCertificationId() != 0) {
             model.addAttribute("certificate", certificate);
-            user = logic.getUserDetails(certificate.getUserId());
         } else {
             model.addAttribute("error", "No certificate with this ID! Try again!");
+            return;
         }
 
         if (user.getUserId() != 0) {
@@ -52,19 +71,19 @@ public class CertificateDetailsPageController {
         } else {
             model.addAttribute("error", "No holder is assigned to this certificate ID!");
         }
-
-        return PAGE_JSP;
     }
 
     @RequestMapping(value = "/showUserPhoto")
-    public void showUserPhoto(HttpServletResponse resp) {
+    public String showUserPhoto(Model model) {
         try {
             byte[] userPhoto = storage.getImageData();
-            resp.setContentType("image/jpeg");
-            resp.getOutputStream().write(userPhoto);
-        } catch (IOException e) {
-            e.printStackTrace();
+            String encodedImage = Base64.encode(userPhoto);
+            model.addAttribute("image", encodedImage);
+        } catch (Throwable t) {
+            LOGGER.error(t, t);
+            return ERROR_JSP;
         }
+        return PHOTO_JSP;
     }
 
     @Autowired

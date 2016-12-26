@@ -1,10 +1,13 @@
 package ua.com.vertex.beans;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Certificate {
+    @Min(value = 1)
     private int certificationId;
+
     private int userId;
     private LocalDate certificationDate;
     private String courseName;

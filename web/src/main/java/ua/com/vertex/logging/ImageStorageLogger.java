@@ -16,10 +16,8 @@ public class ImageStorageLogger {
     @Around("execution(* ua.com.vertex.beans.ImageStorage.getImageData())")
     public Object aspectForGetImageData(ProceedingJoinPoint jp) throws Throwable {
 
-        Object object;
-
-        LOGGER.debug(compose(jp) + " - Retrieving byte array data" + System.lineSeparator());
-        object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Retrieving image data" + System.lineSeparator());
+        Object object = jp.proceed();
         LOGGER.debug(compose(jp) + " - Image data retrieved" + System.lineSeparator());
 
         return object;
@@ -28,11 +26,9 @@ public class ImageStorageLogger {
     @Around("execution(* ua.com.vertex.beans.ImageStorage.setImageData(..)) && args(imageData)")
     public Object aspectForSetImageData(ProceedingJoinPoint jp, byte[] imageData) throws Throwable {
 
-        Object object;
-
-        LOGGER.debug(compose(jp) + " - Setting byte array data" + System.lineSeparator());
-        object = jp.proceed();
-        LOGGER.debug(compose(jp) + " - Byte array data set" + System.lineSeparator());
+        LOGGER.debug(compose(jp) + " - Setting image data" + System.lineSeparator());
+        Object object = jp.proceed();
+        LOGGER.debug(compose(jp) + " - Image data set" + System.lineSeparator());
 
         return object;
     }

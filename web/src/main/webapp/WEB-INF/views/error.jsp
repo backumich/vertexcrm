@@ -44,32 +44,14 @@
     }
 
     .errorText {
-        font-size: 125%;
+        font-size: 250%;
         color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .style1 {
-        font-size: 125%;
-        font-weight: bold;
-    }
-
-    .style2 {
-        font-size: 115%;
-        line-height: 2;
-    }
-
-    .style3 {
-        color: black;
     }
 
     .up-padding {
         padding-top: 100px;
     }
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -128,66 +110,9 @@
 </div>
 
 <div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+    <div align="center" class="up-padding">
 
-        <span class="style1">Enter certificate ID:</span><br><br>
-
-        <sf:form cssClass="style3" method="post" action="processCertificateDetails" commandName="certificate">
-            <c:if test="${empty error}">
-                <sf:input type="number" path="certificationId"/>
-            </c:if>
-            <c:if test="${!empty error}">
-                <input type="number" name="certificationId" class="errorField">
-            </c:if>
-            <input type="submit" value="Send">
-        </sf:form>
-        <br><br>
-
-        <c:if test="${!empty error}">
-            <h3><span class="errorText">${error}</span></h3>
-        </c:if>
-
-        <c:if test="${empty error && certificate.certificationId > 0}">
-            <div class="style2">
-                <table width="300">
-                    <tr>
-                        <td>Certification ID:</td>
-                        <td>${String.format("%05d", certificate.certificationId)}</td>
-                    </tr>
-                    <tr>
-                        <td>User First Name:</td>
-                        <td>${user.firstName}</td>
-                    </tr>
-                    <tr>
-                        <td>User Last Name:</td>
-                        <td>${user.lastName}</td>
-                    </tr>
-                    <tr>
-                        <td>Certification Date:</td>
-                        <td>${certificate.certificationDate}</td>
-                    </tr>
-                    <tr>
-                        <td>Course Name:</td>
-                        <td>${certificate.courseName}</td>
-                    </tr>
-                    <tr>
-                        <td>Programming Language:</td>
-                        <td>${certificate.language}</td>
-                    </tr>
-                </table>
-            </div>
-            <br>
-        </c:if>
-
-
-        <c:if test="${!empty user.photo}">
-            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
-                <input class="style3" type="submit" value="Show Certificate Holder Photo">
-            </form>
-        </c:if>
-        <br>
-
-        <a href="javascript:history.back();">Back</a> |
+        <span class="errorText">Something went wrong... Try again!</span><br><br>
         <a href="<c:url value="/" />">Home</a>
 
     </div>
