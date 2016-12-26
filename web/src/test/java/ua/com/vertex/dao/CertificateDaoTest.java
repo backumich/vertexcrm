@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -15,6 +14,7 @@ import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,13 +40,13 @@ public class CertificateDaoTest {
 
     @Test
     public void daoShouldReturnCertificateExistingInDatabase() {
-        Certificate certificate;
-        certificate = certificateDao.getCertificateById(222);
-        assertNotNull(certificate);
+        Certificate certificate = certificateDao.getCertificateById(222);
+        assertEquals(222, certificate.getCertificationId());
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void daoShouldThrowExceptionForCertificateNotExistingInDatabase() {
-        certificateDao.getCertificateById(0);
+    @Test
+    public void daoShouldReturnEmptyCertificateForCertificateNotExistingInDatabase() {
+        Certificate certificate = certificateDao.getCertificateById(55555);
+        assertEquals(0, certificate.getCertificationId());
     }
 }

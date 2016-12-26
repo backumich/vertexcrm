@@ -1,20 +1,22 @@
 package ua.com.vertex.controllers;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -29,10 +31,16 @@ public class CertificateDetailsPageControllerTest {
     private ImageStorage storage;
 
     @Mock
-    private HttpServletResponse response;
+    private Model model;
 
     @Mock
-    private Model model;
+    private BindingResult result;
+
+    @Mock
+    private Certificate certificate;
+
+    @Mock
+    private User user;
 
     private CertificateDetailsPageController controller;
 
@@ -45,9 +53,6 @@ public class CertificateDetailsPageControllerTest {
 
     @Test
     public void webMvcShouldReturnCorrectView() throws Exception {
-        Certificate certificate = mock(Certificate.class);
-        User user = mock(User.class);
-
         when(logic.getCertificateDetails(222)).thenReturn(certificate);
         when(certificate.getUserId()).thenReturn(22);
         when(logic.getUserDetails(22)).thenReturn(user);
@@ -55,71 +60,64 @@ public class CertificateDetailsPageControllerTest {
         MockMvc mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("certificateDetails"))
                 .build();
-        mockMvc.perform(get("/processCertificateDetails")
-                .param("certificationId", "222"))
+        mockMvc.perform(get("/processCertificateDetails"))
                 .andExpect(view().name("certificateDetails"));
     }
 
-//    @Test
-//    public void doGetFillsOutModelAttributesAfterRetrievingCertificateAndUser() {
-//        Certificate certificate = mock(Certificate.class);
-//        User user = mock(User.class);
-//
-//        when(logic.getCertificateDetails(222)).thenReturn(certificate);
-//        when(certificate.getUserId()).thenReturn(22);
-//        when(logic.getUserDetails(22)).thenReturn(user);
-//
-//        controller.processCertificateDetails("222", model);
-//        verify(model).addAttribute("certificate", certificate);
-//        verify(model).addAttribute("user", user);
-//        verify(model).addAttribute("result", "result");
-//    }
-//
-//    @Test
-//    public void doGetFillsOutModelAttributesAfterNegativeValueRequestedId() {
-//        when(logic.getCertificateDetails(-1)).thenThrow(new NumberFormatException());
-//
-//        controller.processCertificateDetails("-1", model);
-//        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
-//    }
-//
-//    @Test
-//    public void doGetFillsOutModelAttributesAfterRequestedIdNumberFormatException() {
-//        controller.processCertificateDetails("", model);
-//        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
-//    }
-//
-//    @Test
-//    public void doGetFillsOutModelAttributesAfterCertificateException() {
-//        when(logic.getCertificateDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
-//
-//        controller.processCertificateDetails("0", model);
-//        verify(model).addAttribute("certificateIsNull", "No certificate with this ID! Try again!");
-//    }
-//
-//    @Test
-//    public void doGetFillsOutModelAttributesAfterUserException() {
-//        when(logic.getCertificateDetails(500)).thenReturn(new Certificate.Builder()
-//                .setCertificationId(500)
-//                .setCertificationDate(LocalDate.now())
-//                .setCourseName("Java Professional")
-//                .setLanguage("Java")
-//                .getInstance());
-//        when(logic.getUserDetails(0)).thenThrow(new EmptyResultDataAccessException("", 1));
-//
-//        controller.processCertificateDetails("500", model);
-//        model.addAttribute("userIsNull", "No holder is assigned to this certificate ID");
-//    }
-//
-//    @Test
-//    public void showUserPhotoRetrievesByteArray() throws IOException {
-//        ServletOutputStream stream = mock(ServletOutputStream.class);
-//        byte[] data = {(byte) 1};
-//
-//        when(storage.getImageData()).thenReturn(data);
-//        when(response.getOutputStream()).thenReturn(stream);
-//
-//        controller.showUserPhoto(response);
-//        verify(stream).write(data);
-//    }
+    @Test
+    public void FillingModelAttributesAfterRetrievingCertificateAndUser() {
+        when(certificate.getCertificationId()).thenReturn(222);
+        when(logic.getCertificateDetails(222)).thenReturn(certificate);
+        when(certificate.getUserId()).thenReturn(22);
+        when(logic.getUserDetails(22)).thenReturn(user);
+        when(user.getUserId()).thenReturn(22);
+
+        controller.processCertificateDetails(certificate, result, model);
+        verify(model).addAttribute("certificate", certificate);
+        verify(model).addAttribute("user", user);
+    }
+
+    @Test
+    public void FillingErrorAttributeAfterRequestingInvalidId() {
+        when(result.hasErrors()).thenReturn(true);
+
+        controller.processCertificateDetails(certificate, result, model);
+        verify(model).addAttribute("error", "Entered value must be > 0");
+    }
+
+    @Test
+    public void FillingModelAttributesAfterRetrievingEmptyCertificate() {
+        when(certificate.getCertificationId()).thenReturn(0);
+        when(logic.getCertificateDetails(0)).thenReturn(certificate);
+        when(certificate.getUserId()).thenReturn(0);
+        when(logic.getUserDetails(22)).thenReturn(user);
+
+        controller.processCertificateDetails(certificate, result, model);
+        verify(model).addAttribute("error", "No certificate with this ID! Try again!");
+    }
+
+    @Test
+    public void FillingModelAttributesAfterRetrievingEmptyUser() {
+        when(certificate.getCertificationId()).thenReturn(500);
+        when(logic.getCertificateDetails(500)).thenReturn(certificate);
+        when(certificate.getUserId()).thenReturn(0);
+        when(logic.getUserDetails(0)).thenReturn(user);
+        when(user.getUserId()).thenReturn(0);
+
+        controller.processCertificateDetails(certificate, result, model);
+        verify(model).addAttribute("certificate", certificate);
+        verify(model).addAttribute("error", "No holder is assigned to this certificate ID!");
+    }
+
+
+    @Test
+    public void FillingModelAttributeAfterRetrievingPhoto() throws IOException {
+        byte[] data = {(byte) 1};
+
+        when(storage.getImageData()).thenReturn(data);
+        String encodedImage = Base64.encode(data);
+
+        controller.showUserPhoto(model);
+        verify(model).addAttribute("image", encodedImage);
+    }
 }

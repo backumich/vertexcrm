@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -55,15 +54,10 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void certificateAndUserFieldsForCertificateStoredInDBWithUserAssignedShouldNotBeNull() {
-        Certificate certificate;
-        User user;
+        Certificate certificate = logic.getCertificateDetails(222);
+        User user = logic.getUserDetails(certificate.getUserId());
 
-        int certificateId = 222;
-
-        certificate = logic.getCertificateDetails(certificateId);
-        user = logic.getUserDetails(certificate.getUserId());
-
-        assertNotNull(certificate.getCertificationId());
+        assertEquals(222, certificate.getCertificationId());
         assertNotNull(user.getFirstName());
         assertNotNull(user.getLastName());
         assertNotNull(certificate.getCertificationDate());
@@ -71,44 +65,27 @@ public class CertDetailsPageLogicImplTest {
         assertNotNull(certificate.getLanguage());
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    //todo: fix it please
-    public void accessToCertificateNotStoredInDBShouldThrowEmptyResultDataAccessException() {
-        int certificateId = 0;
-        logic.getCertificateDetails(certificateId);
-    }
-
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void accessToUserNotStoredInDBShouldThrowEmptyResultDataAccessException() {
-        Certificate certificate;
-        int certificateId = 500;
-
-        certificate = logic.getCertificateDetails(certificateId);
-        logic.getUserDetails(certificate.getUserId());
+    @Test
+    public void accessToCertificateNotStoredInDBShouldReturnEmptyCertificate() {
+        Certificate certificate = logic.getCertificateDetails(55555);
+        assertEquals(0, certificate.getCertificationId());
     }
 
     @Test
-    public void getUserDetailsForUserWithPhotoShouldReturnUserWithEmptyPhotoAndNullPassportScan() {
-        Certificate certificate;
-        User user;
-        int certificateId = 222;
+    public void accessToUserNotStoredInDBShouldReturnEmptyUser() {
+        User user = logic.getUserDetails(55555);
+        assertEquals(0, user.getUserId());
+    }
 
-        certificate = logic.getCertificateDetails(certificateId);
-        user = logic.getUserDetails(certificate.getUserId());
-
-        assertEquals(user.getPhoto().length, 0);
-        assertNull(user.getPassportScan());
+    @Test
+    public void getUserDetailsForUserWithPhotoShouldReturnUserWithPhoto() {
+        User user = logic.getUserDetails(22);
+        assertEquals(user.getPhoto().length, 1);
     }
 
     @Test
     public void getUserDetailsForUserWithoutPhotoShouldReturnUserWithNullPhoto() {
-        Certificate certificate;
-        User user;
-        int certificateId = 333;
-
-        certificate = logic.getCertificateDetails(certificateId);
-        user = logic.getUserDetails(certificate.getUserId());
-
+        User user = logic.getUserDetails(33);
         assertNull(user.getPhoto());
     }
 }

@@ -147,7 +147,8 @@
             <h3><span class="errorText">${error}</span></h3>
         </c:if>
 
-        <c:if test="${empty error && certificate.certificationId > 0}">
+        <c:if test="${(error == 'No holder is assigned to this certificate ID!' or empty error)
+        && certificate.certificationId > 0}">
             <div class="style2">
                 <table width="300">
                     <tr>

@@ -20,7 +20,11 @@ public class CertificateDetailsPageController {
     private final CertDetailsPageLogic logic;
     private final ImageStorage storage;
 
-    private final static Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
+    private static final String LOG_PHOTO = "Passing user photo to JSP";
+    private static final String LOG_PROCESS = "Processing request with certificateId=";
+    private static final String LOG_INVALID_DATA = "Requested data is invalid";
+    private static final String LOG_PASS_DATA = "Passing certificate and user data to JSP";
 
     private static final String PAGE_JSP = "certificateDetails";
     private static final String ERROR_JSP = "error";
@@ -42,11 +46,13 @@ public class CertificateDetailsPageController {
                                             BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("error", "Entered value must be > 0");
+            LOGGER.info(LOG_INVALID_DATA);
             return PAGE_JSP;
         }
 
         try {
             int certificationId = certificate.getCertificationId();
+            LOGGER.info(LOG_PROCESS + certificationId);
             certificate = logic.getCertificateDetails(certificationId);
             User user = logic.getUserDetails(certificate.getUserId());
             setModel(certificate, user, model);
@@ -55,10 +61,11 @@ public class CertificateDetailsPageController {
             return ERROR_JSP;
         }
 
+        LOGGER.info(LOG_PASS_DATA);
         return PAGE_JSP;
     }
 
-    public void setModel(Certificate certificate, User user, Model model) {
+    private void setModel(Certificate certificate, User user, Model model) {
         if (certificate.getCertificationId() != 0) {
             model.addAttribute("certificate", certificate);
         } else {
@@ -83,6 +90,7 @@ public class CertificateDetailsPageController {
             LOGGER.error(t, t);
             return ERROR_JSP;
         }
+        LOGGER.info(LOG_PHOTO);
         return PHOTO_JSP;
     }
 

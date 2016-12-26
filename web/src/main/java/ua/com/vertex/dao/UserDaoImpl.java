@@ -1,6 +1,9 @@
 package ua.com.vertex.dao;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -20,6 +23,11 @@ import java.util.List;
 public class UserDaoImpl implements UserDaoInf {
     private static final String USER_ID = "userId";
 
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
+    private static final String LOG_USER_IN = "Retrieving user id=";
+    private static final String LOG_USER_OUT = "Retrieved user id=";
+    private static final String LOG_NO_USER = "No user id=";
+
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
@@ -27,12 +35,15 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
+        LOGGER.info(LOG_USER_IN + userId);
         User user;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.info(LOG_NO_USER + userId);
             return new User();
         }
+        LOGGER.info(LOG_USER_OUT + userId);
         return user;
     }
 
