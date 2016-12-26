@@ -1,8 +1,9 @@
-package ua.com.vertex.dao.impl;
+package ua.com.vertex.dao;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,7 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.controllers.UserController;
-import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -25,12 +26,10 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    //private JdbcTemplate jdbcTemplateReg;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        //this.jdbcTemplateReg = new JdbcTemplate(dataSource);
     }
 
     public User getUser(long id) {
@@ -55,22 +54,17 @@ public class UserDaoRealization implements UserDaoRealizationInf {
         LOGGER.info("Running queries existence test E-mail to a database");
 
         String sql = "SELECT count(*) FROM Users WHERE email = :email";
-
         SqlParameterSource namedParameters = new MapSqlParameterSource("email", email);
-
         return this.jdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
-
-//        String query = "SELECT count(*) FROM Users WHERE email=?";
-//        int result = jdbcTemplateReg.queryForObject(query, Integer.class, email);
-//        return result;
     }
 
     @Override
-    public int registrationUser(User user) throws SQLException {
+    public int registrationUser(User user) throws DataAccessException {
 
         LOGGER.info("Adding a new user in the database");
 
-        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) VALUES (:email, :password, :first_name, :last_name, :phone)";
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) " +
+                "VALUES (:email, :password, :first_name, :last_name, :phone)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("email", user.getEmail());
@@ -83,14 +77,6 @@ public class UserDaoRealization implements UserDaoRealizationInf {
         Number id = keyHolder.getKey();
 
         return id.intValue();
-
-//        Map namedParameters = new HashMap();
-//        namedParameters.put("email", user.getEmail());
-//        namedParameters.put("password", user.getPassword());
-//        namedParameters.put("first_name", user.getFirstName());
-//        namedParameters.put("last_name", user.getLastName());
-//        namedParameters.put("phone", user.getPhone());
-//        jdbcTemplate.update(query, namedParameters);
     }
 
     private static final class UserRowMapping implements RowMapper<User> {

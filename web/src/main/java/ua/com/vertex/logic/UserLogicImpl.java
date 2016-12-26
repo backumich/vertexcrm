@@ -2,7 +2,7 @@ package ua.com.vertex.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.com.vertex.dao.UserDaoRealizationInf;
+import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.List;

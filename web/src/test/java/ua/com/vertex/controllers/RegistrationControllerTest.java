@@ -12,16 +12,12 @@ import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("Duplicates")
 public class RegistrationControllerTest {
 
     @Mock
     RegistrationUserLogic registrationUserLogic;
-
-    @Mock
-    private ModelAndView modelAndView;
 
     @Mock
     private BindingResult bindingResult;
@@ -52,46 +48,29 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void viewRegistrationForm_checkReturnTypeObjects() throws Exception {
-        UserFormRegistration userFormRegistration = mock(UserFormRegistration.class);
-        registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-
-        Assert.assertTrue(userFormRegistration instanceof UserFormRegistration);
-        Assert.assertTrue(bindingResult instanceof BindingResult);
-        Assert.assertTrue(modelAndView instanceof ModelAndView);
-    }
-
-    //------------------------
-    @Test
     public void processRegistration_checkReturnViewName() throws Exception {
-        UserFormRegistration userFormRegistration = mock(UserFormRegistration.class);
-        ModelAndView outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
+        UserFormRegistration userFormRegistration = new UserFormRegistration();
+        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView outModelAndView =
+                registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
         Assert.assertEquals("registrationSuccess", outModelAndView.getViewName());
     }
 
     @Test
     public void processRegistration_checkReturnModelAndModelName() throws Exception {
-        //UserFormRegistration userFormRegistration = mock(UserFormRegistration.class);
+
         UserFormRegistration userFormRegistration = new UserFormRegistration();
-        //ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = new ModelAndView();
 
         ModelAndView outModelAndView;
         modelAndView.addObject("userFormRegistration", userFormRegistration);
 
+        //????????????????????????????
         outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-        //outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
+        //????????????????????????????
+
         ModelMap modelMap = outModelAndView.getModelMap();
         assertTrue(modelMap.containsAttribute("userFormRegistration"));
         //Assert.assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
-    }
-
-    @Test
-    public void processRegistration_checkReturnTypeObjects() throws Exception {
-        UserFormRegistration userFormRegistration = mock(UserFormRegistration.class);
-        registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-
-        Assert.assertTrue(userFormRegistration instanceof UserFormRegistration);
-        Assert.assertTrue(bindingResult instanceof BindingResult);
-        Assert.assertTrue(modelAndView instanceof ModelAndView);
     }
 }

@@ -23,7 +23,8 @@ public class UserFormRegistration {
     private String lastName;
 
     @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
-    @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)", message = "Invalid telephone number format")
+    @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
+            message = "Invalid telephone number format")
     private String phone;
 
     public UserFormRegistration() {

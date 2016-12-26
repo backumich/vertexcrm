@@ -4,6 +4,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +28,6 @@ public class RegistrationController {
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    @Autowired
     private RegistrationUserLogic registrationUserLogic;
 
     public RegistrationController() {
@@ -40,12 +40,15 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView viewRegistrationForm() {
-        LOGGER.info("First request to registration.jsp, create model 'UserFormRegistration' and sent ModelAndView to registration.jsp");
+        LOGGER.info("First request to registration.jsp, " +
+                "create model 'UserFormRegistration' and send ModelAndView to registration.jsp");
         return new ModelAndView(REGISTRATION_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, new UserFormRegistration());
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView processRegistration(@Valid @ModelAttribute
+            (NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration,
+                                            BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
             LOGGER.info("Check for signed-in user on a page registration.jsp");
@@ -69,12 +72,16 @@ public class RegistrationController {
         User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
 
         try {
-            registrationUserLogic.registrationUser(user);
-        } catch (RuntimeException e) {
+            int userID = registrationUserLogic.registrationUser(user);
+            modelAndView.addObject("userID", userID);
+            modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+            modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+        } catch (DataAccessException e) {
             return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
         }
 
-        return new ModelAndView(REGISTRATION_SUCCESS_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+        return modelAndView;
+        //return new ModelAndView(REGISTRATION_SUCCESS_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
     }
 }
 
