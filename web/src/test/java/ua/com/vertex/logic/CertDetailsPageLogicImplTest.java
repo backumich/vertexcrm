@@ -11,11 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.Storage;
 
 import static org.junit.Assert.*;
 
@@ -32,7 +32,7 @@ public class CertDetailsPageLogicImplTest {
     private CertificateDaoInf certificateDao;
 
     @Mock
-    private ImageStorage storage;
+    private Storage storage;
 
     private CertDetailsPageLogicImpl logic;
 

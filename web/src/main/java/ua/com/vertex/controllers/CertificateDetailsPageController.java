@@ -11,14 +11,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
+import ua.com.vertex.utils.Storage;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class CertificateDetailsPageController {
     private final CertDetailsPageLogic logic;
-    private final ImageStorage storage;
+    private final Storage storage;
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
     private static final String LOG_PHOTO = "Passing user photo to JSP";
@@ -31,11 +34,14 @@ public class CertificateDetailsPageController {
     private static final String PHOTO_JSP = "photo";
 
     @RequestMapping(value = "/" + PAGE_JSP)
-    public String showCertificateDetailsPage(Model model) {
+    public String showCertificateDetailsPage(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        storage.setSessionId(session.getId() + " ");
+
         try {
             model.addAttribute(new Certificate());
         } catch (Throwable t) {
-            LOGGER.error(t, t);
+            LOGGER.error(storage.getSessionId(), t, t);
             return ERROR_JSP;
         }
         return PAGE_JSP;
@@ -44,24 +50,25 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
                                             BindingResult result, Model model) {
+
         if (result.hasErrors()) {
             model.addAttribute("error", "Entered value must be > 0");
-            LOGGER.info(LOG_INVALID_DATA);
+            LOGGER.info(storage.getSessionId() + LOG_INVALID_DATA);
             return PAGE_JSP;
         }
 
         try {
             int certificationId = certificate.getCertificationId();
-            LOGGER.info(LOG_PROCESS + certificationId);
+            LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificationId);
             certificate = logic.getCertificateDetails(certificationId);
             User user = logic.getUserDetails(certificate.getUserId());
             setModel(certificate, user, model);
         } catch (Throwable t) {
-            LOGGER.error(t, t);
+            LOGGER.error(storage.getSessionId(), t, t);
             return ERROR_JSP;
         }
 
-        LOGGER.info(LOG_PASS_DATA);
+        LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
         return PAGE_JSP;
     }
 
@@ -87,15 +94,15 @@ public class CertificateDetailsPageController {
             String encodedImage = Base64.encode(userPhoto);
             model.addAttribute("image", encodedImage);
         } catch (Throwable t) {
-            LOGGER.error(t, t);
+            LOGGER.error(storage.getSessionId(), t, t);
             return ERROR_JSP;
         }
-        LOGGER.info(LOG_PHOTO);
+        LOGGER.info(storage.getSessionId() + LOG_PHOTO);
         return PHOTO_JSP;
     }
 
     @Autowired
-    public CertificateDetailsPageController(CertDetailsPageLogic logic, ImageStorage storage) {
+    public CertificateDetailsPageController(CertDetailsPageLogic logic, Storage storage) {
         this.logic = logic;
         this.storage = storage;
     }

@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.Storage;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -28,22 +29,23 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String LOG_USER_OUT = "Retrieved user id=";
     private static final String LOG_NO_USER = "No user id=";
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final Storage storage;
 
     @Override
     public User getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
-        LOGGER.info(LOG_USER_IN + userId);
+        LOGGER.info(storage.getSessionId() + LOG_USER_IN + userId);
         User user;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(LOG_NO_USER + userId);
+            LOGGER.info(storage.getSessionId() + LOG_NO_USER + userId);
             return new User();
         }
-        LOGGER.info(LOG_USER_OUT + userId);
+        LOGGER.info(storage.getSessionId() + LOG_USER_OUT + userId);
         return user;
     }
 
@@ -77,7 +79,8 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
+    public UserDaoImpl(DataSource dataSource, Storage storage) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.storage = storage;
     }
 }

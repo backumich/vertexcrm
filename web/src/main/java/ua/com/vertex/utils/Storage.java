@@ -1,4 +1,4 @@
-package ua.com.vertex.beans;
+package ua.com.vertex.utils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -8,8 +8,9 @@ import org.springframework.web.context.WebApplicationContext;
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION,
         proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class ImageStorage {
+public class Storage {
     private byte[] imageData;
+    private String SessionId;
 
     public byte[] getImageData() {
         return imageData;
@@ -17,5 +18,13 @@ public class ImageStorage {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
+    }
+
+    public String getSessionId() {
+        return SessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        SessionId = sessionId;
     }
 }

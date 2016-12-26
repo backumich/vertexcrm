@@ -10,9 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
+import ua.com.vertex.utils.Storage;
 
 import java.io.IOException;
 
@@ -28,7 +28,7 @@ public class CertificateDetailsPageControllerTest {
     private CertDetailsPageLogic logic;
 
     @Mock
-    private ImageStorage storage;
+    private Storage storage;
 
     @Mock
     private Model model;

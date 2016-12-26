@@ -3,17 +3,17 @@ package ua.com.vertex.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.ImageStorage;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
+import ua.com.vertex.utils.Storage;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     private final UserDaoInf userDao;
     private final CertificateDaoInf certificateDao;
-    private final ImageStorage storage;
+    private final Storage storage;
 
     @Override
     public Certificate getCertificateDetails(int certificationId) {
@@ -29,7 +29,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     }
 
     @Autowired
-    public CertDetailsPageLogicImpl(UserDaoInf userDao, CertificateDaoInf certificateDao, ImageStorage storage) {
+    public CertDetailsPageLogicImpl(UserDaoInf userDao, CertificateDaoInf certificateDao, Storage storage) {
         this.userDao = userDao;
         this.certificateDao = certificateDao;
         this.storage = storage;

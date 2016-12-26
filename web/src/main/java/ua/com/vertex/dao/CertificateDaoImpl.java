@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.utils.Storage;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -27,7 +28,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String LOG_CERT_OUT = "Retrieved certificate id=";
     private static final String LOG_NO_CERT = "No certificate in DB, id=";
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final Storage storage;
 
     @Override
     public List<Certificate> getAllCertificateByUserId(int userId) {
@@ -42,16 +44,16 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.info(LOG_CERT_IN + certificateId);
+        LOGGER.info(storage.getSessionId() + LOG_CERT_IN + certificateId);
         Certificate certificate;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(LOG_NO_CERT + certificateId);
+            LOGGER.info(storage.getSessionId() + LOG_NO_CERT + certificateId);
             return new Certificate();
         }
-        LOGGER.info(LOG_CERT_OUT + certificateId);
+        LOGGER.info(storage.getSessionId() + LOG_CERT_OUT + certificateId);
         return certificate;
     }
 
@@ -68,7 +70,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Autowired
-    public void setDataSource(DataSource dataSource) {
+    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.storage = storage;
     }
 }
