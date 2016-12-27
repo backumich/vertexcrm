@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
@@ -15,7 +14,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ua.com.vertex.controllers.CertificateDetails.*;
+import static ua.com.vertex.controllers.CertificateDetails.CERTIFICATE_DETAIL;
+import static ua.com.vertex.controllers.CertificateDetails.CERTIFICATE_JSP;
 
 
 public class CertificateDetailsTest {
@@ -68,10 +68,10 @@ public class CertificateDetailsTest {
     }
 
     @Test
-    public void getCertificateByIdShouldInserEmptyResult() throws Exception {
-        when(certificateLogic.getCertificateById(-1)).thenThrow(new EmptyResultDataAccessException("1", 1));
+    public void getCertificateByIdShouldInserNull() throws Exception {
+        when(certificateLogic.getCertificateById(-1)).thenReturn(null);
 
-        assertTrue("Have wrong objects in ModelAndView", (Boolean) underTest.getCertificateDetails(-1).getModel().get(EMPTY_RESULT));
+        assertNull("Have wrong objects in ModelAndView", underTest.getCertificateDetails(-1).getModel().get(CERTIFICATE_DETAIL));
     }
 
 

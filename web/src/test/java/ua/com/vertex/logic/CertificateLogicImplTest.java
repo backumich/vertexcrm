@@ -4,12 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.dao.EmptyResultDataAccessException;
 import ua.com.vertex.dao.CertificateDaoImpl;
 
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class CertificateLogicImplTest {
 
@@ -28,12 +26,6 @@ public class CertificateLogicImplTest {
     public void getCertificateByIdIsCalledOnCertificateDao() throws Exception {
         certificateLogic.getCertificateById(1);
         verify(certificateDao).getCertificateById(1);
-    }
-
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void getCertificateByIdReturnEmptyResultException() throws Exception {
-        when(certificateDao.getCertificateById(-1)).thenThrow(new EmptyResultDataAccessException("1", 1));
-        certificateLogic.getCertificateById(-1);
     }
 
     @Test

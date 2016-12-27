@@ -40,11 +40,18 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-    public Certificate getCertificateById(int certificateId) throws EmptyResultDataAccessException {
+    public Certificate getCertificateById(int certificateId) {
         String query = "SELECT certification_id,user_id, certification_date, course_name, language " +
                 "FROM Certificate WHERE certification_id =:certificateId";
-        return jdbcTemplate.queryForObject(query,
-                new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
+        Certificate result;
+        try {
+            result = jdbcTemplate.queryForObject(query,
+                    new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            result = null;
+            LOGGER.error("No certificate with the id = " + certificateId);
+        }
+        return result;
     }
 
     @Autowired

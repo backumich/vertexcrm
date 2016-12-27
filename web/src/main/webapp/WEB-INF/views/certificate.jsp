@@ -101,10 +101,10 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
-        <c:if test="${emptyResult}">
+        <c:if test="${empty certificate}">
             <h1>No certificate with going !!!</h1>
         </c:if>
-        <c:if test="${!emptyResult}">
+        <c:if test="${!empty certificate}">
             <table class="active" width="500">
                 <tr>
                     <th>Certification Id</th>

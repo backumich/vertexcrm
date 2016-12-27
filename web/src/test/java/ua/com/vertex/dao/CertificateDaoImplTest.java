@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
@@ -55,9 +53,9 @@ public class CertificateDaoImplTest {
                 certificates, underTest.getAllCertificatesByUserId(1));
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void getCertificateByIdReturnEmptyResultDataAccessException() throws Exception {
-        underTest.getCertificateById(-1);
+    @Test
+    public void getCertificateByIdReturnNull() throws Exception {
+        assertNull(underTest.getCertificateById(-1));
     }
 
     @Test

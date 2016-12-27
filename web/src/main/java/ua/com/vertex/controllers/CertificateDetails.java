@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,9 +15,6 @@ public class CertificateDetails {
 
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATE_DETAIL = "certificate";
-
-    @SuppressWarnings("WeakerAccess")
-    public static final String EMPTY_RESULT = "emptyResult";
 
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATE_JSP = "certificate";
@@ -34,14 +30,11 @@ public class CertificateDetails {
 
     @RequestMapping(value = "/getCertificateDetails", method = RequestMethod.GET)
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
+
         LOGGER.info("Request to '/getCertificateDetails' ");
+
         ModelAndView result = new ModelAndView(CERTIFICATE_JSP);
-        try {
-            result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId));
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.error("No certificate with the id = " + certificateId);
-            result.addObject(EMPTY_RESULT, true);
-        }
+        result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId));
 
         LOGGER.info("Request to '/getCertificateDetails' return 'certificate.jsp' ");
         return result;

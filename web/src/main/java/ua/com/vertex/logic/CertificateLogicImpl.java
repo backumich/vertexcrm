@@ -3,7 +3,6 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDao;
@@ -21,7 +20,7 @@ public class CertificateLogicImpl implements CertificateLogic {
         this.certificateDao = certificateDao;
     }
 
-    public Certificate getCertificateById(int certificateId) throws EmptyResultDataAccessException {
+    public Certificate getCertificateById(int certificateId) {
         LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
         return certificateDao.getCertificateById(certificateId);
     }
