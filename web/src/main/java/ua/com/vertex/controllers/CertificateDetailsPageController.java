@@ -50,26 +50,30 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
                                             BindingResult result, Model model) {
+        boolean pageJsp = false;
+        boolean errorJsp = false;
         try {
             if (result.hasErrors()) {
                 model.addAttribute("error", "Entered value must be > 0");
                 LOGGER.info(storage.getSessionId() + LOG_INVALID_DATA);
-                return PAGE_JSP;
+                pageJsp = true;
             }
 
-            int certificationId = certificate.getCertificationId();
+            if (!pageJsp) {
+                int certificationId = certificate.getCertificationId();
 
-            LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificationId);
-            certificate = logic.getCertificateDetails(certificationId);
-            User user = logic.getUserDetails(certificate.getUserId());
-            setModel(certificate, user, model);
+                LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificationId);
+                certificate = logic.getCertificateDetails(certificationId);
+                User user = logic.getUserDetails(certificate.getUserId());
+                setModel(certificate, user, model);
+                LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
+            }
         } catch (Throwable t) {
             LOGGER.error(storage.getSessionId(), t, t);
-            return ERROR_JSP;
+            errorJsp = true;
         }
 
-        LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
-        return PAGE_JSP;
+        return !errorJsp ? PAGE_JSP : ERROR_JSP;
     }
 
     private void setModel(Certificate certificate, User user, Model model) {
