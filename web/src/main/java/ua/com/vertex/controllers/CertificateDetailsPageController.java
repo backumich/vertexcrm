@@ -36,7 +36,7 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/" + PAGE_JSP)
     public String showCertificateDetailsPage(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        storage.setSessionId(session.getId() + " ");
+        storage.setSessionId("[Session Id: " + session.getId() + "] ");
 
         try {
             model.addAttribute(new Certificate());
