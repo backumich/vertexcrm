@@ -77,17 +77,20 @@ public class CertificateDetailsPageController {
     }
 
     private void setModel(Certificate certificate, User user, Model model) {
+        boolean flag = false;
         if (certificate.getCertificationId() != 0) {
             model.addAttribute("certificate", certificate);
         } else {
             model.addAttribute("error", "No certificate with this ID! Try again!");
-            return;
+            flag = true;
         }
 
-        if (user.getUserId() != 0) {
-            model.addAttribute("user", user);
-        } else {
-            model.addAttribute("error", "No holder is assigned to this certificate ID!");
+        if (!flag) {
+            if (user.getUserId() != 0) {
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("error", "No holder is assigned to this certificate ID!");
+            }
         }
     }
 
