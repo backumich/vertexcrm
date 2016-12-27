@@ -17,6 +17,7 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    //todo: is suppressWarning needed here?
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATES = "certificates";
     @SuppressWarnings("WeakerAccess")
@@ -37,12 +38,13 @@ public class UserController {
 
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
     public String getAllCertificatesByUserId(@RequestParam("userId") int userId, Model model) {
-
+        //todo: same regarding forming message dynamically
         LOGGER.info("Request to '/getCertificateByUserId', call  - model.addAttribute()");
 
         List<Certificate> result = userLogic.getAllCertificatesByUserId(userId);
         model.addAttribute(CERTIFICATES, result);
 
+        //todo: use ${empty certificates} please and else-block.
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
