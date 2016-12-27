@@ -50,7 +50,6 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
                                             BindingResult result, Model model) {
-
         try {
             if (result.hasErrors()) {
                 model.addAttribute("error", "Entered value must be > 0");

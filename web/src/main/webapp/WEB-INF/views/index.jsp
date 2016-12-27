@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -102,8 +103,10 @@
         </div>
     </div>
 </div>
+
+
 <div class="page gray-page mh100">
-    <div class="container pt1_5">
+    <div class="container pt1_5" align="center">
 
         <main class="content">
             <div class="registration">
@@ -115,18 +118,18 @@
                         <div class="errorSummary">
                         </div>
 
-                        <a href="registration.jsp">Sign up</a> |
-                        <a href="signIn.jsp">Sign in</a> |
+                        <a href="registration.jsp">Register</a> |
+                        <a href="signIn.jsp">Log in</a> |
                         <a href="<c:url value="/certificateDetails"/>">
                             Get certificate details by certificate ID</a>
-
                     </div>
                 </div>
             </div>
         </main>
-
     </div>
 </div>
+
+
 <div class="wrapper">
 
 </div>
