@@ -13,6 +13,7 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 @Controller
 public class CertificateDetails {
 
+    //todo: please use suppress warnings as rare as possible. And make variable package-private, it's ok to hide your data, this is encapsulation!!!! (like Sparta)
     @SuppressWarnings("WeakerAccess")
     public static final String CERTIFICATE_DETAIL = "certificate";
 
@@ -28,12 +29,15 @@ public class CertificateDetails {
         this.certificateLogic = certificateLogic;
     }
 
+    //todo: you can use @GetMapping
     @RequestMapping(value = "/getCertificateDetails", method = RequestMethod.GET)
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
         LOGGER.info("Request to '/getCertificateDetails' ");
         ModelAndView result = new ModelAndView();
         result.setViewName(CERTIFICATE_JSP);
         result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId));
+        //todo: if your logic would be changed and this comment wouldn't then this logging will lie to 'customers'.
+        // Please craft this comment regarding request name and return value
         LOGGER.info("Request to '/getCertificateDetails' return 'certificate.jsp' ");
         return result;
     }

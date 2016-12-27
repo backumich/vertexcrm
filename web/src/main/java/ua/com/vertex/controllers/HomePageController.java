@@ -25,6 +25,7 @@ public class HomePageController {
     @GetMapping
     public ModelAndView showHomePage() {
         ModelAndView result = new ModelAndView("redirect:home.jsp");
+        // todo: it seems to be redundant
         result.addObject("userIds", userLogic.getAllUserIds());
         return result;
     }

@@ -26,6 +26,7 @@ public class UserLogicImpl implements UserLogic {
         this.certificateDao = certificateDao;
     }
 
+//    todo: not the best place for this method
     public List<Certificate> getAllCertificatesByUserId(int userId) {
         LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
         return certificateDao.getAllCertificatesByUserId(userId);

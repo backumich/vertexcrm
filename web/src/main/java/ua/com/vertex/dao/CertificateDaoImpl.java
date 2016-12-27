@@ -20,6 +20,7 @@ import java.util.List;
 @Repository
 public class CertificateDaoImpl implements CertificateDao {
 
+    //todo: same with SuppressWarnings
     @SuppressWarnings("WeakerAccess")
     public static final String USER_ID = "userId";
     @SuppressWarnings("WeakerAccess")

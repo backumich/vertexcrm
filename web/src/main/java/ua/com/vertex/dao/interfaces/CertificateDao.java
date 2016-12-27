@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CertificateDao {
 
+    //todo: it is not unused any more, but suppress warning is here
     @SuppressWarnings("unused")
     Certificate getCertificateById(int certificateId);
 

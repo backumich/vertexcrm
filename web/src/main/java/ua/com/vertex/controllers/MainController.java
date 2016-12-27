@@ -13,6 +13,7 @@ public class MainController {
 
     @RequestMapping(value = "/welcome", method = RequestMethod.POST)
     public ModelAndView welcome() {
+        //todo: this seems to be redundant too
         String message = String.format("Welcome, you are %d today", ++count);
         return new ModelAndView("redirect:/welcome.jsp", "message", message);
     }
