@@ -50,7 +50,7 @@
     </context-param>
 
     <welcome-file-list>
-        <welcome-file>user.jsp</welcome-file>
+        <welcome-file>/WEB-INF/views/user.jsp</welcome-file>
     </welcome-file-list>
 
 
