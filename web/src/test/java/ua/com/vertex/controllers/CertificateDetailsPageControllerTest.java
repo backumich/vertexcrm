@@ -106,7 +106,6 @@ public class CertificateDetailsPageControllerTest {
 
         controller.processCertificateDetails(certificate, result, model);
         verify(model).addAttribute("certificate", certificate);
-        verify(model).addAttribute("error", "No holder is assigned to this certificate ID!");
     }
 
 

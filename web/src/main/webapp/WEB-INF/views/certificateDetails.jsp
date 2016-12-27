@@ -44,8 +44,13 @@
         margin-left: 0 !important;
     }
 
-    .errorText {
+    .errorTextBig {
         font-size: 125%;
+        color: red;
+    }
+
+    .errorTextSmall {
+        font-size: 100%;
         color: red;
     }
 
@@ -134,35 +139,34 @@
         <span class="style1">Enter certificate ID:</span><br><br>
 
         <sf:form cssClass="style3" method="post" action="processCertificateDetails" commandName="certificate">
-            <c:if test="${empty error}">
-                <sf:input type="number" path="certificationId"/>
-            </c:if>
-            <c:if test="${!empty error}">
-                <input type="number" name="certificationId" class="errorField">
-            </c:if>
+            <c:if test="${empty error}"><sf:input type="number" path="certificationId"/></c:if>
+            <c:if test="${!empty error}"><input type="number" name="certificationId" class="errorField"></c:if>
             <input type="submit" value="Send">
         </sf:form>
         <br><br>
 
         <c:if test="${!empty error}">
-            <h3><span class="errorText">${error}</span></h3>
+            <h3><span class="errorTextBig">${error}</span></h3>
         </c:if>
 
-        <c:if test="${(error == 'No holder is assigned to this certificate ID!' or empty error)
-        && certificate.certificationId > 0}">
+        <c:if test="${empty error && certificate.certificationId > 0}">
             <div class="style2">
-                <table width="300">
+                <table width="350">
                     <tr>
                         <td>Certification ID:</td>
                         <td>${String.format("%05d", certificate.certificationId)}</td>
                     </tr>
                     <tr>
                         <td>User First Name:</td>
-                        <td>${user.firstName}</td>
+                        <td><span class="errorTextSmall">
+                            <c:if test="${empty user.firstName}">No holder assigned</c:if></span>
+                            <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
                     </tr>
                     <tr>
                         <td>User Last Name:</td>
-                        <td>${user.lastName}</td>
+                        <td><span class="errorTextSmall">
+                            <c:if test="${empty user.lastName}">No holder assigned</c:if></span>
+                            <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
                     </tr>
                     <tr>
                         <td>Certification Date:</td>

@@ -43,7 +43,7 @@
         margin-left: 0 !important;
     }
 
-    .errorText {
+    .errorTextBig {
         font-size: 250%;
         color: red;
     }
