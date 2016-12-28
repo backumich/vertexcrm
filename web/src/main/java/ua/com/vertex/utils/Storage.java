@@ -12,11 +12,11 @@ public class Storage {
     private byte[] imageData;
     private String SessionId;
 
-    public byte[] getImageData() {
+    public byte[] getPhoto() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setPhoto(byte[] imageData) {
         this.imageData = imageData;
     }
 

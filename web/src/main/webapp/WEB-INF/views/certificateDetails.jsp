@@ -159,13 +159,13 @@
                     <td>${String.format("%05d", certificate.certificationId)}</td>
                 </tr>
                 <tr>
-                    <td>Student First Name:</td>
+                    <td>Certificate Holder First Name:</td>
                     <td><span class="errorText100">
                             <c:if test="${empty user.firstName}">No holder assigned</c:if></span>
                         <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
                 </tr>
                 <tr>
-                    <td>Student Last Name:</td>
+                    <td>Certificate Holder Last Name:</td>
                     <td><span class="errorText100">
                             <c:if test="${empty user.lastName}">No holder assigned</c:if></span>
                         <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
@@ -188,9 +188,9 @@
 
 
         <c:if test="${!empty user.photo}">
-            <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
+            <sf:form method="get" action="/certificateHolderPhoto">
                 <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
-            </form>
+            </sf:form>
         </c:if>
         <br>
 

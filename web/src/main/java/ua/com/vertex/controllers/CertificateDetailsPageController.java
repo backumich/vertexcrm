@@ -31,46 +31,49 @@ public class CertificateDetailsPageController {
 
     private static final String PAGE_JSP = "certificateDetails";
     private static final String ERROR_JSP = "error";
-    private static final String PHOTO_JSP = "photo";
+    private static final String PHOTO_JSP = "certificateHolderPhoto";
 
     @RequestMapping(value = "/" + PAGE_JSP)
-    public String showCertificateDetailsPage(Model model, HttpServletRequest request) {
+    public String showCertificateDetailsPage(Model model, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         storage.setSessionId("[Session Id: " + session.getId() + "] ");
+        boolean errorJsp = false;
 
         try {
             model.addAttribute("newCertificate", new Certificate());
         } catch (Throwable t) {
             LOGGER.error(storage.getSessionId(), t, t);
-            return ERROR_JSP;
+            errorJsp = true;
         }
-        return PAGE_JSP;
+        return errorJsp ? ERROR_JSP : PAGE_JSP;
     }
 
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
                                             BindingResult result, Model model) {
-        boolean pageJsp = false;
-        boolean errorJsp = false;
+        boolean bindingResult = false;
+        boolean error = false;
         try {
             if (result.hasErrors()) {
-                model.addAttribute("error", "Entered value must be > 0");
+                model.addAttribute("error", "Entered value must be a positive integer");
                 LOGGER.info(storage.getSessionId() + LOG_INVALID_DATA);
-                pageJsp = true;
+                bindingResult = true;
             }
 
-            if (!pageJsp) {
+            if (!bindingResult) {
                 LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificate.getCertificationId());
                 certificate = addCertificateAttributes(certificate, model);
-                addUserAttributes(certificate, model);
+                if (certificate.getUserId() != 0) {
+                    addUserAttributes(certificate, model);
+                }
                 LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
             }
-        } catch (Throwable t) {
+        } catch (Exception t) {
             LOGGER.error(storage.getSessionId(), t, t);
-            errorJsp = true;
+            error = true;
         }
 
-        return !errorJsp ? PAGE_JSP : ERROR_JSP;
+        return error ? ERROR_JSP : PAGE_JSP;
     }
 
     private Certificate addCertificateAttributes(Certificate certificate, Model model) {
@@ -85,25 +88,26 @@ public class CertificateDetailsPageController {
     }
 
     private void addUserAttributes(Certificate certificate, Model model) {
-        User user = logic.getUserDetails(certificate.getUserId()).orElse(new User());
-        if (user.getUserId() != 0) {
-            model.addAttribute("user", user);
-        }
-        storage.setImageData(user.getPhoto());
+        int userId = certificate.getUserId();
+        User user = logic.getUserDetails(userId).orElse(new User());
+        model.addAttribute("user", user);
+        storage.setPhoto(user.getPhoto());
     }
 
-    @RequestMapping(value = "/showUserPhoto")
+    @RequestMapping(value = "/certificateHolderPhoto")
     public String showUserPhoto(Model model) {
+        boolean error = false;
         try {
-            byte[] userPhoto = storage.getImageData();
+            byte[] userPhoto = storage.getPhoto();
             String encodedImage = Base64.encode(userPhoto);
             model.addAttribute("image", encodedImage);
+            LOGGER.info(storage.getSessionId() + LOG_PHOTO);
         } catch (Throwable t) {
             LOGGER.error(storage.getSessionId(), t, t);
-            return ERROR_JSP;
+            error = true;
         }
-        LOGGER.info(storage.getSessionId() + LOG_PHOTO);
-        return PHOTO_JSP;
+
+        return error ? ERROR_JSP : PHOTO_JSP;
     }
 
     @Autowired

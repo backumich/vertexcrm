@@ -8,11 +8,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,15 +39,17 @@ public class CertificateDaoTest {
         assertNotNull(jdbcTemplate);
     }
 
-//    @Test
-//    public void daoShouldReturnCertificateExistingInDatabase() {
-//        Certificate certificate = certificateDao.getCertificateById(222);
-//        assertEquals(222, certificate.getCertificationId());
-//    }
-//
-//    @Test
-//    public void daoShouldReturnEmptyCertificateForCertificateNotExistingInDatabase() {
-//        Certificate certificate = certificateDao.getCertificateById(55555);
-//        assertEquals(0, certificate.getCertificationId());
-//    }
+    @Test
+    public void daoShouldReturnCertificateOptionalForCertificateExistingInDatabase() {
+        Optional<Certificate> optional = certificateDao.getCertificateById(222);
+        assertNotNull(optional);
+        assertEquals(222, optional.get().getCertificationId());
+    }
+
+    @Test
+    public void daoShouldReturnCertificateOptionalForCertificateNotExistingInDatabase() {
+        Optional<Certificate> optional = certificateDao.getCertificateById(55555);
+        assertNotNull(optional);
+        assertEquals(new Certificate(), optional.orElse(new Certificate()));
+    }
 }
