@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
@@ -33,20 +34,20 @@ public class UserDaoImpl implements UserDaoInf {
     private final Storage storage;
 
     @Override
-    public User getUser(int userId) {
+    public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
         LOGGER.info(storage.getSessionId() + LOG_USER_IN + userId);
-        User user;
+        User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.info(storage.getSessionId() + LOG_NO_USER + userId);
-            return new User();
         }
         LOGGER.info(storage.getSessionId() + LOG_USER_OUT + userId);
-        return user;
+
+        return Optional.ofNullable(user);
     }
 
     @Override

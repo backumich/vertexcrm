@@ -152,11 +152,11 @@
             <h3><span class="errorText125">${error}</span></h3>
         </c:if>
 
-        <c:if test="${empty error && certificate.certificationId > 0}">
+        <c:if test="${empty error && !empty cert}">
             <table class="table">
                 <tr>
                     <td>Certification ID:</td>
-                    <td>${String.format("%05d", certificate.certificationId)}</td>
+                    <td>${String.format("%05d", cert.certificationId)}</td>
                 </tr>
                 <tr>
                     <td>Student First Name:</td>
@@ -172,15 +172,15 @@
                 </tr>
                 <tr>
                     <td>Certification Date:</td>
-                    <td>${certificate.certificationDate}</td>
+                    <td>${cert.certificationDate}</td>
                 </tr>
                 <tr>
                     <td>Course Name:</td>
-                    <td>${certificate.courseName}</td>
+                    <td>${cert.courseName}</td>
                 </tr>
                 <tr>
                     <td>Programming Language:</td>
-                    <td>${certificate.language}</td>
+                    <td>${cert.language}</td>
                 </tr>
             </table>
             <br>

@@ -3,9 +3,11 @@ package ua.com.vertex.logic.interfaces;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 
+import java.util.Optional;
+
 public interface CertDetailsPageLogic {
 
-    Certificate getCertificateDetails(int certificationId);
+    Optional<Certificate> getCertificateDetails(int certificationId);
 
-    User getUserDetails(int userId);
+    Optional<User> getUserDetails(int userId);
 }

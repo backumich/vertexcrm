@@ -60,12 +60,9 @@ public class CertificateDetailsPageController {
             }
 
             if (!pageJsp) {
-                int certificationId = certificate.getCertificationId();
-
-                LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificationId);
-                certificate = logic.getCertificateDetails(certificationId);
-                User user = logic.getUserDetails(certificate.getUserId());
-                setModel(certificate, user, model);
+                LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificate.getCertificationId());
+                certificate = addCertificateAttributes(certificate, model);
+                addUserAttributes(certificate, model);
                 LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
             }
         } catch (Throwable t) {
@@ -76,16 +73,23 @@ public class CertificateDetailsPageController {
         return !errorJsp ? PAGE_JSP : ERROR_JSP;
     }
 
-    private void setModel(Certificate certificate, User user, Model model) {
+    private Certificate addCertificateAttributes(Certificate certificate, Model model) {
+        int certificationId = certificate.getCertificationId();
+        certificate = logic.getCertificateDetails(certificationId).orElse(new Certificate());
         if (certificate.getCertificationId() != 0) {
-            model.addAttribute("certificate", certificate);
+            model.addAttribute("cert", certificate);
         } else {
             model.addAttribute("error", "No certificate with this ID! Try again!");
         }
+        return certificate;
+    }
 
+    private void addUserAttributes(Certificate certificate, Model model) {
+        User user = logic.getUserDetails(certificate.getUserId()).orElse(new User());
         if (user.getUserId() != 0) {
             model.addAttribute("user", user);
         }
+        storage.setImageData(user.getPhoto());
     }
 
     @RequestMapping(value = "/showUserPhoto")

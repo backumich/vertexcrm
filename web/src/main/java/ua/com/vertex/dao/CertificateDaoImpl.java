@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
@@ -40,21 +41,20 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Override
-    public Certificate getCertificateById(int certificateId) {
+    public Optional<Certificate> getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
         LOGGER.info(storage.getSessionId() + LOG_CERT_IN + certificateId);
-        Certificate certificate;
+        Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.info(storage.getSessionId() + LOG_NO_CERT + certificateId);
-            return new Certificate();
         }
         LOGGER.info(storage.getSessionId() + LOG_CERT_OUT + certificateId);
-        return certificate;
+        return Optional.ofNullable(certificate);
     }
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
