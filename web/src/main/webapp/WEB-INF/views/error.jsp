@@ -43,7 +43,7 @@
         margin-left: 0 !important;
     }
 
-    .errorTextBig {
+    .errorText250 {
         font-size: 250%;
         color: red;
     }
@@ -109,10 +109,11 @@
     </div>
 </div>
 
+
 <div class="page gray-page mh100">
     <div align="center" class="up-padding">
 
-        <span class="errorText">Something went wrong... Try again!</span><br><br>
+        <span class="errorText250">Something went wrong... Try again!</span><br><br>
         <a href="<c:url value="/" />">Home</a>
 
     </div>

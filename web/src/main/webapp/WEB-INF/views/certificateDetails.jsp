@@ -44,12 +44,12 @@
         margin-left: 0 !important;
     }
 
-    .errorTextBig {
+    .errorText125 {
         font-size: 125%;
         color: red;
     }
 
-    .errorTextSmall {
+    .errorText100 {
         font-size: 100%;
         color: red;
     }
@@ -59,23 +59,25 @@
         border: 2px solid red;
     }
 
-    .style1 {
+    .formHeaderText {
         font-size: 125%;
         font-weight: bold;
     }
 
-    .style2 {
-        font-size: 115%;
-        line-height: 2;
+    .buttonText {
+        color: black;
     }
 
-    .style3 {
-        color: black;
+    .table {
+        width: auto;
+        font-size: 115%;
+        border-spacing: 10px;
     }
 
     .up-padding {
         padding-top: 100px;
     }
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -133,62 +135,61 @@
     </div>
 </div>
 
+
 <div class="page gray-page mh100">
     <div class="up-padding" align="center">
 
-        <span class="style1">Enter certificate ID:</span><br><br>
+        <span class="formHeaderText">Enter certificate ID:</span><br><br>
 
-        <sf:form cssClass="style3" method="post" action="processCertificateDetails" commandName="certificate">
-            <c:if test="${empty error}"><sf:input type="number" path="certificationId"/></c:if>
+        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="certificate">
+            <c:if test="${empty error}"><input type="number" name="certificationId"/></c:if>
             <c:if test="${!empty error}"><input type="number" name="certificationId" class="errorField"></c:if>
             <input type="submit" value="Send">
         </sf:form>
         <br><br>
 
         <c:if test="${!empty error}">
-            <h3><span class="errorTextBig">${error}</span></h3>
+            <h3><span class="errorText125">${error}</span></h3>
         </c:if>
 
         <c:if test="${empty error && certificate.certificationId > 0}">
-            <div class="style2">
-                <table width="350">
-                    <tr>
-                        <td>Certification ID:</td>
-                        <td>${String.format("%05d", certificate.certificationId)}</td>
-                    </tr>
-                    <tr>
-                        <td>User First Name:</td>
-                        <td><span class="errorTextSmall">
+            <table class="table">
+                <tr>
+                    <td>Certification ID:</td>
+                    <td>${String.format("%05d", certificate.certificationId)}</td>
+                </tr>
+                <tr>
+                    <td>Student First Name:</td>
+                    <td><span class="errorText100">
                             <c:if test="${empty user.firstName}">No holder assigned</c:if></span>
-                            <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
-                    </tr>
-                    <tr>
-                        <td>User Last Name:</td>
-                        <td><span class="errorTextSmall">
+                        <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Student Last Name:</td>
+                    <td><span class="errorText100">
                             <c:if test="${empty user.lastName}">No holder assigned</c:if></span>
-                            <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
-                    </tr>
-                    <tr>
-                        <td>Certification Date:</td>
-                        <td>${certificate.certificationDate}</td>
-                    </tr>
-                    <tr>
-                        <td>Course Name:</td>
-                        <td>${certificate.courseName}</td>
-                    </tr>
-                    <tr>
-                        <td>Programming Language:</td>
-                        <td>${certificate.language}</td>
-                    </tr>
-                </table>
-            </div>
+                        <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Certification Date:</td>
+                    <td>${certificate.certificationDate}</td>
+                </tr>
+                <tr>
+                    <td>Course Name:</td>
+                    <td>${certificate.courseName}</td>
+                </tr>
+                <tr>
+                    <td>Programming Language:</td>
+                    <td>${certificate.language}</td>
+                </tr>
+            </table>
             <br>
         </c:if>
 
 
         <c:if test="${!empty user.photo}">
             <form method="get" action="${pageContext.request.contextPath}/showUserPhoto">
-                <input class="style3" type="submit" value="Show Certificate Holder Photo">
+                <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
             </form>
         </c:if>
         <br>
