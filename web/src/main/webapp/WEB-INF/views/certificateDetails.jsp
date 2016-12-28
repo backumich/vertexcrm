@@ -141,7 +141,7 @@
 
         <span class="formHeaderText">Enter certificate ID:</span><br><br>
 
-        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="certificate">
+        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
             <c:if test="${empty error}"><input type="number" name="certificationId"/></c:if>
             <c:if test="${!empty error}"><input type="number" name="certificationId" class="errorField"></c:if>
             <input type="submit" value="Send">
@@ -152,11 +152,11 @@
             <h3><span class="errorText125">${error}</span></h3>
         </c:if>
 
-        <c:if test="${empty error && !empty cert}">
+        <c:if test="${empty error && !empty certificate}">
             <table class="table">
                 <tr>
                     <td>Certification ID:</td>
-                    <td>${String.format("%05d", cert.certificationId)}</td>
+                    <td>${String.format("%05d", certificate.certificationId)}</td>
                 </tr>
                 <tr>
                     <td>Student First Name:</td>
@@ -172,15 +172,15 @@
                 </tr>
                 <tr>
                     <td>Certification Date:</td>
-                    <td>${cert.certificationDate}</td>
+                    <td>${certificate.certificationDate}</td>
                 </tr>
                 <tr>
                     <td>Course Name:</td>
-                    <td>${cert.courseName}</td>
+                    <td>${certificate.courseName}</td>
                 </tr>
                 <tr>
                     <td>Programming Language:</td>
-                    <td>${cert.language}</td>
+                    <td>${certificate.language}</td>
                 </tr>
             </table>
             <br>

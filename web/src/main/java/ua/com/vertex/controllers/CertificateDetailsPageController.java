@@ -39,7 +39,7 @@ public class CertificateDetailsPageController {
         storage.setSessionId("[Session Id: " + session.getId() + "] ");
 
         try {
-            model.addAttribute(new Certificate());
+            model.addAttribute("newCertificate", new Certificate());
         } catch (Throwable t) {
             LOGGER.error(storage.getSessionId(), t, t);
             return ERROR_JSP;
@@ -77,7 +77,7 @@ public class CertificateDetailsPageController {
         int certificationId = certificate.getCertificationId();
         certificate = logic.getCertificateDetails(certificationId).orElse(new Certificate());
         if (certificate.getCertificationId() != 0) {
-            model.addAttribute("cert", certificate);
+            model.addAttribute("certificate", certificate);
         } else {
             model.addAttribute("error", "No certificate with this ID! Try again!");
         }
