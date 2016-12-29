@@ -50,21 +50,15 @@ public class RegistrationController {
             (NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration,
                                             BindingResult bindingResult, ModelAndView modelAndView) {
 
-        if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
-            LOGGER.info("Check for signed-in user on a page registration.jsp");
-            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
-        }
+        checkEmailAlreadyExists(userFormRegistration, bindingResult);
 
-        if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
-            LOGGER.info("check for errors associated with the coincidence of the password on page registration.jsp");
-            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
-        }
+        isMatchPassword(userFormRegistration, bindingResult);
 
         if (bindingResult.hasErrors()) {
             LOGGER.info("There are errors in filling in the form registration.jsp");
             modelAndView.setViewName(REGISTRATION_PAGE);
             modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
-            return modelAndView;
+            //return modelAndView;
         }
 
         userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
@@ -77,11 +71,29 @@ public class RegistrationController {
             modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
             modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
         } catch (DataAccessException e) {
-            return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+            modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
+            modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+            //return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+            return modelAndView;
         }
 
         return modelAndView;
         //return new ModelAndView(REGISTRATION_SUCCESS_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+    }
+
+    private void isMatchPassword(@Valid @ModelAttribute
+            (NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration, BindingResult bindingResult) {
+        if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
+            LOGGER.info("check for errors associated with the coincidence of the password on page registration.jsp");
+            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
+        }
+    }
+
+    private void checkEmailAlreadyExists(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
+        if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
+            LOGGER.info("Check for signed-in user on a page registration.jsp");
+            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
+        }
     }
 }
 
