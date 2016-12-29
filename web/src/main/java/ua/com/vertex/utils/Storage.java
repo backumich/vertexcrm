@@ -10,7 +10,7 @@ import org.springframework.web.context.WebApplicationContext;
         proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Storage {
     private byte[] imageData;
-    private String SessionId;
+    private String sessionId;
 
     public byte[] getPhoto() {
         return imageData;
@@ -21,10 +21,10 @@ public class Storage {
     }
 
     public String getSessionId() {
-        return SessionId;
+        return sessionId;
     }
 
     public void setSessionId(String sessionId) {
-        SessionId = sessionId;
+        sessionId = sessionId;
     }
 }

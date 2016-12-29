@@ -39,12 +39,14 @@ public class UserDaoImpl implements UserDaoInf {
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
 
         LOGGER.info(storage.getSessionId() + LOG_USER_IN + userId);
+
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.info(storage.getSessionId() + LOG_NO_USER + userId);
         }
+
         LOGGER.info(storage.getSessionId() + LOG_USER_OUT + userId);
 
         return Optional.ofNullable(user);

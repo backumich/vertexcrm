@@ -46,6 +46,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
         LOGGER.info(storage.getSessionId() + LOG_CERT_IN + certificateId);
+
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
@@ -53,7 +54,9 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         } catch (EmptyResultDataAccessException e) {
             LOGGER.info(storage.getSessionId() + LOG_NO_CERT + certificateId);
         }
+
         LOGGER.info(storage.getSessionId() + LOG_CERT_OUT + certificateId);
+
         return Optional.ofNullable(certificate);
     }
 

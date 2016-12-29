@@ -54,18 +54,26 @@
         color: red;
     }
 
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
+    .hrefText {
+        font-size: 120%;
     }
 
-    .formHeaderText {
+    .formHeaderText1 {
         font-size: 125%;
         font-weight: bold;
     }
 
+    .formHeaderText2 {
+        font-size: 180%
+    }
+
     .buttonText {
         color: black;
+    }
+
+    .errorField {
+        background-color: #ffcccc;
+        border: 2px solid red;
     }
 
     .table {
@@ -139,7 +147,9 @@
 <div class="page gray-page mh100">
     <div class="up-padding" align="center">
 
-        <span class="formHeaderText">Enter certificate ID:</span><br><br>
+        <span class="formHeaderText2">Certificate Details</span><br><br><br>
+
+        <span class="formHeaderText1">Enter certificate ID:</span><br><br>
 
         <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
             <c:if test="${empty error}"><input type="number" name="certificationId"/></c:if>
@@ -194,9 +204,10 @@
         </c:if>
         <br>
 
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
-
+        <div class="hrefText">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 

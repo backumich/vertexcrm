@@ -48,6 +48,10 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
     }
+
+    .hrefText {
+        font-size: 120%;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -112,20 +116,19 @@
             <div class="registration">
                 <div id="registration-form">
                     <div class="reg-form">
-                        <h3><span></span>Welcome to Vertex CRM</h3>
-                        <br>
-
-                        <div class="errorSummary">
-                        </div>
-
-                        <a href="registration.jsp">Register</a> |
-                        <a href="signIn.jsp">Log in</a> |
-                        <a href="<c:url value="/certificateDetails"/>">
-                            Get certificate details by certificate ID</a>
+                        <span style="font-size: 200%">Welcome to Vertex CRM</span>
+                        <br><br><br>
                     </div>
                 </div>
             </div>
         </main>
+
+        <div class="hrefText">
+            <a href="registration.jsp">Register</a> |
+            <a href="signIn.jsp">Log in</a> |
+            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>
+        </div>
+
     </div>
 </div>
 

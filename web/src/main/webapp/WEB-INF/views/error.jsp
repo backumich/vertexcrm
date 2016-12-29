@@ -48,6 +48,10 @@
         color: red;
     }
 
+    .hrefText {
+        font-size: 120%;
+    }
+
     .up-padding {
         padding-top: 100px;
     }
@@ -114,7 +118,7 @@
     <div align="center" class="up-padding">
 
         <span class="errorText250">Something went wrong... Try again!</span><br><br>
-        <a href="<c:url value="/" />">Home</a>
+        <span class="hrefText"><a href="<c:url value="/" />">Home</a></span>
 
     </div>
 </div>

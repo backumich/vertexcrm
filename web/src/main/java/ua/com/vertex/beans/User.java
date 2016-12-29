@@ -13,6 +13,8 @@ public class User {
     private int discount;
     private String phone;
 
+    public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
+
     public User() {
     }
 

@@ -48,6 +48,10 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
     }
+
+    .hrefText {
+        font-size: 120%;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -111,8 +115,10 @@
         <img src="data:image/jpeg;base64,${image}" alt="image">
         <br><br>
 
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+        <div class="hrefText">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
 
     </div>
 </div>

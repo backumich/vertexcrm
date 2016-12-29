@@ -81,7 +81,7 @@ public class CertificateDetailsPageControllerTest {
         when(result.hasErrors()).thenReturn(true);
 
         controller.processCertificateDetails(certificate, result, model);
-        verify(model).addAttribute("error", "Entered value must be a positive integer");
+        verify(model).addAttribute("error", "Entered value must be a positive integer!");
     }
 
     @Test
@@ -128,6 +128,20 @@ public class CertificateDetailsPageControllerTest {
 
         controller.processCertificateDetails(certificate, result, model);
         verify(model).addAttribute("user", user);
+    }
+
+    @Test
+    public void addErrorAttributeAfterRetrievingEmptyCertificateOptional() {
+        Certificate certificate = new Certificate.Builder()
+                .setCertificationId(55555)
+                .getInstance();
+        Optional<Certificate> optionalC = Optional.empty();
+
+        when(result.hasErrors()).thenReturn(false);
+        when(logic.getCertificateDetails(55555)).thenReturn(optionalC);
+
+        controller.processCertificateDetails(certificate, result, model);
+        verify(model).addAttribute("error", "No certificate with this ID!");
     }
 
     @Test

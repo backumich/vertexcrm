@@ -17,6 +17,7 @@
 
     <dependencies>
         <dependency>
+            <!--Spring-->
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.3.1.RELEASE</version>
@@ -43,7 +44,7 @@
             <scope>test</scope>
         </dependency>
 
-
+        <!--Servlet+JSTL+JSP-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -54,15 +55,20 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
 
-
+        <!--Validation-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
 
-
+        <!--Logging-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -74,7 +80,7 @@
             <version>2.7</version>
         </dependency>
 
-
+        <!--Database-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -92,14 +98,14 @@
             <version>1.4</version>
         </dependency>
 
-
+        <!--Maven-->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.10</version>
         </dependency>
 
-
+        <!--Testing-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
