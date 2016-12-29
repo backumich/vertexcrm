@@ -15,6 +15,8 @@ public class Certificate {
     private String courseName;
     private String language;
 
+    public static final Certificate BAD_SERTIFICATE = new Builder().setCertificationId(-1).setUserId(-1).getInstance();
+
     public Certificate() {
     }
 
