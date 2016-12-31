@@ -55,7 +55,7 @@ public class UserDaoRealization implements UserDaoRealizationInf {
 
         String sql = "SELECT count(*) FROM Users WHERE email = :email";
         SqlParameterSource namedParameters = new MapSqlParameterSource("email", email);
-        return this.jdbcTemplate.queryForObject(sql, namedParameters, Integer.class);
+        return this.jdbcTemplate.queryForObject(sql, namedParameters, int.class);
     }
 
     @Override
