@@ -6,13 +6,16 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserFormRegistration {
+    //todo: seems that rule "Size more than 5 chars" is included into @Email. Please add message to @email annotation.
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
-    @Email
+    @Email()
     private String email;
 
+    //todo: massage is not clear when password is less then 5 chars
     @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
     private String password;
 
+    //todo: massage is not clear when password is less then 5 chars
     @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
     private String verifyPassword;
 
@@ -22,6 +25,7 @@ public class UserFormRegistration {
     @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
     private String lastName;
 
+    //todo: massage is not clear
     @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
             message = "Invalid telephone number format")
@@ -118,6 +122,7 @@ public class UserFormRegistration {
     }
 }
 
+// todo: what is that?
 //^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
 //
 //        18005551234

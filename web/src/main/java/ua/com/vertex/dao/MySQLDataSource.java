@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 
 //import ua.com.vertex.models._User;
 
-
+//todo: delete it please
 public class MySQLDataSource {
 
     private DataSource dataSource = new MysqlDataSource();

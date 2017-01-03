@@ -61,6 +61,8 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     @Override
     public int registrationUser(User user) throws DataAccessException {
 
+        //todo: refactor it
+
         LOGGER.info("Adding a new user in the database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone) " +

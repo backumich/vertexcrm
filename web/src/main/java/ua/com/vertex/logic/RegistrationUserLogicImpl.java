@@ -41,6 +41,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     @Override
     public UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration) {
         LOGGER.info("Password encryption");
+        //todo: here is the link to think about: https://youtu.be/rCIsuMEFRro
         userFormRegistration.setPassword(DigestUtils.md5Hex(userFormRegistration.getPassword()));
         return userFormRegistration;
     }

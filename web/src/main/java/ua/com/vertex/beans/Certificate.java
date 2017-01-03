@@ -74,12 +74,14 @@ public class Certificate {
         this.courseName = courseName;
     }
 
-    @SuppressWarnings("WeakerAccess")
+//todo: SuppressWarnings seems to be redundant here.
+//    @SuppressWarnings("WeakerAccess")
     public String getLanguage() {
         return language;
     }
 
-    @SuppressWarnings("WeakerAccess")
+//todo: SuppressWarnings seems to be redundant here.
+//    @SuppressWarnings("WeakerAccess")
     public void setLanguage(String language) {
         this.language = language;
     }

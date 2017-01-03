@@ -14,7 +14,8 @@ public class User {
     private int discount;
     private String phone;
 
-    @SuppressWarnings("WeakerAccess")
+    //todo: SuppressWarnings seems to be redundant here. Please check whole file.
+//    @SuppressWarnings("WeakerAccess")
     public User() {
     }
 
@@ -202,6 +203,7 @@ public class User {
             return this;
         }
 
+        //todo: Are you sure this method should be synchronized?
         public synchronized User getInstance() {
             return instance;
         }

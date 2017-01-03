@@ -2,6 +2,7 @@ package ua.com.vertex.logic;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,7 @@ public class RegistrationUserLogicImplTest {
     @Mock
     private UserFormRegistration userFormRegistration;
 
+//    todo: use it - @InjectMocks
     @Mock
     private RegistrationUserLogicImpl registrationUserLogic;
 
@@ -29,18 +31,22 @@ public class RegistrationUserLogicImplTest {
 
     @Before
     public void setUp() {
+//       todo: @RunWith(MockitoJUnitRunner.class) could be used instead
         MockitoAnnotations.initMocks(this);
+        //todo: is it a Mock or not?
         registrationUserLogic = new RegistrationUserLogicImpl();
     }
 
     @Test
     public void userFormRegistrationShouldNotBeNull() {
+        //todo: oO are you going to test java machine? so why don't you test 1 + 1 == 2?
         UserFormRegistration userFormRegistration = new UserFormRegistration();
         assertNotNull(userFormRegistration);
     }
 
     @Test
     public void UserShouldNotBeNull() {
+//        todo: oO
         User user = new User();
         assertNotNull(user);
     }
@@ -51,6 +57,7 @@ public class RegistrationUserLogicImplTest {
         userFormRegistration.setPassword("1");
         userFormRegistration.setVerifyPassword("1");
         Boolean result = registrationUserLogic.isMatchPassword(userFormRegistration);
+//        todo: result == true ????? why don't you use result != false ?? =)
         assertTrue("Result is (" + result + ")", result == true);
     }
 
@@ -76,6 +83,7 @@ public class RegistrationUserLogicImplTest {
         UserFormRegistration userFormRegistration = new UserFormRegistration();
         userFormRegistration.setPassword("222222");
         userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
+        //todo: please change order of variables. Moreover, please change unexpected value so it would be obvious that it is not expected.
         assertNotEquals(userFormRegistration.getPassword(), "96e79218965eb72c92a549dd5a330112");
     }
 
