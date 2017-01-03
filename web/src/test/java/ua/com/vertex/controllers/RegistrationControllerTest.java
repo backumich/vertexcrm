@@ -3,25 +3,35 @@ package ua.com.vertex.controllers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.UserFormRegistration;
+import ua.com.vertex.dao.UserDaoRealization;
+import ua.com.vertex.logic.RegistrationUserLogicImpl;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("Duplicates")
 public class RegistrationControllerTest {
 
     @Mock
-    RegistrationUserLogic registrationUserLogic;
-
-    @Mock
     private BindingResult bindingResult;
 
+    @Mock
+    private UserDaoRealization userDao;
+
+    @Spy
+    @InjectMocks
+    private RegistrationUserLogicImpl registrationUserLogic;
+
+    @InjectMocks
     private RegistrationController registrationController;
 
     @Before
@@ -33,10 +43,10 @@ public class RegistrationControllerTest {
     @Test
     public void viewRegistrationForm_checkReturnViewName() throws Exception {
         //todo: registrationController exists as a variable, use it please
-        RegistrationController registrationController = new RegistrationController(registrationUserLogic);
+//        RegistrationController registrationController = new RegistrationController(registrationUserLogic);
         ModelAndView modelAndView = registrationController.viewRegistrationForm();
         //todo: RegistrationController.REGISTRATION_PAGE should be used
-        Assert.assertEquals("registration", modelAndView.getViewName());
+        assertEquals("registration", modelAndView.getViewName());
     }
 
     @Test
@@ -47,7 +57,7 @@ public class RegistrationControllerTest {
         modelAndView.addObject("userFormRegistration", userFormRegistration);
         ModelMap modelMap = modelAndView.getModelMap();
         assertTrue(modelMap.containsAttribute("userFormRegistration"));
-        Assert.assertEquals(new UserFormRegistration(), modelMap.get("userFormRegistration"));
+        assertEquals(new UserFormRegistration(), modelMap.get("userFormRegistration"));
     }
 
     @Test
@@ -56,13 +66,15 @@ public class RegistrationControllerTest {
         ModelAndView modelAndView = new ModelAndView();
         ModelAndView outModelAndView =
                 registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-        Assert.assertEquals("registrationSuccess", outModelAndView.getViewName());
+        assertEquals("registrationSuccess", outModelAndView.getViewName());
     }
 
     @Test
     public void processRegistration_checkReturnModelAndModelName() throws Exception {
 
         UserFormRegistration userFormRegistration = new UserFormRegistration();
+        userFormRegistration.setPassword("testPassword");
+        userFormRegistration.setVerifyPassword("testPassword");
         ModelAndView modelAndView = new ModelAndView();
 
         ModelAndView outModelAndView;
@@ -74,6 +86,6 @@ public class RegistrationControllerTest {
 
         ModelMap modelMap = outModelAndView.getModelMap();
         assertTrue(modelMap.containsAttribute("userFormRegistration"));
-        //Assert.assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
+        assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
     }
 }

@@ -60,25 +60,26 @@ public class UserDaoRealization implements UserDaoRealizationInf {
 
     @Override
     public int registrationUser(User user) throws DataAccessException {
-
-        //todo: refactor it
-
-        LOGGER.info("Adding a new user in the database");
+        LOGGER.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone) " +
                 "VALUES (:email, :password, :first_name, :last_name, :phone)";
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, getRegistrationParameters(user), keyHolder);
+
+        Number id = keyHolder.getKey();
+        return id.intValue();
+    }
+
+    private MapSqlParameterSource getRegistrationParameters(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("email", user.getEmail());
         namedParameters.addValue("password", user.getPassword());
         namedParameters.addValue("first_name", user.getFirstName());
         namedParameters.addValue("last_name", user.getLastName());
         namedParameters.addValue("phone", user.getPhone());
-        jdbcTemplate.update(query, namedParameters, keyHolder);
-
-        Number id = keyHolder.getKey();
-
-        return id.intValue();
+        return namedParameters;
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
