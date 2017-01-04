@@ -77,30 +77,38 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format(
-                "User ID: %05d%n" +
-                        "E-mail: %s%n" +
-                        "First Name: %s%n" +
-                        "Last Name: %s%n" +
-                        "Discount: %d%n" +
-                        "Phone: %s%n",
-                userId, email, firstName, lastName, discount, phone == null ? "-" : phone);
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", passportScan=" + passportScan +
+                ", photo=" + photo +
+                ", discount=" + discount +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user2 = (User) o;
-        return userId == user2.userId &&
-                Objects.equals(email, user2.email) &&
-                Objects.equals(firstName, user2.firstName) &&
-                Objects.equals(lastName, user2.lastName);
+        User user = (User) o;
+        return userId == user.userId &&
+                discount == user.discount &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Arrays.equals(passportScan, user.passportScan) &&
+                Arrays.equals(photo, user.photo) &&
+                Objects.equals(phone, user.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, firstName, lastName);
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone);
     }
 
     public int getUserId() {
