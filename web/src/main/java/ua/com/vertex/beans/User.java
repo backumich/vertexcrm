@@ -1,5 +1,6 @@
 package ua.com.vertex.beans;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class User {
