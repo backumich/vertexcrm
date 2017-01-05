@@ -9,12 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
-    private static int count = 0;
-
     @RequestMapping(value = "/welcome", method = RequestMethod.POST)
     public ModelAndView welcome() {
-        //todo: this seems to be redundant too
-        String message = String.format("Welcome, you are %d today", ++count);
-        return new ModelAndView("redirect:/welcome.jsp", "message", message);
+        return new ModelAndView("redirect:/welcome.jsp");
     }
 }

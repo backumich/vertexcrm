@@ -16,16 +16,14 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public class CertificateDaoImpl implements CertificateDao {
 
-    //todo: same with SuppressWarnings
-    @SuppressWarnings("WeakerAccess")
-    public static final String USER_ID = "userId";
-    @SuppressWarnings("WeakerAccess")
-    public static final String CERTIFICATE_ID = "certificateId";
+    private static final String USER_ID = "userId";
+    private static final String CERTIFICATE_ID = "certificateId";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
 
@@ -41,7 +39,7 @@ public class CertificateDaoImpl implements CertificateDao {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-    public Certificate getCertificateById(int certificateId) {
+    public Optional<Certificate> getCertificateById(int certificateId) {
         String query = "SELECT certification_id,user_id, certification_date, course_name, language " +
                 "FROM Certificate WHERE certification_id =:certificateId";
         Certificate result;
@@ -52,7 +50,7 @@ public class CertificateDaoImpl implements CertificateDao {
             result = null;
             LOGGER.error("No certificate with the id = " + certificateId);
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 
     @Autowired

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDao;
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
+@WebAppConfiguration
 @ActiveProfiles("test")
 public class CertificateDaoImplTest {
 
@@ -55,7 +58,9 @@ public class CertificateDaoImplTest {
 
     @Test
     public void getCertificateByIdReturnNull() throws Exception {
-        assertNull(underTest.getCertificateById(-1));
+        if (underTest.getCertificateById(-1).isPresent())
+            underTest.getCertificateById(-1).get();
+
     }
 
     @Test
@@ -68,8 +73,11 @@ public class CertificateDaoImplTest {
                 .setLanguage("Java")
                 .getInstance();
 
-        assertEquals("Maybe method was changed",
-                result, underTest.getCertificateById(1));
+        if (underTest.getCertificateById(1).isPresent()) {
+            assertEquals("Maybe method was changed",
+                    result, underTest.getCertificateById(1).get());
+        }
     }
+
 
 }

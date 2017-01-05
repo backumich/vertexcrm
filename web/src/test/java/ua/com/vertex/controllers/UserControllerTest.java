@@ -7,7 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
 
 import java.util.ArrayList;
 
@@ -26,19 +26,19 @@ public class UserControllerTest {
     private Model model;
 
     @Mock
-    private UserLogic userLogic;
+    private CertificateLogic certificateLogic;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTest = new UserController(userLogic);
+        underTest = new UserController(certificateLogic);
         model = new ExtendedModelMap();
     }
 
     @Test
     public void getAllCertificateByUserIdIsCalledOnUserLogic() throws Exception {
         underTest.getAllCertificatesByUserId(111, model);
-        verify(userLogic).getAllCertificatesByUserId(anyInt());
+        verify(certificateLogic).getAllCertificatesByUserId(anyInt());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class UserControllerTest {
         ArrayList<Certificate> certificates = new ArrayList<>();
         certificates.add(new Certificate.Builder().getInstance());
 
-        when(userLogic.getAllCertificatesByUserId(333)).thenReturn(certificates);
+        when(certificateLogic.getAllCertificatesByUserId(333)).thenReturn(certificates);
 
         underTest.getAllCertificatesByUserId(333, model);
 

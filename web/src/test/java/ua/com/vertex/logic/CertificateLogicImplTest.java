@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.com.vertex.dao.CertificateDaoImpl;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 
@@ -32,5 +33,17 @@ public class CertificateLogicImplTest {
     public void getCertificateByIdReturnNull() throws Exception {
         assertNull("Maybe method was changed", certificateLogic.getCertificateById(1));
     }
+
+    @Test
+    public void getAllCertificateByUserIdIsCalledOnCertificateDao() throws Exception {
+        certificateLogic.getAllCertificatesByUserId(1);
+        verify(certificateDao).getAllCertificatesByUserId(1);
+    }
+
+    @Test
+    public void getAllCertificateByUserIdNeverReturnNull() throws Exception {
+        assertNotNull("Maybe method was changed", certificateLogic.getAllCertificatesByUserId(-1));
+    }
+
 
 }

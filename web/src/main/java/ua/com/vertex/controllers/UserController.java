@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
 
 import java.util.List;
 
@@ -17,34 +17,29 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    //todo: is suppressWarning needed here?
-    @SuppressWarnings("WeakerAccess")
-    public static final String CERTIFICATES = "certificates";
-    @SuppressWarnings("WeakerAccess")
-    public static final String USER_JSP = "user";
 
-    @SuppressWarnings("WeakerAccess")
-    public static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
+    static final String CERTIFICATES = "certificates";
+    private static final String USER_JSP = "user";
+    private static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
 
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    private final UserLogic userLogic;
+    private final CertificateLogic certificateLogic;
 
     @Autowired
-    public UserController(UserLogic userLogic) {
-        this.userLogic = userLogic;
+    public UserController(CertificateLogic certificateLogic) {
+        this.certificateLogic = certificateLogic;
     }
 
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
     public String getAllCertificatesByUserId(@RequestParam("userId") int userId, Model model) {
-        //todo: same regarding forming message dynamically
-        LOGGER.info("Request to '/getCertificateByUserId', call  - model.addAttribute()");
 
-        List<Certificate> result = userLogic.getAllCertificatesByUserId(userId);
+        LOGGER.info("Request to '/getCertificateByUserId' with userId = " + userId);
+
+        List<Certificate> result = certificateLogic.getAllCertificatesByUserId(userId);
         model.addAttribute(CERTIFICATES, result);
 
-        //todo: use ${empty certificates} please and else-block.
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
         LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");

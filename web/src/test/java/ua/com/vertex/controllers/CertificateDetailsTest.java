@@ -9,6 +9,7 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
@@ -38,13 +39,14 @@ public class CertificateDetailsTest {
 
     @Test
     public void getCertificateByIdIsCalledOnCertificateLogic() throws Exception {
+        when(certificateLogic.getCertificateById(1)).thenReturn(Optional.empty());
         underTest.getCertificateDetails(1);
         verify(certificateLogic).getCertificateById(1);
     }
 
     @Test
     public void getCertificateByIdReturnCorectView() throws Exception {
-        when(certificateLogic.getCertificateById(anyInt())).thenReturn(certificate);
+        when(certificateLogic.getCertificateById(anyInt())).thenReturn(java.util.Optional.ofNullable(certificate));
 
         ModelAndView modelAndView = underTest.getCertificateDetails(1);
 
@@ -55,7 +57,7 @@ public class CertificateDetailsTest {
 
     @Test
     public void getCertificateByIdShouldInsertCertificateIntoModelAndView() throws Exception {
-        when(certificateLogic.getCertificateById(anyInt())).thenReturn(certificate);
+        when(certificateLogic.getCertificateById(anyInt())).thenReturn(java.util.Optional.ofNullable(certificate));
 
         ModelAndView modelAndView = underTest.getCertificateDetails(1);
 
@@ -69,10 +71,8 @@ public class CertificateDetailsTest {
 
     @Test
     public void getCertificateByIdShouldInserNull() throws Exception {
-        when(certificateLogic.getCertificateById(-1)).thenReturn(null);
+        when(certificateLogic.getCertificateById(-1)).thenReturn(Optional.empty());
 
         assertNull("Have wrong objects in ModelAndView", underTest.getCertificateDetails(-1).getModel().get(CERTIFICATE_DETAIL));
     }
-
-
 }

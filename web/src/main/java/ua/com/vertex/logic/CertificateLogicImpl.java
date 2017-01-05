@@ -8,6 +8,9 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDao;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
 
@@ -20,7 +23,12 @@ public class CertificateLogicImpl implements CertificateLogic {
         this.certificateDao = certificateDao;
     }
 
-    public Certificate getCertificateById(int certificateId) {
+    public List<Certificate> getAllCertificatesByUserId(int userId) {
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
+        return certificateDao.getAllCertificatesByUserId(userId);
+    }
+
+    public Optional<Certificate> getCertificateById(int certificateId) {
         LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
         return certificateDao.getCertificateById(certificateId);
     }

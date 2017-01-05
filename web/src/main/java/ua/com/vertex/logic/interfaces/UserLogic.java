@@ -1,14 +1,10 @@
 package ua.com.vertex.logic.interfaces;
 
-
-import ua.com.vertex.beans.Certificate;
-
 import java.util.List;
 
 public interface UserLogic {
 
-    List<Certificate> getAllCertificatesByUserId(int userId);
-
+    @SuppressWarnings("unused")
     List<String> getAllUserIds();
 
 }
