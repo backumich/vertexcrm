@@ -25,6 +25,6 @@ public class Storage {
     }
 
     public void setSessionId(String sessionId) {
-        sessionId = sessionId;
+        this.sessionId = sessionId;
     }
 }
