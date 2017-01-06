@@ -52,6 +52,14 @@
     .hrefText {
         font-size: 120%;
     }
+
+    .pageHeader {
+        font-size: 180%
+    }
+
+    .up-padding {
+        padding-top: 150px;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -110,32 +118,19 @@
 
 
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+    <div class="up-padding" align="center">
+        <span class="pageHeader">You are logged in</span><br><br><br>
 
-        <main class="content">
-            <div class="registration">
-                <div id="registration-form">
-                    <div class="reg-form">
-                        <span style="font-size: 200%">Welcome to Vertex CRM</span>
-                        <br><br><br>
-                    </div>
-                </div>
-            </div>
-        </main>
 
+        <br><br>
         <div class="hrefText">
-            <a href="registration.jsp">Register</a> |
-            <a href="<c:url value="/logIn"/>">Log in</a> |
-            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/"/>">Home</a>
         </div>
-
     </div>
 </div>
 
 
-<div class="wrapper">
-
-</div>
 <div class="footer">
     <div class="container">
         <div class="right">

@@ -29,20 +29,20 @@ public class CertificateDetailsPageController {
     private static final String LOG_INVALID_DATA = "Requested data is invalid";
     private static final String LOG_PASS_DATA = "Passing certificate and user data to JSP";
 
-    private static final String PAGE_JSP = "certificateDetails";
-    private static final String ERROR_JSP = "error";
-    private static final String PHOTO_JSP = "certificateHolderPhoto";
+    private static final String CERTIFICATE_DETAILS = "certificateDetails";
+    private static final String ERROR = "error";
+    private static final String PHOTO = "certificateHolderPhoto";
 
-    @RequestMapping(value = "/" + PAGE_JSP)
+    @RequestMapping(value = "/" + CERTIFICATE_DETAILS)
     public String showCertificateDetailsPage(Model model, HttpServletRequest request) throws Exception {
-        String returnPage = PAGE_JSP;
+        String returnPage = CERTIFICATE_DETAILS;
         try {
             HttpSession session = request.getSession();
-            storage.setSessionId("[Session Id: " + session.getId() + "] ");
+            storage.setSessionId(session.getId());
             model.addAttribute("newCertificate", new Certificate());
         } catch (Throwable t) {
-            LOGGER.error(storage.getSessionId(), t, t);
-            returnPage = ERROR_JSP;
+            LOGGER.error(storage.getId(), t, t);
+            returnPage = ERROR;
         }
         return returnPage;
     }
@@ -50,15 +50,15 @@ public class CertificateDetailsPageController {
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute("certificate") Certificate certificate,
                                             BindingResult result, Model model) {
-        String returnPage = PAGE_JSP;
+        String returnPage = CERTIFICATE_DETAILS;
         try {
             if (result.hasErrors()) {
                 model.addAttribute("error", "Entered value must be a positive integer!");
-                LOGGER.info(storage.getSessionId() + LOG_INVALID_DATA);
+                LOGGER.info(storage.getId() + LOG_INVALID_DATA);
             } else {
                 int certificationId = certificate.getCertificationId();
 
-                LOGGER.info(storage.getSessionId() + LOG_PROCESS + certificationId);
+                LOGGER.info(storage.getId() + LOG_PROCESS + certificationId);
 
                 certificate = getCertificateDetails(certificationId);
                 if (!Certificate.EMPTY_CERTIFICATE.equals(certificate)) {
@@ -69,11 +69,11 @@ public class CertificateDetailsPageController {
                     model.addAttribute("error", "No certificate with this ID!");
                 }
 
-                LOGGER.info(storage.getSessionId() + LOG_PASS_DATA);
+                LOGGER.info(storage.getId() + LOG_PASS_DATA);
             }
         } catch (Throwable t) {
-            LOGGER.error(storage.getSessionId(), t, t);
-            returnPage = ERROR_JSP;
+            LOGGER.error(storage.getId(), t, t);
+            returnPage = ERROR;
         }
 
         return returnPage;
@@ -92,19 +92,19 @@ public class CertificateDetailsPageController {
         return user;
     }
 
-    @RequestMapping(value = "/" + PHOTO_JSP)
+    @RequestMapping(value = "/" + PHOTO)
     public String showUserPhoto(Model model) {
-        String returnPage = PHOTO_JSP;
+        String returnPage = PHOTO;
         try {
             byte[] userPhoto = storage.getPhoto();
             String encodedImage = Base64.encode(userPhoto);
             model.addAttribute("image", encodedImage);
 
-            LOGGER.info(storage.getSessionId() + LOG_PHOTO);
+            LOGGER.info(storage.getId() + LOG_PHOTO);
 
         } catch (Throwable t) {
-            LOGGER.error(storage.getSessionId(), t, t);
-            returnPage = ERROR_JSP;
+            LOGGER.error(storage.getId(), t, t);
+            returnPage = ERROR;
         }
 
         return returnPage;

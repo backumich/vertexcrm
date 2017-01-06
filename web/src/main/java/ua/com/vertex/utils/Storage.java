@@ -9,19 +9,25 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_SESSION,
         proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Storage {
-    private byte[] imageData;
+    private byte[] photo;
     private String sessionId;
+    private String email;
 
     public byte[] getPhoto() {
-        return imageData;
+        return photo;
     }
 
-    public void setPhoto(byte[] imageData) {
-        this.imageData = imageData;
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getId() {
+        return email == null ? String.format("[Session id: %s] ", sessionId)
+                : String.format("[Session id: %s Email: %s] ", sessionId, email);
     }
 
     public void setSessionId(String sessionId) {

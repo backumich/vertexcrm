@@ -13,6 +13,7 @@ public class User {
     private byte[] photo;
     private int discount;
     private String phone;
+    private int role;
 
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
@@ -71,6 +72,11 @@ public class User {
             return this;
         }
 
+        public Builder setRole(int role) {
+            user.setRole(role);
+            return this;
+        }
+
         public User getInstance() {
             return user;
         }
@@ -98,6 +104,7 @@ public class User {
         User user = (User) o;
         return userId == user.userId &&
                 discount == user.discount &&
+                role == user.role &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstName, user.firstName) &&
@@ -109,7 +116,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone);
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role);
     }
 
     public int getUserId() {
@@ -182,5 +189,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

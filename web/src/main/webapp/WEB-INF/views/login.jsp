@@ -52,6 +52,38 @@
     .hrefText {
         font-size: 120%;
     }
+
+    .formHeader {
+        font-size: 125%;
+        font-weight: bold;
+        color: #adadad;
+    }
+
+    .formInput {
+        color: black;
+    }
+
+    .pageHeader {
+        font-size: 180%
+    }
+
+    .errorText125 {
+        font-size: 125%;
+        color: red;
+    }
+
+    .errorField {
+        background-color: #ffcccc;
+        border: 2px solid red;
+    }
+
+    .buttonText {
+        color: black;
+    }
+
+    .up-padding {
+        padding-top: 100px;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -110,32 +142,49 @@
 
 
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+    <div class="up-padding" align="center">
+        <span class="pageHeader">Log into the system</span><br><br><br>
 
-        <main class="content">
-            <div class="registration">
-                <div id="registration-form">
-                    <div class="reg-form">
-                        <span style="font-size: 200%">Welcome to Vertex CRM</span>
-                        <br><br><br>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <c:if test="${!empty userNotFound}">
+            <h3><span class="errorText125">Invalid E-mail or Password</span></h3>
+        </c:if>
 
+        <form action="${pageContext.request.contextPath}/logIn" method="post">
+            <table>
+                <tr>
+                    <td><span class="formHeader">E-mail:</span></td>
+                    <c:if test="${empty userNotFound}">
+                        <td><input type="text" name="email" class="formInput"/></td>
+                    </c:if>
+                    <c:if test="${!empty userNotFound}">
+                        <td><input type="text" name="email" class="errorField"/></td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td><span class="formHeader">Password:</span></td>
+                    <c:if test="${empty userNotFound}">
+                        <td><input type="password" name="password" class="formInput"/></td>
+                    </c:if>
+                    <c:if test="${!empty userNotFound}">
+                        <td><input type="password" name="password" class="errorField"/></td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Send" class="buttonText"/></td>
+                </tr>
+            </table>
+        </form>
+
+        <br><br>
         <div class="hrefText">
-            <a href="registration.jsp">Register</a> |
-            <a href="<c:url value="/logIn"/>">Log in</a> |
-            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/"/>">Home</a>
         </div>
-
     </div>
 </div>
 
 
-<div class="wrapper">
-
-</div>
 <div class="footer">
     <div class="container">
         <div class="right">

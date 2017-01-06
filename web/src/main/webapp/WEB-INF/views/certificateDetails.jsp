@@ -63,7 +63,7 @@
         font-weight: bold;
     }
 
-    .formHeaderText2 {
+    .pageHeader {
         font-size: 180%
     }
 
@@ -147,7 +147,7 @@
 <div class="page gray-page mh100">
     <div class="up-padding" align="center">
 
-        <span class="formHeaderText2">Certificate Details</span><br><br><br>
+        <span class="pageHeader">Certificate Details</span><br><br><br>
 
         <span class="formHeaderText1">Enter certificate ID:</span><br><br>
 
