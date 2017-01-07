@@ -11,7 +11,6 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserLogIn;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
 
@@ -21,8 +20,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.com.vertex.utils.UserRole.ADMIN;
-import static ua.com.vertex.utils.UserRole.USER;
+import static ua.com.vertex.utils.Role.ADMIN;
+import static ua.com.vertex.utils.Role.USER;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
@@ -61,23 +60,23 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<UserLogIn> logIn(String email) {
+    public Optional<User> logIn(String email) {
         String query = "SELECT password, role_id FROM Users WHERE email=:email";
 
         LOGGER.info(storage.getId() + LOG_LOGIN_IN + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
-        UserLogIn userLogIn = null;
+        User user = null;
         try {
-            userLogIn = jdbcTemplate.queryForObject(query, parameters, new UserLogInRawMapping());
+            user = jdbcTemplate.queryForObject(query, parameters, new UserRawMappingShort());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.info(storage.getId() + LOG_NO_EMAIL + email);
         }
 
         LOGGER.info(storage.getId() + LOG_LOGIN_OUT + email);
 
-        return Optional.ofNullable(userLogIn);
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -105,17 +104,17 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPhoto(handler.getBlobAsBytes(resultSet, "photo"))
                     .setDiscount(resultSet.getInt("discount"))
                     .setPhone(resultSet.getString("phone"))
-                    .setRole(resultSet.getInt("role_id"))
+                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
                     .getInstance();
         }
     }
 
-    private static final class UserLogInRawMapping implements RowMapper<UserLogIn> {
+    private static final class UserRawMappingShort implements RowMapper<User> {
         @Override
-        public UserLogIn mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new UserLogIn.Builder()
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
                     .setPassword(resultSet.getString("password"))
-                    .setUserRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
+                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
                     .getInstance();
         }
     }

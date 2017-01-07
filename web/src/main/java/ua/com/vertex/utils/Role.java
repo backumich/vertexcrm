@@ -1,5 +1,5 @@
 package ua.com.vertex.utils;
 
-public enum UserRole {
+public enum Role {
     ADMIN, USER, NONE
 }

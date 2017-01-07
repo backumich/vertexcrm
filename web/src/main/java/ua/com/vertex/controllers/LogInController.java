@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.Role;
 import ua.com.vertex.utils.Storage;
-import ua.com.vertex.utils.UserRole;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static ua.com.vertex.utils.UserRole.ADMIN;
-import static ua.com.vertex.utils.UserRole.USER;
+import static ua.com.vertex.utils.Role.ADMIN;
+import static ua.com.vertex.utils.Role.USER;
 
 @Controller
 @RequestMapping(value = "/logIn")
@@ -83,7 +83,7 @@ public class LogInController {
         return view;
     }
 
-    private void setParameters(HttpServletRequest request, String email, UserRole userRole) {
+    private void setParameters(HttpServletRequest request, String email, Role userRole) {
         HttpSession session = request.getSession();
         session.setAttribute(USER_ROLE, userRole);
         session.setAttribute(USER_EMAIL, email);

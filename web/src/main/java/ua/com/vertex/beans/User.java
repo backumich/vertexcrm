@@ -1,5 +1,7 @@
 package ua.com.vertex.beans;
 
+import ua.com.vertex.utils.Role;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -13,7 +15,7 @@ public class User {
     private byte[] photo;
     private int discount;
     private String phone;
-    private int role;
+    private Role role;
 
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
@@ -72,7 +74,7 @@ public class User {
             return this;
         }
 
-        public Builder setRole(int role) {
+        public Builder setRole(Role role) {
             user.setRole(role);
             return this;
         }
@@ -104,14 +106,14 @@ public class User {
         User user = (User) o;
         return userId == user.userId &&
                 discount == user.discount &&
-                role == user.role &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Arrays.equals(passportScan, user.passportScan) &&
                 Arrays.equals(photo, user.photo) &&
-                Objects.equals(phone, user.phone);
+                Objects.equals(phone, user.phone) &&
+                role == user.role;
     }
 
     @Override
@@ -191,11 +193,11 @@ public class User {
         this.phone = phone;
     }
 
-    public int getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

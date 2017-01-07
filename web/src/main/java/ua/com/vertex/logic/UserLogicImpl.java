@@ -5,17 +5,17 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.com.vertex.beans.UserLogIn;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.Role;
 import ua.com.vertex.utils.Storage;
-import ua.com.vertex.utils.UserRole;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ua.com.vertex.beans.UserLogIn.EMPTY_USER_LOG_IN;
-import static ua.com.vertex.utils.UserRole.*;
+import static ua.com.vertex.beans.User.EMPTY_USER;
+import static ua.com.vertex.utils.Role.*;
 
 @Service
 public class UserLogicImpl implements UserLogic {
@@ -32,13 +32,13 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public UserRole logIn(String email, String password) {
+    public Role logIn(String email, String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
-        UserLogIn receivedData = userDao.logIn(email).orElse(EMPTY_USER_LOG_IN);
+        User receivedData = userDao.logIn(email).orElse(EMPTY_USER);
 
-        UserRole userRole = NONE;
-        if (!receivedData.equals(EMPTY_USER_LOG_IN) && encoder.matches(password, receivedData.getPassword())) {
-            userRole = receivedData.getUserRole() == ADMIN ? ADMIN : USER;
+        Role userRole = NONE;
+        if (!receivedData.equals(EMPTY_USER) && encoder.matches(password, receivedData.getPassword())) {
+            userRole = receivedData.getRole() == ADMIN ? ADMIN : USER;
         }
 
         LOGGER.info(storage.getId() + LOG_IN_DATA_PROCESSED);
