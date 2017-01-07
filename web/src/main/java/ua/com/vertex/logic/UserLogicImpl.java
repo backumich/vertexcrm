@@ -1,11 +1,14 @@
 package ua.com.vertex.logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.UserLogIn;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.Storage;
 import ua.com.vertex.utils.UserRole;
 
 import java.util.List;
@@ -18,6 +21,10 @@ import static ua.com.vertex.utils.UserRole.*;
 public class UserLogicImpl implements UserLogic {
 
     private final UserDaoInf userDao;
+    private final Storage storage;
+
+    private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+    private static final String LOG_IN_DATA_PROCESSED = "log in data processed";
 
     @Override
     public List<String> getAllUserIds() {
@@ -34,11 +41,14 @@ public class UserLogicImpl implements UserLogic {
             userRole = receivedData.getUserRole() == ADMIN ? ADMIN : USER;
         }
 
+        LOGGER.info(storage.getId() + LOG_IN_DATA_PROCESSED);
+
         return userRole;
     }
 
     @Autowired
-    public UserLogicImpl(UserDaoInf userDao) {
+    public UserLogicImpl(UserDaoInf userDao, Storage storage) {
         this.userDao = userDao;
+        this.storage = storage;
     }
 }
