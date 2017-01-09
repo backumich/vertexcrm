@@ -49,36 +49,9 @@
         margin-left: 0px !important;
     }
 
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .formHeader {
-        font-size: 125%;
-        font-weight: bold;
-        color: #adadad;
-    }
-
-    .formInput {
-        color: black;
-    }
-
     .pageHeader {
-        font-size: 180%
-    }
-
-    .errorText125 {
-        font-size: 125%;
+        font-size: 180%;
         color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .buttonText {
-        color: black;
     }
 
     .up-padding {
@@ -143,43 +116,9 @@
 
 <div class="page gray-page mh100">
     <div class="up-padding" align="center">
-        <span class="pageHeader">Log into the system</span><br><br><br>
+        <span class="pageHeader">You are already logged in</span><br><br><br>
 
-        <c:if test="${!empty userNotFound}">
-            <h3><span class="errorText125">Invalid E-mail or Password</span></h3>
-        </c:if>
 
-        <form action="${pageContext.request.contextPath}/logIn" method="post">
-            <table>
-                <tr>
-                    <td><span class="formHeader">E-mail:</span></td>
-                    <c:if test="${empty userNotFound}">
-                        <td><input type="text" name="email" class="formInput"/></td>
-                    </c:if>
-                    <c:if test="${!empty userNotFound}">
-                        <td><input type="text" name="email" class="errorField"/></td>
-                    </c:if>
-                </tr>
-                <tr>
-                    <td><span class="formHeader">Password:</span></td>
-                    <c:if test="${empty userNotFound}">
-                        <td><input type="password" name="password" class="formInput"/></td>
-                    </c:if>
-                    <c:if test="${!empty userNotFound}">
-                        <td><input type="password" name="password" class="errorField"/></td>
-                    </c:if>
-                </tr>
-                <tr>
-                    <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="submit" value="Send" class="buttonText"/></td>
-                </tr>
-            </table>
-        </form>
-
-        <br><br>
         <div class="hrefText">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/"/>">Home</a>

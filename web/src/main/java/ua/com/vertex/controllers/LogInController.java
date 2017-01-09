@@ -27,6 +27,8 @@ public class LogInController {
     private final Storage storage;
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
+
+    private static final String ALREADY_LOGGED_IN = "loggedIn";
     private static final String LOG_LOGIN_SUCCESS = "login successful";
     private static final String LOG_EMPTY = "empty email or password";
     private static final String LOG_REQUEST = "log in request sent";
@@ -40,8 +42,17 @@ public class LogInController {
     private static final String USER_NOT_FOUND = "userNotFound";
 
     @GetMapping
-    public String showLogInPage() {
-        return LOG_IN;
+    public String showLogInPage(HttpServletRequest request) {
+        String view = LOG_IN;
+        try {
+            if (request.getSession().getAttribute(USER_ROLE) != null) {
+                view = ALREADY_LOGGED_IN;
+            }
+        } catch (Throwable t) {
+            view = ERROR;
+        }
+
+        return view;
     }
 
     @PostMapping
