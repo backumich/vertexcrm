@@ -1,6 +1,5 @@
 package ua.com.vertex.controllers;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.dao.UserDaoRealization;
 import ua.com.vertex.logic.RegistrationUserLogicImpl;
-import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -43,27 +41,30 @@ public class RegistrationControllerTest {
     @Test
     public void viewRegistrationForm_checkReturnViewName() throws Exception {
         //todo: registrationController exists as a variable, use it please
-//        RegistrationController registrationController = new RegistrationController(registrationUserLogic);
         ModelAndView modelAndView = registrationController.viewRegistrationForm();
         //todo: RegistrationController.REGISTRATION_PAGE should be used
         assertEquals("registration", modelAndView.getViewName());
     }
 
-    @Test
-    public void viewRegistrationForm_checkReturnModelAndModelName() throws Exception {
-        //todo: you are testing ModelAndMap in this method, it is not your job
-        ModelAndView modelAndView = new ModelAndView();
-        UserFormRegistration userFormRegistration = new UserFormRegistration();
-        modelAndView.addObject("userFormRegistration", userFormRegistration);
-        ModelMap modelMap = modelAndView.getModelMap();
-        assertTrue(modelMap.containsAttribute("userFormRegistration"));
-        assertEquals(new UserFormRegistration(), modelMap.get("userFormRegistration"));
-    }
+//    @Test
+//    public void viewRegistrationForm_checkReturnModelAndModelName() throws Exception {
+//        //to-do: you are testing ModelAndMap in this method, it is not your job
+//        ModelAndView modelAndView = new ModelAndView();
+//        UserFormRegistration userFormRegistration = new UserFormRegistration();
+//        modelAndView.addObject("userFormRegistration", userFormRegistration);
+//        ModelMap modelMap = modelAndView.getModelMap();
+//        assertTrue(modelMap.containsAttribute("userFormRegistration"));
+//        assertEquals(new UserFormRegistration(), modelMap.get("userFormRegistration"));
+//    }
 
     @Test
     public void processRegistration_checkReturnViewName() throws Exception {
         UserFormRegistration userFormRegistration = new UserFormRegistration();
+        userFormRegistration.setPassword("testPassword");
+        userFormRegistration.setVerifyPassword("testPassword");
+
         ModelAndView modelAndView = new ModelAndView();
+
         ModelAndView outModelAndView =
                 registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
         assertEquals("registrationSuccess", outModelAndView.getViewName());
@@ -71,7 +72,6 @@ public class RegistrationControllerTest {
 
     @Test
     public void processRegistration_checkReturnModelAndModelName() throws Exception {
-
         UserFormRegistration userFormRegistration = new UserFormRegistration();
         userFormRegistration.setPassword("testPassword");
         userFormRegistration.setVerifyPassword("testPassword");
@@ -80,9 +80,7 @@ public class RegistrationControllerTest {
         ModelAndView outModelAndView;
         modelAndView.addObject("userFormRegistration", userFormRegistration);
 
-        //????????????????????????????
         outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-        //????????????????????????????
 
         ModelMap modelMap = outModelAndView.getModelMap();
         assertTrue(modelMap.containsAttribute("userFormRegistration"));

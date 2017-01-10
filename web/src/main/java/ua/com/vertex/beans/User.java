@@ -14,8 +14,6 @@ public class User {
     private int discount;
     private String phone;
 
-    //todo: SuppressWarnings seems to be redundant here. Please check whole file.
-//    @SuppressWarnings("WeakerAccess")
     public User() {
     }
 
@@ -44,7 +42,6 @@ public class User {
                 && getPassword().equals(user.getPassword()) && getFirstName().equals(user.getFirstName())
                 && getLastName().equals(user.getLastName()) && getPassportScan().equals(user.getPassportScan())
                 && getPhoto().equals(user.getPhoto()) && getPhone().equals(user.getPhone());
-
     }
 
     public int hashCode() {
@@ -60,92 +57,74 @@ public class User {
         return result;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public long getUserId() {
         return userId;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getEmail() {
         return email;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getPassword() {
         return password;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getFirstName() {
         return firstName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getLastName() {
         return lastName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public Blob getPassportScan() {
         return passportScan;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPassportScan(Blob passportScan) {
         this.passportScan = passportScan;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public Blob getPhoto() {
         return photo;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPhoto(Blob photo) {
         this.photo = photo;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public int getDiscount() {
         return discount;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setDiscount(int discount) {
         this.discount = discount;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public String getPhone() {
         return phone;
     }
 
-    @SuppressWarnings("WeakerAccess")
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -203,8 +182,7 @@ public class User {
             return this;
         }
 
-        //todo: Are you sure this method should be synchronized?
-        public synchronized User getInstance() {
+        public User getInstance() {
             return instance;
         }
     }

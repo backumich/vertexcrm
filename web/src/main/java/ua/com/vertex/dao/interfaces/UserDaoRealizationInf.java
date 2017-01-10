@@ -18,5 +18,5 @@ public interface UserDaoRealizationInf {
 
     int registrationUser(User user) throws DataAccessException;
 
-    int isRegisteredEmail(String email);
+    Boolean isRegisteredEmail(String email);
 }

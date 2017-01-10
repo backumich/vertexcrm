@@ -13,6 +13,6 @@ public interface RegistrationUserLogic {
 
     User userFormRegistrationToUser(UserFormRegistration userFormRegistration);
 
-    //todo: int? are you going to return anything else except zero and non-zero?
-    int checkEmailAlreadyExists(UserFormRegistration userFormRegistration);
+    //to-do: int? are you going to return anything else except zero and non-zero?
+    Boolean checkEmailAlreadyExists(String email);
 }

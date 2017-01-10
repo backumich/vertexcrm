@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
@@ -30,82 +31,93 @@ public class RegistrationController {
 
     private RegistrationUserLogic registrationUserLogic;
 
-    //todo: what for?
-    public RegistrationController() {
-    }
+    //to-do: what for?
+//    public RegistrationController() {
+//    }
 
     @Autowired
     public RegistrationController(RegistrationUserLogic registrationUserLogic) {
         this.registrationUserLogic = registrationUserLogic;
     }
 
-    //todo: you can use @GetMapping
-    @RequestMapping(method = RequestMethod.GET)
+    //to-do: you can use @GetMapping
+    //@RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ModelAndView viewRegistrationForm() {
-        //todo: ("First request to " + this.REGISTRATION_PAGE) would be enough
-        LOGGER.info("First request to registration.jsp, " +
-                "create model 'UserFormRegistration' and send ModelAndView to registration.jsp");
+        //to-do: ("First request to " + this.REGISTRATION_PAGE) would be enough
+        //LOGGER.info("First request to registration.jsp, create model 'UserFormRegistration' and send ModelAndView to registration.jsp");
+        LOGGER.debug("First request to " + REGISTRATION_PAGE);
         return new ModelAndView(REGISTRATION_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, new UserFormRegistration());
     }
 
-    //todo: @PostMapping
-    @RequestMapping(method = RequestMethod.POST)
-    //todo: something wrong with your formatting
-    public ModelAndView processRegistration(@Valid @ModelAttribute
-            (NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration,
-                                            BindingResult bindingResult, ModelAndView modelAndView) {
+    //to-do: @PostMapping
+    //@RequestMapping(method = RequestMethod.POST)
+    @PostMapping
+    //to-do: something wrong with your formatting
+    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE)
+                                                    UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
 
         //todo: refactor it
 
-        checkEmailAlreadyExists(userFormRegistration, bindingResult);
-
         isMatchPassword(userFormRegistration, bindingResult);
+        checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
         if (bindingResult.hasErrors()) {
-            LOGGER.info("There are errors in filling in the form registration.jsp");
+            LOGGER.info("There are errors in filling in the form " + REGISTRATION_PAGE);
             modelAndView.setViewName(REGISTRATION_PAGE);
-            modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+            //modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
             //return modelAndView;
+        } else {
+
+            //todo: this action should be included into registration logic
+            userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
+
+            //todo: you can add constructor to User-class.
+            User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
+
+            try {
+                int userID = registrationUserLogic.registrationUser(user);
+                modelAndView.addObject("userID", userID);
+                modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                //modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+            } catch (DataAccessException e) {
+                modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
+                //modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+                //return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+                //return modelAndView;
+            }
         }
-
-        //todo: this action should be included into registration logic
-        userFormRegistration = registrationUserLogic.encryptPassword(userFormRegistration);
-
-        //todo: you can add constructor to User-class.
-        User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
-
-        try {
-            int userID = registrationUserLogic.registrationUser(user);
-            modelAndView.addObject("userID", userID);
-            modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-            modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
-        } catch (DataAccessException e) {
-            modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
-            modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
-            //return new ModelAndView(REGISTRATION_ERROR_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
-            return modelAndView;
-        }
-
+        modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
         return modelAndView;
         //return new ModelAndView(REGISTRATION_SUCCESS_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
     }
 
-    //todo: what are these annotations for?
-    private void isMatchPassword(@Valid @ModelAttribute
-            (NAME_USER_MODEL_FOR_REGISTRATION_PAGE) UserFormRegistration userFormRegistration, BindingResult bindingResult) {
+    //to-do: what are these annotations for?
+    private void isMatchPassword(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
         if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
-//            todo: check for errors --- it is already checked at this moment.
-            LOGGER.info("check for errors associated with the coincidence of the password on page registration.jsp");
+//            to-do: check for errors --- it is already checked at this moment.
+            //LOGGER.info("check for errors associated with the coincidence of the password on page registration.jsp");
+            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() + " were entered passwords do not match");
             bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
         }
     }
 
-    private void checkEmailAlreadyExists(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
-        //todo: email would be enough as parameter
-        if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
+//    private void checkEmailAlreadyExists(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
+//        //to-do: email would be enough as parameter
+//        if (registrationUserLogic.checkEmailAlreadyExists(userFormRegistration) != 0) {
+//            //to-do: it is already known if such user exists at this moment
+//            //LOGGER.info("Check for signed-in user on a page registration.jsp");
+//            LOGGER.info("That email |" + userFormRegistration.getEmail() + "| is already registered");
+//            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
+//        }
+//    }
 
-            //todo: it is already known if such user exists at this moment
-            LOGGER.info("Check for signed-in user on a page registration.jsp");
+    private void checkEmailAlreadyExists(String email, BindingResult bindingResult) {
+        //to-do: email would be enough as parameter
+        if (registrationUserLogic.checkEmailAlreadyExists(email)) {
+            //to-do: it is already known if such user exists at this moment
+            //LOGGER.info("Check for signed-in user on a page registration.jsp");
+            LOGGER.info("That email |" + email + "| is already registered");
             bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
         }
     }

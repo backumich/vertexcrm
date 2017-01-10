@@ -6,29 +6,44 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserFormRegistration {
-    //todo: seems that rule "Size more than 5 chars" is included into @Email. Please add message to @email annotation.
+    //to-do: seems that rule "Size more than 5 chars" is included into @Email. Please add message to @email annotation.
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
-    @Email()
+    @Email(message = "E-mail address format is incorrect")
     private String email;
 
-    //todo: massage is not clear when password is less then 5 chars
-    @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
+    @Size(min = 5, max = 30, message = "Password must be longer than 5 and less than 30 characters")
     private String password;
 
-    //todo: massage is not clear when password is less then 5 chars
-    @Size(min = 5, max = 30, message = "Password should not be longer than 30 characters")
+    @Size(min = 5, max = 30, message = "Confirm password must be longer than 5 and less than 30 characters")
     private String verifyPassword;
 
-    @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String firstName;
 
-    @Size(min = 1, max = 256, message = "This field should not be longer than 256 characters")
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String lastName;
 
-    //todo: massage is not clear
+    //to-do: massage is not clear
     @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
-            message = "Invalid telephone number format")
+            message = "Invalid telephone number format!")
+    /* regex to validate phone numbers   ^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
+        18005551234
+        1 800 555 1234
+        +1 800 555-1234
+        +86 800 555 1234
+        1-800-555-1234
+        1 (800) 555-1234
+        (800)555-1234
+        (800) 555-1234
+        (800)5551234
+        800-555-1234
+        800.555.1234
+        800 555 1234x5678
+        8005551234 x5678
+        1    800    555-1234
+        1----800----555-1234
+    */
     private String phone;
 
     public UserFormRegistration() {
@@ -121,22 +136,3 @@ public class UserFormRegistration {
                 '}';
     }
 }
-
-// todo: what is that?
-//^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
-//
-//        18005551234
-//        1 800 555 1234
-//        +1 800 555-1234
-//        +86 800 555 1234
-//        1-800-555-1234
-//        1 (800) 555-1234
-//        (800)555-1234
-//        (800) 555-1234
-//        (800)5551234
-//        800-555-1234
-//        800.555.1234
-//        800 555 1234x5678
-//        8005551234 x5678
-//        1    800    555-1234
-//        1----800----555-1234

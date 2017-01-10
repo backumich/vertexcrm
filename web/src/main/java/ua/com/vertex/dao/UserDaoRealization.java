@@ -50,12 +50,12 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     }
 
     @Override
-    public int isRegisteredEmail(String email) {
-        LOGGER.info("Running queries existence test E-mail to a database");
+    public Boolean isRegisteredEmail(String email) {
+        LOGGER.debug("Running queries existence test E-mail to a database");
 
         String sql = "SELECT count(*) FROM Users WHERE email = :email";
         SqlParameterSource namedParameters = new MapSqlParameterSource("email", email);
-        return this.jdbcTemplate.queryForObject(sql, namedParameters, int.class);
+        return this.jdbcTemplate.queryForObject(sql, namedParameters, int.class) != 0;
     }
 
     @Override

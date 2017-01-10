@@ -117,32 +117,32 @@
                     </tr>
                     <tr>
                         <td>E-mail:</td>
-                        <td><form:input path="email"/></td>
+                        <td><form:input placeholder="E-mail" path="email"/></td>
                         <td><form:errors path="email"/></td>
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><form:password path="password"/></td>
+                        <td><form:password placeholder="Password" path="password"/></td>
                         <td><form:errors path="password"/></td>
                     </tr>
                     <tr>
                         <td>Repeat password:</td>
-                        <td><form:password path="verifyPassword"/></td>
+                        <td><form:password placeholder="Confirm password" path="verifyPassword"/></td>
                         <td><form:errors path="verifyPassword"/></td>
                     </tr>
                     <tr>
                         <td>First name:</td>
-                        <td><form:input path="firstName"/></td>
+                        <td><form:input placeholder="First name" path="firstName"/></td>
                         <td><form:errors path="firstName"/></td>
                     </tr>
                     <tr>
                         <td>Last name:</td>
-                        <td><form:input path="lastName"/></td>
+                        <td><form:input placeholder="Last name" path="lastName"/></td>
                         <td><form:errors path="lastName"/></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><form:input path="phone"/></td>
+                        <td><form:input placeholder="Phone" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
                     <tr>

@@ -25,20 +25,22 @@ public class UserDaoRealizationTest {
 
     @Test
     public void isRegisteredEmailReturnNotZero() throws Exception {
-        int result = underTest.isRegisteredEmail("email1");
-        assertEquals(1, result);
+//        int result = underTest.isRegisteredEmail("email1");
+//        assertEquals(1, result);
+        Boolean result = underTest.isRegisteredEmail("email1");
+        assertEquals(true, result);
     }
 
     @Test
     public void isRegisteredEmailReturnZero() throws Exception {
-        int result = underTest.isRegisteredEmail("chewed.mole2@gmail.com");
-        assertEquals(0, result);
+        Boolean result = underTest.isRegisteredEmail("chewed.mole2@gmail.com");
+        assertEquals(false, result);
     }
 
     @Test
     public void getCertificateByIdReturnEmptyResultDataAccessException() throws Exception {
-        int cnt = underTest.isRegisteredEmail(null);
-        Assert.assertEquals(0, cnt);
+        Boolean cnt = underTest.isRegisteredEmail(null);
+        Assert.assertEquals(false, cnt);
     }
 
     @Test

@@ -1,10 +1,10 @@
 package ua.com.vertex.logic;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
@@ -15,6 +15,7 @@ import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
+    private static final int PASSWORD_STRENGHT = 10;
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private UserDaoRealizationInf userDaoRealization;
@@ -40,9 +41,16 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
     @Override
     public UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration) {
-        LOGGER.info("Password encryption");
+        LOGGER.debug("Password encryption");
         //todo: here is the link to think about: https://youtu.be/rCIsuMEFRro
-        userFormRegistration.setPassword(DigestUtils.md5Hex(userFormRegistration.getPassword()));
+        //-----
+        //userFormRegistration.setPassword(DigestUtils.md5Hex(userFormRegistration.getPassword()));
+        //-----
+        String cryptedPassword = new BCryptPasswordEncoder(PASSWORD_STRENGHT).encode(userFormRegistration.getPassword());
+        userFormRegistration.setPassword(cryptedPassword);
+        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        //passwordEncoder.matches("11111", userFormRegistration.getPassword());
+
         return userFormRegistration;
     }
 
@@ -59,7 +67,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     }
 
     @Override
-    public int checkEmailAlreadyExists(UserFormRegistration userFormRegistration) {
-        return userDaoRealization.isRegisteredEmail(userFormRegistration.getEmail());
+    public Boolean checkEmailAlreadyExists(String email) {
+        return userDaoRealization.isRegisteredEmail(email);
     }
 }
