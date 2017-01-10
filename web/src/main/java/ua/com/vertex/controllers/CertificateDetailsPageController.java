@@ -34,7 +34,7 @@ public class CertificateDetailsPageController {
     private static final String PHOTO = "certificateHolderPhoto";
 
     @RequestMapping(value = "/" + CERTIFICATE_DETAILS)
-    public String showCertificateDetailsPage(Model model, HttpServletRequest request) throws Exception {
+    public String showCertificateDetailsPage(Model model, HttpServletRequest request) {
         String returnPage = CERTIFICATE_DETAILS;
         try {
             HttpSession session = request.getSession();
