@@ -15,7 +15,7 @@ import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
-    private static final int PASSWORD_STRENGHT = 10;
+    private static final int PASSWORD_STRENGTH = 10;
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private UserDaoRealizationInf userDaoRealization;
@@ -30,6 +30,8 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
     @Override
     public int registrationUser(User user) throws DataAccessException {
+        String cryptedPassword = encryptPassword(user.getPassword());
+        user.setPassword(cryptedPassword);
         return userDaoRealization.registrationUser(user);
     }
 
@@ -40,18 +42,10 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     }
 
     @Override
-    public UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration) {
+    public String encryptPassword(String password) {
         LOGGER.debug("Password encryption");
-        //todo: here is the link to think about: https://youtu.be/rCIsuMEFRro
-        //-----
-        //userFormRegistration.setPassword(DigestUtils.md5Hex(userFormRegistration.getPassword()));
-        //-----
-        String cryptedPassword = new BCryptPasswordEncoder(PASSWORD_STRENGHT).encode(userFormRegistration.getPassword());
-        userFormRegistration.setPassword(cryptedPassword);
-        //BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        //passwordEncoder.matches("11111", userFormRegistration.getPassword());
-
-        return userFormRegistration;
+        String cryptedPassword = new BCryptPasswordEncoder(PASSWORD_STRENGTH).encode(password);
+        return cryptedPassword;
     }
 
     @Override

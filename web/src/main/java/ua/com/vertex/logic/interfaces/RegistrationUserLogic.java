@@ -9,10 +9,9 @@ public interface RegistrationUserLogic {
 
     boolean isMatchPassword(UserFormRegistration userFormRegistration);
 
-    UserFormRegistration encryptPassword(UserFormRegistration userFormRegistration);
+    String encryptPassword(String password);
 
     User userFormRegistrationToUser(UserFormRegistration userFormRegistration);
 
-    //to-do: int? are you going to return anything else except zero and non-zero?
     Boolean checkEmailAlreadyExists(String email);
 }

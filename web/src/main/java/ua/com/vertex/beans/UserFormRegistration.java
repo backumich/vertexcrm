@@ -6,7 +6,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserFormRegistration {
-    //to-do: seems that rule "Size more than 5 chars" is included into @Email. Please add message to @email annotation.
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
     private String email;
@@ -23,7 +22,6 @@ public class UserFormRegistration {
     @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String lastName;
 
-    //to-do: massage is not clear
     @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
             message = "Invalid telephone number format!")

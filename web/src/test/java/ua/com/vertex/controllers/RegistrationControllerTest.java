@@ -40,22 +40,9 @@ public class RegistrationControllerTest {
 
     @Test
     public void viewRegistrationForm_checkReturnViewName() throws Exception {
-        //todo: registrationController exists as a variable, use it please
         ModelAndView modelAndView = registrationController.viewRegistrationForm();
-        //todo: RegistrationController.REGISTRATION_PAGE should be used
-        assertEquals("registration", modelAndView.getViewName());
+        assertEquals(RegistrationController.REGISTRATION_PAGE, modelAndView.getViewName());
     }
-
-//    @Test
-//    public void viewRegistrationForm_checkReturnModelAndModelName() throws Exception {
-//        //to-do: you are testing ModelAndMap in this method, it is not your job
-//        ModelAndView modelAndView = new ModelAndView();
-//        UserFormRegistration userFormRegistration = new UserFormRegistration();
-//        modelAndView.addObject("userFormRegistration", userFormRegistration);
-//        ModelMap modelMap = modelAndView.getModelMap();
-//        assertTrue(modelMap.containsAttribute("userFormRegistration"));
-//        assertEquals(new UserFormRegistration(), modelMap.get("userFormRegistration"));
-//    }
 
     @Test
     public void processRegistration_checkReturnViewName() throws Exception {

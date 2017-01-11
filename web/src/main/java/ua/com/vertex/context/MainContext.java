@@ -45,11 +45,6 @@ public class MainContext extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/javascript/**").addResourceLocations("/javascript/");
     }
 
-//    @Override
-//    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-//        configurer.enable();
-//    }
-
     @Bean
     public InternalResourceViewResolver getInternalResourceViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -57,5 +52,4 @@ public class MainContext extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         return resolver;
     }
-
 }

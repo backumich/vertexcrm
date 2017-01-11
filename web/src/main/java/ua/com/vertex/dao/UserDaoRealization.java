@@ -62,8 +62,8 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     public int registrationUser(User user) throws DataAccessException {
         LOGGER.info("Adding a new user into database");
 
-        String query = "INSERT INTO Users (email, password, first_name, last_name, phone) " +
-                "VALUES (:email, :password, :first_name, :last_name, :phone)";
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
+                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, getRegistrationParameters(user), keyHolder);

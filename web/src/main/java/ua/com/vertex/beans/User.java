@@ -17,6 +17,15 @@ public class User {
     public User() {
     }
 
+    public User(UserFormRegistration userFormRegistration) {
+        email = userFormRegistration.getEmail();
+        password = userFormRegistration.getPassword();
+        firstName = userFormRegistration.getFirstName();
+        lastName = userFormRegistration.getLastName();
+        phone = userFormRegistration.getPhone();
+    }
+
+
     public String toString() {
         return "User{" +
                 "userId=" + userId +

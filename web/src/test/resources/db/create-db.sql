@@ -9,6 +9,7 @@ CREATE TABLE Users
   photo         BLOB,
   discount      INT,
   phone         VARCHAR(25),
+  role_id       INT(11),
   PRIMARY KEY (user_id)
 
 );
