@@ -51,7 +51,10 @@
 
     .pageHeader {
         font-size: 180%;
-        color: red;
+    }
+
+    .hrefText {
+        font-size: 120%;
     }
 
     .up-padding {
@@ -116,7 +119,7 @@
 
 <div class="page gray-page mh100">
     <div class="up-padding" align="center">
-        <span class="pageHeader">You are already logged in</span><br><br><br>
+        <span class="pageHeader">You are logged in</span><br><br><br>
 
 
         <div class="hrefText">

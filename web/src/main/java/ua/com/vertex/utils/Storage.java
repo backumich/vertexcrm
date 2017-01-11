@@ -12,6 +12,16 @@ public class Storage {
     private String sessionId;
     private String email;
 
+    private static long count = 0;
+
+    public Storage() {
+        count++;
+    }
+
+    public long getCount() {
+        return count;
+    }
+
     public byte[] getPhoto() {
         return photo;
     }
@@ -31,5 +41,9 @@ public class Storage {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }

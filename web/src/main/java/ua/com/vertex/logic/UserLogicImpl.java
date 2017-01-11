@@ -33,7 +33,8 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public Role logIn(String email, String password) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
+        final int strength = 10;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(strength);
         User receivedData = userDao.logIn(email).orElse(EMPTY_USER);
 
         Role userRole = NONE;

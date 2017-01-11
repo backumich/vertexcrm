@@ -20,17 +20,17 @@
             <!--Spring-->
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.3.1.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>4.3.1.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.3.1.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.3.2.RELEASE</version>
+            <version>4.3.4.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -51,11 +51,16 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>4.2.0.RELEASE</version>
+            <version>4.2.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
             <version>4.2.1.RELEASE</version>
         </dependency>
 

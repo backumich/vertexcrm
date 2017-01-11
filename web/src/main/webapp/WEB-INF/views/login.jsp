@@ -170,11 +170,12 @@
                     </c:if>
                 </tr>
                 <tr>
-                    <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
-                </tr>
-                <tr>
                     <td></td>
                     <td><input type="submit" value="Send" class="buttonText"/></td>
+                </tr>
+
+                <tr>
+                    <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
                 </tr>
             </table>
         </form>

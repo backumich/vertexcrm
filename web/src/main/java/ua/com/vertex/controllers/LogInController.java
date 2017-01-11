@@ -28,13 +28,12 @@ public class LogInController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
-    private static final String ALREADY_LOGGED_IN = "loggedIn";
     private static final String LOG_LOGIN_SUCCESS = "login successful";
     private static final String LOG_EMPTY = "empty email or password";
     private static final String LOG_REQUEST = "log in request sent";
 
     private static final String LOG_IN = "login";
-    private static final String LOG_IN_SUCCESS = "loginSuccess";
+    private static final String LOGGED_IN = "loggedIn";
     private static final String ERROR = "error";
 
     private static final String USER_EMAIL = "userEmail";
@@ -46,7 +45,7 @@ public class LogInController {
         String view = LOG_IN;
         try {
             if (request.getSession().getAttribute(USER_ROLE) != null) {
-                view = ALREADY_LOGGED_IN;
+                view = LOGGED_IN;
             }
         } catch (Throwable t) {
             view = ERROR;
@@ -58,7 +57,7 @@ public class LogInController {
     @PostMapping
     public String processLogInRequest(@RequestParam String email, @RequestParam String password,
                                       Model model, HttpServletRequest request) {
-        String view = LOG_IN_SUCCESS;
+        String view = LOGGED_IN;
 
         LOGGER.info(storage.getId() + LOG_REQUEST);
 
