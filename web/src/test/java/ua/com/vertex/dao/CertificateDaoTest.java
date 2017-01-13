@@ -8,9 +8,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
 import java.util.Optional;
@@ -22,12 +22,12 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = MainTestContext.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class UserDaoTest {
+public class CertificateDaoTest {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    private UserDaoInf userDao;
+    private CertificateDaoInf certificateDao;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -40,16 +40,16 @@ public class UserDaoTest {
     }
 
     @Test
-    public void daoShouldReturnUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.getUser(22);
+    public void daoShouldReturnCertificateOptionalForCertificateExistingInDatabase() {
+        Optional<Certificate> optional = certificateDao.getCertificateById(222);
         assertNotNull(optional);
-        assertEquals(22, optional.get().getUserId());
+        assertEquals(222, optional.get().getCertificationId());
     }
 
     @Test
-    public void daoShouldReturnUserOptionalForUserNotExistingInDatabase() {
-        Optional<User> optional = userDao.getUser(55555);
+    public void daoShouldReturnCertificateOptionalForCertificateNotExistingInDatabase() {
+        Optional<Certificate> optional = certificateDao.getCertificateById(55555);
         assertNotNull(optional);
-        assertEquals(new User(), optional.orElse(new User()));
+        assertEquals(new Certificate(), optional.orElse(new Certificate()));
     }
 }

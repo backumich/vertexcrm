@@ -108,7 +108,18 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        ${userIds}
+        <div align="center">
+            <table border="0">
+                <tr>
+                    <td colspan="2" align="center"><h2>
+                        Congratulation ${userFormRegistration.firstName} ${userFormRegistration.lastName},
+                        registration success</h2></td>
+
+                    Your secret session id - ${userID}
+                </tr>
+            </table>
+
+        </div>
 
     </div>
 </div>

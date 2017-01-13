@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <script src="js/index.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/registration.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/registration.css"/>
 </head>
 
 <body>

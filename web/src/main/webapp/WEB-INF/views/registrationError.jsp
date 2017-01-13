@@ -107,14 +107,26 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
 
-        <h3><span></span>Welcome to Vertex CRM</h3>
-        <br>
+        <div align="center">
+            <table border="0">
+                <tr>
+                    <td colspan="2" align="center"><h2>I'm sorry, something went wrong. Try to register later.</h2></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><h2>${userFormRegistration.email}</h2></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><h2>${userFormRegistration.lastName}</h2></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><h2>${userFormRegistration.firstName}</h2></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><h2>${userFormRegistration.phone}</h2></td>
+                </tr>
+            </table>
 
-        <div class="errorSummary">
         </div>
-
-        <h3><a href="registration">Sign up</a></h3>
-        <h3><a href="signIn.jsp">Sign in</a></h3>
 
     </div>
 </div>

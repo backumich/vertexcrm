@@ -30,27 +30,25 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
     @Override
     public int registrationUser(User user) throws DataAccessException {
-        String cryptedPassword = encryptPassword(user.getPassword());
-        user.setPassword(cryptedPassword);
+        user.setPassword(encryptPassword(user.getPassword()));
         return userDaoRealization.registrationUser(user);
     }
 
     @Override
     public boolean isMatchPassword(UserFormRegistration userFormRegistration) {
-        LOGGER.info("Check for a match on the password");
+        LOGGER.debug("Check for a match on the password");
         return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
     }
 
     @Override
     public String encryptPassword(String password) {
         LOGGER.debug("Password encryption");
-        String cryptedPassword = new BCryptPasswordEncoder(PASSWORD_STRENGTH).encode(password);
-        return cryptedPassword;
+        return new BCryptPasswordEncoder(PASSWORD_STRENGTH).encode(password);
     }
 
     @Override
     public User userFormRegistrationToUser(UserFormRegistration userFormRegistration) {
-        LOGGER.info("Conversion of the model UserFormRegistration to User");
+        LOGGER.debug("Conversion of the model UserFormRegistration to User");
         User user = new User();
         user.setEmail(userFormRegistration.getEmail());
         user.setPassword(userFormRegistration.getPassword());
