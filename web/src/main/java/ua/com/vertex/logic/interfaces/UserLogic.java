@@ -1,7 +1,7 @@
 package ua.com.vertex.logic.interfaces;
 
 
-import ua.com.vertex.utils.Role;
+import ua.com.vertex.beans.User;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ public interface UserLogic {
 
     List<String> getAllUserIds();
 
-    Role logIn(String email, String password);
+    User logIn(String email);
 }

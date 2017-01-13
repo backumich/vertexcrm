@@ -123,7 +123,6 @@
 
 
         <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/"/>">Home</a>
         </div>
     </div>

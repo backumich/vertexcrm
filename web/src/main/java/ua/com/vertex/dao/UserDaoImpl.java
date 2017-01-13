@@ -54,6 +54,8 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.info(storage.getId() + LOG_NO_USER_ID + userId);
         }
 
+        System.out.println("user: " + user);
+
         LOGGER.info(storage.getId() + LOG_USER_OUT + userId);
 
         return Optional.ofNullable(user);
@@ -61,9 +63,9 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> logIn(String email) {
-        String query = "SELECT password, role_id FROM Users WHERE email=:email";
+        String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
 
-        LOGGER.info(storage.getId() + LOG_LOGIN_IN + email);
+        LOGGER.info(LOG_LOGIN_IN + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -71,10 +73,10 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, parameters, new UserRawMappingShort());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(storage.getId() + LOG_NO_EMAIL + email);
+            LOGGER.info(LOG_NO_EMAIL + email);
         }
 
-        LOGGER.info(storage.getId() + LOG_LOGIN_OUT + email);
+        LOGGER.info(LOG_LOGIN_OUT + email);
 
         return Optional.ofNullable(user);
     }
@@ -113,6 +115,7 @@ public class UserDaoImpl implements UserDaoInf {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             return new User.Builder()
+                    .setEmail(resultSet.getString("email"))
                     .setPassword(resultSet.getString("password"))
                     .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
                     .getInstance();

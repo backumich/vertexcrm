@@ -67,8 +67,8 @@
         font-size: 180%
     }
 
-    .errorText125 {
-        font-size: 125%;
+    .errorText140 {
+        font-size: 140%;
         color: red;
     }
 
@@ -145,37 +145,39 @@
     <div class="up-padding" align="center">
         <span class="pageHeader">Log into the system</span><br><br><br>
 
-        <c:if test="${!empty userNotFound}">
-            <h3><span class="errorText125">Invalid E-mail or Password</span></h3>
+        <c:if test="${param.error != null}">
+            <p><span class="errorText140">Invalid E-mail or Password</span></p>
+        </c:if>
+
+        <c:if test="${param.logout != null}">
+            <p><span class="errorText140">You have been logged out</span></p>
         </c:if>
 
         <form action="${pageContext.request.contextPath}/logIn" method="post">
             <table>
                 <tr>
                     <td><span class="formHeader">E-mail:</span></td>
-                    <c:if test="${empty userNotFound}">
-                        <td><input type="text" name="email" class="formInput"/></td>
+                    <c:if test="${param.error == null}">
+                        <td><input type="text" name="username"/></td>
                     </c:if>
-                    <c:if test="${!empty userNotFound}">
-                        <td><input type="text" name="email" class="errorField"/></td>
+                    <c:if test="${param.error != null}">
+                        <td><input type="text" name="username" class="errorField"/></td>
                     </c:if>
                 </tr>
                 <tr>
                     <td><span class="formHeader">Password:</span></td>
-                    <c:if test="${empty userNotFound}">
-                        <td><input type="password" name="password" class="formInput"/></td>
+                    <c:if test="${param.error == null}">
+                        <td><input type="password" name="password"/></td>
                     </c:if>
-                    <c:if test="${!empty userNotFound}">
+                    <c:if test="${param.error != null}">
                         <td><input type="password" name="password" class="errorField"/></td>
                     </c:if>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td><input type="submit" value="Send" class="buttonText"/></td>
-                </tr>
-
-                <tr>
                     <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
+                </tr>
+                <tr>
+                    <td align="right" colspan="2"><input type="submit" value="Send" class="buttonText"></td>
                 </tr>
             </table>
         </form>

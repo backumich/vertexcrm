@@ -126,6 +126,7 @@
         <div class="hrefText">
             <a href="<c:url value="/registration"/>">Register</a> |
             <a href="<c:url value="/logIn"/>">Log in</a> |
+            <a href="<c:url value="/logOut"/>">Log out</a> |
             <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>
         </div>
 
