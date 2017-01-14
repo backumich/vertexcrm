@@ -54,8 +54,6 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.info(storage.getId() + LOG_NO_USER_ID + userId);
         }
 
-        System.out.println("user: " + user);
-
         LOGGER.info(storage.getId() + LOG_USER_OUT + userId);
 
         return Optional.ofNullable(user);

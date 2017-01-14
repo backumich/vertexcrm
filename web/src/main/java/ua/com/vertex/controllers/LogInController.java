@@ -19,7 +19,7 @@ public class LogInController {
     private static final String LOG_LOGIN_SUCCESS = "login successful";
     private static final String LOG_ENTRY = " page entered";
 
-    private static final String LOGIN = "login";
+    private static final String LOGIN = "logIn";
     private static final String LOGGED_IN = "loggedIn";
     private static final String ERROR = "error";
 

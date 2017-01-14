@@ -14,6 +14,7 @@ import ua.com.vertex.logic.SpringDataUserDetailsService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
+    private static final int VALIDITY_SECONDS = 604800;
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -48,6 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logOut")
                 .logoutSuccessUrl("/")
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds(VALIDITY_SECONDS)
         ;
     }
 }

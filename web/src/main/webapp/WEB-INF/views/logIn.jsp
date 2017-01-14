@@ -174,6 +174,12 @@
                     </c:if>
                 </tr>
                 <tr>
+                    <td align="right" colspan="2">
+                        <label for="remember_me" class="formHeader">Remember me</label>
+                        <input id="remember_me" name="remember-me" type="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
                     <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
                 </tr>
                 <tr>
