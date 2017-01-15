@@ -118,15 +118,19 @@
                     <th>Phone</th>
                 </tr>
                 <tr>
+                    1
                     <%--${certificate.courseName}--%>
                 </tr>
                 <tr>
+                    2
                     <%--${certificate.courseName}--%>
                 </tr>
                 <tr>
+                    3
                     <%--${certificate.courseName}--%>
                 </tr>
                 <tr>
+                    4
                     <%--${certificate.courseName}--%>
                 </tr>
                 <tr>

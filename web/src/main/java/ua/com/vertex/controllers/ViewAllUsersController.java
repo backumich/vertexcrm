@@ -11,11 +11,17 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.logic.interfaces.ViewAllUsersLogic;
 
 @Controller
-@RequestMapping(value = "/viewAllUser")
+@RequestMapping(value = "/viewAllUsers")
 @SessionAttributes("users")
 public class ViewAllUsersController {
-    @Autowired
+
+
     ViewAllUsersLogic viewAllUsersLogic;
+
+    @Autowired
+    public ViewAllUsersController(ViewAllUsersLogic viewAllUsersLogic) {
+        this.viewAllUsersLogic = viewAllUsersLogic;
+    }
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
