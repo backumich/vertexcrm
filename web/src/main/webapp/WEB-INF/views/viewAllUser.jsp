@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -111,15 +112,30 @@
         <div align="center">
             <table border="0">
                 <tr>
-                    <td colspan="2" align="center"><h2>
-                        Congratulation ${userFormRegistration.firstName} ${userFormRegistration.lastName},
-                        registration success</h2></td>
-
-                    Your secret session id - ${userID}
+                    <th>User ID</th>
+                    <th>Last name</th>
+                    <th>First name</th>
+                    <th>Phone</th>
+                </tr>
+                <tr>
+                    <%--${certificate.courseName}--%>
+                </tr>
+                <tr>
+                    <%--${certificate.courseName}--%>
+                </tr>
+                <tr>
+                    <%--${certificate.courseName}--%>
+                </tr>
+                <tr>
+                    <%--${certificate.courseName}--%>
+                </tr>
+                <tr>
+                    <input class="buttonText" type="submit" value="123">
                 </tr>
             </table>
 
         </div>
+
 
     </div>
 </div>

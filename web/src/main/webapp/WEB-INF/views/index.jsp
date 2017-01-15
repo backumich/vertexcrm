@@ -126,7 +126,8 @@
         <div class="hrefText">
             <a href="<c:url value="/registration"/>">Register</a> |
             <a href="signIn.jsp">Log in</a> |
-            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>
+            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>|
+            <a href="<c:url value="/viewAllUser"/>">View all user registered into CRM</a>|
         </div>
 
     </div>
