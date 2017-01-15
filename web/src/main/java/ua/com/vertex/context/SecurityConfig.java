@@ -37,8 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/javascript/**", "/", "/register", "/logOut", "/certificateDetails",
-                        "/processCertificateDetails", "/certificateHolderPhoto", "/error").permitAll()
+                .antMatchers("/css/**", "/javascript/**", "/", "/register", "/logIn", "/logOut", "/loggedOut", "/error",
+                        "/certificateDetails", "/processCertificateDetails", "/certificateHolderPhoto").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logOut")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/loggedOut")
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(VALIDITY_SECONDS)

@@ -45,17 +45,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.info(storage.getId() + LOG_CERT_IN + certificateId);
+        LOGGER.debug(storage.getId() + LOG_CERT_IN + certificateId);
 
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(storage.getId() + LOG_NO_CERT + certificateId);
+            LOGGER.debug(storage.getId() + LOG_NO_CERT + certificateId);
         }
 
-        LOGGER.info(storage.getId() + LOG_CERT_OUT + certificateId);
+        LOGGER.debug(storage.getId() + LOG_CERT_OUT + certificateId);
 
         return Optional.ofNullable(certificate);
     }

@@ -54,11 +54,11 @@ public class CertificateDetailsPageController {
         try {
             if (result.hasErrors()) {
                 model.addAttribute("error", "Entered value must be a positive integer!");
-                LOGGER.info(storage.getId() + LOG_INVALID_DATA);
+                LOGGER.debug(storage.getId() + LOG_INVALID_DATA);
             } else {
                 int certificationId = certificate.getCertificationId();
 
-                LOGGER.info(storage.getId() + LOG_PROCESS + certificationId);
+                LOGGER.debug(storage.getId() + LOG_PROCESS + certificationId);
 
                 certificate = getCertificateDetails(certificationId);
                 if (!Certificate.EMPTY_CERTIFICATE.equals(certificate)) {
@@ -69,7 +69,7 @@ public class CertificateDetailsPageController {
                     model.addAttribute("error", "No certificate with this ID!");
                 }
 
-                LOGGER.info(storage.getId() + LOG_PASS_DATA);
+                LOGGER.debug(storage.getId() + LOG_PASS_DATA);
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
@@ -100,7 +100,7 @@ public class CertificateDetailsPageController {
             String encodedImage = Base64.encode(userPhoto);
             model.addAttribute("image", encodedImage);
 
-            LOGGER.info(storage.getId() + LOG_PHOTO);
+            LOGGER.debug(storage.getId() + LOG_PHOTO);
 
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);

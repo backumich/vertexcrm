@@ -45,16 +45,16 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
 
-        LOGGER.info(storage.getId() + LOG_USER_IN + userId);
+        LOGGER.debug(storage.getId() + LOG_USER_IN + userId);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(storage.getId() + LOG_NO_USER_ID + userId);
+            LOGGER.debug(storage.getId() + LOG_NO_USER_ID + userId);
         }
 
-        LOGGER.info(storage.getId() + LOG_USER_OUT + userId);
+        LOGGER.debug(storage.getId() + LOG_USER_OUT + userId);
 
         return Optional.ofNullable(user);
     }
@@ -63,7 +63,7 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> logIn(String email) {
         String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
 
-        LOGGER.info(LOG_LOGIN_IN + email);
+        LOGGER.debug(LOG_LOGIN_IN + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -71,10 +71,10 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, parameters, new UserRawMappingShort());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(LOG_NO_EMAIL + email);
+            LOGGER.debug(LOG_NO_EMAIL + email);
         }
 
-        LOGGER.info(LOG_LOGIN_OUT + email);
+        LOGGER.debug(LOG_LOGIN_OUT + email);
 
         return Optional.ofNullable(user);
     }

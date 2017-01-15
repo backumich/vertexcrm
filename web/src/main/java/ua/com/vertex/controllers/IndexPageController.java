@@ -28,14 +28,12 @@ public class IndexPageController {
         try {
             if (storage.getSessionId() == null && storage.getCount() > 2) {
                 storage.setSessionId(request.getSession().getId());
+
                 LOGGER.info(storage.getId() + LOG_SESSION_START);
-            }
-            if (request.getUserPrincipal() != null && storage.getEmail() == null) {
-                storage.setEmail(request.getUserPrincipal().getName());
-            }
 
-            LOGGER.debug(storage.getId() + INDEX + LOG_ENTRY);
-
+            } else if (storage.getSessionId() != null) {
+                LOGGER.debug(storage.getId() + INDEX + LOG_ENTRY);
+            }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;

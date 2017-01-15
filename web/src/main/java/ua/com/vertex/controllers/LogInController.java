@@ -3,11 +3,11 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.utils.Storage;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LogInController {
@@ -17,19 +17,17 @@ public class LogInController {
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
     private static final String LOG_LOGIN_SUCCESS = "login successful";
-    private static final String LOG_ENTRY = " page entered";
 
     private static final String LOGIN = "logIn";
     private static final String LOGGED_IN = "loggedIn";
     private static final String ERROR = "error";
 
     @RequestMapping(value = "/logIn")
-    public String showLogInPage(HttpServletRequest request) {
-        LOGGER.debug(storage.getId() + LOGIN + LOG_ENTRY);
-
+    public String showLogInPage() {
         String view = LOGIN;
         try {
-            if (request.getUserPrincipal() != null) {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (!"anonymousUser".equals(principal)) {
                 view = LOGGED_IN;
             }
         } catch (Throwable t) {
@@ -42,7 +40,18 @@ public class LogInController {
 
     @RequestMapping(value = "/loggedIn")
     public String showLoggedIn() {
-        LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (!"anonymousUser".equals(principal) && storage.getEmail() == null) {
+                storage.setEmail(((UserDetails) principal).getUsername());
+
+                LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
+            }
+        } catch (Throwable t) {
+            LOGGER.error(storage.getId(), t, t);
+            return ERROR;
+        }
+
         return LOGGED_IN;
     }
 
