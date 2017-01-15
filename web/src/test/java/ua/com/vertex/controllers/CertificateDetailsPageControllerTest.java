@@ -43,6 +43,10 @@ public class CertificateDetailsPageControllerTest {
 
     private CertificateDetailsPageController controller;
 
+    private static final int EXISTING_USER_ID = 22;
+    private static final int EXISTING_CERT_ID = 222;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -64,10 +68,10 @@ public class CertificateDetailsPageControllerTest {
         Optional<User> optionalU = Optional.of(new User());
 
         when(result.hasErrors()).thenReturn(false);
-        when(certificate.getCertificationId()).thenReturn(222);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(certificate.getUserId()).thenReturn(22);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
+        when(certificate.getCertificationId()).thenReturn(EXISTING_CERT_ID);
+        when(logic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
+        when(certificate.getUserId()).thenReturn(EXISTING_USER_ID);
+        when(logic.getUserDetails(EXISTING_USER_ID)).thenReturn(optionalU);
 
         MockMvc mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("certificateDetails"))
@@ -87,21 +91,21 @@ public class CertificateDetailsPageControllerTest {
     @Test
     public void addCertificateAttributeAfterRetrievingNotEmptyOptional() {
         Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
+                .setCertificationId(EXISTING_CERT_ID)
+                .setUserId(EXISTING_USER_ID)
                 .setCertificationDate(LocalDate.now())
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
                 .getInstance();
         User user = new User.Builder()
-                .setUserId(22)
+                .setUserId(EXISTING_USER_ID)
                 .getInstance();
         Optional<Certificate> optionalC = Optional.of(certificate);
         Optional<User> optionalU = Optional.of(user);
 
         when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
+        when(logic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
+        when(logic.getUserDetails(EXISTING_USER_ID)).thenReturn(optionalU);
 
         controller.processCertificateDetails(certificate, result, model);
         verify(model).addAttribute("certificate", certificate);
@@ -110,21 +114,21 @@ public class CertificateDetailsPageControllerTest {
     @Test
     public void addUserAttributeAfterRetrievingNotEmptyOptional() {
         Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
+                .setCertificationId(EXISTING_CERT_ID)
+                .setUserId(EXISTING_USER_ID)
                 .setCertificationDate(LocalDate.now())
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
                 .getInstance();
         User user = new User.Builder()
-                .setUserId(22)
+                .setUserId(EXISTING_USER_ID)
                 .getInstance();
         Optional<Certificate> optionalC = Optional.of(certificate);
         Optional<User> optionalU = Optional.of(user);
 
         when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
+        when(logic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
+        when(logic.getUserDetails(EXISTING_USER_ID)).thenReturn(optionalU);
 
         controller.processCertificateDetails(certificate, result, model);
         verify(model).addAttribute("user", user);
@@ -133,12 +137,12 @@ public class CertificateDetailsPageControllerTest {
     @Test
     public void addErrorAttributeAfterRetrievingEmptyCertificateOptional() {
         Certificate certificate = new Certificate.Builder()
-                .setCertificationId(55555)
+                .setCertificationId(NOT_EXISTING_ID)
                 .getInstance();
         Optional<Certificate> optionalC = Optional.empty();
 
         when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(55555)).thenReturn(optionalC);
+        when(logic.getCertificateDetails(NOT_EXISTING_ID)).thenReturn(optionalC);
 
         controller.processCertificateDetails(certificate, result, model);
         verify(model).addAttribute("error", "No certificate with this ID!");
@@ -148,22 +152,22 @@ public class CertificateDetailsPageControllerTest {
     public void setUserPhotoAfterRetrievingNotEmptyOptional() {
         byte[] photo = {(byte) 1};
         Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
+                .setCertificationId(EXISTING_CERT_ID)
+                .setUserId(EXISTING_USER_ID)
                 .setCertificationDate(LocalDate.now())
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
                 .getInstance();
         User user = new User.Builder()
-                .setUserId(22)
+                .setUserId(EXISTING_USER_ID)
                 .setPhoto(photo)
                 .getInstance();
         Optional<Certificate> optionalC = Optional.of(certificate);
         Optional<User> optionalU = Optional.of(user);
 
         when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
+        when(logic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
+        when(logic.getUserDetails(EXISTING_USER_ID)).thenReturn(optionalU);
 
         controller.processCertificateDetails(certificate, result, model);
         verify(storage).setPhoto(photo);

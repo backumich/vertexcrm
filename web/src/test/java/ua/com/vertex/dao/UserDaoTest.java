@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -12,7 +11,6 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -24,31 +22,38 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class UserDaoTest {
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
     @Autowired
     private UserDaoInf userDao;
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    private static final int EXISTING_ID = 22;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+    private static final String EXISTING_EMAIL = "22@test.com";
+    private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
 
     @Test
-    public void jdbcTemplateShouldNotBeNull() {
-        assertNotNull(jdbcTemplate);
-    }
-
-    @Test
-    public void daoShouldReturnUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.getUser(22);
+    public void getUserShouldReturnUserOptionalForUserExistingInDatabase() {
+        Optional<User> optional = userDao.getUser(EXISTING_ID);
         assertNotNull(optional);
-        assertEquals(22, optional.get().getUserId());
+        assertEquals(EXISTING_ID, optional.get().getUserId());
     }
 
     @Test
-    public void daoShouldReturnUserOptionalForUserNotExistingInDatabase() {
-        Optional<User> optional = userDao.getUser(55555);
+    public void getUserShouldReturnNullUserOptionalForUserNotExistingInDatabase() {
+        Optional<User> optional = userDao.getUser(NOT_EXISTING_ID);
+        assertNotNull(optional);
+        assertEquals(new User(), optional.orElse(new User()));
+    }
+
+    @Test
+    public void logInShouldReturnUserOptionalForUserExistingInDatabase() {
+        Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
+        assertNotNull(optional);
+        assertEquals(EXISTING_EMAIL, optional.get().getEmail());
+    }
+
+    @Test
+    public void logInShouldReturnNullUserOptionalForUserNotExistingInDatabase() {
+        Optional<User> optional = userDao.logIn(NOT_EXISTING_EMAIL);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));
     }

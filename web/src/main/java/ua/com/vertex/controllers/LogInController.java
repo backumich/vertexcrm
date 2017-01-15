@@ -21,13 +21,15 @@ public class LogInController {
     private static final String LOGIN = "logIn";
     private static final String LOGGED_IN = "loggedIn";
     private static final String ERROR = "error";
+    private static final String ANONYMOUS_USER = "anonymousUser";
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage() {
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (!"anonymousUser".equals(principal)) {
+
+            if (!ANONYMOUS_USER.equals(principal)) {
                 view = LOGGED_IN;
             }
         } catch (Throwable t) {
@@ -42,11 +44,9 @@ public class LogInController {
     public String showLoggedIn() {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (!"anonymousUser".equals(principal) && storage.getEmail() == null) {
-                storage.setEmail(((UserDetails) principal).getUsername());
+            storage.setEmail(((UserDetails) principal).getUsername());
 
-                LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
-            }
+            LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             return ERROR;

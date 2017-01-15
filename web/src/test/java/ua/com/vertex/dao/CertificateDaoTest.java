@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -12,7 +11,6 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -24,31 +22,22 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class CertificateDaoTest {
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
     @Autowired
     private CertificateDaoInf certificateDao;
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
-    @Test
-    public void jdbcTemplateShouldNotBeNull() {
-        assertNotNull(jdbcTemplate);
-    }
+    private static final int EXISTING_ID = 222;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
     public void daoShouldReturnCertificateOptionalForCertificateExistingInDatabase() {
-        Optional<Certificate> optional = certificateDao.getCertificateById(222);
+        Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
-        assertEquals(222, optional.get().getCertificationId());
+        assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
     @Test
-    public void daoShouldReturnCertificateOptionalForCertificateNotExistingInDatabase() {
-        Optional<Certificate> optional = certificateDao.getCertificateById(55555);
+    public void daoShouldReturnNullCertificateOptionalForCertificateNotExistingInDatabase() {
+        Optional<Certificate> optional = certificateDao.getCertificateById(NOT_EXISTING_ID);
         assertNotNull(optional);
         assertEquals(new Certificate(), optional.orElse(new Certificate()));
     }

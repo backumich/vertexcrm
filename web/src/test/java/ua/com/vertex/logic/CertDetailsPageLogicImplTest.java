@@ -33,6 +33,10 @@ public class CertDetailsPageLogicImplTest {
 
     private CertDetailsPageLogicImpl logic;
 
+    private static final int EXISTING_USER_ID = 22;
+    private static final int EXISTING_CERT_ID = 222;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+
     @Before
     public void setUp() {
         logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
@@ -50,28 +54,28 @@ public class CertDetailsPageLogicImplTest {
 
     @Test
     public void certificateOptionalForCertificateStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(222);
+        Optional<Certificate> optional = logic.getCertificateDetails(EXISTING_CERT_ID);
         assertNotNull(optional);
-        assertEquals(222, optional.get().getCertificationId());
+        assertEquals(EXISTING_CERT_ID, optional.get().getCertificationId());
     }
 
     @Test
     public void certificateOptionalForCertificateNotStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(55555);
+        Optional<Certificate> optional = logic.getCertificateDetails(NOT_EXISTING_ID);
         assertNotNull(optional);
         assertEquals(new Certificate(), optional.orElse(new Certificate()));
     }
 
     @Test
     public void userOptionalForUserStoredInDBShouldBeReturned() {
-        Optional<User> optional = logic.getUserDetails(22);
+        Optional<User> optional = logic.getUserDetails(EXISTING_USER_ID);
         assertNotNull(optional);
-        assertEquals(22, optional.get().getUserId());
+        assertEquals(EXISTING_USER_ID, optional.get().getUserId());
     }
 
     @Test
     public void userOptionalForUserNotStoredInDBShouldBeReturned() {
-        Optional<User> optional = logic.getUserDetails(55555);
+        Optional<User> optional = logic.getUserDetails(NOT_EXISTING_ID);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));
     }

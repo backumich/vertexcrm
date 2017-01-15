@@ -26,6 +26,7 @@ public class LogOutController {
     private static final String LOGGED_OUT = "loggedOut";
     private static final String ERROR = "error";
     private static final String INDEX = "index";
+    private static final String ANONYMOUS_USER = "anonymousUser";
 
     @RequestMapping(value = "/logOut")
     public String showLogOutPage() {
@@ -34,7 +35,7 @@ public class LogOutController {
         String view = LOGOUT;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if ("anonymousUser".equals(principal)) {
+            if (ANONYMOUS_USER.equals(principal)) {
                 view = LOGGED_OUT;
             }
         } catch (Throwable t) {
@@ -49,13 +50,19 @@ public class LogOutController {
     public String processLogOut(HttpServletRequest request) {
         LOGGER.info(storage.getId() + LOG_OUT_SUCCESS);
 
-        if (storage.getSessionId() == null && storage.getCount() > 2) {
-            storage.setSessionId(request.getSession().getId());
+        String view = LOGGED_OUT;
+        try {
+            if (storage.getSessionId() == null && storage.getCount() > 2) {
+                storage.setSessionId(request.getSession().getId());
 
-            LOGGER.info(storage.getId() + LOG_SESSION_START);
+                LOGGER.info(storage.getId() + LOG_SESSION_START);
+            }
+        } catch (Throwable t) {
+            LOGGER.error(storage.getId(), t, t);
+            view = ERROR;
         }
 
-        return LOGGED_OUT;
+        return view;
     }
 
     @RequestMapping(value = "/logOutRefuse")

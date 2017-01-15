@@ -22,10 +22,10 @@ CREATE TABLE Certificate
 );
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
-VALUES ('22', 'email', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
+VALUES ('22', '22@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
-VALUES ('33', 'email', 'password', 'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
+VALUES ('33', '33@test.com', 'password', 'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
 VALUES ('222', '22', '2016-12-1', 'Java Professional', 'Java');
