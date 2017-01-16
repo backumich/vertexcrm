@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -50,6 +49,15 @@
 
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
+    }
+
+    .colortext {
+        background-color: #ffe; /* Цвет фона */
+        color: black; /* Цвет текста */
+    }
+
+    .buttonText {
+        color: black;
     }
     </style>
 </head>
@@ -108,39 +116,34 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
-
         <div align="center">
-            <table border="0">
-                <tr>
-                    <th>User ID</th>
-                    <th>Last name</th>
-                    <th>First name</th>
-                    <th>Phone</th>
-                </tr>
-                <tr>
-                    1
-                    <%--${certificate.courseName}--%>
-                </tr>
-                <tr>
-                    2
-                    <%--${certificate.courseName}--%>
-                </tr>
-                <tr>
-                    3
-                    <%--${certificate.courseName}--%>
-                </tr>
-                <tr>
-                    4
-                    <%--${certificate.courseName}--%>
-                </tr>
-                <tr>
-                    <input class="buttonText" type="submit" value="123">
-                </tr>
-            </table>
-
+            <form:form action="getUserDetailsByID" method="post" commandName="userDetails">
+                <table bordercolor="red" border="2">
+                    <tr>
+                        <th width="60px">User ID</th>
+                        <th width="150px">E-mail</th>
+                        <th width="150px">Last name</th>
+                        <th width="150px">First name</th>
+                        <th width="150px">Phone</th>
+                        <th width="100px"></th>
+                    </tr>
+                    <c:forEach var="users" items="${users}">
+                        <tr>
+                            <td>${users.userID} </td>
+                            <td>${users.email} </td>
+                            <td>${users.lastName} </td>
+                            <td>${users.firstName} </td>
+                            <td>${users.phone} </td>
+                            <td>
+                                    <%--<input name="${users.userID}" class="buttonText" type="submit" value="Detail">--%>
+                                <form:input id="${users.userID}" name="userID" class="buttonText" type="submit"
+                                            value="Detail">
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </form:form>
         </div>
-
-
     </div>
 </div>
 <div class="footer">
