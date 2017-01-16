@@ -15,6 +15,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
+    private final String[] permittedRequests = {"/css/**", "/javascript/**", "/", "/registration",
+            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
+            "/certificateHolderPhoto"};
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -37,8 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/javascript/**", "/", "/registration", "/logIn", "/logOut", "/loggedOut",
-                        "/certificateDetails", "/processCertificateDetails", "/certificateHolderPhoto")
+                .antMatchers(permittedRequests)
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
