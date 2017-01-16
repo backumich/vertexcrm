@@ -136,8 +136,8 @@
                             <td>${users.phone} </td>
                             <td>
                                     <%--<input name="${users.userID}" class="buttonText" type="submit" value="Detail">--%>
-                                <form:input id="${users.userID}" name="userID" class="buttonText" type="submit"
-                                            value="Detail">
+                                <form:input path="${users.userID}" id="${users.userID}" name="userID" class="buttonText"
+                                            type="submit" value="Detail"/>
                             </td>
                         </tr>
                     </c:forEach>
