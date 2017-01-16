@@ -46,6 +46,9 @@ public class CertificateDetailsPageControllerTest {
     private static final int EXISTING_USER_ID = 22;
     private static final int EXISTING_CERT_ID = 222;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+    private static final String CERTIFICATE_DETAILS = "certificateDetails";
+    private static final String PROCESS_CERTIFICATE_DETAILS = "processCertificateDetails";
+    private static final String CERTIFICATE_HOLDER_PHOTO = "certificateHolderPhoto";
 
     @Before
     public void setUp() {
@@ -56,10 +59,10 @@ public class CertificateDetailsPageControllerTest {
     @Test
     public void certificateDetailsWebMvcShouldReturnPageView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateDetails"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
                 .build();
-        mockMvc.perform(get("/certificateDetails"))
-                .andExpect(view().name("certificateDetails"));
+        mockMvc.perform(get("/" + CERTIFICATE_DETAILS))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
@@ -74,10 +77,10 @@ public class CertificateDetailsPageControllerTest {
         when(logic.getUserDetails(EXISTING_USER_ID)).thenReturn(optionalU);
 
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateDetails"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
                 .build();
-        mockMvc.perform(get("/processCertificateDetails"))
-                .andExpect(view().name("certificateDetails"));
+        mockMvc.perform(get("/" + PROCESS_CERTIFICATE_DETAILS))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
@@ -176,19 +179,19 @@ public class CertificateDetailsPageControllerTest {
     @Test
     public void photoWebMvcShouldReturnCorrectView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateHolderPhoto"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_HOLDER_PHOTO))
                 .build();
-        mockMvc.perform(get("/certificateHolderPhoto"))
-                .andExpect(view().name("certificateHolderPhoto"));
+        mockMvc.perform(get("/" + CERTIFICATE_HOLDER_PHOTO))
+                .andExpect(view().name(CERTIFICATE_HOLDER_PHOTO));
     }
 
     @Test
     public void photoWebMvcShouldReturnErrorViewAfterUncheckedException() throws Exception {
         when(storage.getPhoto()).thenThrow(new RuntimeException());
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateHolderPhoto"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_HOLDER_PHOTO))
                 .build();
-        mockMvc.perform(get("/certificateHolderPhoto"))
+        mockMvc.perform(get("/" + CERTIFICATE_HOLDER_PHOTO))
                 .andExpect(view().name("error"));
     }
 

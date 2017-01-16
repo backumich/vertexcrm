@@ -28,9 +28,11 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class LogOutControllerTest {
+
     @Mock
     private Storage storage;
 
+    private MockMvc mockMvc;
     private LogOutController controller;
 
     @Before
@@ -42,7 +44,7 @@ public class LogOutControllerTest {
     @Test
     @WithMockUser
     public void showLogOutPageForLoggedInUserShouldReturnCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
+        mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("logOut"))
                 .build();
         mockMvc.perform(get("/logOut"))
@@ -51,7 +53,7 @@ public class LogOutControllerTest {
 
     @Test
     public void showLogOutPageForLoggedOutUserShouldReturnCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
+        mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("loggedOut"))
                 .build();
         mockMvc.perform(get("/loggedOut"))
@@ -74,7 +76,7 @@ public class LogOutControllerTest {
 
     @Test
     public void logOutRefuseShouldReturnCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
+        mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("logOut"))
                 .build();
         mockMvc.perform(get("/logOutRefuse"))

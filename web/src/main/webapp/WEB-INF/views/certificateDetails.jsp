@@ -45,7 +45,7 @@
     }
 
     .errorText140 {
-        font-size: 125%;
+        font-size: 140%;
         color: red;
     }
 
@@ -159,7 +159,7 @@
         <br><br>
 
         <c:if test="${!empty error}">
-            <h3><span class="errorText125">${error}</span></h3>
+            <h3><span class="errorText140">${error}</span></h3>
         </c:if>
 
         <c:if test="${empty error && !empty certificate}">

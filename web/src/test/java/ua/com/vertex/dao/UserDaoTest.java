@@ -31,28 +31,28 @@ public class UserDaoTest {
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
 
     @Test
-    public void getUserShouldReturnUserOptionalForUserExistingInDatabase() {
+    public void getUserReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.getUser(EXISTING_ID);
         assertNotNull(optional);
         assertEquals(EXISTING_ID, optional.get().getUserId());
     }
 
     @Test
-    public void getUserShouldReturnNullUserOptionalForUserNotExistingInDatabase() {
+    public void getUserReturnsNullUserOptionalForUserNotExistingInDatabase() {
         Optional<User> optional = userDao.getUser(NOT_EXISTING_ID);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));
     }
 
     @Test
-    public void logInShouldReturnUserOptionalForUserExistingInDatabase() {
+    public void logInReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
         assertNotNull(optional);
         assertEquals(EXISTING_EMAIL, optional.get().getEmail());
     }
 
     @Test
-    public void logInShouldReturnNullUserOptionalForUserNotExistingInDatabase() {
+    public void logInReturnsNullUserOptionalForUserNotExistingInDatabase() {
         Optional<User> optional = userDao.logIn(NOT_EXISTING_EMAIL);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));

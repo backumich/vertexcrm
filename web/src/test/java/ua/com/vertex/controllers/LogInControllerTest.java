@@ -27,9 +27,11 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class LogInControllerTest {
+
     @Mock
     private Storage storage;
 
+    private MockMvc mockMvc;
     private LogInController controller;
 
     @Before
@@ -41,7 +43,7 @@ public class LogInControllerTest {
     @Test
     @WithMockUser
     public void showLogInPageForLoggedInUserShouldReturnCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
+        mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("loggedIn"))
                 .build();
         mockMvc.perform(get("/logIn"))
@@ -51,7 +53,7 @@ public class LogInControllerTest {
     @Test
     @WithMockUser
     public void showLoggedInPageForLoggedInUserShouldReturnCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
+        mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("loggedIn"))
                 .build();
         mockMvc.perform(get("/loggedIn"))
