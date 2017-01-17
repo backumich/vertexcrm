@@ -15,7 +15,6 @@ import ua.com.vertex.logic.interfaces.ViewAllUsersLogic;
 @SessionAttributes("users")
 public class ViewAllUsersController {
 
-
     ViewAllUsersLogic viewAllUsersLogic;
 
     @Autowired

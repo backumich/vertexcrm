@@ -50,15 +50,6 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
     }
-
-    .colortext {
-        background-color: #ffe; /* Цвет фона */
-        color: black; /* Цвет текста */
-    }
-
-    .buttonText {
-        color: black;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -116,42 +107,18 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
+
         <div align="center">
-            <form:form action="userDetailsByID" method="post" commandName="users">
-
-                <table bordercolor="red" border="2">
+            <form:form action="registration" method="post" commandName="userFormRegistration">
+                <table border="0">
                     <tr>
-                        <th width="60px">User ID</th>
-                        <th width="150px">E-mail</th>
-                        <th width="150px">Last name</th>
-                        <th width="150px">First name</th>
-                        <th width="150px">Phone</th>
-                        <th width="100px"></th>
+                        <td colspan="2" align="center"><h2>Registration new user</h2></td>
                     </tr>
-                    <c:forEach var="users" items="${users}">
-                        <tr>
-                            <td>${users.userID} </td>
-                            <td>${users.email} </td>
-                            <td>${users.lastName} </td>
-                            <td>${users.firstName} </td>
-                            <td>${users.phone} </td>
-                            <td>
-                                <a href="userDetailsByID?userID=${users.userID}">Detail</a>
-
-
-                                    <%--<a href="${editUrl}?id=${employeeList.id}">--%>
-                                    <%--Edit--%>
-                                    <%--</a>--%>
-
-                                    <%--<input id="${users.userID}" name="zzz" class="buttonText" type="submit" value="Detail">--%>
-                                    <%--<form:input path="${users.userID}" id="${users.userID}" name="userID" class="buttonText"--%>
-                                    <%--type="submit" value="Detail"/>--%>
-                            </td>
-                        </tr>
-                    </c:forEach>
                 </table>
             </form:form>
         </div>
+
+
     </div>
 </div>
 <div class="footer">
