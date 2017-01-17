@@ -117,40 +117,62 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <form:form action="userDetailsByID" method="post" commandName="users">
+            <table bordercolor="red" border="2">
+                <tr>
+                    <th width="60px">User ID</th>
+                    <th width="150px">E-mail</th>
+                    <th width="150px">Last name</th>
+                    <th width="150px">First name</th>
+                    <th width="150px">Phone</th>
+                    <th width="100px"></th>
+                </tr>
 
-                <table bordercolor="red" border="2">
+                <c:forEach var="users" items="${users}">
                     <tr>
-                        <th width="60px">User ID</th>
-                        <th width="150px">E-mail</th>
-                        <th width="150px">Last name</th>
-                        <th width="150px">First name</th>
-                        <th width="150px">Phone</th>
-                        <th width="100px"></th>
+                        <td>${users.userID} </td>
+                        <td>${users.email} </td>
+                        <td>${users.lastName} </td>
+                        <td>${users.firstName} </td>
+                        <td>${users.phone} </td>
+                        <td>
+                            <c:set var="titleURL">
+                                <c:url value="userDetailsByID">
+                                    <c:param name="userID" value="${users.userID}"/>
+                                </c:url>
+                            </c:set>
+                            <a href="${titleURL}">Detail</a>
+                        </td>
                     </tr>
-                    <c:forEach var="users" items="${users}">
-                        <tr>
-                            <td>${users.userID} </td>
-                            <td>${users.email} </td>
-                            <td>${users.lastName} </td>
-                            <td>${users.firstName} </td>
-                            <td>${users.phone} </td>
-                            <td>
-                                <a href="userDetailsByID?userID=${users.userID}">Detail</a>
+                </c:forEach>
+
+            </table>
 
 
-                                    <%--<a href="${editUrl}?id=${employeeList.id}">--%>
-                                    <%--Edit--%>
-                                    <%--</a>--%>
+            <%--<form:form action="userDetailsByID" method="post" commandName="users">--%>
 
-                                    <%--<input id="${users.userID}" name="zzz" class="buttonText" type="submit" value="Detail">--%>
-                                    <%--<form:input path="${users.userID}" id="${users.userID}" name="userID" class="buttonText"--%>
-                                    <%--type="submit" value="Detail"/>--%>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </form:form>
+            <%--<table bordercolor="red" border="2">--%>
+            <%--<tr>--%>
+            <%--<th width="60px">User ID</th>--%>
+            <%--<th width="150px">E-mail</th>--%>
+            <%--<th width="150px">Last name</th>--%>
+            <%--<th width="150px">First name</th>--%>
+            <%--<th width="150px">Phone</th>--%>
+            <%--<th width="100px"></th>--%>
+            <%--</tr>--%>
+            <%--<c:forEach var="users" items="${users}">--%>
+            <%--<tr>--%>
+            <%--<td>${users.userID} </td>--%>
+            <%--<td>${users.email} </td>--%>
+            <%--<td>${users.lastName} </td>--%>
+            <%--<td>${users.firstName} </td>--%>
+            <%--<td>${users.phone} </td>--%>
+            <%--<td>--%>
+            <%--<a href="userDetailsByID?userID=${users.userID}">Detail</a>--%>
+            <%--</td>--%>
+            <%--</tr>--%>
+            <%--</c:forEach>--%>
+            <%--</table>--%>
+            <%--</form:form>--%>
         </div>
     </div>
 </div>

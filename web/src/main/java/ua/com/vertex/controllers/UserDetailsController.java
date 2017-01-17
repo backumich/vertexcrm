@@ -14,12 +14,12 @@ import ua.com.vertex.logic.interfaces.ViewAllUsersLogic;
 @Controller
 @RequestMapping(value = "/userDetailsByID")
 @SessionAttributes("users")
-public class UserDetailsByID {
+public class UserDetailsController {
 
     ViewAllUsersLogic viewAllUsersLogic;
 
     @Autowired
-    public UserDetailsByID(ViewAllUsersLogic viewAllUsersLogic) {
+    public UserDetailsController(ViewAllUsersLogic viewAllUsersLogic) {
         this.viewAllUsersLogic = viewAllUsersLogic;
     }
 
