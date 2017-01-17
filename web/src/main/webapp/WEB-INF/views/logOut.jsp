@@ -53,32 +53,12 @@
         font-size: 120%;
     }
 
-    .formHeader {
-        font-size: 125%;
-        font-weight: bold;
-        color: #adadad;
-    }
-
-    .formInput {
-        color: black;
-    }
-
     .pageHeader {
         font-size: 180%
     }
 
-    .errorText140 {
-        font-size: 140%;
-        color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .buttonText {
-        color: black;
+    .button {
+        width: 100px;
     }
 
     .up-padding {
@@ -150,13 +130,13 @@
             <tr>
                 <td>
                     <form action="${pageContext.request.contextPath}/logOut" method="post">
-                        <input type="submit" style="width: 100px" value="Yes"/>
+                        <input type="submit" class="button" value="Yes"/>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                     </form>
                 </td>
                 <td>
                     <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
-                        <input type="submit" style="width: 100px" value="No"/>
+                        <input type="submit" class="button" value="No"/>
                     </form>
                 </td>
             </tr>

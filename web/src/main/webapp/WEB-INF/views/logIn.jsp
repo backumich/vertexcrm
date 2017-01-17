@@ -59,10 +59,6 @@
         color: #adadad;
     }
 
-    .formInput {
-        color: black;
-    }
-
     .pageHeader {
         font-size: 180%
     }
