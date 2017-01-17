@@ -1,99 +1,24 @@
 package ua.com.vertex.beans;
 
-
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 public class Certificate {
-
+    @Min(value = 1)
+    @Max(value = Integer.MAX_VALUE)
     private int certificationId;
+
     private int userId;
     private LocalDate certificationDate;
     private String courseName;
     private String language;
 
-    @SuppressWarnings("WeakerAccess")
+    public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
+
     public Certificate() {
-    }
-
-    public String toString() {
-        return "Certificate{" +
-                "certificationId=" + certificationId +
-                ", certificationDate=" + certificationDate +
-                ", courseName='" + courseName + '\'' +
-                ", language='" + language + '\'' +
-                '}';
-    }
-
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Certificate that = (Certificate) o;
-
-        return certificationId == that.certificationId && userId == that.userId &&
-                (certificationDate != null ? certificationDate.equals(that.certificationDate) : that.certificationDate == null) &&
-                (courseName != null ? courseName.equals(that.courseName) : that.courseName == null) &&
-                (language != null ? language.equals(that.language) : that.language == null);
-    }
-
-    public int hashCode() {
-        int result = certificationId;
-        result = 31 * result + userId;
-        result = 31 * result + (certificationDate != null ? certificationDate.hashCode() : 0);
-        result = 31 * result + (courseName != null ? courseName.hashCode() : 0);
-        result = 31 * result + (language != null ? language.hashCode() : 0);
-        return result;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public int getCertificationId() {
-        return certificationId;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void setCertificationId(int certificationId) {
-        this.certificationId = certificationId;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public int getUserId() {
-        return userId;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public LocalDate getCertificationDate() {
-        return certificationDate;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void setCertificationDate(LocalDate certificationDate) {
-        this.certificationDate = certificationDate;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public String getCourseName() {
-        return courseName;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public String getLanguage() {
-        return language;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public void setLanguage(String language) {
-        this.language = language;
     }
 
     public static class Builder {
@@ -108,8 +33,8 @@ public class Certificate {
             return this;
         }
 
-        public Builder setUserId(int userId) {
-            instance.setUserId(userId);
+        public Builder setUserId(int id) {
+            instance.setUserId(id);
             return this;
         }
 
@@ -131,5 +56,73 @@ public class Certificate {
         public Certificate getInstance() {
             return instance;
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Certification ID: %05d%n" +
+                        "User ID: %05d%n" +
+                        "Certification Date: %s%n" +
+                        "Course Name: %s%n" +
+                        "Language: %s%n",
+                certificationId, userId, certificationDate, courseName, language);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Certificate certificate2 = (Certificate) o;
+        return certificationId == certificate2.certificationId &&
+                userId == certificate2.userId &&
+                Objects.equals(certificationDate, certificate2.certificationDate) &&
+                Objects.equals(courseName, certificate2.courseName) &&
+                Objects.equals(language, certificate2.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(certificationId, userId, certificationDate, courseName, language);
+    }
+
+    public int getCertificationId() {
+        return certificationId;
+    }
+
+    public void setCertificationId(int certificationId) {
+        this.certificationId = certificationId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public LocalDate getCertificationDate() {
+        return certificationDate;
+    }
+
+    public void setCertificationDate(LocalDate certificationDate) {
+        this.certificationDate = certificationDate;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

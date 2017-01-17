@@ -21,17 +21,14 @@ import java.util.Properties;
 @ComponentScan("ua.com.vertex")
 @EnableWebMvc
 public class MainContext extends WebMvcConfigurerAdapter {
-
     private static final String DB_PROPERTIES = "db.properties";
 
     @Bean
     public DataSource dataSource() throws Exception {
-
         return BasicDataSourceFactory.createDataSource(getDbProperties());
     }
 
     private Properties getDbProperties() throws IOException {
-
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
 
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
@@ -60,5 +57,4 @@ public class MainContext extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/javascript/**").addResourceLocations("/javascript/");
     }
-
 }
