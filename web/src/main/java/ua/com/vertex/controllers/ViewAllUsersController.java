@@ -29,7 +29,6 @@ public class ViewAllUsersController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("viewAllUsers");
         modelAndView.addObject("users", viewAllUsersLogic.getListUsers());
-        // viewAllUsersLogic.getListUsers();
         return modelAndView;
 
     }
