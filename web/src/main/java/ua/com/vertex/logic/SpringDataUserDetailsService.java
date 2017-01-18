@@ -15,7 +15,6 @@ import java.util.List;
 
 import static ua.com.vertex.beans.User.EMPTY_USER;
 
-
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
 
@@ -24,11 +23,13 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userLogic.logIn(username);
+
         if (user.equals(EMPTY_USER)) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         } else {
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                     authorities);
         }

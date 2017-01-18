@@ -3,21 +3,26 @@ package ua.com.vertex.context;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 
+import static ua.com.vertex.utils.Role.ADMIN;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
-    private final String[] permittedRequests = {"/css/**", "/javascript/**", "/", "/registration",
-            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
+    private final String[] permittedAllRequests = {"/css/**", "/javascript/**", "/", "/registration",
+            "/logIn", "/logOut", "/loggedOut", "/certificateDetails",
             "/certificateHolderPhoto"};
+    private final String[] permittedAdminRequests = {"/processCertificateDetails"};
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -40,8 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers(permittedRequests)
+                .antMatchers(permittedAllRequests)
                 .permitAll()
+                .antMatchers(permittedAdminRequests).hasAuthority(ADMIN.toString())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
