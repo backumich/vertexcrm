@@ -2,6 +2,7 @@ package ua.com.vertex.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.vertex.beans.UserMainData;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -17,5 +18,13 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public List<String> getAllUserIds() {
         return userDao.getAllUserIds().stream().map(id -> Integer.toString(id)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserMainData> getListUsers() {
+
+        userDao.getListUsers();
+        return userDao.getListUsers();
+
     }
 }

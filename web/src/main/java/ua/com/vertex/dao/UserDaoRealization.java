@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserMainData;
 import ua.com.vertex.controllers.UserController;
 import ua.com.vertex.dao.interfaces.UserDaoRealizationInf;
 
@@ -59,6 +60,14 @@ public class UserDaoRealization implements UserDaoRealizationInf {
     }
 
     @Override
+    public List<UserMainData> getListUsers() throws DataAccessException {
+        LOGGER.info("Adding a new user into database");
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
+        return jdbcTemplate.query(query, new ViewAllUsersDaoRealization.UserRowMapping());
+    }
+
+    @Override
     public int registrationUser(User user) throws DataAccessException {
         LOGGER.info("Adding a new user into database");
 
@@ -71,6 +80,7 @@ public class UserDaoRealization implements UserDaoRealizationInf {
         Number id = keyHolder.getKey();
         return id.intValue();
     }
+
 
     private MapSqlParameterSource getRegistrationParameters(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
