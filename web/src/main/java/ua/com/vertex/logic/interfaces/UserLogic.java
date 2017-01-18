@@ -10,4 +10,6 @@ public interface UserLogic {
     List<String> getAllUserIds();
 
     List<UserMainData> getListUsers();
+
+    List<UserMainData> getUserDetails();
 }

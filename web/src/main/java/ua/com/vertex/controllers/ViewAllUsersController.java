@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.logic.interfaces.ViewAllUsersLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 @Controller
 @RequestMapping(value = "/viewAllUsers")
 @SessionAttributes("users")
 public class ViewAllUsersController {
 
-    ViewAllUsersLogic viewAllUsersLogic;
+    UserLogic userLogic;
 
     @Autowired
-    public ViewAllUsersController(ViewAllUsersLogic viewAllUsersLogic) {
-        this.viewAllUsersLogic = viewAllUsersLogic;
+    public ViewAllUsersController(UserLogic userLogic) {
+        this.userLogic = userLogic;
     }
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
@@ -28,7 +28,7 @@ public class ViewAllUsersController {
     public ModelAndView viewAllUsers() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("viewAllUsers");
-        modelAndView.addObject("users", viewAllUsersLogic.getListUsers());
+        modelAndView.addObject("users", userLogic.getListUsers());
         return modelAndView;
 
     }

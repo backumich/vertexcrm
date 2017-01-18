@@ -22,9 +22,14 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public List<UserMainData> getListUsers() {
-
         userDao.getListUsers();
         return userDao.getListUsers();
-
     }
+
+    @Override
+    public List<UserMainData> getUserDetails() {
+        return null;
+    }
+
+
 }

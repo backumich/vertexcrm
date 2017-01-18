@@ -3,7 +3,6 @@ package ua.com.vertex.dao.interfaces;
 
 import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserMainData;
 
 import java.util.List;
 
@@ -21,5 +20,4 @@ public interface UserDaoRealizationInf {
 
     Boolean isRegisteredEmail(String email);
 
-    List<UserMainData> getListUsers();
 }
