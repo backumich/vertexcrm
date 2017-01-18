@@ -21,6 +21,8 @@ public class UserController {
     static final String CERTIFICATES = "certificates";
     private static final String USER_JSP = "user";
     private static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
+    private static final String LOG_REQ_IN = "Request to '/getCertificateByUserId' with userId=";
+    private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserId' return 'user.jsp' ";
 
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
@@ -35,14 +37,14 @@ public class UserController {
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
     public String getAllCertificatesByUserId(@RequestParam("userId") int userId, Model model) {
 
-        LOGGER.info("Request to '/getCertificateByUserId' with userId = " + userId);
+        LOGGER.debug(LOG_REQ_IN + userId);
 
         List<Certificate> result = certificateLogic.getAllCertificatesByUserId(userId);
         model.addAttribute(CERTIFICATES, result);
 
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
-        LOGGER.info("Request to '/getCertificateByUserId' return 'user.jsp' ");
+        LOGGER.debug(LOG_REQ_OUT);
 
         return USER_JSP;
     }

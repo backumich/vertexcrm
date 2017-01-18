@@ -17,6 +17,9 @@ public class CertificateDetails {
     static final String CERTIFICATE_JSP = "certificate";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetails.class);
+    private static final String LOG_REQ_IN = "Request to '/getCertificateDetails' with certificateId=";
+    private static final String LOG_REQ_OUT = "Request to '/getCertificateDetails' return ";
+
 
     private CertificateLogic certificateLogic;
 
@@ -29,7 +32,7 @@ public class CertificateDetails {
     @GetMapping(value = "/getCertificateDetails")
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
 
-        LOGGER.info("Request to '/getCertificateDetails' ");
+        LOGGER.info(LOG_REQ_IN + certificateId);
 
         ModelAndView result = new ModelAndView(CERTIFICATE_JSP);
         if (certificateLogic.getCertificateById(certificateId).isPresent()) {
@@ -40,7 +43,7 @@ public class CertificateDetails {
         }
 
 
-        LOGGER.info("Request to '/getCertificateDetails' return " + result.getViewName());
+        LOGGER.info(LOG_REQ_OUT + result.getViewName());
         return result;
     }
 }

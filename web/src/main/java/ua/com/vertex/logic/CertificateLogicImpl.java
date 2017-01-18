@@ -15,6 +15,10 @@ import java.util.Optional;
 public class CertificateLogicImpl implements CertificateLogic {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateLogicImpl.class);
+    private static final String LOG_ALLCERT = "Call - certificateDao.getAllCertificateByUserId(%s);";
+    private static final String LOG_CERT = "Call - certificateDao.getCertificateById(%s);";
+
+
 
     private CertificateDaoInf certificateDaoInf;
 
@@ -24,12 +28,12 @@ public class CertificateLogicImpl implements CertificateLogic {
     }
 
     public List<Certificate> getAllCertificatesByUserId(int userId) {
-        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
+        LOGGER.debug(String.format(LOG_ALLCERT, Integer.toString(userId)));
         return certificateDaoInf.getAllCertificatesByUserId(userId);
     }
 
     public Optional<Certificate> getCertificateById(int certificateId) {
-        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
+        LOGGER.debug(String.format(LOG_CERT, Integer.toString(certificateId)));
         return certificateDaoInf.getCertificateById(certificateId);
     }
 }
