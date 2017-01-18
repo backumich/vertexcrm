@@ -42,8 +42,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        String query = "SELECT user_id, email, password, first_name, " +
-                "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
+        String query = "SELECT * FROM Users WHERE user_id=:userId";
 
         LOGGER.debug(storage.getId() + LOG_USER_IN + userId);
 
@@ -69,7 +68,7 @@ public class UserDaoImpl implements UserDaoInf {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(query, parameters, new UserRawMappingShort());
+            user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug(LOG_NO_EMAIL + email);
         }
@@ -81,7 +80,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public void deleteUser(int userId) {
-        String query = "DELETE FROM Users WHERE user_id=:id";
+        String query = "DELETE FROM Users WHERE user_id=:userId";
         jdbcTemplate.update(query, new MapSqlParameterSource(USER_ID, userId));
     }
 
@@ -109,7 +108,7 @@ public class UserDaoImpl implements UserDaoInf {
         }
     }
 
-    private static final class UserRawMappingShort implements RowMapper<User> {
+    private static final class UserRowMapperLogIn implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             return new User.Builder()

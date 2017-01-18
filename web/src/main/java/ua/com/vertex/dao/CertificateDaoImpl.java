@@ -42,8 +42,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     @Override
     public Optional<Certificate> getCertificateById(int certificateId) {
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certification_id =:certificateId";
+        String query = "SELECT * FROM Certificate WHERE certification_id =:certificateId";
 
         LOGGER.debug(storage.getId() + LOG_CERT_IN + certificateId);
 
