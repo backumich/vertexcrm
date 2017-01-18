@@ -42,7 +42,8 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        String query = "SELECT * FROM Users WHERE user_id=:userId";
+        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
+                "phone, role_id FROM Users WHERE user_id=:userId";
 
         LOGGER.debug(storage.getId() + LOG_USER_IN + userId);
 
@@ -50,7 +51,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(storage.getId() + LOG_NO_USER_ID + userId);
+            LOGGER.warn(storage.getId() + LOG_NO_USER_ID + userId);
         }
 
         LOGGER.debug(storage.getId() + LOG_USER_OUT + userId);

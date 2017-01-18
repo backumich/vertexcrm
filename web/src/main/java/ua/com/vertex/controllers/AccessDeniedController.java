@@ -9,10 +9,10 @@ import ua.com.vertex.utils.Storage;
 
 @Controller
 @RequestMapping(value = "/403")
-public class AccessController {
+public class AccessDeniedController {
 
     private final Storage storage;
-    private static final Logger LOGGER = LogManager.getLogger(AccessController.class);
+    private static final Logger LOGGER = LogManager.getLogger(AccessDeniedController.class);
 
     private static final String LOG_DENIED = "HTTP Status 403 - Access is denied";
 
@@ -25,7 +25,7 @@ public class AccessController {
     }
 
     @Autowired
-    public AccessController(Storage storage) {
+    public AccessDeniedController(Storage storage) {
         this.storage = storage;
     }
 }

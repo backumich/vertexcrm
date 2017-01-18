@@ -1,6 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -8,16 +9,17 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="./css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -36,21 +38,14 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
 
-    .pageHeader {
-        font-size: 180%;
+    .errorText {
+        font-size: 200%;
+        color: red;
     }
 
     .hrefText {
@@ -60,6 +55,7 @@
     .up-padding {
         padding-top: 100px;
     }
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -88,6 +84,7 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -118,13 +115,15 @@
 
 
 <div class="page gray-page mh100">
-    <div class="up-padding" align="center">
-        <span class="pageHeader">You are logged in</span><br><br><br>
+    <div align="center" class="up-padding">
 
+        <span class="errorText">Logged as admin. The page is under construction...</span><br><br>
 
         <div class="hrefText">
-            <a href="<c:url value="/"/>">Home</a>
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
         </div>
+
     </div>
 </div>
 
@@ -183,11 +182,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>
