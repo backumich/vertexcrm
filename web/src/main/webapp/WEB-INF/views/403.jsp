@@ -117,7 +117,7 @@
 <div class="page gray-page mh100">
     <div align="center" class="up-padding">
 
-        <span class="errorText">Access denied!</span><br><br>
+        <span class="errorText">HTTP Status 403 - Access is denied</span><br><br>
         <span class="hrefText"><a href="<c:url value="/" />">Home</a></span>
 
     </div>

@@ -14,7 +14,7 @@ public class AccessController {
     private final Storage storage;
     private static final Logger LOGGER = LogManager.getLogger(AccessController.class);
 
-    private static final String LOG_DENIED = "403: access denied";
+    private static final String LOG_DENIED = "HTTP Status 403 - Access is denied";
 
     private static final String ACCESS_DENIED = "403";
 
