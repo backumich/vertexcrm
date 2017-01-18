@@ -20,9 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
     private final String[] permittedAllRequests = {"/css/**", "/javascript/**", "/", "/registration",
-            "/logIn", "/logOut", "/loggedOut", "/certificateDetails",
+            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
             "/certificateHolderPhoto"};
-    private final String[] permittedAdminRequests = {"/processCertificateDetails"};
+    private final String[] permittedAdminRequests = {};
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -61,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(VALIDITY_SECONDS)
+                .and()
+                .exceptionHandling().accessDeniedPage("/403")
         ;
     }
 }
