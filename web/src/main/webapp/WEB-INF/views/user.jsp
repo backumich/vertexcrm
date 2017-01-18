@@ -100,7 +100,7 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5">
+    <div class="container pt1_5" align="centr">
 
         <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
             <label>
@@ -138,7 +138,14 @@
             </table>
         </c:if>
 
+        <br>
+
+        <div class="hrefText">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
+
 </div>
 <div class="footer">
     <div class="container">

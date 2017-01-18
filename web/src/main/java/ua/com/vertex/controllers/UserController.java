@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
@@ -32,6 +33,11 @@ public class UserController {
     @Autowired
     public UserController(CertificateLogic certificateLogic) {
         this.certificateLogic = certificateLogic;
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ModelAndView user() {
+        return new ModelAndView("user");
     }
 
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)

@@ -122,6 +122,12 @@
                 </tr>
             </table>
         </c:if>
+        <br>
+
+        <div class="hrefText">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 <div class="footer">

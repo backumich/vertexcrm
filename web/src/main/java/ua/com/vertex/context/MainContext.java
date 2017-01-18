@@ -49,7 +49,7 @@ public class MainContext extends WebMvcConfigurerAdapter {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/user");
+        registry.addViewController("/").setViewName("/index");
     }
 
     @Override
