@@ -41,23 +41,23 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "USER")
     public void showLogInPageForLoggedInUserShouldReturnCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("loggedIn"))
+                .setSingleView(new InternalResourceView("user"))
                 .build();
         mockMvc.perform(get("/logIn"))
-                .andExpect(view().name("loggedIn"));
+                .andExpect(view().name("user"));
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(authorities = "USER")
     public void showLoggedInPageForLoggedInUserShouldReturnCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("loggedIn"))
+                .setSingleView(new InternalResourceView("user"))
                 .build();
         mockMvc.perform(get("/loggedIn"))
-                .andExpect(view().name("loggedIn"));
+                .andExpect(view().name("user"));
     }
 
     @Test

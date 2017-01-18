@@ -28,6 +28,7 @@ public class LogInController {
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "user";
     private static final String ERROR = "error";
+    private static final String INDEX = "index";
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @RequestMapping(value = "/logIn")
@@ -37,7 +38,7 @@ public class LogInController {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
             if (!ANONYMOUS_USER.equals(principal)) {
-                view = method(view);
+                view = redirectView(view);
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
@@ -49,11 +50,10 @@ public class LogInController {
 
     @RequestMapping(value = "/loggedIn")
     public String showLoggedIn() {
-        String view = "index";
+        String view = INDEX;
 
         try {
-            view = method(view);
-
+            view = redirectView(view);
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             storage.setEmail(((UserDetails) principal).getUsername());
 
@@ -66,7 +66,7 @@ public class LogInController {
         return view;
     }
 
-    private String method(String view) {
+    private String redirectView(String view) {
         @SuppressWarnings("unchecked") List<SimpleGrantedAuthority> authorities = (List<SimpleGrantedAuthority>)
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
