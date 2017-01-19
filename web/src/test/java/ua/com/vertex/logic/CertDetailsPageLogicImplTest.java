@@ -55,14 +55,14 @@ public class CertDetailsPageLogicImplTest {
 
 //    @Test
 //    public void userOptionalForUserStoredInDBShouldBeReturned() {
-//        Optional<User> optional = logic.getUser(EXISTING_USER_ID);
+//        Optional<User> optional = logic.getUserById(EXISTING_USER_ID);
 //        assertNotNull(optional);
 //        assertEquals(EXISTING_USER_ID, optional.get().getUserId());
 //    }
 //
 //    @Test
 //    public void userOptionalForUserNotStoredInDBShouldBeReturned() {
-//        Optional<User> optional = logic.getUser(NOT_EXISTING_ID);
+//        Optional<User> optional = logic.getUserById(NOT_EXISTING_ID);
 //        assertNotNull(optional);
 //        assertEquals(new User(), optional.orElse(new User()));
 //    }

@@ -17,7 +17,7 @@ public class LogOutController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogOutController.class);
 
-    private static final String LOG_ENTRY = " page entered";
+    private static final String LOG_ENTRY = " page accessed";
     private static final String LOG_OUT_SUCCESS = "Logging out successful";
     private static final String LOG_LOGOUT_REFUSE = "logging out refused";
     private static final String LOG_SESSION_START = "Session start";

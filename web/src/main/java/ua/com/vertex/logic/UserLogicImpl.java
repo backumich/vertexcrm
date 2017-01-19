@@ -25,11 +25,28 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public Optional<User> getUser(int id) {
+    public Optional<User> getUserById(int id) {
         User user = userDao.getUser(id).orElse(EMPTY_USER);
 
         if (!EMPTY_USER.equals(user)) {
             user = imagesCheck(user);
+        }
+
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
+    }
+
+    @Override
+    public Optional<User> logIn(String email) {
+        User user;
+        if (email.isEmpty()) {
+            user = EMPTY_USER;
+        } else {
+            user = userDao.logIn(email).orElse(EMPTY_USER);
         }
 
         return Optional.ofNullable(user);
@@ -47,23 +64,6 @@ public class UserLogicImpl implements UserLogic {
         }
 
         return user;
-    }
-
-    @Override
-    public Optional<User> logIn(String email) {
-        User user;
-        if (email.isEmpty()) {
-            user = EMPTY_USER;
-        } else {
-            user = userDao.logIn(email).orElse(EMPTY_USER);
-        }
-
-        return Optional.ofNullable(user);
-    }
-
-    @Override
-    public Optional<User> getUserByEmail(String email) {
-        return userDao.getUserByEmail(email);
     }
 
     @Autowired

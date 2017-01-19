@@ -43,8 +43,7 @@ public class LogInController {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (!ANONYMOUS_USER.equals(principal)) {
-                view = redirectView(view);
-                setUser(storage.getEmail(), model);
+                view = setUser(storage.getEmail(), model);
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
@@ -56,13 +55,13 @@ public class LogInController {
 
     @RequestMapping(value = "/loggedIn")
     public String showLoggedIn(Model model) {
-        String view = ERROR;
+
+        String view;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String email = ((UserDetails) principal).getUsername();
             storage.setEmail(email);
-            view = redirectView(view);
-            setUser(email, model);
+            view = setUser(email, model);
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;
@@ -71,7 +70,8 @@ public class LogInController {
         return view;
     }
 
-    private String redirectView(String view) throws Exception {
+    private String redirectView() throws Exception {
+        String view = "";
 
         Collection<? extends GrantedAuthority> authorities =
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -86,7 +86,7 @@ public class LogInController {
                     throw new Exception(AUTHORITIES_ERROR);
                 }
             }
-            LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
+
         } else {
             throw new Exception(AUTHORITIES_ERROR);
         }
@@ -94,12 +94,17 @@ public class LogInController {
         return view;
     }
 
-    private void setUser(String email, Model model) {
+    private String setUser(String email, Model model) throws Exception {
+        String view = redirectView();
         User user = userLogic.getUserByEmail(email).orElse(EMPTY_USER);
-        if (!EMPTY_USER.equals(user)) {
+
+        if (USER_PAGE.equals(view) && !EMPTY_USER.equals(user)) {
             userLogic.imagesCheck(user);
             model.addAttribute("user", user);
         }
+        LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
+
+        return view;
     }
 
     @Autowired

@@ -76,7 +76,7 @@ public class CertificateDetailsPageControllerTest {
 //        when(certificate.getCertificationId()).thenReturn(EXISTING_CERT_ID);
 //        when(certLogic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
 //        when(certificate.getUserId()).thenReturn(EXISTING_USER_ID);
-//        when(userLogic.getUser(EXISTING_USER_ID)).thenReturn(optionalU);
+//        when(userLogic.getUserById(EXISTING_USER_ID)).thenReturn(optionalU);
 //
 //        MockMvc mockMvc = standaloneSetup(controller)
 //                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
@@ -110,7 +110,7 @@ public class CertificateDetailsPageControllerTest {
 //
 //        when(result.hasErrors()).thenReturn(false);
 //        when(certLogic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
-//        when(userLogic.getUser(EXISTING_USER_ID)).thenReturn(optionalU);
+//        when(userLogic.getUserById(EXISTING_USER_ID)).thenReturn(optionalU);
 //
 //        controller.processCertificateDetails(certificate, result, model);
 //        verify(model).addAttribute("certificate", certificate);
@@ -133,7 +133,7 @@ public class CertificateDetailsPageControllerTest {
 //
 //        when(result.hasErrors()).thenReturn(false);
 //        when(certLogic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
-//        when(userLogic.getUser(EXISTING_USER_ID)).thenReturn(optionalU);
+//        when(userLogic.getUserById(EXISTING_USER_ID)).thenReturn(optionalU);
 //
 //        controller.processCertificateDetails(certificate, result, model);
 //        verify(model).addAttribute("user", user);
@@ -172,7 +172,7 @@ public class CertificateDetailsPageControllerTest {
 //
 //        when(result.hasErrors()).thenReturn(false);
 //        when(certLogic.getCertificateDetails(EXISTING_CERT_ID)).thenReturn(optionalC);
-//        when(userLogic.getUser(EXISTING_USER_ID)).thenReturn(optionalU);
+//        when(userLogic.getUserById(EXISTING_USER_ID)).thenReturn(optionalU);
 //
 //        controller.processCertificateDetails(certificate, result, model);
 //        verify(storage).setPhoto(photo);

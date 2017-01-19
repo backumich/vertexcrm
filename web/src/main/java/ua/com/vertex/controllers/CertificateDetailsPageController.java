@@ -74,7 +74,7 @@ public class CertificateDetailsPageController {
         certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
         if (!EMPTY_CERTIFICATE.equals(certificate)) {
             model.addAttribute("certificate", certificate);
-            User user = userLogic.getUser(certificate.getUserId()).orElse(EMPTY_USER);
+            User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);
             model.addAttribute("user", user);
         } else {
             model.addAttribute("error", "No certificate with this ID!");

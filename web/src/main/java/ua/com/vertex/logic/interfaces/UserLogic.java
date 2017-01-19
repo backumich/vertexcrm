@@ -10,11 +10,11 @@ public interface UserLogic {
 
     List<String> getAllUserIds();
 
-    Optional<User> getUser(int id);
+    Optional<User> getUserById(int id);
+
+    Optional<User> getUserByEmail(String email);
 
     Optional<User> logIn(String email);
 
     User imagesCheck(User user);
-
-    Optional<User> getUserByEmail(String email);
 }
