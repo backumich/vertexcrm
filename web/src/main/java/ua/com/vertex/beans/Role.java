@@ -2,11 +2,14 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class UserRole {
+public class Role {
     private int roleId;
     private String name;
 
-    public UserRole(int roleId, String name) {
+    public Role() {
+    }
+
+    public Role(int roleId, String name) {
         this.roleId = roleId;
         this.name = name;
     }
@@ -31,9 +34,9 @@ public class UserRole {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserRole userRole = (UserRole) o;
-        return roleId == userRole.roleId &&
-                Objects.equals(name, userRole.name);
+        Role role = (Role) o;
+        return roleId == role.roleId &&
+                Objects.equals(name, role.name);
     }
 
     @Override
@@ -43,7 +46,7 @@ public class UserRole {
 
     @Override
     public String toString() {
-        return "UserRole{" +
+        return "Role{" +
                 "roleId=" + roleId +
                 ", name='" + name + '\'' +
                 '}';

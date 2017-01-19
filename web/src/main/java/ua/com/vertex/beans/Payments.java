@@ -2,12 +2,15 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class UserPayments {
+public class Payments {
     private int paytmensId;
     private int dealId;
     private double ammount;
 
-    public UserPayments(int paytmensId, int dealId, double ammount) {
+    public Payments() {
+    }
+
+    public Payments(int paytmensId, int dealId, double ammount) {
         this.paytmensId = paytmensId;
         this.dealId = dealId;
         this.ammount = ammount;
@@ -41,7 +44,7 @@ public class UserPayments {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserPayments that = (UserPayments) o;
+        Payments that = (Payments) o;
         return paytmensId == that.paytmensId &&
                 dealId == that.dealId &&
                 Double.compare(that.ammount, ammount) == 0;
@@ -54,7 +57,7 @@ public class UserPayments {
 
     @Override
     public String toString() {
-        return "UserPayments{" +
+        return "Payments{" +
                 "paytmensId=" + paytmensId +
                 ", dealId=" + dealId +
                 ", ammount=" + ammount +

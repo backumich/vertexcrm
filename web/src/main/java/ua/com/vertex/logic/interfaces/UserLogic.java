@@ -1,6 +1,7 @@
 package ua.com.vertex.logic.interfaces;
 
 
+import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserMainData;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface UserLogic {
 
     List<UserMainData> getListUsers();
 
-    List<UserMainData> getUserDetails();
+    User getUserDetails(int userID);
 }

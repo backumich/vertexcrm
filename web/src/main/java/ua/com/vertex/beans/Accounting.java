@@ -2,14 +2,17 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class UserAccounting {
+public class Accounting {
     private int dealId;
     private int userId;
     private int certificateId;
     private double courseCoast;
     private double debt;
 
-    public UserAccounting(int dealId, int userId, int certificateId, double courseCoast, double debt) {
+    public Accounting() {
+    }
+
+    public Accounting(int dealId, int userId, int certificateId, double courseCoast, double debt) {
         this.dealId = dealId;
         this.userId = userId;
         this.certificateId = certificateId;
@@ -61,7 +64,7 @@ public class UserAccounting {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserAccounting that = (UserAccounting) o;
+        Accounting that = (Accounting) o;
         return dealId == that.dealId &&
                 userId == that.userId &&
                 certificateId == that.certificateId &&
@@ -76,7 +79,7 @@ public class UserAccounting {
 
     @Override
     public String toString() {
-        return "UserAccounting{" +
+        return "Accounting{" +
                 "dealId=" + dealId +
                 ", userId=" + userId +
                 ", certificateId=" + certificateId +

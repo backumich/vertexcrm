@@ -109,13 +109,8 @@
     <div class="container pt1_5">
 
         <div align="center">
-            <form:form action="registration" method="post" commandName="userFormRegistration">
-                <table border="0">
-                    <tr>
-                        <td colspan="2" align="center"><h2>Registration new user</h2></td>
-                    </tr>
-                </table>
-            </form:form>
+            ${user}
+            ${user.getCertificate().get(0)}
         </div>
 
 

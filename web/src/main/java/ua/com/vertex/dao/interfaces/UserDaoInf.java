@@ -16,4 +16,7 @@ public interface UserDaoInf {
     List<Integer> getAllUserIds();
 
     List<UserMainData> getListUsers();
+
+    User getUserDetails(int UserID);
+
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 @Controller
@@ -27,8 +28,10 @@ public class UserDetailsController {
 
     @GetMapping
     public ModelAndView getUserDetailsByID(@RequestParam("userID") int userID) {
-        int userIDq = userID;
+        User user = userLogic.getUserDetails(userID);
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("userDetailsByID");
+        modelAndView.addObject("user", user);
         return modelAndView;
 
     }

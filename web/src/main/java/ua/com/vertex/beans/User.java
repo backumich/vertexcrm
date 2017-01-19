@@ -1,6 +1,7 @@
 package ua.com.vertex.beans;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -13,6 +14,11 @@ public class User {
     private byte[] photo;
     private int discount;
     private String phone;
+
+    private List<Role> role;
+    private List<Certificate> certificate;
+    private List<Accounting> accounting;
+    private List<Payments> payments;
 
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
@@ -76,6 +82,26 @@ public class User {
 
         public Builder setPhone(String phone) {
             user.setPhone(phone);
+            return this;
+        }
+
+        public Builder setRole(List<Role> role) {
+            user.setRole(role);
+            return this;
+        }
+
+        public Builder setCertificate(List<Certificate> certificate) {
+            user.setCertificate(certificate);
+            return this;
+        }
+
+        public Builder setAccounting(List<Accounting> accounting) {
+            user.setAccounting(accounting);
+            return this;
+        }
+
+        public Builder setPayments(List<Payments> payments) {
+            user.setPayments(payments);
             return this;
         }
 
@@ -190,5 +216,37 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Role> getRole() {
+        return role;
+    }
+
+    public void setRole(List<Role> role) {
+        this.role = role;
+    }
+
+    public List<Certificate> getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(List<Certificate> certificate) {
+        this.certificate = certificate;
+    }
+
+    public List<Accounting> getAccounting() {
+        return accounting;
+    }
+
+    public void setAccounting(List<Accounting> accounting) {
+        this.accounting = accounting;
+    }
+
+    public List<Payments> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payments> payments) {
+        this.payments = payments;
     }
 }
