@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class IndexPageControllerTest {
+
+    // todo : inspect and add/remove tests according to implemented code refactoring
+
     @Mock
     private Storage storage;
 

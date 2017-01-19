@@ -78,7 +78,7 @@
 
     .table {
         width: auto;
-        font-size: 115%;
+        font-size: 140%;
         border-spacing: 10px;
     }
 
@@ -152,17 +152,17 @@
         <span class="formHeaderText1">Enter certificate ID:</span><br><br>
 
         <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
-            <c:if test="${empty error}"><input type="number" name="certificationId"/></c:if>
-            <c:if test="${!empty error}"><input type="number" name="certificationId" class="errorField"></c:if>
+            <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
+            <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
             <input type="submit" value="Send">
         </sf:form>
         <br><br>
 
-        <c:if test="${!empty error}">
+        <c:if test="${error != null}">
             <h3><span class="errorText140">${error}</span></h3>
         </c:if>
 
-        <c:if test="${empty error && !empty certificate}">
+        <c:if test="${error == null && certificate != null}">
             <table class="table">
                 <tr>
                     <td>Certification ID:</td>
@@ -171,14 +171,14 @@
                 <tr>
                     <td>Certificate Holder First Name:</td>
                     <td><span class="errorText100">
-                            <c:if test="${empty user.firstName}">No holder assigned</c:if></span>
-                        <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
+                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
+                        <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
                 </tr>
                 <tr>
                     <td>Certificate Holder Last Name:</td>
                     <td><span class="errorText100">
-                            <c:if test="${empty user.lastName}">No holder assigned</c:if></span>
-                        <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
+                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
+                        <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
                 </tr>
                 <tr>
                     <td>Certification Date:</td>
@@ -197,8 +197,8 @@
         </c:if>
 
 
-        <c:if test="${!empty user.photo}">
-            <sf:form method="get" action="/certificateHolderPhoto">
+        <c:if test="${user.photo != null}">
+            <sf:form method="get" action="/userPhoto">
                 <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
             </sf:form>
         </c:if>

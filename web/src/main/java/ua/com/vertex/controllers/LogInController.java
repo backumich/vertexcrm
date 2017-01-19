@@ -7,16 +7,22 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.com.vertex.beans.User;
+import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.Role;
 import ua.com.vertex.utils.Storage;
 
 import java.util.Collection;
 
+import static ua.com.vertex.beans.User.EMPTY_USER;
+
 @Controller
 public class LogInController {
 
     private final Storage storage;
+    private final UserLogic userLogic;
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
@@ -32,12 +38,13 @@ public class LogInController {
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @RequestMapping(value = "/logIn")
-    public String showLogInPage() {
+    public String showLogInPage(Model model) {
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (!ANONYMOUS_USER.equals(principal)) {
                 view = redirectView(view);
+                setUser(storage.getEmail(), model);
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
@@ -48,12 +55,14 @@ public class LogInController {
     }
 
     @RequestMapping(value = "/loggedIn")
-    public String showLoggedIn() {
+    public String showLoggedIn(Model model) {
         String view = ERROR;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            storage.setEmail(((UserDetails) principal).getUsername());
+            String email = ((UserDetails) principal).getUsername();
+            storage.setEmail(email);
             view = redirectView(view);
+            setUser(email, model);
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;
@@ -85,8 +94,17 @@ public class LogInController {
         return view;
     }
 
+    private void setUser(String email, Model model) {
+        User user = userLogic.getUserByEmail(email).orElse(EMPTY_USER);
+        if (!EMPTY_USER.equals(user)) {
+            userLogic.imagesCheck(user);
+            model.addAttribute("user", user);
+        }
+    }
+
     @Autowired
-    public LogInController(Storage storage) {
+    public LogInController(Storage storage, UserLogic userLogic) {
         this.storage = storage;
+        this.userLogic = userLogic;
     }
 }

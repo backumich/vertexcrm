@@ -112,11 +112,18 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="center">
 
-        <img src="data:image/jpeg;base64,${image}" alt="image">
+        <c:if test="${photo != null}">
+            <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="photo">
+        </c:if>
+
+        <c:if test="${passportScan != null}">
+            <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="passport">
+        </c:if>
+
         <br><br>
 
         <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/logIn"/>">Back</a> |
             <a href="<c:url value="/" />">Home</a>
         </div>
 

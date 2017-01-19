@@ -3,6 +3,7 @@ package ua.com.vertex.logic;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -12,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.utils.Storage;
 
 import static org.junit.Assert.assertEquals;
 import static ua.com.vertex.beans.User.EMPTY_USER;
@@ -24,8 +26,13 @@ import static ua.com.vertex.utils.Role.USER;
 @ActiveProfiles("test")
 public class UserLogicImplTest {
 
+    // todo : inspect and add/remove tests according to implemented code refactoring
+
     @Autowired
     private UserDaoImpl dao;
+
+    @Mock
+    private Storage storage;
 
     private UserLogicImpl logic;
 
@@ -36,7 +43,7 @@ public class UserLogicImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        logic = new UserLogicImpl(dao);
+        logic = new UserLogicImpl(dao, storage);
     }
 
     @Test

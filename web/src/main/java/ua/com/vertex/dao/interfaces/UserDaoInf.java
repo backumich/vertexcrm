@@ -10,6 +10,8 @@ public interface UserDaoInf {
 
     Optional<User> getUser(int id);
 
+    Optional<User> getUserByEmail(String email);
+
     Optional<User> logIn(String username);
 
     void deleteUser(int id);

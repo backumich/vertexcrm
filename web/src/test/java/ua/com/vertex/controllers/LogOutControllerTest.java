@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 public class LogOutControllerTest {
 
+    // todo : inspect and add/remove tests according to implemented code refactoring
+
     @Mock
     private Storage storage;
 

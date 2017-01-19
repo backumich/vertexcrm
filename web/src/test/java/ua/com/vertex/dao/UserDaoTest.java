@@ -22,6 +22,8 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class UserDaoTest {
 
+    // todo : inspect and add/remove tests according to implemented code refactoring
+
     @Autowired
     private UserDaoInf userDao;
 

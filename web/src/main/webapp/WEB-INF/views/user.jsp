@@ -52,6 +52,16 @@
         font-size: 120%;
     }
 
+    .buttonText {
+        color: black;
+    }
+
+    .table {
+        width: auto;
+        font-size: 140%;
+        border-spacing: 10px;
+    }
+
     .up-padding {
         padding-top: 100px;
     }
@@ -117,7 +127,50 @@
 <div class="page gray-page mh100">
     <div align="center" class="up-padding">
 
-        <span class="text">Logged as user. The page is under construction...</span><br><br><br>
+        <span class="text">User Profile</span><br><br><br>
+
+        <table class="table">
+            <tr>
+                <td>User ID:</td>
+                <td>${user.userId}</td>
+            </tr>
+            <tr>
+                <td>First Name:</td>
+                <td>${user.firstName}</td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td>${user.lastName}</td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td>${user.email}</td>
+            </tr>
+            <tr>
+                <td>Discount:</td>
+                <td>${user.discount}</td>
+            </tr>
+            <tr>
+                <td>Photo:</td>
+                <td>
+                    <c:if test="${user.photo != null}">
+                        <sf:form method="get" action="/userPhoto">
+                            <input class="buttonText" type="submit" value="Show User Photo">
+                        </sf:form>
+                    </c:if>
+                </td>
+            </tr>
+            <tr>
+                <td>Passport scan:</td>
+                <td>
+                    <c:if test="${user.passportScan != null}">
+                        <sf:form method="get" action="/passportScan">
+                            <input class="buttonText" type="submit" value="Show User Passport Scan">
+                        </sf:form>
+                    </c:if>
+                </td>
+            </tr>
+        </table>
 
         <div class="hrefText">
             <a href="javascript:history.back();">Back</a> |

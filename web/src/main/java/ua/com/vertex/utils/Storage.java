@@ -9,6 +9,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Storage {
     private byte[] photo;
+    private byte[] passportScan;
     private String sessionId;
     private String email;
 
@@ -28,6 +29,14 @@ public class Storage {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    public byte[] getPassportScan() {
+        return passportScan;
+    }
+
+    public void setPassportScan(byte[] passportScan) {
+        this.passportScan = passportScan;
     }
 
     public String getEmail() {

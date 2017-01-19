@@ -111,7 +111,7 @@ public class AnonymousUserAccessRightsTest {
     @Test
     @WithAnonymousUser
     public void testCertificateHolderPhoto() throws Exception {
-        mockMvc.perform(get("/certificateHolderPhoto"))
+        mockMvc.perform(get("/userPhoto"))
                 .andExpect(redirectedUrl(null));
     }
 }
