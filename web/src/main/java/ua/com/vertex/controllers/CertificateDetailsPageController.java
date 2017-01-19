@@ -15,13 +15,12 @@ import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.Storage;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
+import static ua.com.vertex.beans.User.EMPTY_USER;
 
 @Controller
 public class CertificateDetailsPageController {
+
     private final CertDetailsPageLogic certLogic;
     private final UserLogic userLogic;
     private final Storage storage;
@@ -35,12 +34,10 @@ public class CertificateDetailsPageController {
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String ERROR = "error";
 
-    @RequestMapping(value = "/" + CERTIFICATE_DETAILS)
-    public String showCertificateDetailsPage(Model model, HttpServletRequest request) {
+    @RequestMapping(value = "/certificateDetails")
+    public String showCertificateDetailsPage(Model model) {
         String returnPage = CERTIFICATE_DETAILS;
         try {
-            HttpSession session = request.getSession();
-            storage.setSessionId(session.getId());
             model.addAttribute("newCertificate", new Certificate());
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
@@ -77,7 +74,7 @@ public class CertificateDetailsPageController {
         certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
         if (!EMPTY_CERTIFICATE.equals(certificate)) {
             model.addAttribute("certificate", certificate);
-            User user = userLogic.getUser(certificate.getUserId());
+            User user = userLogic.getUser(certificate.getUserId()).orElse(EMPTY_USER);
             model.addAttribute("user", user);
         } else {
             model.addAttribute("error", "No certificate with this ID!");

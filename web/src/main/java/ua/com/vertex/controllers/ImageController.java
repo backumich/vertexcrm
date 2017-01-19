@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.utils.Storage;
 
 @Controller
@@ -23,12 +24,13 @@ public class ImageController {
     private static final String ERROR = "error";
 
     @RequestMapping(value = "/userPhoto")
-    public String showUserPhoto(Model model) {
+    public String showUserPhoto(@RequestParam("previousPage") String previousPage, Model model) {
         String returnPage = IMAGE;
         try {
             byte[] userPhoto = storage.getPhoto();
             String encodedImage = Base64.encode(userPhoto);
             model.addAttribute("photo", encodedImage);
+            model.addAttribute("page", previousPage);
 
             LOGGER.debug(storage.getId() + LOG_PHOTO);
 

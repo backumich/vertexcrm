@@ -25,14 +25,14 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public User getUser(int id) {
+    public Optional<User> getUser(int id) {
         User user = userDao.getUser(id).orElse(EMPTY_USER);
 
         if (!EMPTY_USER.equals(user)) {
             user = imagesCheck(user);
         }
 
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public User logIn(String email) {
+    public Optional<User> logIn(String email) {
         User user;
         if (email.isEmpty()) {
             user = EMPTY_USER;
@@ -58,7 +58,7 @@ public class UserLogicImpl implements UserLogic {
             user = userDao.logIn(email).orElse(EMPTY_USER);
         }
 
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override

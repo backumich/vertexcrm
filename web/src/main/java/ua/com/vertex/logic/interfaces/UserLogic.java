@@ -10,9 +10,9 @@ public interface UserLogic {
 
     List<String> getAllUserIds();
 
-    User getUser(int id);
+    Optional<User> getUser(int id);
 
-    User logIn(String email);
+    Optional<User> logIn(String email);
 
     User imagesCheck(User user);
 

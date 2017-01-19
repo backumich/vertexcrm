@@ -155,6 +155,7 @@
                 <td>
                     <c:if test="${user.photo != null}">
                         <sf:form method="get" action="/userPhoto">
+                            <input type="hidden" name="previousPage" value="/logIn"/>
                             <input class="buttonText" type="submit" value="Show User Photo">
                         </sf:form>
                     </c:if>

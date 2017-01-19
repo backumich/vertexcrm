@@ -123,8 +123,8 @@
         <br><br>
 
         <div class="hrefText">
-            <a href="<c:url value="/logIn"/>">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+            <a href="<c:url value="${page}"/>">Back</a> |
+            <a href="<c:url value="/"/>">Home</a>
         </div>
 
     </div>

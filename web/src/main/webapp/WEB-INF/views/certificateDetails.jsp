@@ -199,6 +199,7 @@
 
         <c:if test="${user.photo != null}">
             <sf:form method="get" action="/userPhoto">
+                <input type="hidden" name="previousPage" value="/certificateDetails"/>
                 <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
             </sf:form>
         </c:if>
