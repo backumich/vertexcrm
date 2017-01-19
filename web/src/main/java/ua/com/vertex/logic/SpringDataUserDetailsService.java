@@ -28,7 +28,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         } else {
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+            authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                     authorities);

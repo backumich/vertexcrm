@@ -43,9 +43,9 @@
         margin-left: 0 !important;
     }
 
-    .errorText {
+    .text {
         font-size: 200%;
-        color: red;
+        color: #9d9d9d;
     }
 
     .hrefText {
@@ -117,7 +117,7 @@
 <div class="page gray-page mh100">
     <div align="center" class="up-padding">
 
-        <span class="errorText">Logged as user. The page is under construction...</span><br><br>
+        <span class="text">Logged as user. The page is under construction...</span><br><br><br>
 
         <div class="hrefText">
             <a href="javascript:history.back();">Back</a> |
