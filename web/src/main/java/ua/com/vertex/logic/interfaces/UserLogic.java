@@ -12,5 +12,5 @@ public interface UserLogic {
 
     List<UserMainData> getListUsers();
 
-    User getUserDetails(int userID);
+    User getUserDetailsByID(int userID);
 }

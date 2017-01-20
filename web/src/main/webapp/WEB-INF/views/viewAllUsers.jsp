@@ -136,7 +136,7 @@
                         <td>${users.phone} </td>
                         <td>
                             <c:set var="titleURL">
-                                <c:url value="userDetailsByID">
+                                <c:url value="userDetails">
                                     <c:param name="userID" value="${users.userID}"/>
                                 </c:url>
                             </c:set>

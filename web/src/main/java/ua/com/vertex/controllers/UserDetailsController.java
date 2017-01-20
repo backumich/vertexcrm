@@ -13,7 +13,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 @Controller
-@RequestMapping(value = "/userDetailsByID")
+@RequestMapping(value = "/userDetails")
 @SessionAttributes("users")
 public class UserDetailsController {
 
@@ -28,9 +28,9 @@ public class UserDetailsController {
 
     @GetMapping
     public ModelAndView getUserDetailsByID(@RequestParam("userID") int userID) {
-        User user = userLogic.getUserDetails(userID);
+        User user = userLogic.getUserDetailsByID(userID);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("userDetailsByID");
+        modelAndView.setViewName("userDetails");
         modelAndView.addObject("user", user);
         return modelAndView;
 

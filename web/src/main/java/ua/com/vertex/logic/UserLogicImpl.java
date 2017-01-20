@@ -28,9 +28,9 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public User getUserDetails(int userID) {
-        //userDao.getUserDetails(userID);
-        return userDao.getUserDetails(userID);
+    public User getUserDetailsByID(int userID) {
+        //userDao.getUserDetailsByID(userID);
+        return userDao.getUserDetailsByID(userID);
     }
 
 

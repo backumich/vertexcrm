@@ -1,7 +1,5 @@
 package ua.com.vertex.beans;
 
-import java.util.Objects;
-
 public class Accounting {
     private int dealId;
     private int userId;
@@ -64,17 +62,28 @@ public class Accounting {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Accounting that = (Accounting) o;
-        return dealId == that.dealId &&
-                userId == that.userId &&
-                certificateId == that.certificateId &&
-                Double.compare(that.courseCoast, courseCoast) == 0 &&
-                Double.compare(that.debt, debt) == 0;
+
+        if (dealId != that.dealId) return false;
+        if (userId != that.userId) return false;
+        if (certificateId != that.certificateId) return false;
+        if (Double.compare(that.courseCoast, courseCoast) != 0) return false;
+        return Double.compare(that.debt, debt) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dealId, userId, certificateId, courseCoast, debt);
+        int result;
+        long temp;
+        result = dealId;
+        result = 31 * result + userId;
+        result = 31 * result + certificateId;
+        temp = Double.doubleToLongBits(courseCoast);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(debt);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
     @Override

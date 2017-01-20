@@ -17,6 +17,6 @@ public interface UserDaoInf {
 
     List<UserMainData> getListUsers();
 
-    User getUserDetails(int UserID);
+    User getUserDetailsByID(int UserID);
 
 }

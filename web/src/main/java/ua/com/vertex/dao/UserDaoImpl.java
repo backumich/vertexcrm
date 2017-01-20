@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,12 +86,14 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public User getUserDetails(int userID) {
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone," +
+    public User getUserDetailsByID(int userID) {
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone, " +
+                "r.role_id, r.name," +
                 "   c.certification_id, c.certification_date, c.course_name, c.language," +
                 "   a.deal_id, a.course_coast, a.debt, " +
                 "   p.payment_id, p.amount" +
-                "       FROM Users u" +
+                "       FROM Users u " +
+                "        LEFT JOIN Roles r ON u.role_id = r.role_id" +
                 "        LEFT JOIN Certificate c ON u.user_id = c.user_id" +
                 "        LEFT JOIN Accounting a ON u.user_id = a.user_id" +
                 "        LEFT JOIN Payments p ON a.deal_id = p.deal_id" +
@@ -103,24 +106,11 @@ public class UserDaoImpl implements UserDaoInf {
         @Override
         public User extractData(ResultSet rs) throws SQLException, DataAccessException {
             User user = null;
-//            User user = new User.Builder().
-//                    setUserId(rs.getInt("user_id")).
-//                    setEmail(rs.getString("email")).
-//                    setFirstName(rs.getString("first_name")).
-//                    setLastName(rs.getString("last_name")).
-//                    setPassportScan(rs.getBytes("passport_scan")).
-//                    setPhoto(rs.getBytes("photo")).
-//                    setDiscount(rs.getInt("discount")).
-//                    setPhone(rs.getString("phone")).
-//                    getInstance();
 
-            Certificate certificate = new Certificate();
-            Accounting accounting = new Accounting();
-            Payments payments = new Payments();
-
-            ArrayList<Certificate> listCertificate = new ArrayList<>();
-            ArrayList<Accounting> listAccounting = new ArrayList<>();
-            ArrayList<Payments> listPayments = new ArrayList<>();
+            HashSet<Role> hashSetRole = new HashSet<>();
+            HashSet<Certificate> hashSetCertificate = new HashSet<>();
+            HashSet<Accounting> hashSetAccounting = new HashSet<>();
+            HashSet<Payments> hashSetPayments = new HashSet<>();
 
             while (rs.next()) {
                 if (user == null) {
@@ -135,17 +125,46 @@ public class UserDaoImpl implements UserDaoInf {
                     user.setPhone(rs.getString("phone"));
                 }
 
+                int role_id = rs.getInt("role_id");
+                if (!rs.wasNull() && role_id > 0) {
+                    Role role = new Role();
+                    role.setRoleId(role_id);
+                    role.setName(rs.getString("name"));
+                    hashSetRole.add(role);
+                }
+
                 int certification_id = rs.getInt("certification_id");
-                if (!rs.wasNull() && rs.getInt("certification_id") > 0) {
+                if (!rs.wasNull() && certification_id > 0) {
+                    Certificate certificate = new Certificate();
                     certificate.setCertificationId(certification_id);
                     certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
                     certificate.setCourseName(rs.getString("course_name"));
                     certificate.setLanguage(rs.getString("language"));
-                    listCertificate.add(certificate);
+                    hashSetCertificate.add(certificate);
+                }
+
+                int deal_id = rs.getInt("deal_id");
+                if (!rs.wasNull() && deal_id > 0) {
+                    Accounting accounting = new Accounting();
+                    accounting.setDealId(deal_id);
+                    accounting.setCourseCoast(rs.getDouble("course_coast"));
+                    accounting.setDebt(rs.getDouble("debt"));
+                    hashSetAccounting.add(accounting);
+                }
+
+                int payment_id = rs.getInt("payment_id");
+                if (!rs.wasNull() && payment_id > 0) {
+                    Payments payments = new Payments();
+                    payments.setPaytmensId(payment_id);
+                    payments.setAmmount(rs.getDouble("amount"));
+                    hashSetPayments.add(payments);
                 }
             }
 
-            user.setCertificate(listCertificate);
+            user.setRole(new ArrayList<>(hashSetRole));
+            user.setCertificate(new ArrayList<>(hashSetCertificate));
+            user.setAccounting(new ArrayList<>(hashSetAccounting));
+            user.setPayments(new ArrayList<>(hashSetPayments));
 
             return user;
 
@@ -154,7 +173,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<UserMainData> getListUsers() throws DataAccessException {
-        LOGGER.info("Adding a new user into database");
+        LOGGER.debug("Select list all user");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, new UserDaoImpl.ViewAllUserRowMapping());
