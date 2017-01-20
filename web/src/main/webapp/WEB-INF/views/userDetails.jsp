@@ -109,7 +109,7 @@
     <div class="container pt1_5">
 
         <div align="center">
-            ${user}
+            <%--${user}--%>
             <%--${!empty user.getRole().get(0)}--%>
             <%--${!empty user.getCertificate().get(0)}--%>
             <%--${!empty user.getAccounting().get(0)}--%>
@@ -157,28 +157,38 @@
                     <td>Phone</td>
                     <td><input type="text" size="40" value="${user.phone}" disabled></td>
                 </tr>
-
-                <%--<c:forEach var="user" items="${user}">--%>
-                <%--<tr>--%>
-                <%--<td>${user.userId} </td>--%>
-                <%--<td>${user.email} </td>--%>
-                <%--<td>${user.lastName} </td>--%>
-                <%--<td>${user.firstName} </td>--%>
-                <%--<td>${user.phone} </td>--%>
-                <%--<td>--%>
-                <%--<c:set var="titleURL">--%>
-                <%--<c:url value="userDetails">--%>
-                <%--<c:param name="userId" value="${user.userId}"/>--%>
-                <%--</c:url>--%>
-                <%--</c:set>--%>
-                <%--<a href="${titleURL}">Detail</a>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-                <%--</c:forEach>--%>
-
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <p>User role</p>
+            <table bordercolor="red" border="2">
+                <c:if test="${!empty user.role}">
+                    <c:forEach var="userRole" items="${user.role}">
+                        <tr>
+                            <td>${userRole.name} </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
             </table>
 
-
+            <p>User certification </p>
+            <c:if test="${!empty user.certificate}">
+                <table bordercolor="red" border="2">
+                    <tr>
+                        <th width="150px">Certification date</th>
+                        <th width="150px">Course name</th>
+                        <th width="150px">Language</th>
+                    </tr>
+                    <c:forEach var="userCertificate" items="${user.certificate}">
+                        <tr>
+                            <td>${userCertificate.certificationDate} </td>
+                            <td>${userCertificate.courseName} </td>
+                            <td>${userCertificate.language} </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </c:if>
         </div>
     </div>
 </div>
