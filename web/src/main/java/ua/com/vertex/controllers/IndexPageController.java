@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.com.vertex.utils.DeleteTempFiles;
 import ua.com.vertex.utils.Storage;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,8 @@ public class IndexPageController {
     private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
 
     private static final String LOG_SESSION_START = "Session start";
-    private static final String LOG_ENTRY = " page entered";
+    private static final String LOG_ENTRY = " page accessed";
+    private static final String LOG_CLEAN = "Cleaning temporary file directory";
 
     private static final String ERROR = "error";
     private static final String INDEX = "index";
@@ -33,6 +35,8 @@ public class IndexPageController {
 
             } else if (storage.getSessionId() != null) {
                 LOGGER.debug(storage.getId() + INDEX + LOG_ENTRY);
+                LOGGER.debug(storage.getId() + LOG_CLEAN);
+                DeleteTempFiles.cleanTempDir();
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);

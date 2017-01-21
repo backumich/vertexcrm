@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -44,42 +43,13 @@
         margin-left: 0 !important;
     }
 
-    .errorText140 {
-        font-size: 140%;
-        color: red;
-    }
-
-    .errorText100 {
-        font-size: 100%;
+    .errorText {
+        font-size: 200%;
         color: red;
     }
 
     .hrefText {
         font-size: 120%;
-    }
-
-    .formHeaderText1 {
-        font-size: 125%;
-        font-weight: bold;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .table {
-        width: auto;
-        font-size: 140%;
-        border-spacing: 5px;
     }
 
     .up-padding {
@@ -145,70 +115,14 @@
 
 
 <div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+    <div align="center" class="up-padding">
 
-        <span class="pageHeader">Certificate Details</span><br><br><br>
-
-        <span class="formHeaderText1">Enter certificate ID:</span><br><br>
-
-        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
-            <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-            <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-            <input type="submit" value="Send">
-        </sf:form>
-        <br><br>
-
-        <c:if test="${error != null}">
-            <h3><span class="errorText140">${error}</span></h3>
-        </c:if>
-
-        <c:if test="${error == null && certificate != null}">
-            <table class="table">
-                <tr>
-                    <td>Certification ID:</td>
-                    <td>${String.format("%05d", certificate.certificationId)}</td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder First Name:</td>
-                    <td><span class="errorText100">
-                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                        <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder Last Name:</td>
-                    <td><span class="errorText100">
-                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                        <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certification Date:</td>
-                    <td>${certificate.certificationDate}</td>
-                </tr>
-                <tr>
-                    <td>Course Name:</td>
-                    <td>${certificate.courseName}</td>
-                </tr>
-                <tr>
-                    <td>Programming Language:</td>
-                    <td>${certificate.language}</td>
-                </tr>
-            </table>
-            <br>
-        </c:if>
+        <span class="errorText">You did not select any image</span><br><br>
 
 
-        <c:if test="${user.photo != null}">
-            <sf:form method="get" action="/userPhoto">
-                <input type="hidden" name="previousPage" value="/certificateDetails"/>
-                <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
-            </sf:form>
-        </c:if>
-        <br>
+        <a href="<c:url value="/logIn"/>">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
 
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
     </div>
 </div>
 

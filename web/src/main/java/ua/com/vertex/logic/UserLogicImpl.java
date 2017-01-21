@@ -37,7 +37,13 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        return userDao.getUserByEmail(email);
+        User user = userDao.getUserByEmail(email).orElse(EMPTY_USER);
+
+        if (!EMPTY_USER.equals(user)) {
+            user = imagesCheck(user);
+        }
+
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -64,6 +70,15 @@ public class UserLogicImpl implements UserLogic {
         }
 
         return user;
+    }
+
+    @Override
+    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
+        User user = userDao.saveImage(userId, image, imageType).orElse(EMPTY_USER);
+
+        if (!EMPTY_USER.equals(user)) {
+            imagesCheck(user);
+        }
     }
 
     @Autowired

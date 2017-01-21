@@ -17,4 +17,6 @@ public interface UserDaoInf {
     void deleteUser(int id);
 
     List<Integer> getAllUserIds();
+
+    Optional<User> saveImage(int userId, byte[] image, String imageType) throws Exception;
 }

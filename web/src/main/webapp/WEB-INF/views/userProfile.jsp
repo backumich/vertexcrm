@@ -58,8 +58,8 @@
 
     .table {
         width: auto;
-        font-size: 140%;
-        border-spacing: 10px;
+        font-size: 120%;
+        border-spacing: 5px;
     }
 
     .up-padding {
@@ -152,23 +152,54 @@
             </tr>
             <tr>
                 <td>Photo:</td>
-                <td>
-                    <c:if test="${user.photo != null}">
+                <c:if test="${user.photo != null}">
+                    <td>
                         <sf:form method="get" action="/userPhoto">
                             <input type="hidden" name="previousPage" value="/logIn"/>
-                            <input class="buttonText" type="submit" value="Show User Photo">
-                        </sf:form>
-                    </c:if>
+                            <input class="buttonText" type="submit" value="Show Photo">
+                        </sf:form><br>
+                    </td>
+                </c:if>
+                <c:if test="${user.photo == null}">
+                    <td>no photo</td>
+                </c:if>
+                <td>
+                    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                        <input type="hidden" name="userId" value="${user.userId}"/>
+                        <input type="hidden" name="firstName" value="${user.firstName}"/>
+                        <input type="hidden" name="lastName" value="${user.lastName}"/>
+                        <input type="hidden" name="email" value="${user.email}"/>
+                        <input type="hidden" name="discount" value="${user.discount}"/>
+                        <input type="hidden" name="imageType" value="photo"/>
+                        <input type="file" name="image" accept="image/jpeg, image/png"/>
+                        <input class="buttonText" type="submit" value="Upload New Photo">
+                    </sf:form>
                 </td>
             </tr>
             <tr>
                 <td>Passport scan:</td>
-                <td>
-                    <c:if test="${user.passportScan != null}">
+                <c:if test="${user.passportScan != null}">
+                    <td>
                         <sf:form method="get" action="/passportScan">
-                            <input class="buttonText" type="submit" value="Show User Passport Scan">
-                        </sf:form>
-                    </c:if>
+                            <input type="hidden" name="previousPage" value="/logIn"/>
+                            <input class="buttonText" type="submit" value="Show Passport Scan">
+                        </sf:form><br>
+                    </td>
+                </c:if>
+                <c:if test="${user.passportScan == null}">
+                    <td>no passport scan</td>
+                </c:if>
+                <td>
+                    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                        <input type="hidden" name="userId" value="${user.userId}"/>
+                        <input type="hidden" name="firstName" value="${user.firstName}"/>
+                        <input type="hidden" name="lastName" value="${user.lastName}"/>
+                        <input type="hidden" name="email" value="${user.email}"/>
+                        <input type="hidden" name="discount" value="${user.discount}"/>
+                        <input type="hidden" name="imageType" value="passport_scan"/>
+                        <input type="file" name="image" accept="image/jpeg, image/png"/>
+                        <input class="buttonText" type="submit" value="Upload New Passport Scan">
+                    </sf:form>
                 </td>
             </tr>
         </table>

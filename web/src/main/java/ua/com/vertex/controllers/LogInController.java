@@ -33,12 +33,13 @@ public class LogInController {
     private static final String USER = Role.USER.name();
     private static final String LOGIN = "logIn";
     private static final String ADMIN_PAGE = "admin";
-    private static final String USER_PAGE = "user";
+    private static final String USER_PAGE = "userProfile";
     private static final String ERROR = "error";
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {
+
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -70,6 +71,18 @@ public class LogInController {
         return view;
     }
 
+    private String setUser(String email, Model model) throws Exception {
+        String view = redirectView();
+        User user = userLogic.getUserByEmail(email).orElse(EMPTY_USER);
+
+        if (USER_PAGE.equals(view) && !EMPTY_USER.equals(user)) {
+            model.addAttribute("user", user);
+        }
+        LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
+
+        return view;
+    }
+
     private String redirectView() throws Exception {
         String view = "";
 
@@ -90,19 +103,6 @@ public class LogInController {
         } else {
             throw new Exception(AUTHORITIES_ERROR);
         }
-
-        return view;
-    }
-
-    private String setUser(String email, Model model) throws Exception {
-        String view = redirectView();
-        User user = userLogic.getUserByEmail(email).orElse(EMPTY_USER);
-
-        if (USER_PAGE.equals(view) && !EMPTY_USER.equals(user)) {
-            userLogic.imagesCheck(user);
-            model.addAttribute("user", user);
-        }
-        LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
 
         return view;
     }

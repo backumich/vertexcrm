@@ -28,8 +28,11 @@ import static ua.com.vertex.utils.Role.USER;
 public class UserDaoImpl implements UserDaoInf {
     private static final String USER_ID = "userId";
     private static final String EMAIL = "email";
+    private static final String PHOTO = "photo";
+    private static final String PASSPORT_SCAN = "passportScan";
 
     private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
+
     private static final String LOG_USER_ID_IN = "Retrieving user id=";
     private static final String LOG_USER_ID_OUT = "Retrieved user id=";
     private static final String LOG_NO_USER_ID = "No user id=";
@@ -45,7 +48,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        String query = "SELECT user_id, email, first_name, last_name, passport_scan, photo, discount, " +
+        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
                 "phone, role_id FROM Users WHERE user_id=:userId";
 
         LOGGER.debug(storage.getId() + LOG_USER_ID_IN + userId);
@@ -64,7 +67,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query = "SELECT user_id, email, first_name, last_name, passport_scan, photo, discount, " +
+        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
         LOGGER.debug(storage.getId() + LOG_USER_EMAIL_IN + email);
@@ -113,12 +116,39 @@ public class UserDaoImpl implements UserDaoInf {
         return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
+    @Override
+    public Optional<User> saveImage(int userId, byte[] image, String imageType) throws Exception {
+        String query;
+        User user = new User();
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue(USER_ID, userId);
+
+        if (PHOTO.equals(imageType)) {
+            query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
+            parameters.addValue(PHOTO, image);
+            jdbcTemplate.update(query, parameters);
+            user.setPhoto(image);
+
+        } else if (PASSPORT_SCAN.equals(imageType)) {
+            query = "UPDATE Users SET passport_scan=:passportScan WHERE user_id=:userId";
+            parameters.addValue(PASSPORT_SCAN, image);
+            jdbcTemplate.update(query, parameters);
+            user.setPassportScan(image);
+        } else {
+            throw new Exception("Wrong image type description");
+        }
+
+        return Optional.of(user);
+    }
+
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             LobHandler handler = new DefaultLobHandler();
             return new User.Builder()
                     .setUserId(resultSet.getInt("user_id"))
                     .setEmail(resultSet.getString("email"))
+                    .setPassword(resultSet.getString("password"))
                     .setFirstName(resultSet.getString("first_name"))
                     .setLastName(resultSet.getString("last_name"))
                     .setPassportScan(handler.getBlobAsBytes(resultSet, "passport_scan"))

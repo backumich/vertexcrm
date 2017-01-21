@@ -16,8 +16,9 @@
     <packaging>war</packaging>
 
     <dependencies>
+
+        <!--Spring-->
         <dependency>
-            <!--Spring-->
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.3.4.RELEASE</version>
@@ -103,6 +104,13 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.7</version>
+        </dependency>
+
+        <!--Apache-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
 
         <!--Database-->
