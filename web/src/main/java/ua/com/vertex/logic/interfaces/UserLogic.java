@@ -13,4 +13,6 @@ public interface UserLogic {
     List<UserMainData> getListUsers();
 
     User getUserDetailsByID(int userID);
+
+    //User getUserDetailsByID(int userID);
 }

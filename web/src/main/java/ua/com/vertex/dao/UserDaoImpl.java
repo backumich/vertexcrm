@@ -12,7 +12,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
-import ua.com.vertex.beans.*;
+import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.Role;
+import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.UserMainData;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
 
@@ -87,17 +90,13 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public User getUserDetailsByID(int userID) {
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone, " +
-                "r.role_id, r.name," +
-                "   c.certification_id, c.certification_date, c.course_name, c.language," +
-                "   a.deal_id, a.course_coast, a.debt, " +
-                "   p.payment_id, p.amount" +
-                "       FROM Users u " +
-                "        LEFT JOIN Roles r ON u.role_id = r.role_id" +
-                "        LEFT JOIN Certificate c ON u.user_id = c.user_id" +
-                "        LEFT JOIN Accounting a ON u.user_id = a.user_id" +
-                "        LEFT JOIN Payments p ON a.deal_id = p.deal_id" +
-                "        WHERE u.user_id = :userID";
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone," +
+                "  r.role_id, r.name," +
+                "  c.certification_id, c.certification_date, c.course_name, c.language" +
+                "  FROM Users u" +
+                "  LEFT JOIN Roles r ON u.role_id = r.role_id" +
+                "  LEFT JOIN Certificate c ON u.user_id = c.user_id" +
+                "  WHERE u.user_id = :userID";
 
         return jdbcTemplate.query(query, new MapSqlParameterSource("userID", userID), new UserDetailsRowMapping());
     }
@@ -108,10 +107,8 @@ public class UserDaoImpl implements UserDaoInf {
             User user = null;
             LobHandler handler = new DefaultLobHandler();
 
-            HashSet<Role> hashSetRole = new HashSet<>();
-            HashSet<Certificate> hashSetCertificate = new HashSet<>();
-            HashSet<Accounting> hashSetAccounting = new HashSet<>();
-            HashSet<Payments> hashSetPayments = new HashSet<>();
+            HashSet<Role> roles = new HashSet<>();
+            HashSet<Certificate> certificates = new HashSet<>();
 
             while (rs.next()) {
                 if (user == null) {
@@ -132,7 +129,7 @@ public class UserDaoImpl implements UserDaoInf {
                     Role role = new Role();
                     role.setRoleId(role_id);
                     role.setName(rs.getString("name"));
-                    hashSetRole.add(role);
+                    roles.add(role);
                 }
 
                 int certification_id = rs.getInt("certification_id");
@@ -142,34 +139,13 @@ public class UserDaoImpl implements UserDaoInf {
                     certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
                     certificate.setCourseName(rs.getString("course_name"));
                     certificate.setLanguage(rs.getString("language"));
-                    hashSetCertificate.add(certificate);
-                }
-
-                int deal_id = rs.getInt("deal_id");
-                if (!rs.wasNull() && deal_id > 0) {
-                    Accounting accounting = new Accounting();
-                    accounting.setDealId(deal_id);
-                    accounting.setCourseCoast(rs.getDouble("course_coast"));
-                    accounting.setDebt(rs.getDouble("debt"));
-                    hashSetAccounting.add(accounting);
-                }
-
-                int payment_id = rs.getInt("payment_id");
-                if (!rs.wasNull() && payment_id > 0) {
-                    Payments payments = new Payments();
-                    payments.setPaytmensId(payment_id);
-                    payments.setAmmount(rs.getDouble("amount"));
-                    hashSetPayments.add(payments);
+                    certificates.add(certificate);
                 }
             }
 
-            user.setRole(new ArrayList<>(hashSetRole));
-            user.setCertificate(new ArrayList<>(hashSetCertificate));
-            user.setAccounting(new ArrayList<>(hashSetAccounting));
-            user.setPayments(new ArrayList<>(hashSetPayments));
-
+            user.setRole(new ArrayList<>(roles));
+            user.setCertificate(new ArrayList<>(certificates));
             return user;
-
         }
     }
 
