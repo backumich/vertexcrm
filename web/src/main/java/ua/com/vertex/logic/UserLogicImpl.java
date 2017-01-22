@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.UserDaoImpl;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import static ua.com.vertex.beans.User.EMPTY_USER;
 public class UserLogicImpl implements UserLogic {
 
     private final UserDaoImpl userDao;
-    private final Storage storage;
 
     @Override
     public List<String> getAllUserIds() {
@@ -26,24 +24,14 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public Optional<User> getUserById(int id) {
-        User user = userDao.getUser(id).orElse(EMPTY_USER);
 
-        if (!EMPTY_USER.equals(user)) {
-            user = imagesCheck(user);
-        }
-
-        return Optional.ofNullable(user);
+        return userDao.getUser(id);
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        User user = userDao.getUserByEmail(email).orElse(EMPTY_USER);
 
-        if (!EMPTY_USER.equals(user)) {
-            user = imagesCheck(user);
-        }
-
-        return Optional.ofNullable(user);
+        return userDao.getUserByEmail(email);
     }
 
     @Override
@@ -59,31 +47,17 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public User imagesCheck(User user) {
-        if (user.getPhoto() != null) {
-            storage.setPhoto(user.getPhoto());
-            user.setPhoto(new byte[]{(byte) 1});
-        }
-        if (user.getPassportScan() != null) {
-            storage.setPassportScan(user.getPassportScan());
-            user.setPassportScan(new byte[]{(byte) 1});
-        }
-
-        return user;
+    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
+        userDao.saveImage(userId, image, imageType);
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
-        User user = userDao.saveImage(userId, image, imageType).orElse(EMPTY_USER);
-
-        if (!EMPTY_USER.equals(user)) {
-            imagesCheck(user);
-        }
+    public Optional<byte[]> getImage(int userId, String imageType) {
+        return userDao.getImage(userId, imageType);
     }
 
     @Autowired
-    public UserLogicImpl(UserDaoImpl userDao, Storage storage) {
+    public UserLogicImpl(UserDaoImpl userDao) {
         this.userDao = userDao;
-        this.storage = storage;
     }
 }

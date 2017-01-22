@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
+import ua.com.vertex.utils.DeleteTempFiles;
 import ua.com.vertex.utils.Storage;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,21 +19,28 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 public class IndexPageControllerTest {
 
-    // todo : inspect and add/remove tests according to implemented code refactoring
-
     @Mock
     private Storage storage;
+
+    @Mock
+    private DeleteTempFiles cleaner;
+
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpSession session;
 
     private IndexPageController controller;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new IndexPageController(storage);
+        controller = new IndexPageController(storage, cleaner);
     }
 
     @Test
-    public void showIndexPageShouldReturnCorrectView() throws Exception {
+    public void showIndexPageReturnsView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("index"))
                 .build();
@@ -41,16 +49,22 @@ public class IndexPageControllerTest {
     }
 
     @Test
-    public void sessionIdShouldBeSet() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpSession session = mock(HttpSession.class);
-
+    public void showIndexPageSetsSessionId() {
         when(storage.getSessionId()).thenReturn(null);
-        when(storage.getCount()).thenReturn(3L);
         when(request.getSession()).thenReturn(session);
         when(request.getSession().getId()).thenReturn("testSessionId");
 
         controller.showIndexPage(request);
-        verify(storage).setSessionId("testSessionId");
+        verify(storage, times(1)).setSessionId("testSessionId");
+    }
+
+    @Test
+    public void showIndexPageInvokesTempDirCleaner() {
+        when(storage.getSessionId()).thenReturn(null);
+        when(request.getSession()).thenReturn(session);
+        when(request.getSession().getId()).thenReturn("testSessionId");
+
+        controller.showIndexPage(request);
+        verify(cleaner, times(1)).cleanTempDir();
     }
 }

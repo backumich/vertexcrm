@@ -20,7 +20,6 @@ public class LogOutController {
     private static final String LOG_ENTRY = " page accessed";
     private static final String LOG_OUT_SUCCESS = "Logging out successful";
     private static final String LOG_LOGOUT_REFUSE = "logging out refused";
-    private static final String LOG_SESSION_START = "Session start";
 
     private static final String LOGOUT = "logOut";
     private static final String LOGGED_OUT = "loggedOut";
@@ -52,10 +51,8 @@ public class LogOutController {
 
         String view = LOGGED_OUT;
         try {
-            if (storage.getSessionId() == null && storage.getCount() > 2) {
+            if (storage.getSessionId() == null) {
                 storage.setSessionId(request.getSession().getId());
-
-                LOGGER.info(storage.getId() + LOG_SESSION_START);
             }
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);

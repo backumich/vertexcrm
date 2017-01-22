@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexPageController {
 
     private final Storage storage;
+    private final DeleteTempFiles cleaner;
 
     private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
 
-    private static final String LOG_SESSION_START = "Session start";
     private static final String LOG_ENTRY = " page accessed";
     private static final String LOG_CLEAN = "Cleaning temporary file directory";
 
@@ -28,16 +28,10 @@ public class IndexPageController {
     public String showIndexPage(HttpServletRequest request) {
         String view = INDEX;
         try {
-            if (storage.getSessionId() == null && storage.getCount() > 2) {
-                storage.setSessionId(request.getSession().getId());
-
-                LOGGER.info(storage.getId() + LOG_SESSION_START);
-
-            } else if (storage.getSessionId() != null) {
-                LOGGER.debug(storage.getId() + INDEX + LOG_ENTRY);
-                LOGGER.debug(storage.getId() + LOG_CLEAN);
-                DeleteTempFiles.cleanTempDir();
-            }
+            storage.setSessionId(request.getSession().getId());
+            LOGGER.debug(storage.getId() + INDEX + LOG_ENTRY);
+            LOGGER.debug(storage.getId() + LOG_CLEAN);
+            cleaner.cleanTempDir();
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;
@@ -47,7 +41,8 @@ public class IndexPageController {
     }
 
     @Autowired
-    public IndexPageController(Storage storage) {
+    public IndexPageController(Storage storage, DeleteTempFiles cleaner) {
         this.storage = storage;
+        this.cleaner = cleaner;
     }
 }

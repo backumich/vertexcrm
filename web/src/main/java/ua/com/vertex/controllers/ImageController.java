@@ -26,18 +26,17 @@ public class ImageController {
     private static final String IMAGE = "image";
     private static final String ERROR = "error";
     private static final String IMAGE_ERROR = "imageError";
+    private static final String PHOTO = "photo";
+    private static final String PASSPORT_SCAN = "passportScan";
 
     @RequestMapping(value = "/userPhoto")
-    public String showUserPhoto(@RequestParam("previousPage") String previousPage, Model model) {
+    public String showUserPhoto(@RequestParam("previousPage") String previousPage,
+                                @RequestParam("userId") int userId, Model model) {
+
         String view = IMAGE;
         try {
-            byte[] userPhoto = storage.getPhoto();
-            String encodedImage = Base64.encode(userPhoto);
-            model.addAttribute("photo", encodedImage);
-            model.addAttribute("page", previousPage);
-
+            encode(model, userId, previousPage, PHOTO);
             LOGGER.debug(storage.getId() + LOG_PHOTO);
-
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;
@@ -47,22 +46,25 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/passportScan")
-    public String showPassportScan(@RequestParam("previousPage") String previousPage, Model model) {
+    public String showPassportScan(@RequestParam("previousPage") String previousPage,
+                                   @RequestParam("userId") int userId, Model model) {
+
         String view = IMAGE;
         try {
-            byte[] passportScan = storage.getPassportScan();
-            String encodedImage = Base64.encode(passportScan);
-            model.addAttribute("passportScan", encodedImage);
-            model.addAttribute("page", previousPage);
-
+            encode(model, userId, previousPage, PASSPORT_SCAN);
             LOGGER.debug(storage.getId() + LOG_PASSPORT_SCAN);
-
         } catch (Throwable t) {
             LOGGER.error(storage.getId(), t, t);
             view = ERROR;
         }
 
         return view;
+    }
+
+    private void encode(Model model, int userId, String previousPage, String imageType) {
+        String encoded = Base64.encode(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
+        model.addAttribute(imageType, encoded);
+        model.addAttribute("page", previousPage);
     }
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
@@ -75,8 +77,6 @@ public class ImageController {
                 view = IMAGE_ERROR;
             } else {
                 userLogic.saveImage(user.getUserId(), image, imageType);
-                user.setPhoto(storage.getPhoto());
-                user.setPassportScan(storage.getPassportScan());
                 model.addAttribute(user);
             }
         } catch (Throwable t) {

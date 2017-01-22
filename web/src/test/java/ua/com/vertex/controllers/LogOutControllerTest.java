@@ -29,8 +29,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 public class LogOutControllerTest {
 
-    // todo : inspect and add/remove tests according to implemented code refactoring
-
     @Mock
     private Storage storage;
 
@@ -45,7 +43,7 @@ public class LogOutControllerTest {
 
     @Test
     @WithMockUser
-    public void showLogOutPageForLoggedInUserShouldReturnCorrectView() throws Exception {
+    public void showLogOutPageForLoggedInUserReturnsCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("logOut"))
                 .build();
@@ -54,7 +52,7 @@ public class LogOutControllerTest {
     }
 
     @Test
-    public void showLogOutPageForLoggedOutUserShouldReturnCorrectView() throws Exception {
+    public void showLogOutPageForLoggedOutUserReturnsCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("loggedOut"))
                 .build();
@@ -63,12 +61,11 @@ public class LogOutControllerTest {
     }
 
     @Test
-    public void sessionIdShouldBeSet() {
+    public void processLogOutSetsSessionId() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
 
         when(storage.getSessionId()).thenReturn(null);
-        when(storage.getCount()).thenReturn(3L);
         when(request.getSession()).thenReturn(session);
         when(request.getSession().getId()).thenReturn("testSessionId");
 
@@ -77,7 +74,7 @@ public class LogOutControllerTest {
     }
 
     @Test
-    public void logOutRefuseShouldReturnCorrectView() throws Exception {
+    public void logOutRefuseReturnsCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("logOut"))
                 .build();

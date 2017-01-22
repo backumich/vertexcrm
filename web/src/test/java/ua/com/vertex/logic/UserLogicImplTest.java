@@ -3,7 +3,6 @@ package ua.com.vertex.logic;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,11 +12,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.UserDaoImpl;
-import ua.com.vertex.utils.Storage;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static ua.com.vertex.beans.User.EMPTY_USER;
 import static ua.com.vertex.utils.Role.USER;
 
@@ -31,21 +29,21 @@ public class UserLogicImplTest {
     @Autowired
     private UserDaoImpl dao;
 
-    @Mock
-    private Storage storage;
-
     private UserLogicImpl logic;
 
     private static final String EXISTING_EMAIL = "33@test.com";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
-    private static final int EXISTING_ID = 33;
+    private static final String PHOTO = "photo";
+    private static final String PASSPORT_SCAN = "passportScan";
+    private static final int EXISTING_ID1 = 33;
+    private static final int EXISTING_ID2 = 22;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     private static final String PASSWORD = "password";
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        logic = new UserLogicImpl(dao, storage);
+        logic = new UserLogicImpl(dao);
     }
 
     @Test
@@ -73,16 +71,16 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getUserByIdWithNotExistingIdReturnsEmptyUser() {
+    public void getUserByIdWithNotExistingIdReturnsNullOptional() {
         Optional<User> optional = logic.getUserById(NOT_EXISTING_ID);
-        assertEquals(EMPTY_USER, optional.get());
+        assertEquals(null, optional.orElse(null));
     }
 
     @Test
     public void getUserByIdWithExistingIdReturnsExistingUser() {
-        Optional<User> optional = logic.getUserById(EXISTING_ID);
+        Optional<User> optional = logic.getUserById(EXISTING_ID1);
         User user = new User.Builder()
-                .setUserId(EXISTING_ID)
+                .setUserId(EXISTING_ID1)
                 .setEmail(EXISTING_EMAIL)
                 .setPassword(PASSWORD)
                 .setFirstName("FirstName")
@@ -96,16 +94,16 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getUserByEmailWithNotExistingEmailReturnsEmptyUser() {
+    public void getUserByEmailWithNotExistingEmailReturnsNullOptional() {
         Optional<User> optional = logic.getUserByEmail(NOT_EXISTING_EMAIL);
-        assertEquals(EMPTY_USER, optional.get());
+        assertEquals(null, optional.orElse(null));
     }
 
     @Test
     public void getUserByEmailWithExistingEmailReturnsExistingUser() {
         Optional<User> optional = logic.getUserByEmail(EXISTING_EMAIL);
         User user = new User.Builder()
-                .setUserId(EXISTING_ID)
+                .setUserId(EXISTING_ID1)
                 .setEmail(EXISTING_EMAIL)
                 .setPassword(PASSWORD)
                 .setFirstName("FirstName")
@@ -119,24 +117,26 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void imagesCheckForUserWithNullImagesReturnsUserWithNullImages() {
-        User user = new User();
-        assertEquals(user, logic.imagesCheck(user));
+    public void saveImageShouldNotThrowExceptionsIfPhotoPassed() throws Exception {
+        byte[] image = new byte[]{1, 2, 3};
+        logic.saveImage(EXISTING_ID1, image, PHOTO);
     }
 
     @Test
-    public void imagesCheckForUserWithNotNullImagesReturnsUserWithSpecifiedByteArray() {
-        byte[] dataStart = {1, 2, 3, 4};
-        byte[] dataFinal = {1};
-        User userStart = new User.Builder()
-                .setPhoto(dataStart)
-                .setPassportScan(dataStart)
-                .getInstance();
-        User userFinal = new User.Builder()
-                .setPhoto(dataFinal)
-                .setPassportScan(dataFinal)
-                .getInstance();
+    public void saveImageShouldNotThrowExceptionsIfPassportPassed() throws Exception {
+        byte[] image = new byte[]{1, 2, 3};
+        logic.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
+    }
 
-        assertEquals(userFinal, logic.imagesCheck(userStart));
+    @Test
+    public void getImageShouldReturnImage() throws Exception {
+        Optional<byte[]> optional = logic.getImage(EXISTING_ID2, PHOTO);
+        assertNotNull(optional.get());
+    }
+
+    @Test
+    public void getImageShouldReturnNullImage() throws Exception {
+        Optional<byte[]> optional = logic.getImage(EXISTING_ID1, PHOTO);
+        assertNull(null, optional.orElse(null));
     }
 }

@@ -8,36 +8,8 @@ import org.springframework.web.context.WebApplicationContext;
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Storage {
-    private byte[] photo;
-    private byte[] passportScan;
     private String sessionId;
     private String email;
-
-    private static long count = 0;
-
-    public Storage() {
-        count++;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
-    public byte[] getPassportScan() {
-        return passportScan;
-    }
-
-    public void setPassportScan(byte[] passportScan) {
-        this.passportScan = passportScan;
-    }
 
     public String getEmail() {
         return email;

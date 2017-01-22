@@ -7,8 +7,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.lob.DefaultLobHandler;
-import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -48,7 +46,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
+        String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE user_id=:userId";
 
         LOGGER.debug(storage.getId() + LOG_USER_ID_IN + userId);
@@ -67,7 +65,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
+        String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
         LOGGER.debug(storage.getId() + LOG_USER_EMAIL_IN + email);
@@ -117,42 +115,53 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<User> saveImage(int userId, byte[] image, String imageType) throws Exception {
+    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
         String query;
-        User user = new User();
-
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
 
         if (PHOTO.equals(imageType)) {
             query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
             parameters.addValue(PHOTO, image);
-            jdbcTemplate.update(query, parameters);
-            user.setPhoto(image);
 
         } else if (PASSPORT_SCAN.equals(imageType)) {
             query = "UPDATE Users SET passport_scan=:passportScan WHERE user_id=:userId";
             parameters.addValue(PASSPORT_SCAN, image);
-            jdbcTemplate.update(query, parameters);
-            user.setPassportScan(image);
+
         } else {
-            throw new Exception("Wrong image type description");
+            throw new RuntimeException("Wrong image type description");
         }
 
-        return Optional.of(user);
+        jdbcTemplate.update(query, parameters);
+    }
+
+    @Override
+    public Optional<byte[]> getImage(int userId, String imageType) {
+        byte[] image;
+
+        if (PHOTO.equals(imageType)) {
+            String query = "SELECT photo FROM Users WHERE user_id=:userId";
+            image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
+                    byte[].class);
+        } else if (PASSPORT_SCAN.equals(imageType)) {
+            String query = "SELECT passport_scan FROM Users WHERE user_id=:userId";
+            image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
+                    byte[].class);
+        } else {
+            throw new RuntimeException("Wrong image type description");
+        }
+
+        return Optional.ofNullable(image);
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            LobHandler handler = new DefaultLobHandler();
             return new User.Builder()
                     .setUserId(resultSet.getInt("user_id"))
                     .setEmail(resultSet.getString("email"))
                     .setPassword(resultSet.getString("password"))
                     .setFirstName(resultSet.getString("first_name"))
                     .setLastName(resultSet.getString("last_name"))
-                    .setPassportScan(handler.getBlobAsBytes(resultSet, "passport_scan"))
-                    .setPhoto(handler.getBlobAsBytes(resultSet, "photo"))
                     .setDiscount(resultSet.getInt("discount"))
                     .setPhone(resultSet.getString("phone"))
                     .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)

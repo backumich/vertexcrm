@@ -27,7 +27,8 @@ public class LogInController {
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
     private static final String LOG_LOGIN_SUCCESS = "login successful";
-    private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
+    private static final String LOG_AUTHORITIES_ERROR = "0 or more than 1 authority found";
+    private static final String LOG_ENTRY = " page accessed";
 
     private static final String ADMIN = Role.ADMIN.name();
     private static final String USER = Role.USER.name();
@@ -39,6 +40,7 @@ public class LogInController {
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {
+        LOGGER.debug(storage.getId() + LOGIN + LOG_ENTRY);
 
         String view = LOGIN;
         try {
@@ -96,12 +98,12 @@ public class LogInController {
                 } else if (USER.equals(authority.toString())) {
                     view = USER_PAGE;
                 } else {
-                    throw new Exception(AUTHORITIES_ERROR);
+                    throw new Exception(LOG_AUTHORITIES_ERROR);
                 }
             }
 
         } else {
-            throw new Exception(AUTHORITIES_ERROR);
+            throw new Exception(LOG_AUTHORITIES_ERROR);
         }
 
         return view;

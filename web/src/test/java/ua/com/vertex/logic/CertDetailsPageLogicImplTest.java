@@ -23,14 +23,11 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class CertDetailsPageLogicImplTest {
 
-    // todo : inspect and add/remove tests according to implemented code refactoring
-
     @Autowired
     private CertificateDaoInf certificateDao;
 
     private CertDetailsPageLogicImpl logic;
 
-    private static final int EXISTING_USER_ID = 22;
     private static final int EXISTING_CERT_ID = 222;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
@@ -47,23 +44,9 @@ public class CertDetailsPageLogicImplTest {
     }
 
     @Test
-    public void certificateOptionalForCertificateNotStoredInDBShouldBeReturned() {
+    public void certificateNullOptionalForCertificateNotStoredInDBShouldBeReturned() {
         Optional<Certificate> optional = logic.getCertificateDetails(NOT_EXISTING_ID);
         assertNotNull(optional);
-        assertEquals(new Certificate(), optional.orElse(new Certificate()));
+        assertEquals(null, optional.orElse(null));
     }
-
-//    @Test
-//    public void userOptionalForUserStoredInDBShouldBeReturned() {
-//        Optional<User> optional = logic.getUserById(EXISTING_USER_ID);
-//        assertNotNull(optional);
-//        assertEquals(EXISTING_USER_ID, optional.get().getUserId());
-//    }
-//
-//    @Test
-//    public void userOptionalForUserNotStoredInDBShouldBeReturned() {
-//        Optional<User> optional = logic.getUserById(NOT_EXISTING_ID);
-//        assertNotNull(optional);
-//        assertEquals(new User(), optional.orElse(new User()));
-//    }
 }

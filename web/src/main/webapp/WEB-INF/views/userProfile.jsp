@@ -152,17 +152,13 @@
             </tr>
             <tr>
                 <td>Photo:</td>
-                <c:if test="${user.photo != null}">
-                    <td>
-                        <sf:form method="get" action="/userPhoto">
-                            <input type="hidden" name="previousPage" value="/logIn"/>
-                            <input class="buttonText" type="submit" value="Show Photo">
-                        </sf:form><br>
-                    </td>
-                </c:if>
-                <c:if test="${user.photo == null}">
-                    <td>no photo</td>
-                </c:if>
+                <td>
+                    <sf:form method="get" action="/userPhoto">
+                        <input type="hidden" name="userId" value="${user.userId}"/>
+                        <input type="hidden" name="previousPage" value="/logIn"/>
+                        <input class="buttonText" type="submit" value="Show Photo">
+                    </sf:form><br>
+                </td>
                 <td>
                     <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
                         <input type="hidden" name="userId" value="${user.userId}"/>
@@ -178,17 +174,13 @@
             </tr>
             <tr>
                 <td>Passport scan:</td>
-                <c:if test="${user.passportScan != null}">
-                    <td>
-                        <sf:form method="get" action="/passportScan">
-                            <input type="hidden" name="previousPage" value="/logIn"/>
-                            <input class="buttonText" type="submit" value="Show Passport Scan">
-                        </sf:form><br>
-                    </td>
-                </c:if>
-                <c:if test="${user.passportScan == null}">
-                    <td>no passport scan</td>
-                </c:if>
+                <td>
+                    <sf:form method="get" action="/passportScan">
+                        <input type="hidden" name="userId" value="${user.userId}"/>
+                        <input type="hidden" name="previousPage" value="/logIn"/>
+                        <input class="buttonText" type="submit" value="Show Passport Scan">
+                    </sf:form><br>
+                </td>
                 <td>
                     <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
                         <input type="hidden" name="userId" value="${user.userId}"/>

@@ -22,8 +22,6 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class CertificateDaoTest {
 
-    // todo : inspect and add/remove tests according to implemented code refactoring
-
     @Autowired
     private CertificateDaoInf certificateDao;
 
@@ -31,16 +29,16 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
-    public void daoShouldReturnCertificateOptionalForCertificateExistingInDatabase() {
+    public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
         assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
     @Test
-    public void daoShouldReturnNullCertificateOptionalForCertificateNotExistingInDatabase() {
+    public void getCertificateByIdReturnsNullOptionalForCertificateNotExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(NOT_EXISTING_ID);
         assertNotNull(optional);
-        assertEquals(new Certificate(), optional.orElse(new Certificate()));
+        assertEquals(null, optional.orElse(null));
     }
 }

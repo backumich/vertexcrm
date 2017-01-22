@@ -16,7 +16,7 @@ public interface UserLogic {
 
     Optional<User> logIn(String email);
 
-    User imagesCheck(User user);
-
     void saveImage(int userId, byte[] image, String imageType) throws Exception;
+
+    Optional<byte[]> getImage(int userId, String imageType);
 }

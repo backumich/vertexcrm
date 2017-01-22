@@ -18,5 +18,7 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds();
 
-    Optional<User> saveImage(int userId, byte[] image, String imageType) throws Exception;
+    void saveImage(int userId, byte[] image, String imageType) throws Exception;
+
+    Optional<byte[]> getImage(int userId, String imageType);
 }
