@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,9 +57,7 @@ public class LogInController {
 
         String view;
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String email = ((UserDetails) principal).getUsername();
-            view = setUser(email, model);
+            view = setUser(logInfo.getEmail(), model);
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
