@@ -106,6 +106,7 @@ public class UserDaoImpl implements UserDaoInf {
         @Override
         public User extractData(ResultSet rs) throws SQLException, DataAccessException {
             User user = null;
+            LobHandler handler = new DefaultLobHandler();
 
             HashSet<Role> hashSetRole = new HashSet<>();
             HashSet<Certificate> hashSetCertificate = new HashSet<>();
@@ -119,7 +120,8 @@ public class UserDaoImpl implements UserDaoInf {
                     user.setEmail(rs.getString("email"));
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
-                    user.setPassportScan(rs.getBytes("passport_scan"));
+                    user.setPassportScan(handler.getBlobAsBytes(rs, "passport_scan"));
+                    //user.setPassportScan(rs.getBytes("passport_scan"));
                     user.setPhoto(rs.getBytes("photo"));
                     user.setDiscount(rs.getInt("discount"));
                     user.setPhone(rs.getString("phone"));

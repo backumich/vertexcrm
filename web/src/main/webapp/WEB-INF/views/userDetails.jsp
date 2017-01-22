@@ -143,11 +143,11 @@
                 </tr>
                 <tr>
                     <td>Passport scan</td>
-                    <td><input type="image" size="40" value="${user.passportScan}" disabled></td>
+                    <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="image"></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
-                    <td><input type="image" size="40" value="${user.photo}" disabled></td>
+                    <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="image"></td>
                 </tr>
                 <tr>
                     <td>Discount</td>
@@ -157,28 +157,7 @@
                     <td>Phone</td>
                     <td><input type="text" size="40" value="${user.phone}" disabled></td>
                 </tr>
-
-                <%--<c:forEach var="user" items="${user}">--%>
-                <%--<tr>--%>
-                <%--<td>${user.userId} </td>--%>
-                <%--<td>${user.email} </td>--%>
-                <%--<td>${user.lastName} </td>--%>
-                <%--<td>${user.firstName} </td>--%>
-                <%--<td>${user.phone} </td>--%>
-                <%--<td>--%>
-                <%--<c:set var="titleURL">--%>
-                <%--<c:url value="userDetails">--%>
-                <%--<c:param name="userId" value="${user.userId}"/>--%>
-                <%--</c:url>--%>
-                <%--</c:set>--%>
-                <%--<a href="${titleURL}">Detail</a>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-                <%--</c:forEach>--%>
-
             </table>
-
-
         </div>
     </div>
 </div>

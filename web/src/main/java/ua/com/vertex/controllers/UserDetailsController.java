@@ -1,5 +1,6 @@
 package ua.com.vertex.controllers;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class UserDetailsController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("userDetails");
         modelAndView.addObject("user", user);
+        String encodedImagePassportScan = Base64.encode(user.getPassportScan());
+        modelAndView.addObject("imagePassportScan", encodedImagePassportScan);
+        String encodedPhoto = Base64.encode(user.getPhoto());
+        modelAndView.addObject("imagePhoto", encodedPhoto);
         return modelAndView;
 
     }
