@@ -113,11 +113,11 @@
     <div class="container pt1_5" align="center">
 
         <c:if test="${photo != null}">
-            <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="photo">
+            <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
         </c:if>
 
         <c:if test="${passportScan != null}">
-            <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="passport">
+            <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="no passport scan">
         </c:if>
 
         <br><br>

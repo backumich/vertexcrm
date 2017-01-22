@@ -12,7 +12,7 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -31,7 +31,7 @@ public class CertificateDetailsPageControllerTest {
     private UserLogic userLogic;
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     @Mock
     private Model model;
@@ -53,7 +53,7 @@ public class CertificateDetailsPageControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new CertificateDetailsPageController(certLogic, userLogic, storage);
+        controller = new CertificateDetailsPageController(certLogic, userLogic, logInfo);
     }
 
     @Test

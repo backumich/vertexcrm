@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -15,14 +15,14 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class AccessDeniedControllerTest {
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     private AccessDeniedController controller;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new AccessDeniedController(storage);
+        controller = new AccessDeniedController(logInfo);
     }
 
     @Test

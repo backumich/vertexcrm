@@ -13,12 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -30,7 +26,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class LogOutControllerTest {
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     private MockMvc mockMvc;
     private LogOutController controller;
@@ -38,7 +34,7 @@ public class LogOutControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new LogOutController(storage);
+        controller = new LogOutController(logInfo);
     }
 
     @Test
@@ -58,19 +54,6 @@ public class LogOutControllerTest {
                 .build();
         mockMvc.perform(get("/loggedOut"))
                 .andExpect(view().name("loggedOut"));
-    }
-
-    @Test
-    public void processLogOutSetsSessionId() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpSession session = mock(HttpSession.class);
-
-        when(storage.getSessionId()).thenReturn(null);
-        when(request.getSession()).thenReturn(session);
-        when(request.getSession().getId()).thenReturn("testSessionId");
-
-        controller.processLogOut(request);
-        verify(storage).setSessionId("testSessionId");
     }
 
     @Test

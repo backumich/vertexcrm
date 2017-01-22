@@ -7,10 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.utils.DeleteTempFiles;
-import ua.com.vertex.utils.Storage;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import ua.com.vertex.utils.LogInfo;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,23 +17,17 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class IndexPageControllerTest {
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     @Mock
     private DeleteTempFiles cleaner;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private HttpSession session;
 
     private IndexPageController controller;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new IndexPageController(storage, cleaner);
+        controller = new IndexPageController(logInfo, cleaner);
     }
 
     @Test
@@ -49,22 +40,10 @@ public class IndexPageControllerTest {
     }
 
     @Test
-    public void showIndexPageSetsSessionId() {
-        when(storage.getSessionId()).thenReturn(null);
-        when(request.getSession()).thenReturn(session);
-        when(request.getSession().getId()).thenReturn("testSessionId");
-
-        controller.showIndexPage(request);
-        verify(storage, times(1)).setSessionId("testSessionId");
-    }
-
-    @Test
     public void showIndexPageInvokesTempDirCleaner() {
-        when(storage.getSessionId()).thenReturn(null);
-        when(request.getSession()).thenReturn(session);
-        when(request.getSession().getId()).thenReturn("testSessionId");
+        when(logInfo.getId()).thenReturn("testSessionId");
 
-        controller.showIndexPage(request);
+        controller.showIndexPage();
         verify(cleaner, times(1)).cleanTempDir();
     }
 }

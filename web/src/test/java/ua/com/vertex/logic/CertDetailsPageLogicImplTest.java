@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,6 +38,7 @@ public class CertDetailsPageLogicImplTest {
     }
 
     @Test
+    @WithMockUser
     public void certificateOptionalForCertificateStoredInDBShouldBeReturned() {
         Optional<Certificate> optional = logic.getCertificateDetails(EXISTING_CERT_ID);
         assertNotNull(optional);
@@ -44,6 +46,7 @@ public class CertDetailsPageLogicImplTest {
     }
 
     @Test
+    @WithMockUser
     public void certificateNullOptionalForCertificateNotStoredInDBShouldBeReturned() {
         Optional<Certificate> optional = logic.getCertificateDetails(NOT_EXISTING_ID);
         assertNotNull(optional);

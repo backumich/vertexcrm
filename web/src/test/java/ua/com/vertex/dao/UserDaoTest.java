@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,7 +27,6 @@ public class UserDaoTest {
     @Autowired
     private UserDaoInf userDao;
 
-
     private static final int EXISTING_ID1 = 22;
     private static final int EXISTING_ID2 = 33;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
@@ -37,24 +37,28 @@ public class UserDaoTest {
     private static final String WRONG_IMAGE_TYPE = "wrongImageType";
 
     @Test
+    @WithMockUser
     public void getUserReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.getUser(EXISTING_ID1);
         assertEquals(EXISTING_ID1, optional.get().getUserId());
     }
 
     @Test
+    @WithMockUser
     public void getUserReturnsNullUserOptionalForUserNotExistingInDatabase() {
         Optional<User> optional = userDao.getUser(NOT_EXISTING_ID);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test
+    @WithMockUser
     public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL);
         assertEquals(EXISTING_ID1, optional.get().getUserId());
     }
 
     @Test
+    @WithMockUser
     public void getUserByEmailReturnsNullUserOptionalForUserNotExistingInDatabase() {
         Optional<User> optional = userDao.getUserByEmail(NOT_EXISTING_EMAIL);
         assertEquals(null, optional.orElse(null));
@@ -73,6 +77,7 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPhotoSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PHOTO);
@@ -80,6 +85,7 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPassportSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
@@ -93,24 +99,28 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPhoto() {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PHOTO);
         assertNotNull(optional.get());
     }
 
     @Test
+    @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPassportScan() {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PASSPORT_SCAN);
         assertNotNull(optional.get());
     }
 
     @Test
+    @WithMockUser
     public void getImageReturnsNullOptionalIfNotExistingImage() {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID2, PHOTO);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test(expected = DataAccessException.class)
+    @WithMockUser
     public void getImageThrowsExceptionForNotExistingUser() {
         userDao.getImage(NOT_EXISTING_ID, PHOTO);
     }

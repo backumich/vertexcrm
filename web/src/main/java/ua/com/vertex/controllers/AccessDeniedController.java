@@ -5,13 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 @Controller
 @RequestMapping(value = "/403")
 public class AccessDeniedController {
 
-    private final Storage storage;
+    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(AccessDeniedController.class);
 
     private static final String LOG_DENIED = "HTTP Status 403 - Access is denied";
@@ -20,12 +20,12 @@ public class AccessDeniedController {
 
     @RequestMapping
     public String show403Page() {
-        LOGGER.debug(storage.getId() + LOG_DENIED);
+        LOGGER.debug(logInfo.getId() + LOG_DENIED);
         return ACCESS_DENIED;
     }
 
     @Autowired
-    public AccessDeniedController(Storage storage) {
-        this.storage = storage;
+    public AccessDeniedController(LogInfo logInfo) {
+        this.logInfo = logInfo;
     }
 }

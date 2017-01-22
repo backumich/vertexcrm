@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.com.vertex.utils.Storage;
-
-import javax.servlet.http.HttpServletRequest;
+import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class LogOutController {
 
-    private final Storage storage;
+    private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(LogOutController.class);
 
@@ -29,7 +27,7 @@ public class LogOutController {
 
     @RequestMapping(value = "/logOut")
     public String showLogOutPage() {
-        LOGGER.debug(storage.getId() + LOGOUT + LOG_ENTRY);
+        LOGGER.debug(logInfo.getId() + LOGOUT + LOG_ENTRY);
 
         String view = LOGOUT;
         try {
@@ -38,7 +36,7 @@ public class LogOutController {
                 view = LOGGED_OUT;
             }
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -46,30 +44,19 @@ public class LogOutController {
     }
 
     @RequestMapping(value = "/loggedOut")
-    public String processLogOut(HttpServletRequest request) {
-        LOGGER.info(storage.getId() + LOG_OUT_SUCCESS);
-
-        String view = LOGGED_OUT;
-        try {
-            if (storage.getSessionId() == null) {
-                storage.setSessionId(request.getSession().getId());
-            }
-        } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
-            view = ERROR;
-        }
-
-        return view;
+    public String processLogOut() {
+        LOGGER.info(logInfo.getId() + LOG_OUT_SUCCESS);
+        return LOGGED_OUT;
     }
 
     @RequestMapping(value = "/logOutRefuse")
     public String processLogOutRefuse() {
-        LOGGER.debug(storage.getId() + LOG_LOGOUT_REFUSE);
+        LOGGER.debug(logInfo.getId() + LOG_LOGOUT_REFUSE);
         return INDEX;
     }
 
     @Autowired
-    public LogOutController(Storage storage) {
-        this.storage = storage;
+    public LogOutController(LogInfo logInfo) {
+        this.logInfo = logInfo;
     }
 }

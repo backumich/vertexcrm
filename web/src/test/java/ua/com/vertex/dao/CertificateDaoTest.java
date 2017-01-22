@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,6 +30,7 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
+    @WithMockUser
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
@@ -36,6 +38,7 @@ public class CertificateDaoTest {
     }
 
     @Test
+    @WithMockUser
     public void getCertificateByIdReturnsNullOptionalForCertificateNotExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(NOT_EXISTING_ID);
         assertNotNull(optional);

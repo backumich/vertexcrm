@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -21,6 +21,9 @@ import java.util.Optional;
 @Repository
 @SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoImpl implements CertificateDaoInf {
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final LogInfo logInfo;
+
     private static final String USER_ID = "userId";
     private static final String CERTIFICATE_ID = "certificateId";
 
@@ -28,9 +31,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String LOG_CERT_IN = "Retrieving certificate id=";
     private static final String LOG_CERT_OUT = "Retrieved certificate id=";
     private static final String LOG_NO_CERT = "No certificate in DB, id=";
-
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final Storage storage;
 
     @Override
     public List<Certificate> getAllCertificateByUserId(int userId) {
@@ -45,17 +45,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug(storage.getId() + LOG_CERT_IN + certificateId);
+        LOGGER.debug(logInfo.getId() + LOG_CERT_IN + certificateId);
 
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(storage.getId() + LOG_NO_CERT + certificateId);
+            LOGGER.debug(logInfo.getId() + LOG_NO_CERT + certificateId);
         }
 
-        LOGGER.debug(storage.getId() + LOG_CERT_OUT + certificateId);
+        LOGGER.debug(logInfo.getId() + LOG_CERT_OUT + certificateId);
 
         return Optional.ofNullable(certificate);
     }
@@ -73,8 +73,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Autowired
-    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
+    public CertificateDaoImpl(DataSource dataSource, LogInfo logInfo) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.storage = storage;
+        this.logInfo = logInfo;
     }
 }

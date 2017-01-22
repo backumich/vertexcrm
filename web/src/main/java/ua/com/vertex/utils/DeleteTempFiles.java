@@ -14,7 +14,7 @@ import static ua.com.vertex.context.WebAppInitializer.TEMP_DIR_PATH;
 @Component
 public class DeleteTempFiles {
 
-    private Storage storage;
+    private LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(DeleteTempFiles.class);
 
@@ -22,12 +22,12 @@ public class DeleteTempFiles {
         try {
             FileUtils.cleanDirectory(new File(TEMP_DIR_PATH));
         } catch (IOException e) {
-            LOGGER.debug(storage.getId(), e, e);
+            LOGGER.debug(logInfo.getId(), e, e);
         }
     }
 
     @Autowired
-    public void setStorage(Storage storage) {
-        this.storage = storage;
+    public void setLogInfo(LogInfo logInfo) {
+        this.logInfo = logInfo;
     }
 }

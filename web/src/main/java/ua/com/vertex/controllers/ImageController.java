@@ -9,22 +9,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class ImageController {
 
     private final UserLogic userLogic;
-    private final Storage storage;
+    private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
 
     private static final String LOG_PHOTO = "Passing user photo to JSP";
     private static final String LOG_PASSPORT_SCAN = "Passing user passport scan to JSP";
+    private static final String LOG_ENTRY = " page accessed";
 
     private static final String USER_PAGE = "userProfile";
     private static final String IMAGE = "image";
     private static final String ERROR = "error";
+    private static final String NO_IMAGE = "no image selected";
     private static final String IMAGE_ERROR = "imageError";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
@@ -33,12 +35,13 @@ public class ImageController {
     public String showUserPhoto(@RequestParam("previousPage") String previousPage,
                                 @RequestParam("userId") int userId, Model model) {
 
+        LOGGER.debug(logInfo.getId() + PHOTO + LOG_ENTRY);
         String view = IMAGE;
         try {
             encode(model, userId, previousPage, PHOTO);
-            LOGGER.debug(storage.getId() + LOG_PHOTO);
+            LOGGER.debug(logInfo.getId() + LOG_PHOTO);
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -49,12 +52,13 @@ public class ImageController {
     public String showPassportScan(@RequestParam("previousPage") String previousPage,
                                    @RequestParam("userId") int userId, Model model) {
 
+        LOGGER.debug(logInfo.getId() + PASSPORT_SCAN + LOG_ENTRY);
         String view = IMAGE;
         try {
             encode(model, userId, previousPage, PASSPORT_SCAN);
-            LOGGER.debug(storage.getId() + LOG_PASSPORT_SCAN);
+            LOGGER.debug(logInfo.getId() + LOG_PASSPORT_SCAN);
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -75,12 +79,13 @@ public class ImageController {
         try {
             if (image == null) {
                 view = IMAGE_ERROR;
+                LOGGER.debug(logInfo.getId() + NO_IMAGE);
             } else {
                 userLogic.saveImage(user.getUserId(), image, imageType);
                 model.addAttribute(user);
             }
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -88,8 +93,8 @@ public class ImageController {
     }
 
     @Autowired
-    public ImageController(UserLogic userLogic, Storage storage) {
+    public ImageController(UserLogic userLogic, LogInfo logInfo) {
         this.userLogic = userLogic;
-        this.storage = storage;
+        this.logInfo = logInfo;
     }
 }

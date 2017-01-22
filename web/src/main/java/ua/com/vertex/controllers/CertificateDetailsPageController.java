@@ -13,7 +13,7 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
 import static ua.com.vertex.beans.User.EMPTY_USER;
@@ -23,7 +23,7 @@ public class CertificateDetailsPageController {
 
     private final CertDetailsPageLogic certLogic;
     private final UserLogic userLogic;
-    private final Storage storage;
+    private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
 
@@ -40,7 +40,7 @@ public class CertificateDetailsPageController {
         try {
             model.addAttribute("newCertificate", new Certificate());
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             returnPage = ERROR;
         }
         return returnPage;
@@ -53,13 +53,13 @@ public class CertificateDetailsPageController {
         try {
             if (result.hasErrors()) {
                 model.addAttribute("error", "Entered value must be a positive integer!");
-                LOGGER.debug(storage.getId() + LOG_INVALID_DATA);
+                LOGGER.debug(logInfo.getId() + LOG_INVALID_DATA);
             } else {
                 setUserAndCertificate(certificate, model);
-                LOGGER.debug(storage.getId() + LOG_PASS_DATA);
+                LOGGER.debug(logInfo.getId() + LOG_PASS_DATA);
             }
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             returnPage = ERROR;
         }
 
@@ -69,7 +69,7 @@ public class CertificateDetailsPageController {
     private void setUserAndCertificate(Certificate certificate, Model model) {
         int certificationId = certificate.getCertificationId();
 
-        LOGGER.debug(storage.getId() + LOG_PROCESS + certificationId);
+        LOGGER.debug(logInfo.getId() + LOG_PROCESS + certificationId);
 
         certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
         if (!EMPTY_CERTIFICATE.equals(certificate)) {
@@ -82,9 +82,9 @@ public class CertificateDetailsPageController {
     }
 
     @Autowired
-    public CertificateDetailsPageController(CertDetailsPageLogic certLogic, UserLogic userLogic, Storage storage) {
+    public CertificateDetailsPageController(CertDetailsPageLogic certLogic, UserLogic userLogic, LogInfo logInfo) {
         this.certLogic = certLogic;
         this.userLogic = userLogic;
-        this.storage = storage;
+        this.logInfo = logInfo;
     }
 }

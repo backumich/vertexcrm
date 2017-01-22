@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.Role;
-import ua.com.vertex.utils.Storage;
 
 import java.util.Collection;
 
@@ -21,14 +21,13 @@ import static ua.com.vertex.beans.User.EMPTY_USER;
 @Controller
 public class LogInController {
 
-    private final Storage storage;
+    private final LogInfo logInfo;
     private final UserLogic userLogic;
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
     private static final String LOG_LOGIN_SUCCESS = "login successful";
     private static final String LOG_AUTHORITIES_ERROR = "0 or more than 1 authority found";
-    private static final String LOG_ENTRY = " page accessed";
 
     private static final String ADMIN = Role.ADMIN.name();
     private static final String USER = Role.USER.name();
@@ -40,16 +39,14 @@ public class LogInController {
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {
-        LOGGER.debug(storage.getId() + LOGIN + LOG_ENTRY);
-
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (!ANONYMOUS_USER.equals(principal)) {
-                view = setUser(storage.getEmail(), model);
+                view = setUser(logInfo.getEmail(), model);
             }
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -63,10 +60,9 @@ public class LogInController {
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String email = ((UserDetails) principal).getUsername();
-            storage.setEmail(email);
             view = setUser(email, model);
         } catch (Throwable t) {
-            LOGGER.error(storage.getId(), t, t);
+            LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -77,10 +73,13 @@ public class LogInController {
         String view = redirectView();
         User user = userLogic.getUserByEmail(email).orElse(EMPTY_USER);
 
-        if (USER_PAGE.equals(view) && !EMPTY_USER.equals(user)) {
+        if (USER_PAGE.equals(view)) {
             model.addAttribute("user", user);
+            LOGGER.info(logInfo.getId() + LOG_LOGIN_SUCCESS);
+        } else if (ADMIN_PAGE.equals(view)) {
+            model.addAttribute("user", user);
+            LOGGER.info(logInfo.getId() + LOG_LOGIN_SUCCESS);
         }
-        LOGGER.info(storage.getId() + LOG_LOGIN_SUCCESS);
 
         return view;
     }
@@ -110,8 +109,8 @@ public class LogInController {
     }
 
     @Autowired
-    public LogInController(Storage storage, UserLogic userLogic) {
-        this.storage = storage;
+    public LogInController(LogInfo logInfo, UserLogic userLogic) {
+        this.logInfo = logInfo;
         this.userLogic = userLogic;
     }
 }

@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class ImageControllerTest {
     private UserLogic userLogic;
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     @Mock
     private Model model;
@@ -35,7 +35,7 @@ public class ImageControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new ImageController(userLogic, storage);
+        controller = new ImageController(userLogic, logInfo);
     }
 
     @Test

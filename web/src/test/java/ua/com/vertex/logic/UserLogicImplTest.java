@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -71,12 +72,14 @@ public class UserLogicImplTest {
     }
 
     @Test
+    @WithMockUser
     public void getUserByIdWithNotExistingIdReturnsNullOptional() {
         Optional<User> optional = logic.getUserById(NOT_EXISTING_ID);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test
+    @WithMockUser
     public void getUserByIdWithExistingIdReturnsExistingUser() {
         Optional<User> optional = logic.getUserById(EXISTING_ID1);
         User user = new User.Builder()
@@ -94,12 +97,14 @@ public class UserLogicImplTest {
     }
 
     @Test
+    @WithMockUser
     public void getUserByEmailWithNotExistingEmailReturnsNullOptional() {
         Optional<User> optional = logic.getUserByEmail(NOT_EXISTING_EMAIL);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test
+    @WithMockUser
     public void getUserByEmailWithExistingEmailReturnsExistingUser() {
         Optional<User> optional = logic.getUserByEmail(EXISTING_EMAIL);
         User user = new User.Builder()
@@ -117,24 +122,28 @@ public class UserLogicImplTest {
     }
 
     @Test
+    @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPhotoPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
         logic.saveImage(EXISTING_ID1, image, PHOTO);
     }
 
     @Test
+    @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPassportPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
         logic.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
     }
 
     @Test
+    @WithMockUser
     public void getImageShouldReturnImage() throws Exception {
         Optional<byte[]> optional = logic.getImage(EXISTING_ID2, PHOTO);
         assertNotNull(optional.get());
     }
 
     @Test
+    @WithMockUser
     public void getImageShouldReturnNullImage() throws Exception {
         Optional<byte[]> optional = logic.getImage(EXISTING_ID1, PHOTO);
         assertNull(null, optional.orElse(null));

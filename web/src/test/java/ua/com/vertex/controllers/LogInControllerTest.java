@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
 
@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class LogInControllerTest {
 
     @Mock
-    private Storage storage;
+    private LogInfo logInfo;
 
     @Mock
     private UserLogic userLogic;
@@ -52,7 +52,7 @@ public class LogInControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new LogInController(storage, userLogic);
+        controller = new LogInController(logInfo, userLogic);
     }
 
     @SuppressWarnings("Duplicates")
@@ -62,7 +62,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn(EMAIL);
+        when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
 
         mockMvc = standaloneSetup(controller)
@@ -80,7 +80,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn(EMAIL);
+        when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
 
         mockMvc = standaloneSetup(controller)
@@ -96,7 +96,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn(EMAIL);
+        when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
 
         controller.showLogInPage(model);
@@ -109,7 +109,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn(EMAIL);
+        when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
 
         mockMvc = standaloneSetup(controller)
@@ -119,15 +119,6 @@ public class LogInControllerTest {
                 .andExpect(view().name("error"));
     }
 
-    @Test
-    @WithMockUser(username = EMAIL)
-    public void showLoggedInPageForLoggedInUserSetsEmail() {
-        when(storage.getEmail()).thenReturn(null);
-
-        controller.showLoggedIn(model);
-        verify(storage, times(1)).setEmail(EMAIL);
-    }
-
     @SuppressWarnings("Duplicates")
     @Test
     @WithMockUser(authorities = "USER")
@@ -135,7 +126,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn("user");
+        when(logInfo.getEmail()).thenReturn("user");
         when(userLogic.getUserByEmail("user")).thenReturn(optional);
 
         mockMvc = standaloneSetup(controller)
@@ -152,7 +143,7 @@ public class LogInControllerTest {
         User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
         Optional<User> optional = Optional.ofNullable(user);
 
-        when(storage.getEmail()).thenReturn("user");
+        when(logInfo.getEmail()).thenReturn("user");
         when(userLogic.getUserByEmail("user")).thenReturn(optional);
 
         mockMvc = standaloneSetup(controller)

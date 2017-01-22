@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -24,41 +24,45 @@ import static ua.com.vertex.utils.Role.USER;
 @Repository
 @SuppressWarnings("SqlDialectInspection")
 public class UserDaoImpl implements UserDaoInf {
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final LogInfo logInfo;
+
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
+
+    private static final String LOG_USER_ID_IN = "Retrieving user, id=";
+    private static final String LOG_USER_ID_OUT = "Retrieved user, id=";
+    private static final String LOG_NO_USER_ID = "No user id=";
+    private static final String LOG_USER_EMAIL_IN = "Retrieving user, email=";
+    private static final String LOG_USER_EMAIL_OUT = "Retrieved user, email=";
+    private static final String LOG_NO_USER_EMAIL = "No user email=";
+    private static final String LOG_LOGIN_IN = "Retrieving user password and role, email=";
+    private static final String LOG_LOGIN_OUT = "Retrieved user password and role, email=";
+    private static final String LOG_NO_EMAIL = "No email=";
+    private static final String LOG_SAVE_IMAGE_IN = "Saving image, user id=";
+    private static final String LOG_SAVE_IMAGE_OUT = "Saved image";
+    private static final String LOG_GET_IMAGE_IN = "Retrieving image, user id=";
+    private static final String LOG_GET_IMAGE_OUT = "Retrieved image";
+
     private static final String USER_ID = "userId";
     private static final String EMAIL = "email";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
-
-    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
-
-    private static final String LOG_USER_ID_IN = "Retrieving user id=";
-    private static final String LOG_USER_ID_OUT = "Retrieved user id=";
-    private static final String LOG_NO_USER_ID = "No user id=";
-    private static final String LOG_USER_EMAIL_IN = "Retrieving user email=";
-    private static final String LOG_USER_EMAIL_OUT = "Retrieved user email=";
-    private static final String LOG_NO_USER_EMAIL = "No user email=";
-    private static final String LOG_LOGIN_IN = "Retrieving user password and role by email=";
-    private static final String LOG_LOGIN_OUT = "Retrieved user password and role by email=";
-    private static final String LOG_NO_EMAIL = "No email=";
-
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final Storage storage;
 
     @Override
     public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE user_id=:userId";
 
-        LOGGER.debug(storage.getId() + LOG_USER_ID_IN + userId);
+        LOGGER.debug(logInfo.getId() + LOG_USER_ID_IN + userId);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(storage.getId() + LOG_NO_USER_ID + userId);
+            LOGGER.warn(logInfo.getId() + LOG_NO_USER_ID + userId);
         }
 
-        LOGGER.debug(storage.getId() + LOG_USER_ID_OUT + userId);
+        LOGGER.debug(logInfo.getId() + LOG_USER_ID_OUT + userId);
 
         return Optional.ofNullable(user);
     }
@@ -68,16 +72,16 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug(storage.getId() + LOG_USER_EMAIL_IN + email);
+        LOGGER.debug(logInfo.getId() + LOG_USER_EMAIL_IN + email);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(storage.getId() + LOG_NO_USER_EMAIL + email);
+            LOGGER.warn(logInfo.getId() + LOG_NO_USER_EMAIL + email);
         }
 
-        LOGGER.debug(storage.getId() + LOG_USER_EMAIL_OUT + email);
+        LOGGER.debug(logInfo.getId() + LOG_USER_EMAIL_OUT + email);
 
         return Optional.ofNullable(user);
     }
@@ -120,6 +124,8 @@ public class UserDaoImpl implements UserDaoInf {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
 
+        LOGGER.debug(logInfo.getId() + LOG_SAVE_IMAGE_IN + userId + ", " + imageType);
+
         if (PHOTO.equals(imageType)) {
             query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
             parameters.addValue(PHOTO, image);
@@ -129,8 +135,10 @@ public class UserDaoImpl implements UserDaoInf {
             parameters.addValue(PASSPORT_SCAN, image);
 
         } else {
-            throw new RuntimeException("Wrong image type description");
+            throw new RuntimeException("Image not saved: wrong image type description");
         }
+
+        LOGGER.debug(logInfo.getId() + LOG_SAVE_IMAGE_OUT);
 
         jdbcTemplate.update(query, parameters);
     }
@@ -138,18 +146,24 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public Optional<byte[]> getImage(int userId, String imageType) {
         byte[] image;
+        String query;
+
+        LOGGER.debug(logInfo.getId() + LOG_GET_IMAGE_IN + userId + ", " + imageType);
 
         if (PHOTO.equals(imageType)) {
-            String query = "SELECT photo FROM Users WHERE user_id=:userId";
-            image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
-                    byte[].class);
+            query = "SELECT photo FROM Users WHERE user_id=:userId";
+
         } else if (PASSPORT_SCAN.equals(imageType)) {
-            String query = "SELECT passport_scan FROM Users WHERE user_id=:userId";
-            image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
-                    byte[].class);
+            query = "SELECT passport_scan FROM Users WHERE user_id=:userId";
+
         } else {
             throw new RuntimeException("Wrong image type description");
         }
+
+        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
+                byte[].class);
+
+        LOGGER.debug(logInfo.getId() + LOG_GET_IMAGE_OUT);
 
         return Optional.ofNullable(image);
     }
@@ -181,8 +195,8 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Autowired
-    public UserDaoImpl(DataSource dataSource, Storage storage) {
+    public UserDaoImpl(DataSource dataSource, LogInfo logInfo) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.storage = storage;
+        this.logInfo = logInfo;
     }
 }
