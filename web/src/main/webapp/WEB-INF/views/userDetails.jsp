@@ -161,12 +161,13 @@
             <br/>
             <br/>
             <br/>
-            <p>User role</p>
+                <p>User roles</p>
             <table bordercolor="red" border="2">
                 <c:if test="${!empty user.role}">
                     <c:forEach var="userRole" items="${user.role}">
                         <tr>
-                            <td>${userRole.name} </td>
+                            <td><input type="text" size="40" value="${userRole.name}" disabled></td>
+                                <%--<td>${userRole.name} </td>--%>
                         </tr>
                     </c:forEach>
                 </c:if>
@@ -176,15 +177,18 @@
             <c:if test="${!empty user.certificate}">
                 <table bordercolor="red" border="2">
                     <tr>
-                        <th width="150px">Certification date</th>
+                        <th width="100px">Certification date</th>
                         <th width="150px">Course name</th>
                         <th width="150px">Language</th>
                     </tr>
                     <c:forEach var="userCertificate" items="${user.certificate}">
                         <tr>
-                            <td>${userCertificate.certificationDate} </td>
-                            <td>${userCertificate.courseName} </td>
-                            <td>${userCertificate.language} </td>
+                            <td><input type="text" size="20" value="${userCertificate.certificationDate}" disabled></td>
+                            <td><input type="text" size="40" value="${userCertificate.courseName}" disabled></td>
+                            <td><input type="text" size="40" value="${userCertificate.language}" disabled></td>
+                                <%--<td>${userCertificate.certificationDate} </td>--%>
+                                <%--<td>${userCertificate.courseName} </td>--%>
+                                <%--<td>${userCertificate.language} </td>--%>
                         </tr>
                     </c:forEach>
                 </table>
