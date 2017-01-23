@@ -1,19 +1,31 @@
 package ua.com.vertex.beans;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
 
 public class Certificate {
+
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
 
     private int userId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate certificationDate;
+
+    @NotEmpty
     private String courseName;
+
+    @NotEmpty
     private String language;
 
     public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();

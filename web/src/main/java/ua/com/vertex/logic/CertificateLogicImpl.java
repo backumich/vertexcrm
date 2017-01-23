@@ -17,6 +17,7 @@ public class CertificateLogicImpl implements CertificateLogic {
     private static final Logger LOGGER = LogManager.getLogger(CertificateLogicImpl.class);
     private static final String LOG_ALLCERT = "Call - certificateDao.getAllCertificateByUserId(%s);";
     private static final String LOG_CERT = "Call - certificateDao.getCertificateById(%s);";
+    private static final String LOG_ADD_CERT = "Call - certificateDao.addCertificate ;";
 
 
 
@@ -35,5 +36,10 @@ public class CertificateLogicImpl implements CertificateLogic {
     public Optional<Certificate> getCertificateById(int certificateId) {
         LOGGER.debug(String.format(LOG_CERT, Integer.toString(certificateId)));
         return certificateDaoInf.getCertificateById(certificateId);
+    }
+
+    public int addCertificate(Certificate certificate) {
+        LOGGER.debug(LOG_ADD_CERT);
+        return certificateDaoInf.addCertificate(certificate);
     }
 }

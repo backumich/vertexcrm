@@ -1,6 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -31,16 +33,15 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
+
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
-    }
-
-    .hrefText {
-        font-size: 120%;
     }
     </style>
 </head>
@@ -60,6 +61,7 @@
             } catch (e) {
             }
         });
+
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -68,6 +70,8 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -95,35 +99,27 @@
         </div>
     </div>
 </div>
-
-
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
-
-        <main class="content">
-            <div class="registration">
-                <div id="registration-form">
-                    <div class="reg-form">
-                        <span style="font-size: 200%">Welcome to Vertex CRM</span>
-                        <br><br><br>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div class="container pt1_5" align="centr">
 
         <div class="hrefText">
-            <a href="<c:url value="/registration"/>">Register</a> |
-            <a href="signIn.jsp">Log in</a> |
-            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>|
-            <a href="<c:url value="/user"/>">View user.jsp</a>|
-            <a href="<c:url value="/admin"/>">View admin.jsp</a>|
+            <c:if test="${!empty msg}">
+                <h3><span class="alert-success">${msg}</span></h3>
+            </c:if>
         </div>
 
+        <form method="post" action="${pageContext.request.contextPath}/addCertificate">
+            <input type="submit" name="addCertificate" value="Add Certificate"/>
+        </form>
+        <br>
+        <br>
+        <br>
+
+        <div class="hrefText">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
-</div>
-
-
-<div class="wrapper">
 
 </div>
 <div class="footer">
