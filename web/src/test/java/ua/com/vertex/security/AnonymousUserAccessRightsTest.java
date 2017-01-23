@@ -114,4 +114,11 @@ public class AnonymousUserAccessRightsTest {
         mockMvc.perform(get("/userPhoto"))
                 .andExpect(redirectedUrl(null));
     }
+
+    @Test
+    @WithAnonymousUser
+    public void test403() throws Exception {
+        mockMvc.perform(get("/403"))
+                .andExpect(redirectedUrl(null));
+    }
 }

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/svaBranch.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -41,19 +42,6 @@
 
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
-    }
-
-    .text {
-        font-size: 200%;
-        color: #9d9d9d;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .up-padding {
-        padding-top: 100px;
     }
 
     </style>
@@ -114,16 +102,13 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div align="center" class="up-padding">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <span class="text">Logged as admin. The page is under construction...</span><br><br><br>
+    <span class="textSize200">Logged as admin. The page is under construction...</span><br><br><br>
 
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
-
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
 </div>
 

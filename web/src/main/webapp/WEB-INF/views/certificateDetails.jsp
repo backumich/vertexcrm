@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/svaBranch.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -44,47 +45,6 @@
         margin-left: 0 !important;
     }
 
-    .errorText140 {
-        font-size: 140%;
-        color: red;
-    }
-
-    .errorText100 {
-        font-size: 100%;
-        color: red;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .formHeaderText1 {
-        font-size: 125%;
-        font-weight: bold;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .table {
-        width: auto;
-        font-size: 140%;
-        border-spacing: 5px;
-    }
-
-    .up-padding {
-        padding-top: 100px;
-    }
 
     </style>
 </head>
@@ -144,14 +104,13 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <span class="pageHeader">Certificate Details</span><br><br><br>
+    <span class="fontSize180">Certificate Details</span><br><br><br>
 
-        <span class="formHeaderText1">Enter certificate ID:</span><br><br>
+    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
-        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
+    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
             <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
             <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
             <input type="submit" value="Send">
@@ -159,7 +118,7 @@
         <br><br>
 
         <c:if test="${error != null}">
-            <h3><span class="errorText140">${error}</span></h3>
+            <h3><span class="fontSize140 red">${error}</span></h3>
         </c:if>
 
         <c:if test="${error == null && certificate != null}">
@@ -170,13 +129,13 @@
                 </tr>
                 <tr>
                     <td>Certificate Holder First Name:</td>
-                    <td><span class="errorText100">
+                    <td><span class="red">
                             <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
                         <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
                 </tr>
                 <tr>
                     <td>Certificate Holder Last Name:</td>
-                    <td><span class="errorText100">
+                    <td><span class="red">
                             <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
                         <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
                 </tr>
@@ -197,18 +156,17 @@
             <sf:form method="get" action="/userPhoto">
                 <input type="hidden" name="userId" value="${user.userId}"/>
                 <input type="hidden" name="previousPage" value="/certificateDetails"/>
-                <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
+                <input class="black" type="submit" value="Show Certificate Holder Photo">
             </sf:form>
         </c:if>
 
         <br>
 
-        <div class="hrefText">
+    <div class="href">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
-</div>
 
 
 <div class="footer">
