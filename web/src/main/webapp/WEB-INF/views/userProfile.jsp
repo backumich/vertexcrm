@@ -9,11 +9,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -41,29 +42,6 @@
 
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
-    }
-
-    .text {
-        font-size: 200%;
-        color: #9d9d9d;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .table {
-        width: auto;
-        font-size: 120%;
-        border-spacing: 5px;
-    }
-
-    .up-padding {
-        padding-top: 100px;
     }
 
     </style>
@@ -124,84 +102,82 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div align="center" class="up-padding">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <span class="text">User Profile</span><br><br><br>
+    <span class="fontSize200 silver">User Profile</span><br><br><br>
 
-        <table class="table">
-            <tr>
-                <td>User ID:</td>
-                <td>${user.userId}</td>
-            </tr>
-            <tr>
-                <td>First Name:</td>
-                <td>${user.firstName}</td>
-            </tr>
-            <tr>
-                <td>Last Name:</td>
-                <td>${user.lastName}</td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>${user.email}</td>
-            </tr>
-            <tr>
-                <td>Discount:</td>
-                <td>${user.discount}</td>
-            </tr>
-            <tr>
-                <td>Photo:</td>
-                <td>
-                    <sf:form method="get" action="/userPhoto">
-                        <input type="hidden" name="userId" value="${user.userId}"/>
-                        <input type="hidden" name="previousPage" value="/logIn"/>
-                        <input class="buttonText" type="submit" value="Show Photo">
-                    </sf:form><br>
-                </td>
-                <td>
-                    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
-                        <input type="hidden" name="userId" value="${user.userId}"/>
-                        <input type="hidden" name="firstName" value="${user.firstName}"/>
-                        <input type="hidden" name="lastName" value="${user.lastName}"/>
-                        <input type="hidden" name="email" value="${user.email}"/>
-                        <input type="hidden" name="discount" value="${user.discount}"/>
-                        <input type="hidden" name="imageType" value="photo"/>
-                        <input type="file" name="image" accept="image/jpeg, image/png"/>
-                        <input class="buttonText" type="submit" value="Upload New Photo">
-                    </sf:form>
-                </td>
-            </tr>
-            <tr>
-                <td>Passport scan:</td>
-                <td>
-                    <sf:form method="get" action="/passportScan">
-                        <input type="hidden" name="userId" value="${user.userId}"/>
-                        <input type="hidden" name="previousPage" value="/logIn"/>
-                        <input class="buttonText" type="submit" value="Show Passport Scan">
-                    </sf:form><br>
-                </td>
-                <td>
-                    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
-                        <input type="hidden" name="userId" value="${user.userId}"/>
-                        <input type="hidden" name="firstName" value="${user.firstName}"/>
-                        <input type="hidden" name="lastName" value="${user.lastName}"/>
-                        <input type="hidden" name="email" value="${user.email}"/>
-                        <input type="hidden" name="discount" value="${user.discount}"/>
-                        <input type="hidden" name="imageType" value="passport_scan"/>
-                        <input type="file" name="image" accept="image/jpeg, image/png"/>
-                        <input class="buttonText" type="submit" value="Upload New Passport Scan">
-                    </sf:form>
-                </td>
-            </tr>
-        </table>
+    <table class="table fontSize125">
+        <tr>
+            <td>User ID:</td>
+            <td>${user.userId}</td>
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td>${user.firstName}</td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td>${user.lastName}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>${user.email}</td>
+        </tr>
+        <tr>
+            <td>Discount:</td>
+            <td>${user.discount}</td>
+        </tr>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <sf:form method="get" action="/userPhoto">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="previousPage" value="/logIn"/>
+                    <input class="black" type="submit" value="Show Photo">
+                </sf:form><br>
+            </td>
+            <td>
+                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="firstName" value="${user.firstName}"/>
+                    <input type="hidden" name="lastName" value="${user.lastName}"/>
+                    <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="discount" value="${user.discount}"/>
+                    <input type="hidden" name="imageType" value="photo"/>
+                    <input type="file" name="image" accept="image/jpeg, image/png"/>
+                    <input class="black" type="submit" value="Upload New Photo">
+                </sf:form>
+            </td>
+        </tr>
+        <tr>
+            <td>Passport scan:</td>
+            <td>
+                <sf:form method="get" action="/passportScan">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="previousPage" value="/logIn"/>
+                    <input class="black" type="submit" value="Show Passport Scan">
+                </sf:form><br>
+            </td>
+            <td>
+                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="firstName" value="${user.firstName}"/>
+                    <input type="hidden" name="lastName" value="${user.lastName}"/>
+                    <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="discount" value="${user.discount}"/>
+                    <input type="hidden" name="imageType" value="passport_scan"/>
+                    <input type="file" name="image" accept="image/jpeg, image/png"/>
+                    <input class="black" type="submit" value="Upload New Passport Scan">
+                </sf:form>
+            </td>
+        </tr>
+    </table>
 
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
-
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
+
 </div>
 
 

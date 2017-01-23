@@ -8,11 +8,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -121,34 +122,32 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <span class="pageHeader">Want to log out?</span><br><br><br>
+    <span class="fontSize180 silver">Want to log out?</span><br><br><br>
 
         <table>
             <tr>
                 <td>
                     <form action="${pageContext.request.contextPath}/logOut" method="post">
-                        <input type="submit" class="button" value="Yes"/>
+                        <input type="submit" class="black" value="Yes"/>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                     </form>
                 </td>
                 <td>
                     <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
-                        <input type="submit" class="button" value="No"/>
+                        <input type="submit" class="black" value="No"/>
                     </form>
                 </td>
             </tr>
         </table>
 
         <br><br>
-        <div class="hrefText">
+    <div class="href">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/"/>">Home</a>
         </div>
     </div>
-</div>
 
 
 <div class="footer">

@@ -12,7 +12,6 @@
 
 .fontSize200 {
     font-size: 200%;
-    color: #9d9d9d;
 }
 
 .red {
@@ -21,6 +20,10 @@
 
 .black {
     color: black;
+}
+
+.silver {
+    color: silver;
 }
 
 .bold {
@@ -38,7 +41,6 @@
 
 .table {
     width: auto;
-    font-size: 140%;
     border-spacing: 5px;
 }
 

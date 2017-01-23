@@ -8,11 +8,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -109,8 +110,7 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+<div align="center" class="page gray-page mh100 up-padding">
 
         <c:if test="${photo != null}">
             <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
@@ -122,12 +122,11 @@
 
         <br><br>
 
-        <div class="hrefText">
+    <div class="href">
             <a href="<c:url value="${page}"/>">Back</a> |
             <a href="<c:url value="/"/>">Home</a>
         </div>
 
-    </div>
 </div>
 
 

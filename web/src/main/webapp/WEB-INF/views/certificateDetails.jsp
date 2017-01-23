@@ -10,12 +10,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/svaBranch.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -106,7 +106,7 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <span class="fontSize180">Certificate Details</span><br><br><br>
+    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
     <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
@@ -122,7 +122,7 @@
         </c:if>
 
         <c:if test="${error == null && certificate != null}">
-            <table class="table">
+            <table class="table fontSize140">
                 <tr>
                     <td>Certification ID:</td>
                     <td>${String.format("%05d", certificate.certificationId)}</td>

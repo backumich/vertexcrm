@@ -8,11 +8,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -49,17 +50,6 @@
         margin-left: 0px !important;
     }
 
-    .pageHeader {
-        font-size: 180%;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .up-padding {
-        padding-top: 100px;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -117,15 +107,13 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="up-padding" align="center">
-        <span class="pageHeader">You are logged out</span><br><br><br>
+<div align="center" class="page gray-page mh100 up-padding">
+    <span class="fontSize180 silver">You are logged out</span><br><br><br>
 
 
-        <div class="hrefText">
+    <div class="href">
             <a href="<c:url value="/"/>">Home</a>
         </div>
-    </div>
 </div>
 
 
