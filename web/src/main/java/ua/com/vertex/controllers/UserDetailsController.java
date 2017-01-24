@@ -13,10 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.sql.SQLException;
+
 @Controller
 @RequestMapping(value = "/userDetails")
 @SessionAttributes("users")
 public class UserDetailsController {
+    private static final String ERROR_JSP = "error";
 
     UserLogic userLogic;
 
@@ -28,17 +31,36 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @GetMapping
-    public ModelAndView getUserDetailsByID(@RequestParam("userID") int userID) {
-        User user = userLogic.getUserDetailsByID(userID);
+    public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("userDetails");
-        modelAndView.addObject("user", user);
-        String encodedImagePassportScan = Base64.encode(user.getPassportScan());
-        modelAndView.addObject("imagePassportScan", encodedImagePassportScan);
-        String encodedPhoto = Base64.encode(user.getPhoto());
-        modelAndView.addObject("imagePhoto", encodedPhoto);
-        return modelAndView;
+        User user = null;
+        try {
+            user = userLogic.getUserDetailsByID(userId);
+        } catch (SQLException e) {
+            modelAndView.setViewName(ERROR_JSP);
+        }
+        if (user != null) {
+            modelAndView.setViewName("userDetails");
+            modelAndView.addObject("user", user);
 
+            try {
+                String encodedImagePassportScan = Base64.encode(user.getPassportScan());
+                modelAndView.addObject("imagePassportScan", encodedImagePassportScan);
+                LOGGER.debug("Passports scan is obtained and converted");
+            } catch (Throwable t) {
+                LOGGER.debug("There are problems with access to passports scan");
+            }
+            try {
+                String encodedPhoto = Base64.encode(user.getPhoto());
+                modelAndView.addObject("imagePhoto", encodedPhoto);
+                LOGGER.debug("Photo is obtained and converted");
+            } catch (Throwable t) {
+                LOGGER.debug("There are problems with access to photos");
+            }
+        } else {
+            modelAndView.setViewName(ERROR_JSP);
+        }
+        return modelAndView;
     }
 }
 

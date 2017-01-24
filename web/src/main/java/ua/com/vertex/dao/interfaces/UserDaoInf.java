@@ -2,8 +2,8 @@ package ua.com.vertex.dao.interfaces;
 
 
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserMainData;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +15,8 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds();
 
-    List<UserMainData> getListUsers();
+    List<User> getListUsers();
 
-    User getUserDetailsByID(int UserID);
+    User getUserDetailsByID(int UserID) throws SQLException;
 
 }

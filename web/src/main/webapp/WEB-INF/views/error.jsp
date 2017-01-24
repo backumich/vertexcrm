@@ -118,6 +118,8 @@
     <div align="center" class="up-padding">
 
         <span class="errorText250">Something went wrong... Try again!</span><br><br>
+        <span class="errorText250">Something went wrong... Try again!</span><br><br>
+
         <span class="hrefText"><a href="<c:url value="/" />">Home</a></span>
 
     </div>

@@ -3,10 +3,10 @@ package ua.com.vertex.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserMainData;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,15 +22,15 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<UserMainData> getListUsers() {
+    public List<User> getListUsers() {
         userDao.getListUsers();
         return userDao.getListUsers();
     }
 
     @Override
-    public User getUserDetailsByID(int userID) {
-        //userDao.getUserDetailsByID(userID);
-        return userDao.getUserDetailsByID(userID);
+    public User getUserDetailsByID(int userId) throws SQLException {
+        //userDao.getUserDetailsByID(userId);
+        return userDao.getUserDetailsByID(userId);
     }
 
 

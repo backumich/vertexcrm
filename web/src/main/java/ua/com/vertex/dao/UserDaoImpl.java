@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserMainData;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
 
@@ -89,23 +88,22 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public User getUserDetailsByID(int userID) {
+    public User getUserDetailsByID(int userId) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone," +
                 "  r.role_id, r.name," +
                 "  c.certification_id, c.certification_date, c.course_name, c.language" +
                 "  FROM Users u" +
                 "  LEFT JOIN Roles r ON u.role_id = r.role_id" +
                 "  LEFT JOIN Certificate c ON u.user_id = c.user_id" +
-                "  WHERE u.user_id = :userID";
+                "  WHERE u.user_id = :userId";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource("userID", userID), new UserDetailsRowMapping());
+        return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new UserDetailsRowMapping());
     }
 
     private static final class UserDetailsRowMapping implements ResultSetExtractor<User> {
         @Override
         public User extractData(ResultSet rs) throws SQLException, DataAccessException {
             User user = null;
-            LobHandler handler = new DefaultLobHandler();
 
             HashSet<Role> roles = new HashSet<>();
             HashSet<Certificate> certificates = new HashSet<>();
@@ -117,8 +115,7 @@ public class UserDaoImpl implements UserDaoInf {
                     user.setEmail(rs.getString("email"));
                     user.setFirstName(rs.getString("first_name"));
                     user.setLastName(rs.getString("last_name"));
-                    user.setPassportScan(handler.getBlobAsBytes(rs, "passport_scan"));
-                    //user.setPassportScan(rs.getBytes("passport_scan"));
+                    user.setPassportScan(rs.getBytes("passport_scan"));
                     user.setPhoto(rs.getBytes("photo"));
                     user.setDiscount(rs.getInt("discount"));
                     user.setPhone(rs.getString("phone"));
@@ -136,30 +133,36 @@ public class UserDaoImpl implements UserDaoInf {
                 if (!rs.wasNull() && certification_id > 0) {
                     Certificate certificate = new Certificate();
                     certificate.setCertificationId(certification_id);
-                    certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
+                    if (rs.getDate("certification_date") != null) {
+                        certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
+                    }
                     certificate.setCourseName(rs.getString("course_name"));
                     certificate.setLanguage(rs.getString("language"));
                     certificates.add(certificate);
+                    //todo: норм исключения и тесты
                 }
             }
 
-            user.setRole(new ArrayList<>(roles));
-            user.setCertificate(new ArrayList<>(certificates));
+            if (user != null) {
+                user.setRole(new ArrayList<>(roles));
+                user.setCertificate(new ArrayList<>(certificates));
+            }
+
             return user;
         }
     }
 
     @Override
-    public List<UserMainData> getListUsers() throws DataAccessException {
+    public List<User> getListUsers() throws DataAccessException {
         LOGGER.debug("Select list all user");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, new UserDaoImpl.ViewAllUserRowMapping());
     }
 
-    private static final class ViewAllUserRowMapping implements RowMapper<UserMainData> {
-        public UserMainData mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new UserMainData.Builder().
+    private static final class ViewAllUserRowMapping implements RowMapper<User> {
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder().
                     setUserId(resultSet.getInt("user_id")).
                     setEmail(resultSet.getString("email")).
                     setFirstName(resultSet.getString("first_name")).

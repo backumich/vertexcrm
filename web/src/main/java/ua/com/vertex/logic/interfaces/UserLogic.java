@@ -2,17 +2,17 @@ package ua.com.vertex.logic.interfaces;
 
 
 import ua.com.vertex.beans.User;
-import ua.com.vertex.beans.UserMainData;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserLogic {
 
     List<String> getAllUserIds();
 
-    List<UserMainData> getListUsers();
+    List<User> getListUsers();
 
-    User getUserDetailsByID(int userID);
+    User getUserDetailsByID(int userId) throws SQLException;
 
     //User getUserDetailsByID(int userID);
 }

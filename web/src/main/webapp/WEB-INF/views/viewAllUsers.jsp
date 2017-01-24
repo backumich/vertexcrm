@@ -129,7 +129,7 @@
 
                 <c:forEach var="users" items="${users}">
                     <tr>
-                        <td>${users.userID} </td>
+                        <td>${users.userId} </td>
                         <td>${users.email} </td>
                         <td>${users.lastName} </td>
                         <td>${users.firstName} </td>
@@ -137,7 +137,7 @@
                         <td>
                             <c:set var="titleURL">
                                 <c:url value="userDetails">
-                                    <c:param name="userID" value="${users.userID}"/>
+                                    <c:param name="userId" value="${users.userId}"/>
                                 </c:url>
                             </c:set>
                             <a href="${titleURL}">Detail</a>
