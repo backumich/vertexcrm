@@ -18,7 +18,7 @@ public class Certificate {
 
     private int userId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate certificationDate;
 
