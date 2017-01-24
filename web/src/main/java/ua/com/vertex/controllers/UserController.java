@@ -20,7 +20,7 @@ public class UserController {
 
 
     static final String CERTIFICATES = "certificates";
-    private static final String USER_JSP = "user";
+    static final String USER_JSP = "user";
     private static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
     private static final String LOG_REQ_IN = "Request to '/getCertificateByUserId' with userId=";
     private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserId' return 'user.jsp' ";

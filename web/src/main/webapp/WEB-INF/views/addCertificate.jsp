@@ -114,11 +114,11 @@
                 </tr>
                 <tr>
                     <td><form:label path="userId">User id:</form:label></td>
-                    <td><form:input placeholder="User id" path="userId"/></td>
+                    <td><form:input placeholder="User id" value="0" type="number" path="userId"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="certificationDate">Certification date :</form:label></td>
-                    <td><form:input placeholder="yyyy-MM-dd" path="certificationDate"/></td>
+                    <td><form:input placeholder="yyyy-MM-dd" type="date" path="certificationDate"/></td>
                     <td><form:errors path="certificationDate"/></td>
                 </tr>
                 <tr>

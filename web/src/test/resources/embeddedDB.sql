@@ -15,7 +15,7 @@ CREATE TABLE Users
 
 CREATE TABLE Certificate
 (
-  certification_id   INT PRIMARY KEY,
+  certification_id   INT AUTO_INCREMENT PRIMARY KEY,
   user_id            INT,
   certification_date DATE         NOT NULL,
   course_name        VARCHAR(500) NOT NULL,

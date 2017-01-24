@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
@@ -17,6 +18,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.UserController.CERTIFICATES;
+import static ua.com.vertex.controllers.UserController.USER_JSP;
 
 
 public class UserControllerTest {
@@ -36,6 +38,12 @@ public class UserControllerTest {
     }
 
     @Test
+    public void userHasCorrectDataInModel() throws Exception {
+        ModelAndView result = underTest.user();
+        assertEquals("Have wrong viewName in ModelAndView", result.getViewName(), USER_JSP);
+    }
+
+    @Test
     public void getAllCertificateByUserIdIsCalledOnUserLogic() throws Exception {
         underTest.getAllCertificatesByUserId(111, model);
         verify(certificateLogic).getAllCertificatesByUserId(anyInt());
@@ -44,7 +52,7 @@ public class UserControllerTest {
     @Test
     public void getAllCertificateByUserIdShouldReturnAppropriateString() {
         String result = underTest.getAllCertificatesByUserId(222, model);
-        assertEquals("Maybe mapping for this method was changed", "user", result);
+        assertEquals("Return wrong view", "user", result);
     }
 
     @Test

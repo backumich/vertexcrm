@@ -14,6 +14,7 @@ import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.utils.Storage;
 
 import javax.sql.DataSource;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -57,7 +58,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(COLUMN_USER_ID, certificate.getUserId());
-//        source.addValue(COLUMN_CERTIFICATION_DATE, certificate.getCertificationDate().);
+        source.addValue(COLUMN_CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
         source.addValue(COLUMN_COURSE_NAME, certificate.getCourseName());
         source.addValue(COLUMN_LANGUAGE, certificate.getLanguage());
 

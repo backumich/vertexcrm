@@ -22,14 +22,14 @@ import java.beans.PropertyEditorSupport;
 @Controller
 public class AdminController {
 
-    private static final String ADD_CERTIFICATE_JSP = "addCertificate";
-    private static final String ADMIN_JSP = "admin";
+    static final String ADD_CERTIFICATE_JSP = "addCertificate";
+    static final String ADMIN_JSP = "admin";
     private static final String CERTIFICATE = "certificate";
-    private static final String MSG = "msg";
+    static final String MSG = "msg";
 
     private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private static final String LOG_REQ_ADD_CERTIFICATE = "Request to '/addCertificate' redirect to page - ";
-    private static final String LOG_CERTIFICATE_INCORECT_DATA = "The data have not been validated!!!";
+    private static final String LOG_CERTIFICATE_INCORRECT_DATA = "The data have not been validated!!!";
     private static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id=";
 
     private final CertificateLogic certificateLogic;
@@ -52,8 +52,8 @@ public class AdminController {
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE);
 
         if (bindingResult.hasErrors()) {
-            LOGGER.warn(LOG_CERTIFICATE_INCORECT_DATA);
-            model.addAttribute(MSG, LOG_CERTIFICATE_INCORECT_DATA);
+            LOGGER.warn(LOG_CERTIFICATE_INCORRECT_DATA);
+            model.addAttribute(MSG, LOG_CERTIFICATE_INCORRECT_DATA);
         } else {
             int result = certificateLogic.addCertificate(certificate);
             model.addAttribute(MSG, LOG_CERTIFICATE_ADDED + result);
