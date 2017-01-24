@@ -8,6 +8,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -16,6 +17,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @WebAppConfiguration
 public class ViewAllUsersControllerTest {
@@ -43,11 +48,15 @@ public class ViewAllUsersControllerTest {
 
         ModelAndView mav = viewAllUsersController.viewAllUsers();
         assertEquals(users, mav.getModel().get("users"));
-
-//        this.mockMvc.perform(get("/viewAllUsers}"))
-//                .andExpect(status().isOk());
-
-
     }
 
+    @Test
+    public void viewAllUsersControllerReturnedViewTest() throws Exception {
+        MockMvc mockMvc = standaloneSetup(viewAllUsersController)
+                .setSingleView(new InternalResourceView("viewAllUsers"))
+                .build();
+        mockMvc.perform(get("/viewAllUsers"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("viewAllUsers"));
+    }
 }

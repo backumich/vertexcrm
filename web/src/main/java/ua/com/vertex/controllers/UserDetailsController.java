@@ -57,9 +57,12 @@ public class UserDetailsController {
             } catch (Throwable t) {
                 LOGGER.debug("There are problems with access to photos");
             }
-        } else {
-            modelAndView.setViewName(ERROR_JSP);
         }
+        //todo:проверить работу исключения
+
+//        else {
+//            modelAndView.setViewName(ERROR_JSP);
+//        }
         return modelAndView;
     }
 }
