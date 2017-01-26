@@ -10,7 +10,9 @@ public interface UserDaoInf {
 
     Optional<User> getUser(int id);
 
+    @SuppressWarnings("unused")
     void deleteUser(int id);
 
+    @SuppressWarnings("unused")
     List<Integer> getAllUserIds();
 }

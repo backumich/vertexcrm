@@ -18,8 +18,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+
 @Repository
-@SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String USER_ID = "userId";
     private static final String CERTIFICATE_ID = "certificateId";
@@ -28,16 +28,20 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String LOG_CERT_IN = "Retrieving certificate id=";
     private static final String LOG_CERT_OUT = "Retrieved certificate id=";
     private static final String LOG_NO_CERT = "No certificate in DB, id=";
+    private static final String LOG_ALLCERT_OUT = "Retrieved all certificates by id=";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final Storage storage;
 
     @Override
-    public List<Certificate> getAllCertificateByUserId(int userId) {
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
+    public List<Certificate> getAllCertificatesByUserId(int userId) {
+
+        String query = "SELECT certification_id, certification_date, course_name "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
+        LOGGER.debug(LOG_ALLCERT_OUT + userId);
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
     @Override
@@ -45,17 +49,18 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.info(storage.getSessionId() + LOG_CERT_IN + certificateId);
+        LOGGER.debug(storage.getSessionId() + LOG_CERT_IN + certificateId);
 
-        Certificate certificate = null;
+        Certificate certificate;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.info(storage.getSessionId() + LOG_NO_CERT + certificateId);
+            certificate = null;
+            LOGGER.error(storage.getSessionId() + LOG_NO_CERT + certificateId);
         }
 
-        LOGGER.info(storage.getSessionId() + LOG_CERT_OUT + certificateId);
+        LOGGER.debug(storage.getSessionId() + LOG_CERT_OUT + certificateId);
 
         return Optional.ofNullable(certificate);
     }
@@ -76,5 +81,19 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     public CertificateDaoImpl(DataSource dataSource, Storage storage) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.storage = storage;
+    }
+
+    private static final class ShortCertificateRowMapper implements RowMapper<Certificate> {
+
+        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Certificate.Builder()
+                    .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(0)
+                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
+                    .setCourseName(resultSet.getString("course_name"))
+                    .setLanguage(null)
+                    .getInstance();
+        }
+
     }
 }

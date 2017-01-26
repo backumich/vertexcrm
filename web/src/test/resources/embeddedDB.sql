@@ -38,4 +38,13 @@ INSERT INTO Certificate (certification_id, user_id, certification_date, course_n
 VALUES ('333', '33', '2016-12-1', 'Java Professional', 'Java');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
-VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java')
+VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
