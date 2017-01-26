@@ -1,9 +1,9 @@
 package ua.com.vertex.controllers;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +20,9 @@ import java.sql.SQLException;
 @SessionAttributes("users")
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
+    private static final String PAGE_JSP = "userDetails";
 
-    UserLogic userLogic;
+    private UserLogic userLogic;
 
     @Autowired
     public UserDetailsController(UserLogic userLogic) {
@@ -36,29 +37,27 @@ public class UserDetailsController {
         User user = null;
         try {
             user = userLogic.getUserDetailsByID(userId);
-        } catch (SQLException e) {
+            LOGGER.debug("Get full data for user ID - " + userId);
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
             modelAndView.setViewName(ERROR_JSP);
         }
         if (user != null) {
-            modelAndView.setViewName("userDetails");
+            modelAndView.setViewName(PAGE_JSP);
             modelAndView.addObject("user", user);
-
             try {
-                String encodedImagePassportScan = Base64.encode(user.getPassportScan());
-                modelAndView.addObject("imagePassportScan", encodedImagePassportScan);
-                LOGGER.debug("Passports scan is obtained and converted");
+                modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
+                LOGGER.debug("Passports scan is obtained and converted for user ID - " + userId);
             } catch (Throwable t) {
-                LOGGER.debug("There are problems with access to passports scan");
+                LOGGER.debug("There are problems with access to passports scan for user ID - " + userId);
             }
             try {
-                String encodedPhoto = Base64.encode(user.getPhoto());
-                modelAndView.addObject("imagePhoto", encodedPhoto);
-                LOGGER.debug("Photo is obtained and converted");
+                modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
+                LOGGER.debug("Photo is obtained and converted for user ID - " + userId);
             } catch (Throwable t) {
-                LOGGER.debug("There are problems with access to photos");
+                LOGGER.debug("There are problems with access to photos for user ID - " + userId);
             }
         }
-        //todo:проверить работу исключения
         return modelAndView;
     }
 }

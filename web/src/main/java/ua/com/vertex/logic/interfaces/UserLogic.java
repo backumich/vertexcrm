@@ -14,5 +14,5 @@ public interface UserLogic {
 
     User getUserDetailsByID(int userId) throws SQLException;
 
-    //User getUserDetailsByID(int userID);
+    String convertImage(byte[] image);
 }

@@ -238,7 +238,7 @@ public class User {
         return accounting;
     }
 
-    public void setAccounting(List<Accounting> accounting) {
+    private void setAccounting(List<Accounting> accounting) {
         this.accounting = accounting;
     }
 
@@ -246,7 +246,7 @@ public class User {
         return payments;
     }
 
-    public void setPayments(List<Payments> payments) {
+    private void setPayments(List<Payments> payments) {
         this.payments = payments;
     }
 }

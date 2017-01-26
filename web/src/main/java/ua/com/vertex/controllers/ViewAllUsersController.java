@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +17,10 @@ import java.sql.SQLException;
 @RequestMapping(value = "/viewAllUsers")
 @SessionAttributes("users")
 public class ViewAllUsersController {
+    private static final String ERROR_JSP = "error";
+    private static final String PAGE_JSP = "viewAllUsers";
 
-    UserLogic userLogic;
+    private UserLogic userLogic;
 
     @Autowired
     public ViewAllUsersController(UserLogic userLogic) {
@@ -29,12 +32,13 @@ public class ViewAllUsersController {
     @GetMapping
     public ModelAndView viewAllUsers() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("viewAllUsers");
+        modelAndView.setViewName(PAGE_JSP);
         try {
             modelAndView.addObject("users", userLogic.getListUsers());
             LOGGER.debug("Get list all users");
-        } catch (SQLException e) {
+        } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the list of users there was a database error");
+            modelAndView.setViewName(ERROR_JSP);
         }
         return modelAndView;
     }

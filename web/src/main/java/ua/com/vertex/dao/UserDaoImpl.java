@@ -128,14 +128,10 @@ public class UserDaoImpl implements UserDaoInf {
                 certificate.setCertificationId(certification_id);
                 if (rs.getDate("certification_date") != null) {
                     certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
-//                    throw new SQLException();
                 }
                 certificate.setCourseName(rs.getString("course_name"));
                 certificate.setLanguage(rs.getString("language"));
                 certificates.add(certificate);
-                //todo: норм исключения и тесты
-
-
             }
         }
 

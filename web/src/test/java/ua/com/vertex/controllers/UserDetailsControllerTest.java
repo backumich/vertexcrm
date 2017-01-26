@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-//@WebAppConfiguration
 public class UserDetailsControllerTest {
 
     @Mock
@@ -28,13 +27,11 @@ public class UserDetailsControllerTest {
     @Mock
     private UserDetailsController userDetailsController;
 
-    private MockMvc mockMvc;
-
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userDetailsController = new UserDetailsController(logic);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
     }
 
     @Test
@@ -51,12 +48,12 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerReturnedFailViewTest() throws Exception {
-        when(logic.getUserDetailsByID(-1)).thenThrow(new SQLException());
+        when(logic.getUserDetailsByID(-5)).thenThrow(new SQLException());
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("error"))
                 .build();
         mockMvc.perform(get("/userDetails")
-                .param("userId", String.valueOf(-1)))
+                .param("userId", String.valueOf(-5)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"));
     }

@@ -50,6 +50,15 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
     }
+
+    .colortext {
+        background-color: #ffe; /* Цвет фона */
+        color: black; /* Цвет текста */
+    }
+
+    .buttonText {
+        color: black;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -111,19 +120,19 @@
             <table bordercolor="red" border="2">
                 <tr>
                     <td>User ID</td>
-                    <td><input type="number" size="40" value="${user.userId}" disabled></td>
+                    <td><input class="buttonText" type="number" size="40" value="${user.userId}" disabled></td>
                 </tr>
                 <tr>
                     <td>E-mail</td>
-                    <td><input type="text" size="40" value="${user.email}" disabled></td>
+                    <td><input class="buttonText" type="text" size="40" value="${user.email}" disabled></td>
                 </tr>
                 <tr>
                     <td>Last name</td>
-                    <td><input type="text" size="40" value="${user.lastName}" disabled></td>
+                    <td><input class="buttonText" type="text" size="40" value="${user.lastName}" disabled></td>
                 </tr>
                 <tr>
                     <td>First name</td>
-                    <td><input type="text" size="40" value="${user.firstName}" disabled></td>
+                    <td><input class="buttonText" type="text" size="40" value="${user.firstName}" disabled></td>
                 </tr>
                 <tr>
                     <td>Passport scan</td>
@@ -135,11 +144,11 @@
                 </tr>
                 <tr>
                     <td>Discount</td>
-                    <td><input type="number" size="40" value="${user.discount}" disabled></td>
+                    <td><input class="buttonText" type="number" size="40" value="${user.discount}" disabled></td>
                 </tr>
                 <tr>
                     <td>Phone</td>
-                    <td><input type="text" size="40" value="${user.phone}" disabled></td>
+                    <td><input class="buttonText" type="text" size="40" value="${user.phone}" disabled></td>
                 </tr>
             </table>
             <br/>
@@ -155,7 +164,7 @@
                 <c:if test="${!empty user.role}">
                     <c:forEach var="userRole" items="${user.role}">
                         <tr>
-                            <td><input type="text" size="40" value="${userRole.name}" disabled></td>
+                            <td><input class="buttonText" type="text" size="40" value="${userRole.name}" disabled></td>
                         </tr>
                     </c:forEach>
                 </c:if>
@@ -177,9 +186,12 @@
                     </tr>
                     <c:forEach var="userCertificate" items="${user.certificate}">
                         <tr>
-                            <td><input type="text" size="20" value="${userCertificate.certificationDate}" disabled></td>
-                            <td><input type="text" size="40" value="${userCertificate.courseName}" disabled></td>
-                            <td><input type="text" size="40" value="${userCertificate.language}" disabled></td>
+                            <td><input class="buttonText" type="text" size="20"
+                                       value="${userCertificate.certificationDate}" disabled></td>
+                            <td><input class="buttonText" type="text" size="40" value="${userCertificate.courseName}"
+                                       disabled></td>
+                            <td><input class="buttonText" type="text" size="40" value="${userCertificate.language}"
+                                       disabled></td>
                         </tr>
                     </c:forEach>
                 </table>

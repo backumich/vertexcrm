@@ -1,5 +1,6 @@
 package ua.com.vertex.logic;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
@@ -12,9 +13,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserLogicImpl implements UserLogic {
+    private UserDaoInf userDao;
 
     @Autowired
-    private UserDaoInf userDao;
+    public UserLogicImpl(UserDaoInf userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<String> getAllUserIds() {
@@ -29,9 +33,11 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public User getUserDetailsByID(int userId) throws SQLException {
-        //userDao.getUserDetailsByID(userId);
         return userDao.getUserDetailsByID(userId);
     }
 
-
+    @Override
+    public String convertImage(byte[] image) {
+        return Base64.encode(image);
+    }
 }
