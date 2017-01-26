@@ -109,52 +109,65 @@ public class UserDaoImpl implements UserDaoInf {
             HashSet<Certificate> certificates = new HashSet<>();
 
             while (rs.next()) {
-                if (user == null) {
-                    user = new User();
-                    user.setUserId(rs.getInt("user_id"));
-                    user.setEmail(rs.getString("email"));
-                    user.setFirstName(rs.getString("first_name"));
-                    user.setLastName(rs.getString("last_name"));
-                    user.setPassportScan(rs.getBytes("passport_scan"));
-                    user.setPhoto(rs.getBytes("photo"));
-                    user.setDiscount(rs.getInt("discount"));
-                    user.setPhone(rs.getString("phone"));
-                }
-
-                int role_id = rs.getInt("role_id");
-                if (!rs.wasNull() && role_id > 0) {
-                    Role role = new Role();
-                    role.setRoleId(role_id);
-                    role.setName(rs.getString("name"));
-                    roles.add(role);
-                }
-
-                int certification_id = rs.getInt("certification_id");
-                if (!rs.wasNull() && certification_id > 0) {
-                    Certificate certificate = new Certificate();
-                    certificate.setCertificationId(certification_id);
-                    if (rs.getDate("certification_date") != null) {
-                        certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
-                    }
-                    certificate.setCourseName(rs.getString("course_name"));
-                    certificate.setLanguage(rs.getString("language"));
-                    certificates.add(certificate);
-                    //todo: норм исключения и тесты
-                }
+                user = getUserFromDB(rs, user);
+                getUserRolesFromDB(rs, roles);
+                getUserCertificatesFromDB(rs, certificates);
             }
 
             if (user != null) {
                 user.setRole(new ArrayList<>(roles));
                 user.setCertificate(new ArrayList<>(certificates));
             }
+            return user;
+        }
 
+        private void getUserCertificatesFromDB(ResultSet rs, HashSet<Certificate> certificates) throws SQLException {
+            int certification_id = rs.getInt("certification_id");
+            if (!rs.wasNull() && certification_id > 0) {
+                Certificate certificate = new Certificate();
+                certificate.setCertificationId(certification_id);
+                if (rs.getDate("certification_date") != null) {
+                    certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
+                    //throw new SQLException();
+                }
+                certificate.setCourseName(rs.getString("course_name"));
+                certificate.setLanguage(rs.getString("language"));
+                certificates.add(certificate);
+                //todo: норм исключения и тесты
+
+
+            }
+        }
+
+        private void getUserRolesFromDB(ResultSet rs, HashSet<Role> roles) throws SQLException {
+            int role_id = rs.getInt("role_id");
+            if (!rs.wasNull() && role_id > 0) {
+                Role role = new Role();
+                role.setRoleId(role_id);
+                role.setName(rs.getString("name"));
+                roles.add(role);
+            }
+        }
+
+        private User getUserFromDB(ResultSet rs, User user) throws SQLException {
+            if (user == null) {
+                user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setPassportScan(rs.getBytes("passport_scan"));
+                user.setPhoto(rs.getBytes("photo"));
+                user.setDiscount(rs.getInt("discount"));
+                user.setPhone(rs.getString("phone"));
+            }
             return user;
         }
     }
 
     @Override
-    public List<User> getListUsers() throws DataAccessException {
-        LOGGER.debug("Select list all user");
+    public List<User> getListUsers() throws SQLException {
+        LOGGER.debug("Select list all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, new UserDaoImpl.ViewAllUserRowMapping());

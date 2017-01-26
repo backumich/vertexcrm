@@ -10,7 +10,7 @@ public interface UserLogic {
 
     List<String> getAllUserIds();
 
-    List<User> getListUsers();
+    List<User> getListUsers() throws SQLException;
 
     User getUserDetailsByID(int userId) throws SQLException;
 

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.sql.SQLException;
+
 @Controller
 @RequestMapping(value = "/viewAllUsers")
 @SessionAttributes("users")
@@ -28,9 +30,13 @@ public class ViewAllUsersController {
     public ModelAndView viewAllUsers() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("viewAllUsers");
-        modelAndView.addObject("users", userLogic.getListUsers());
+        try {
+            modelAndView.addObject("users", userLogic.getListUsers());
+            LOGGER.debug("Get list all users");
+        } catch (SQLException e) {
+            LOGGER.debug("During preparation the list of users there was a database error");
+        }
         return modelAndView;
-
     }
 }
 

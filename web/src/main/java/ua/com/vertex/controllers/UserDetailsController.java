@@ -59,10 +59,6 @@ public class UserDetailsController {
             }
         }
         //todo:проверить работу исключения
-
-//        else {
-//            modelAndView.setViewName(ERROR_JSP);
-//        }
         return modelAndView;
     }
 }

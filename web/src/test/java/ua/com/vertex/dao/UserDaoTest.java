@@ -1,5 +1,6 @@
 package ua.com.vertex.dao;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -51,5 +53,39 @@ public class UserDaoTest {
         Optional<User> optional = userDao.getUser(55555);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));
+    }
+
+    @Test
+    public void getListUsersNotEmpty() throws Exception {
+        List<User> users = userDao.getListUsers();
+        assertEquals(4, users.size());
+        assertEquals(false, users.isEmpty());
+    }
+
+//    @Test
+//    public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
+//        User testUser = new User();
+//        testUser.setUserId(10);
+//        testUser.setEmail("emailTest");
+//        testUser.setFirstName("first_name");
+//        testUser.setLastName("last_name");
+//        testUser.setDiscount(0);
+//        testUser.setPhone("666666666");
+//
+//        User user = userDao.getUserDetailsByID(10);
+//        Assert.assertNotNull(user);
+//
+//        Assert.assertEquals(testUser.getUserId(), user.getUserId());
+//        Assert.assertEquals(testUser.getEmail(), user.getEmail());
+//        Assert.assertEquals(testUser.getFirstName(), user.getFirstName());
+//        Assert.assertEquals(testUser.getLastName(), user.getLastName());
+//        Assert.assertEquals(testUser.getDiscount(), user.getDiscount());
+//        Assert.assertEquals(testUser.getPhone(), user.getPhone());
+//    }
+
+    @Test
+    public void getUserDetailsByIDForUserNotExistingInDatabase() throws Exception {
+        User user = userDao.getUserDetailsByID(1111);
+        Assert.assertNull(user);
     }
 }

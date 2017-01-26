@@ -22,7 +22,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<User> getListUsers() {
+    public List<User> getListUsers() throws SQLException {
         userDao.getListUsers();
         return userDao.getListUsers();
     }
