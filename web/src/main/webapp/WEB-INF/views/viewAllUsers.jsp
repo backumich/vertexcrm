@@ -118,6 +118,7 @@
     <div class="container pt1_5">
         <div align="center">
             <table bordercolor="red" border="2">
+
                 <tr>
                     <th width="60px">User ID</th>
                     <th width="150px">E-mail</th>
@@ -126,7 +127,11 @@
                     <th width="150px">Phone</th>
                     <th width="100px"></th>
                 </tr>
-
+                <c:if test="${empty users}">
+                    <tr>
+                        <td>There are no users!</td>
+                    </tr>
+                </c:if>
                 <c:forEach var="users" items="${users}">
                     <tr>
                         <td>${users.userId} </td>

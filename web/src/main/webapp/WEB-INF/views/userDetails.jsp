@@ -107,24 +107,8 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
-
         <div align="center">
-            <%--${user}--%>
-            <%--${!empty user.getRole().get(0)}--%>
-            <%--${!empty user.getCertificate().get(0)}--%>
-            <%--${!empty user.getAccounting().get(0)}--%>
-            <%--${!empty user.getPayments().get(0)}--%>
-
-
             <table bordercolor="red" border="2">
-                <%--<tr>--%>
-                <%--<th width="60px">User ID</th>--%>
-                <%--<th width="150px">E-mail</th>--%>
-                <%--<th width="150px">Last name</th>--%>
-                <%--<th width="150px">First name</th>--%>
-                <%--<th width="150px">Phone</th>--%>
-                <%--<th width="100px"></th>--%>
-                <%--</tr>--%>
                 <tr>
                     <td>User ID</td>
                     <td><input type="number" size="40" value="${user.userId}" disabled></td>
@@ -143,11 +127,11 @@
                 </tr>
                 <tr>
                     <td>Passport scan</td>
-                    <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="image"></td>
+                    <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
-                    <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="image"></td>
+                    <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
                 </tr>
                 <tr>
                     <td>Discount</td>
@@ -161,19 +145,29 @@
             <br/>
             <br/>
             <br/>
-                <p>User roles</p>
+            <p>User roles</p>
             <table bordercolor="red" border="2">
+                <c:if test="${empty user.role}">
+                    <tr>
+                        <td>Error! The current user does not have roles in the system!</td>
+                    </tr>
+                </c:if>
                 <c:if test="${!empty user.role}">
                     <c:forEach var="userRole" items="${user.role}">
                         <tr>
                             <td><input type="text" size="40" value="${userRole.name}" disabled></td>
-                                <%--<td>${userRole.name} </td>--%>
                         </tr>
                     </c:forEach>
                 </c:if>
             </table>
 
             <p>User certification </p>
+            <c:if test="${empty user.certificate}">
+                <tr>
+                    <td>Current user does not have certificates!</td>
+                </tr>
+            </c:if>
+
             <c:if test="${!empty user.certificate}">
                 <table bordercolor="red" border="2">
                     <tr>
@@ -186,9 +180,6 @@
                             <td><input type="text" size="20" value="${userCertificate.certificationDate}" disabled></td>
                             <td><input type="text" size="40" value="${userCertificate.courseName}" disabled></td>
                             <td><input type="text" size="40" value="${userCertificate.language}" disabled></td>
-                                <%--<td>${userCertificate.certificationDate} </td>--%>
-                                <%--<td>${userCertificate.courseName} </td>--%>
-                                <%--<td>${userCertificate.language} </td>--%>
                         </tr>
                     </c:forEach>
                 </table>

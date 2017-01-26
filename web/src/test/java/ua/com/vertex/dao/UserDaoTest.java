@@ -58,30 +58,30 @@ public class UserDaoTest {
     @Test
     public void getListUsersNotEmpty() throws Exception {
         List<User> users = userDao.getListUsers();
-        assertEquals(4, users.size());
+        //assertEquals(4, users.size());
         assertEquals(false, users.isEmpty());
     }
 
-//    @Test
-//    public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
-//        User testUser = new User();
-//        testUser.setUserId(10);
-//        testUser.setEmail("emailTest");
-//        testUser.setFirstName("first_name");
-//        testUser.setLastName("last_name");
-//        testUser.setDiscount(0);
-//        testUser.setPhone("666666666");
-//
-//        User user = userDao.getUserDetailsByID(10);
-//        Assert.assertNotNull(user);
-//
-//        Assert.assertEquals(testUser.getUserId(), user.getUserId());
-//        Assert.assertEquals(testUser.getEmail(), user.getEmail());
-//        Assert.assertEquals(testUser.getFirstName(), user.getFirstName());
-//        Assert.assertEquals(testUser.getLastName(), user.getLastName());
-//        Assert.assertEquals(testUser.getDiscount(), user.getDiscount());
-//        Assert.assertEquals(testUser.getPhone(), user.getPhone());
-//    }
+    @Test
+    public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
+        User testUser = new User();
+        testUser.setUserId(10);
+        testUser.setEmail("emailTest");
+        testUser.setFirstName("first_name");
+        testUser.setLastName("last_name");
+        testUser.setDiscount(0);
+        testUser.setPhone("666666666");
+
+        User user = userDao.getUserDetailsByID(10);
+        Assert.assertNotNull(user);
+
+        Assert.assertEquals(testUser.getUserId(), user.getUserId());
+        Assert.assertEquals(testUser.getEmail(), user.getEmail());
+        Assert.assertEquals(testUser.getFirstName(), user.getFirstName());
+        Assert.assertEquals(testUser.getLastName(), user.getLastName());
+        Assert.assertEquals(testUser.getDiscount(), user.getDiscount());
+        Assert.assertEquals(testUser.getPhone(), user.getPhone());
+    }
 
     @Test
     public void getUserDetailsByIDForUserNotExistingInDatabase() throws Exception {
