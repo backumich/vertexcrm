@@ -16,8 +16,8 @@ import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -47,7 +47,7 @@ public class CertificateDaoTest {
     public void daoShouldReturnCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(222);
         assertNotNull(optional);
-        assertEquals(222, optional.get().getCertificationId());
+        optional.ifPresent(certificate -> assertEquals(222, certificate.getCertificationId()));
     }
 
     @Test
@@ -84,12 +84,12 @@ public class CertificateDaoTest {
                 certificates, certificateDao.getAllCertificatesByUserId(1));
     }
 
-    @Test
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @Test(expected = NoSuchElementException.class)
     public void getCertificateByIdReturnNull() throws Exception {
-        if (certificateDao.getCertificateById(-1).isPresent())
             certificateDao.getCertificateById(-1).get();
-
     }
+
 
     @Test
     public void getCertificateByIdReturnReturnCorectData() throws Exception {
