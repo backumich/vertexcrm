@@ -47,3 +47,7 @@
 .up-padding {
     padding-top: 100px;
 }
+
+a:hover {
+    color: white;
+}

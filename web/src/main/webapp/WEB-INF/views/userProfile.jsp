@@ -109,7 +109,7 @@
     <table class="table fontSize125">
         <tr>
             <td>User ID:</td>
-            <td>${user.userId}</td>
+            <td>${String.format("%05d", user.userId)}</td>
         </tr>
         <tr>
             <td>First Name:</td>
