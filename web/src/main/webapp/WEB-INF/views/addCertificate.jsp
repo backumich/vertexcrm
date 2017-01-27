@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -112,9 +113,9 @@
                 <tr>
                     <td><form:hidden path="certificationId" value="1"/></td>
                 </tr>
+                Users
                 <tr>
-                    <td><form:label path="userId">User id:</form:label></td>
-                    <td><form:input placeholder="User id" value="0" type="number" path="userId"/></td>
+                    <td><form:hidden path="userId" value="1"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="certificationDate">Certification date :</form:label></td>

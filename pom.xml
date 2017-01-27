@@ -23,6 +23,7 @@
         </plugins>
     </build>
 
+
     <modules>
         <module>utils</module>
         <module>web</module>

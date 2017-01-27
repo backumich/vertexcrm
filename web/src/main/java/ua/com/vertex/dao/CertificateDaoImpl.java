@@ -7,7 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
@@ -20,17 +21,23 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+
 
 @Repository
 public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String USER_ID = "userId";
     private static final String CERTIFICATE_ID = "certificateId";
-    private static final String TABLE_NAME = "Certificate";
+    private static final String CERTIFICATION_DATE = "certificationDate";
+    private static final String COURSE_NAME = "courseName";
+    private static final String LANGUAGE = "language";
+
     private static final String COLUMN_CERTIFICATE_ID = "certification_id";
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_CERTIFICATION_DATE = "certification_date";
     private static final String COLUMN_COURSE_NAME = "course_name";
     private static final String COLUMN_LANGUAGE = "language";
+
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
     private static final String LOG_CERT_IN = "Retrieving certificate id=";
@@ -39,8 +46,16 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String LOG_ALL_CERTIFICATE_OUT = "Retrieved all certificates by id=";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert insertCertificate;
+    //    private final SimpleJdbcInsert insertCertificate;
     private final Storage storage;
+
+    @Autowired
+    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.storage = storage;
+//        this.insertCertificate = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME)
+//                .usingColumns(COLUMN_USER_ID, COLUMN_CERTIFICATION_DATE, COLUMN_COURSE_NAME, COLUMN_LANGUAGE);
+    }
 
     @Override
     public List<Certificate> getAllCertificatesByUserId(int userId) {
@@ -53,16 +68,30 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
+//    @Override
+//    public int addCertificate(Certificate certificate) {
+//
+//        return insertCertificate.executeAndReturnKey(addParametrToMapSqlParameterSourceFromCertificate(certificate))
+//                .intValue();
+//    }
+
     @Override
     public int addCertificate(Certificate certificate) {
+        String query = "INSERT INTO Certificate (user_id,certification_date, course_name, language) " +
+                "VALUES ( :userId, :certificationDate, :courseName, :language)";
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromCertificate(certificate), keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    private MapSqlParameterSource addParametrToMapSqlParameterSourceFromCertificate(Certificate certificate) {
         MapSqlParameterSource source = new MapSqlParameterSource();
-        source.addValue(COLUMN_USER_ID, certificate.getUserId());
-        source.addValue(COLUMN_CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
-        source.addValue(COLUMN_COURSE_NAME, certificate.getCourseName());
-        source.addValue(COLUMN_LANGUAGE, certificate.getLanguage());
-
-        return insertCertificate.execute(source);
+        source.addValue(USER_ID, certificate.getUserId());
+        source.addValue(CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
+        source.addValue(COURSE_NAME, certificate.getCourseName());
+        source.addValue(LANGUAGE, certificate.getLanguage());
+        return source;
     }
 
     @Override
@@ -110,13 +139,5 @@ public class CertificateDaoImpl implements CertificateDaoInf {
                     .getInstance();
         }
 
-    }
-
-    @Autowired
-    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.insertCertificate = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME)
-                .usingColumns(COLUMN_USER_ID, COLUMN_CERTIFICATION_DATE, COLUMN_COURSE_NAME, COLUMN_LANGUAGE);
-        this.storage = storage;
     }
 }

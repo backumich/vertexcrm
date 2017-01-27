@@ -45,6 +45,7 @@ public class MainContext extends WebMvcConfigurerAdapter {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
+        resolver.setContentType("text/html;charset=UTF-8");
         resolver.setExposeContextBeansAsAttributes(true);
         return resolver;
     }
@@ -54,7 +55,7 @@ public class MainContext extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setUseCodeAsDefaultMessage(true);
+        messageSource.setFallbackToSystemLocale(true);
         return messageSource;
     }
 

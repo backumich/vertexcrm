@@ -117,7 +117,7 @@ public class CertificateDaoImplTest {
                 .setLanguage("Java")
                 .getInstance();
         int result = underTest.addCertificate(certificate);
-        assertEquals("", result, 1);
+        assertEquals("", result, 501);
     }
 
 }
