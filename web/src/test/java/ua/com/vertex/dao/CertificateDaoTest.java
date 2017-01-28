@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -87,7 +88,7 @@ public class CertificateDaoTest {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)
     public void getCertificateByIdReturnNull() throws Exception {
-            certificateDao.getCertificateById(-1).get();
+        certificateDao.getCertificateById(-1).get();
     }
 
 

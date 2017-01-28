@@ -19,7 +19,6 @@ public class CertificateLogicImpl implements CertificateLogic {
     private static final String LOG_CERT = "Call - certificateDao.getCertificateById(%s);";
 
 
-
     private CertificateDaoInf certificateDaoInf;
 
     @Autowired
