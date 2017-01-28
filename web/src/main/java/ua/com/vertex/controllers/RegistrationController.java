@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
-    protected static final String REGISTRATION_PAGE = "registration";
+    static final String REGISTRATION_PAGE = "registration";
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     private static final String REGISTRATION_ERROR_PAGE = "registrationError";
     private static final String NAME_USER_MODEL_FOR_REGISTRATION_PAGE = "userFormRegistration";

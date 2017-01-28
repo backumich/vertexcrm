@@ -47,14 +47,15 @@ VALUES ('333', '33', '2016-12-1', 'Java Professional', 'Java');
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
 VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java');
 
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
 
 INSERT INTO Users(user_id, email, password, first_name, last_name , discount, phone, role_id)
 VALUES(10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 
--- INSERT INTO Roles (role_id, name) VALUES(1, 'Admin');
--- INSERT INTO Roles (role_id, name) VALUES(2, 'User');
---
--- INSERT INTO Certificate(certification_id, user_id, certification_date, course_name, language)
--- VALUES(2, 1, '2016-11-08', 'Java Professional', 'Java');
--- INSERT INTO Certificate(certification_id, user_id, certification_date, course_name, language)
--- VALUES(32, 1, '2017-01-25', 'Java OOP', 'Ru');

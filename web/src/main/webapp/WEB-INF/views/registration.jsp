@@ -20,6 +20,7 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -32,23 +33,13 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
 
     .buttonText {
@@ -58,6 +49,7 @@
 </head>
 <body class="inside footer-under">
 <!-- Yandex.Metrika counter -->
+<%--suppress JSValidateTypes --%>
 <script type="text/javascript">
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function () {
@@ -72,7 +64,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -81,7 +72,6 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {

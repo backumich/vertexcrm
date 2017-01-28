@@ -14,6 +14,7 @@ public interface UserDaoRealizationInf {
     @SuppressWarnings("unused")
     void deleteUser(long id);
 
+    @SuppressWarnings("unused")
     List<Integer> getAllUserIds();
 
     int registrationUser(User user) throws DataAccessException;
