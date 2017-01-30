@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+
     var $page = $('html, body');
     $('a[href*="#"]').click(function () {
         var href = $.attr(this, 'href');
@@ -8,6 +10,22 @@ $(document).ready(function () {
             window.location.hash = href;
         });
         return false;
+    });
+
+    $("#allowedit").click(function () {
+        document.getElementById("email").disabled = false;
+        document.getElementById("lastName").disabled = false;
+        document.getElementById("firstName").disabled = false;
+        document.getElementById("discount").disabled = false;
+        document.getElementById("phone").disabled = false;
+        document.getElementById("role").disabled = false;
+        document.getElementById("save").disabled = false;
+        // document.getElementById("email").disabled = false;
+        // document.getElementById("email").disabled = false;
+        // document.getElementById("email").disabled = false;
+        // document.getElementById("email").disabled = false;
+        // document.getElementById("email").disabled = false;
+        // document.getElementById("email").disabled = false;
     });
 
     $(".typing").typed({

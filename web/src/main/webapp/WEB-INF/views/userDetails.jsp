@@ -117,86 +117,110 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <table bordercolor="red" border="2">
-                <tr>
-                    <td>User ID</td>
-                    <td><input class="buttonText" type="number" size="40" value="${user.userId}" disabled></td>
-                </tr>
-                <tr>
-                    <td>E-mail</td>
-                    <td><input class="buttonText" type="text" size="40" value="${user.email}" disabled></td>
-                </tr>
-                <tr>
-                    <td>Last name</td>
-                    <td><input class="buttonText" type="text" size="40" value="${user.lastName}" disabled></td>
-                </tr>
-                <tr>
-                    <td>First name</td>
-                    <td><input class="buttonText" type="text" size="40" value="${user.firstName}" disabled></td>
-                </tr>
-                <tr>
-                    <td>Passport scan</td>
-                    <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
-                </tr>
-                <tr>
-                    <td>Photo</td>
-                    <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
-                </tr>
-                <tr>
-                    <td>Discount</td>
-                    <td><input class="buttonText" type="number" size="40" value="${user.discount}" disabled></td>
-                </tr>
-                <tr>
-                    <td>Phone</td>
-                    <td><input class="buttonText" type="text" size="40" value="${user.phone}" disabled></td>
-                </tr>
-            </table>
-            <br/>
-            <br/>
-            <br/>
-            <p>User roles</p>
-            <table bordercolor="red" border="2">
-                <c:if test="${empty user.role}">
-                    <tr>
-                        <td>Error! The current user does not have roles in the system!</td>
-                    </tr>
-                </c:if>
-                <c:if test="${!empty user.role}">
-                    <c:forEach var="userRole" items="${user.role}">
-                        <tr>
-                            <td><input class="buttonText" type="text" size="40" value="${userRole.name}" disabled></td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
-            </table>
-
-            <p>User certification </p>
-            <c:if test="${empty user.certificate}">
-                <tr>
-                    <td>Current user does not have certificates!</td>
-                </tr>
-            </c:if>
-
-            <c:if test="${!empty user.certificate}">
+            <button id="allowedit" class="buttonText">Allow editing</button>
+            <%--user - то что отсылается в контроллер--%>
+            <form:form action="saveUserData" method="post" commandName="user">
                 <table bordercolor="red" border="2">
                     <tr>
-                        <th width="100px">Certification date</th>
-                        <th width="150px">Course name</th>
-                        <th width="150px">Language</th>
+                        <td>User ID</td>
+                        <td><form:input id="userId" class="buttonText" type="number" size="40" value="${user.userId}"
+                                        path="userId" disabled="true"/>
+                        </td>
                     </tr>
-                    <c:forEach var="userCertificate" items="${user.certificate}">
-                        <tr>
-                            <td><input class="buttonText" type="text" size="20"
-                                       value="${userCertificate.certificationDate}" disabled></td>
-                            <td><input class="buttonText" type="text" size="40" value="${userCertificate.courseName}"
-                                       disabled></td>
-                            <td><input class="buttonText" type="text" size="40" value="${userCertificate.language}"
-                                       disabled></td>
-                        </tr>
-                    </c:forEach>
+                    <tr>
+                        <td>E-mail</td>
+                        <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
+                                        path="email" disabled="true"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
+                                        path="lastName" disabled="true"/>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>First name</td>
+                        <td><form:input id="firstName" class="buttonText" type="text" size="40"
+                                        value="${user.firstName}" path="firstName" disabled="true"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Passport scan</td>
+                        <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
+                    </tr>
+                    <tr>
+                        <td>Photo</td>
+                        <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
+                    </tr>
+                    <tr>
+                        <td>Discount</td>
+                        <td><form:input id="discount" class="buttonText" type="number" size="40"
+                                        value="${user.discount}"
+                                        path="discount" disabled="true"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td><form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
+                                        path="phone" disabled="true"/>
+                        </td>
+                    </tr>
                 </table>
-            </c:if>
+                <br/>
+                <br/>
+                <br/>
+                <p>User roles</p>
+                <table bordercolor="red" border="2">
+                    <c:if test="${empty user.role}">
+                        <tr>
+                            <td>Error! The current user does not have roles in the system!</td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${!empty user.role}">
+                        <c:forEach var="userRole" items="${user.role}">
+                            <tr>
+                                <td><input id="role" class="buttonText" type="text" size="40" value="${userRole.name}"
+                                           disabled></td>
+                            </tr>
+                        </c:forEach>
+                    </c:if>
+                </table>
+
+                <p>User certification </p>
+                <c:if test="${empty user.certificate}">
+                    <tr>
+                        <td>Current user does not have certificates!</td>
+                    </tr>
+                </c:if>
+
+                <c:if test="${!empty user.certificate}">
+                    <table bordercolor="red" border="2">
+                        <tr>
+                            <th width="100px">Certification date</th>
+                            <th width="150px">Course name</th>
+                            <th width="150px">Language</th>
+                        </tr>
+                        <c:forEach var="userCertificate" items="${user.certificate}">
+                            <tr>
+                                <td><input class="buttonText" type="text" size="20"
+                                           value="${userCertificate.certificationDate}" disabled></td>
+                                <td><input class="buttonText" type="text" size="40"
+                                           value="${userCertificate.courseName}"
+                                           disabled></td>
+                                <td><input class="buttonText" type="text" size="40" value="${userCertificate.language}"
+                                           disabled></td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </c:if>
+                <td colspan="2" align="center"><input id="save" class="buttonText" type="submit" value="Save" disabled/>
+                </td>
+
+            </form:form>
         </div>
+
     </div>
 </div>
 <div class="footer">
