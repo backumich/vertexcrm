@@ -13,13 +13,28 @@ $(document).ready(function () {
     });
 
     $("#allowedit").click(function () {
-        document.getElementById("email").disabled = false;
-        document.getElementById("lastName").disabled = false;
-        document.getElementById("firstName").disabled = false;
-        document.getElementById("discount").disabled = false;
-        document.getElementById("phone").disabled = false;
-        document.getElementById("role").disabled = false;
-        document.getElementById("save").disabled = false;
+        if ($("#email").length) {
+            document.getElementById("email").disabled = false;
+        }
+        if ($("#lastName").length) {
+            document.getElementById("lastName").disabled = false;
+        }
+        if ($("#firstName").length) {
+            document.getElementById("firstName").disabled = false;
+        }
+        if ($("#discount").length) {
+            document.getElementById("discount").disabled = false;
+        }
+        if ($("#phone").length) {
+            document.getElementById("phone").disabled = false;
+        }
+        if ($("#role").length) {
+            document.getElementById("role").disabled = false;
+        }
+        if ($("#save").length) {
+            document.getElementById("save").disabled = false;
+        }
+
         // document.getElementById("email").disabled = false;
         // document.getElementById("email").disabled = false;
         // document.getElementById("email").disabled = false;

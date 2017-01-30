@@ -35,14 +35,17 @@ public class SaveUserDataController {
     @PostMapping
     public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
                                              User user, BindingResult bindingResult, ModelAndView modelAndView) {
+//    public ModelAndView saveUserData(@Valid User user, BindingResult bindingResult, ModelAndView modelAndView) {
+
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(USER_DETAILS_PAGE);
+            modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
         } else {
+            modelAndView.setViewName(USER_DETAILS_PAGE);
+            modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
 
         }
 
-        modelAndView.setViewName(USER_DETAILS_PAGE);
-        modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
         return modelAndView;
     }
 }

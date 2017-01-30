@@ -132,6 +132,7 @@
                         <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
                                         path="email" disabled="true"/>
                         </td>
+                        <td><form:errors path="email"/></td>
                     </tr>
                     <tr>
                         <td>Last name</td>
@@ -186,6 +187,12 @@
                             </tr>
                         </c:forEach>
                     </c:if>
+                        <%--<select name="Role">--%>
+                        <%--<c:forEach var="user" items="${user.role}">--%>
+                        <%--<option value="${user.role.getRoleId()}"--%>
+                        <%--${user.role.getRoleId() == selectedDept ? 'selected="selected"' : ''}>${user.role.getName()}</option>--%>
+                        <%--</c:forEach>--%>
+                        <%--</select>--%>
                 </table>
 
                 <p>User certification </p>

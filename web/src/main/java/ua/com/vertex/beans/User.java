@@ -1,11 +1,17 @@
 package ua.com.vertex.beans;
 
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
     private int userId;
+
+    @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
+    @Email(message = "E-mail address format is incorrect")
     private String email;
     private String password;
     private String firstName;
