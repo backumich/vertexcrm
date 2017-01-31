@@ -1,73 +1,31 @@
 package ua.com.vertex.beans;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
 
 public class Certificate {
 
+    public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
-
     private int userId;
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate certificationDate;
-
-    @NotEmpty
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String courseName;
-
-    @NotEmpty
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String language;
 
-    public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
-
     public Certificate() {
-    }
-
-    public static class Builder {
-        private final Certificate instance;
-
-        public Builder() {
-            instance = new Certificate();
-        }
-
-        public Builder setCertificationId(int id) {
-            instance.setCertificationId(id);
-            return this;
-        }
-
-        public Builder setUserId(int id) {
-            instance.setUserId(id);
-            return this;
-        }
-
-        public Builder setCertificationDate(LocalDate date) {
-            instance.setCertificationDate(date);
-            return this;
-        }
-
-        public Builder setCourseName(String name) {
-            instance.setCourseName(name);
-            return this;
-        }
-
-        public Builder setLanguage(String language) {
-            instance.setLanguage(language);
-            return this;
-        }
-
-        public Certificate getInstance() {
-            return instance;
-        }
     }
 
     @Override
@@ -136,5 +94,42 @@ public class Certificate {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public static class Builder {
+        private final Certificate instance;
+
+        public Builder() {
+            instance = new Certificate();
+        }
+
+        public Builder setCertificationId(int id) {
+            instance.setCertificationId(id);
+            return this;
+        }
+
+        public Builder setUserId(int id) {
+            instance.setUserId(id);
+            return this;
+        }
+
+        public Builder setCertificationDate(LocalDate date) {
+            instance.setCertificationDate(date);
+            return this;
+        }
+
+        public Builder setCourseName(String name) {
+            instance.setCourseName(name);
+            return this;
+        }
+
+        public Builder setLanguage(String language) {
+            instance.setLanguage(language);
+            return this;
+        }
+
+        public Certificate getInstance() {
+            return instance;
+        }
     }
 }

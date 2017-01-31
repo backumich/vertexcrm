@@ -37,7 +37,7 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView user() {
-        return new ModelAndView("user");
+        return new ModelAndView(USER_JSP);
     }
 
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
