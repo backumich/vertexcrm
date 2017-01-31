@@ -180,6 +180,28 @@ public class UserDaoImpl implements UserDaoInf {
         }
     }
 
+    @Override
+    public List<Role> getListAllRoles() throws SQLException {
+        LOGGER.debug("Select list all users");
+
+        String query = "SELECT r.role_id, r.name FROM Roles r";
+        return jdbcTemplate.query(query, new UserDaoImpl.GetListAllRolesRowMapping());
+    }
+
+    private static final class GetListAllRolesRowMapping implements RowMapper<Role> {
+        public Role mapRow(ResultSet rs, int i) throws SQLException {
+            List<Role> roles = new ArrayList<>();
+
+            while (rs.next()) {
+                Role role = new Role();
+                role.setRoleId(rs.getInt("role_id"));
+                role.setName(rs.getString("name"));
+                roles.add(role);
+            }
+            return null;
+        }
+    }
+
     @Autowired
     public UserDaoImpl(DataSource dataSource, Storage storage) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
