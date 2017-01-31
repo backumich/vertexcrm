@@ -32,8 +32,8 @@ public class ViewAllUsersController {
     @GetMapping
     public ModelAndView viewAllUsers() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(PAGE_JSP);
         try {
+            modelAndView.setViewName(PAGE_JSP);
             modelAndView.addObject("users", userLogic.getListUsers());
             LOGGER.debug("Get list all users");
         } catch (DataAccessException | SQLException e) {
