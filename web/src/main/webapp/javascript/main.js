@@ -28,19 +28,12 @@ $(document).ready(function () {
         if ($("#phone").length) {
             document.getElementById("phone").disabled = false;
         }
-        if ($("#role").length) {
-            document.getElementById("role").disabled = false;
+        if ($("#roles").length) {
+            document.getElementById("roles").disabled = false;
         }
         if ($("#save").length) {
             document.getElementById("save").disabled = false;
         }
-
-        // document.getElementById("email").disabled = false;
-        // document.getElementById("email").disabled = false;
-        // document.getElementById("email").disabled = false;
-        // document.getElementById("email").disabled = false;
-        // document.getElementById("email").disabled = false;
-        // document.getElementById("email").disabled = false;
     });
 
     $(".typing").typed({

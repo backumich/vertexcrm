@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 //@RequestMapping(value = "/userDetails")
@@ -43,6 +45,16 @@ public class UserDetailsController {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
             modelAndView.setViewName(ERROR_JSP);
         }
+        try {
+            List<Role> roles = userLogic.getListAllRoles();
+            // roles.get()
+            modelAndView.addObject("roles", roles);
+            LOGGER.debug("Get all roles for user ID - " + userId);
+        } catch (DataAccessException | SQLException e) {
+            LOGGER.debug("During preparation the all roles for user ID - " + userId + " there was a database error");
+            modelAndView.setViewName(ERROR_JSP);
+        }
+
         if (user != null) {
             modelAndView.setViewName(PAGE_JSP);
             modelAndView.addObject("user", user);

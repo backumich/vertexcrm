@@ -1,6 +1,7 @@
 package ua.com.vertex.logic.interfaces;
 
 
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
@@ -15,4 +16,6 @@ public interface UserLogic {
     User getUserDetailsByID(int userId) throws SQLException;
 
     String convertImage(byte[] image);
+
+    List<Role> getListAllRoles() throws SQLException;
 }

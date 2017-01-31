@@ -179,20 +179,36 @@
                             <td>Error! The current user does not have roles in the system!</td>
                         </tr>
                     </c:if>
-                    <c:if test="${!empty user.role}">
-                        <c:forEach var="userRole" items="${user.role}">
-                            <tr>
-                                <td><input id="role" class="buttonText" type="text" size="40" value="${userRole.name}"
-                                           disabled></td>
-                            </tr>
-                        </c:forEach>
-                    </c:if>
-                        <%--<select name="Role">--%>
-                        <%--<c:forEach var="user" items="${user.role}">--%>
-                        <%--<option value="${user.role.getRoleId()}"--%>
-                        <%--${user.role.getRoleId() == selectedDept ? 'selected="selected"' : ''}>${user.role.getName()}</option>--%>
+                        <%--<c:if test="${!empty user.role}">--%>
+                        <%--<c:forEach var="userRole" items="${user.role}">--%>
+                        <%--<tr>--%>
+                        <%--<td><input id="role" class="buttonText" type="text" size="40" value="${userRole.name}"--%>
+                        <%--disabled></td>--%>
+                        <%--</tr>--%>
                         <%--</c:forEach>--%>
-                        <%--</select>--%>
+                        <%--</c:if>--%>
+
+                    <c:if test="${!empty user.role}">
+                        <tr>
+                            <td>
+                                <select id="roles" name="roles" disabled="true">
+                                    <c:forEach items="${roles}" var="roles">
+                                        <%--<option value="${roles.roleId}">${roles.name}</option>--%>
+
+                                        <%--<option value="${roles.roleId}">--%>
+                                        <%--${roles.name}--%>
+                                        <%--</option>--%>
+
+                                        <option value="${roles.roleId}" ${roles.roleId == user.role[0].roleId ? 'selected="selected"' : ''}>${roles.name}</option>
+
+                                    </c:forEach>
+                                </select>
+
+                                <br/>
+
+                            </td>
+                        </tr>
+                    </c:if>
                 </table>
 
                 <p>User certification </p>
