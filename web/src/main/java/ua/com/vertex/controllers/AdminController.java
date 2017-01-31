@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,23 +14,24 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
-import java.beans.PropertyEditorSupport;
-
-
 @Controller
 public class AdminController {
 
     static final String ADD_CERTIFICATE_JSP = "addCertificate";
     static final String ADMIN_JSP = "admin";
-    private static final String CERTIFICATE = "certificate";
     static final String MSG = "msg";
-
+    private static final String CERTIFICATE = "certificate";
     private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private static final String LOG_REQ_ADD_CERTIFICATE = "Request to '/addCertificate' redirect to page - ";
     private static final String LOG_CERTIFICATE_INCORRECT_DATA = "The data have not been validated!!!";
     private static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id=";
 
     private final CertificateLogic certificateLogic;
+
+    @Autowired
+    public AdminController(CertificateLogic certificateLogic) {
+        this.certificateLogic = certificateLogic;
+    }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView admin() {
@@ -62,29 +61,5 @@ public class AdminController {
 
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_JSP);
         return ADD_CERTIFICATE_JSP;
-    }
-
-    @InitBinder(CERTIFICATE)
-    public void customizeBinding(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                if (text == null) {
-                    return;
-                }
-                setValue(text.replaceAll("<.[^<>]*?>", ""));
-            }
-
-            @Override
-            public String getAsText() {
-                Object value = getValue();
-                return (value != null ? value.toString() : "");
-            }
-        });
-    }
-
-    @Autowired
-    public AdminController(CertificateLogic certificateLogic) {
-        this.certificateLogic = certificateLogic;
     }
 }
