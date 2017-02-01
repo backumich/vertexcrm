@@ -113,7 +113,6 @@
                 <tr>
                     <td><form:hidden path="certificationId" value="1"/></td>
                 </tr>
-                Users
                 <tr>
                     <td><form:hidden path="userId" value="1"/></td>
                 </tr>
