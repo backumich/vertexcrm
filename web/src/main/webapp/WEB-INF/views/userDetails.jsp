@@ -182,7 +182,7 @@
                     <c:if test="${!empty user.role}">
                         <tr>
                             <td>
-                                <select id="roles" class="buttonText" name="rolez" disabled="true">
+                                <select id="roles" class="buttonText" name="roleId" disabled="true">
                                     <c:forEach items="${roles}" var="roles">
                                         <option value="${roles.roleId}" ${roles.roleId == user.role[0].roleId ? 'selected="selected"' : ''}>${roles.name}</option>
                                     </c:forEach>
@@ -220,7 +220,8 @@
                         </c:forEach>
                     </table>
                 </c:if>
-                <td colspan="2" align="center"><input id="save" class="buttonText" type="submit" value="Save" disabled/>
+                <td colspan="2" align="center">
+                    <input id="save" class="buttonText" type="submit" value="Save" disabled/>
                 </td>
 
             </form:form>
