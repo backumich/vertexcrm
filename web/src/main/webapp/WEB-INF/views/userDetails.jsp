@@ -183,8 +183,15 @@
                         <tr>
                             <td>
                                 <select id="roles" class="buttonText" name="roleId" disabled="true">
+                                    <option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>
                                     <c:forEach items="${roles}" var="roles">
-                                        <option value="${roles.roleId}" ${roles.roleId == user.role[0].roleId ? 'selected="selected"' : ''}>${roles.name}</option>
+
+                                        <%--<c:if test="${roles.roleId != user.role[0].roleId}">--%>
+                                        <%--<option value="${roles.roleId}">${roles.name}</option>--%>
+                                        <%--</c:if>--%>
+
+
+                                        <%--<option value="${roles.roleId}" ${roles.roleId == user.role[0].roleId ? 'selected="selected"' : ''}>${roles.name}</option>--%>
                                     </c:forEach>
                                 </select>
                                 <br/>

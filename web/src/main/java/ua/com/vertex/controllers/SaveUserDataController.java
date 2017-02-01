@@ -34,7 +34,7 @@ public class SaveUserDataController {
     }
 
     @PostMapping
-    public ModelAndView saveUserData(@Valid @RequestParam("roleId") String role, @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
+    public ModelAndView saveUserData(@Valid @RequestParam("roleId") int role, @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
             User user, BindingResult bindingResult, ModelAndView modelAndView) {
 //    public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
 //                                             User user, BindingResult bindingResult, ModelAndView modelAndView) {
