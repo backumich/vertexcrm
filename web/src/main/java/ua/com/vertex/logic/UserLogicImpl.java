@@ -46,4 +46,9 @@ public class UserLogicImpl implements UserLogic {
     public List<Role> getListAllRoles() throws SQLException {
         return userDao.getListAllRoles();
     }
+
+    @Override
+    public Role getRoleById(int roleID) throws SQLException {
+        return userDao.getRoleById(roleID);
+    }
 }

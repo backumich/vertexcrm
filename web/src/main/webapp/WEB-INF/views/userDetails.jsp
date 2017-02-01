@@ -138,13 +138,14 @@
                         <td>Last name</td>
                         <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
                                         path="lastName" disabled="true"/>
-
+                        <td><form:errors path="lastName"/></td>
                         </td>
                     </tr>
                     <tr>
                         <td>First name</td>
                         <td><form:input id="firstName" class="buttonText" type="text" size="40"
                                         value="${user.firstName}" path="firstName" disabled="true"/>
+                        <td><form:errors path="firstName"/></td>
                         </td>
                     </tr>
                     <tr>
@@ -160,12 +161,14 @@
                         <td><form:input id="discount" class="buttonText" type="number" size="40"
                                         value="${user.discount}"
                                         path="discount" disabled="true"/>
+                        <td><form:errors path="discount"/></td>
                         </td>
                     </tr>
                     <tr>
                         <td>Phone</td>
                         <td><form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
                                         path="phone" disabled="true"/>
+                        <td><form:errors path="phone"/></td>
                         </td>
                     </tr>
                 </table>
@@ -186,9 +189,9 @@
                                     <option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>
                                     <c:forEach items="${roles}" var="roles">
 
-                                        <%--<c:if test="${roles.roleId != user.role[0].roleId}">--%>
-                                        <%--<option value="${roles.roleId}">${roles.name}</option>--%>
-                                        <%--</c:if>--%>
+                                        <c:if test="${roles.roleId != user.role[0].roleId}">
+                                            <option value="${roles.roleId}">${roles.name}</option>
+                                        </c:if>
 
 
                                         <%--<option value="${roles.roleId}" ${roles.roleId == user.role[0].roleId ? 'selected="selected"' : ''}>${roles.name}</option>--%>

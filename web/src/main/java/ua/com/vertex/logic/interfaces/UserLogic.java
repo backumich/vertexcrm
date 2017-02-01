@@ -18,4 +18,7 @@ public interface UserLogic {
     String convertImage(byte[] image);
 
     List<Role> getListAllRoles() throws SQLException;
+
+    Role getRoleById(int roleID) throws SQLException;
+
 }

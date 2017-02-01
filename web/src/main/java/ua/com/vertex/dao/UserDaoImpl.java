@@ -88,7 +88,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public User getUserDetailsByID(int userId) throws SQLException {
+    public User getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone," +
                 "  r.role_id, r.name," +
                 "  c.certification_id, c.certification_date, c.course_name, c.language" +
@@ -97,7 +97,7 @@ public class UserDaoImpl implements UserDaoInf {
                 "  LEFT JOIN Certificate c ON u.user_id = c.user_id" +
                 "  WHERE u.user_id = :userId";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userId), new UserDetailsRowMapping());
+        return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping());
     }
 
     private static final class UserDetailsRowMapping implements ResultSetExtractor<User> {
@@ -195,6 +195,30 @@ public class UserDaoImpl implements UserDaoInf {
             role.setName(rs.getString("name"));
             return role;
         }
+    }
+
+
+    @Override
+    public Role getRoleById(int roleID) throws SQLException {
+        LOGGER.debug("Select user role " + roleID);
+
+        String query = "SELECT r.role_id, r.name FROM Roles r WHERE r.role_id = :roleId";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("roleId", roleID), new RoleRowMapping());
+    }
+
+    private static final class RoleRowMapping implements RowMapper<Role> {
+        public Role mapRow(ResultSet rs, int i) throws SQLException {
+            Role role = new Role();
+            role.setRoleId(rs.getInt("role_id"));
+            role.setName(rs.getString("name"));
+            return role;
+        }
+    }
+
+    @Override
+    public int updateUser(User user) throws SQLException {
+
+        return 0;
     }
 
     @Autowired

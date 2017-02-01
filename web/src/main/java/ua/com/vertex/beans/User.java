@@ -2,6 +2,9 @@ package ua.com.vertex.beans;
 
 import org.hibernate.validator.constraints.Email;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
@@ -13,12 +16,26 @@ public class User {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
     private String email;
+
     private String password;
+
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
     private String firstName;
+
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
     private String lastName;
+
     private byte[] passportScan;
+
     private byte[] photo;
+
+    @Min(value = 1, message = "This field must be between 0 and 100")
+    @Max(value = 100, message = "This field must be between 0 and 100")
     private int discount;
+
+    @Size(min = 1, max = 15, message = "This field should not be longer than 15 characters")
+    @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
+            message = "Invalid telephone number format!")
     private String phone;
 
     private List<Role> role;

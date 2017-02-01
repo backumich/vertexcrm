@@ -18,8 +18,12 @@ public interface UserDaoInf {
 
     List<User> getListUsers() throws SQLException;
 
-    User getUserDetailsByID(int UserID) throws SQLException;
+    User getUserDetailsByID(int userID) throws SQLException;
 
     List<Role> getListAllRoles() throws SQLException;
+
+    Role getRoleById(int roleID) throws SQLException;
+
+    int updateUser(User user) throws SQLException;
 
 }

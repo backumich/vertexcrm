@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,10 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/saveUserData")
@@ -34,15 +39,23 @@ public class SaveUserDataController {
     }
 
     @PostMapping
-    public ModelAndView saveUserData(@Valid @RequestParam("roleId") int role, @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
+    public ModelAndView saveUserData(@RequestParam("roleId") int role, @Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
             User user, BindingResult bindingResult, ModelAndView modelAndView) {
-//    public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
-//                                             User user, BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(USER_DETAILS_PAGE);
             modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
         } else {
+            try {
+                List<Role> roles = new ArrayList<>();
+                roles.add(userLogic.getRoleById(role));
+                user.setRole(roles);
+
+            } catch (DataAccessException | SQLException e) {
+
+
+            }
+
             modelAndView.setViewName(USER_DETAILS_PAGE);
             modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
 
