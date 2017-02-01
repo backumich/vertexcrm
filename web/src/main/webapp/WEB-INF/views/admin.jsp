@@ -108,9 +108,9 @@
             </c:if>
         </div>
 
-        <form method="post" action="${pageContext.request.contextPath}/addCertificate">
+        <form:form cssClass="buttonText" method="post" action="addCertificate">
             <input type="submit" name="addCertificate" value="Add Certificate"/>
-        </form>
+        </form:form>
         <br>
         <br>
         <br>
