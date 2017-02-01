@@ -8,7 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -33,9 +35,10 @@ public class SaveUserDataController {
     }
 
     @PostMapping
-    public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
-                                             User user, BindingResult bindingResult, ModelAndView modelAndView) {
-//    public ModelAndView saveUserData(@Valid User user, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView saveUserData(@Valid @RequestParam("rolez") Role role, @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
+            User user, BindingResult bindingResult, ModelAndView modelAndView) {
+
+        //@RequestParam("userId") int userId
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(USER_DETAILS_PAGE);

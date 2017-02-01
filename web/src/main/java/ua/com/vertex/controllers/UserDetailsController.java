@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Controller
-//@RequestMapping(value = "/userDetails")
+@RequestMapping(value = "/userDetails")
 @SessionAttributes("users")
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
@@ -34,7 +34,7 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @GetMapping
-    @RequestMapping(value = "/userDetails")
+    //@RequestMapping(value = "/userDetails")
     public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
         User user = null;
@@ -47,7 +47,6 @@ public class UserDetailsController {
         }
         try {
             List<Role> roles = userLogic.getListAllRoles();
-            // roles.get()
             modelAndView.addObject("roles", roles);
             LOGGER.debug("Get all roles for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
@@ -73,19 +72,5 @@ public class UserDetailsController {
         }
         return modelAndView;
     }
-
-//    @RequestMapping(value = {"/saveUserData"}, method = RequestMethod.POST)
-//    public String saveEmployee(@ModelAttribute("user") @Valid User user, BindingResult result, ModelMap model) {
-//
-//        int a = 5;
-//        if (result.hasErrors()) {
-//
-//            return "registration";
-//        }
-//
-//
-//        model.addAttribute("success", "Employee " + user.getEmail() + " registered successfully");
-//        return "success";
-//    }
 }
 
