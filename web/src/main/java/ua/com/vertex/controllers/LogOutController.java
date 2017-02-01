@@ -15,10 +15,6 @@ public class LogOutController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogOutController.class);
 
-    private static final String LOG_ENTRY = " page accessed";
-    private static final String LOG_OUT_SUCCESS = "Logging out successful";
-    private static final String LOG_LOGOUT_REFUSE = "logging out refused";
-
     private static final String LOGOUT = "logOut";
     private static final String LOGGED_OUT = "loggedOut";
     private static final String ERROR = "error";
@@ -27,7 +23,7 @@ public class LogOutController {
 
     @RequestMapping(value = "/logOut")
     public String showLogOutPage() {
-        LOGGER.debug(logInfo.getId() + LOGOUT + LOG_ENTRY);
+        LOGGER.debug(logInfo.getId() + LOGOUT + " page accessed");
 
         String view = LOGOUT;
         try {
@@ -45,13 +41,13 @@ public class LogOutController {
 
     @RequestMapping(value = "/loggedOut")
     public String processLogOut() {
-        LOGGER.info(logInfo.getId() + LOG_OUT_SUCCESS);
+        LOGGER.info(logInfo.getId() + "logging out successful");
         return LOGGED_OUT;
     }
 
     @RequestMapping(value = "/logOutRefuse")
     public String processLogOutRefuse() {
-        LOGGER.debug(logInfo.getId() + LOG_LOGOUT_REFUSE);
+        LOGGER.debug(logInfo.getId() + "logging out refused");
         return INDEX;
     }
 

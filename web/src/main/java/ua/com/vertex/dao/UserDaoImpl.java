@@ -29,20 +29,6 @@ public class UserDaoImpl implements UserDaoInf {
 
     private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
-    private static final String LOG_USER_ID_IN = "Retrieving user, id=";
-    private static final String LOG_USER_ID_OUT = "Retrieved user, id=";
-    private static final String LOG_NO_USER_ID = "No user id=";
-    private static final String LOG_USER_EMAIL_IN = "Retrieving user, email=";
-    private static final String LOG_USER_EMAIL_OUT = "Retrieved user, email=";
-    private static final String LOG_NO_USER_EMAIL = "No user email=";
-    private static final String LOG_LOGIN_IN = "Retrieving user password and role, email=";
-    private static final String LOG_LOGIN_OUT = "Retrieved user password and role, email=";
-    private static final String LOG_NO_EMAIL = "No email=";
-    private static final String LOG_SAVE_IMAGE_IN = "Saving image, user id=";
-    private static final String LOG_SAVE_IMAGE_OUT = "Saved image";
-    private static final String LOG_GET_IMAGE_IN = "Retrieving image, user id=";
-    private static final String LOG_GET_IMAGE_OUT = "Retrieved image";
-
     private static final String USER_ID = "userId";
     private static final String EMAIL = "email";
     private static final String PHOTO = "photo";
@@ -53,16 +39,16 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE user_id=:userId";
 
-        LOGGER.debug(logInfo.getId() + LOG_USER_ID_IN + userId);
+        LOGGER.debug(logInfo.getId() + "Retrieving user, id=" + userId);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + LOG_NO_USER_ID + userId);
+            LOGGER.warn(logInfo.getId() + "No user id=" + userId);
         }
 
-        LOGGER.debug(logInfo.getId() + LOG_USER_ID_OUT + userId);
+        LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
 
         return Optional.ofNullable(user);
     }
@@ -72,16 +58,16 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug(logInfo.getId() + LOG_USER_EMAIL_IN + email);
+        LOGGER.debug(logInfo.getId() + "Retrieving user, email=" + email);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + LOG_NO_USER_EMAIL + email);
+            LOGGER.warn(logInfo.getId() + "No user email=" + email);
         }
 
-        LOGGER.debug(logInfo.getId() + LOG_USER_EMAIL_OUT + email);
+        LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
 
         return Optional.ofNullable(user);
     }
@@ -90,7 +76,7 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> logIn(String email) {
         String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug(LOG_LOGIN_IN + email);
+        LOGGER.debug("Retrieving user password and role, email=" + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -98,10 +84,10 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(LOG_NO_EMAIL + email);
+            LOGGER.debug("No email=" + email);
         }
 
-        LOGGER.debug(LOG_LOGIN_OUT + email);
+        LOGGER.debug("Retrieved user password and role, email=" + email);
 
         return Optional.ofNullable(user);
     }
@@ -124,7 +110,7 @@ public class UserDaoImpl implements UserDaoInf {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
 
-        LOGGER.debug(logInfo.getId() + LOG_SAVE_IMAGE_IN + userId + ", " + imageType);
+        LOGGER.debug(logInfo.getId() + "Saving image, user id=" + userId + ", " + imageType);
 
         if (PHOTO.equals(imageType)) {
             query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
@@ -138,7 +124,7 @@ public class UserDaoImpl implements UserDaoInf {
             throw new RuntimeException("Image not saved: wrong image type description");
         }
 
-        LOGGER.debug(logInfo.getId() + LOG_SAVE_IMAGE_OUT);
+        LOGGER.debug(logInfo.getId() + "image saved");
 
         jdbcTemplate.update(query, parameters);
     }
@@ -148,7 +134,7 @@ public class UserDaoImpl implements UserDaoInf {
         byte[] image;
         String query;
 
-        LOGGER.debug(logInfo.getId() + LOG_GET_IMAGE_IN + userId + ", " + imageType);
+        LOGGER.debug(logInfo.getId() + "Retrieving image, user id=" + userId + ", " + imageType);
 
         if (PHOTO.equals(imageType)) {
             query = "SELECT photo FROM Users WHERE user_id=:userId";
@@ -163,7 +149,7 @@ public class UserDaoImpl implements UserDaoInf {
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
                 byte[].class);
 
-        LOGGER.debug(logInfo.getId() + LOG_GET_IMAGE_OUT);
+        LOGGER.debug(logInfo.getId() + "image retrieved");
 
         return Optional.ofNullable(image);
     }

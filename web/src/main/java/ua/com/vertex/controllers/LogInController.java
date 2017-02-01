@@ -25,9 +25,7 @@ public class LogInController {
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
-    private static final String LOG_LOGIN_SUCCESS = "login successful";
-    private static final String LOG_AUTHORITIES_ERROR = "0 or more than 1 authority found";
-
+    private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
     private static final String ADMIN = Role.ADMIN.name();
     private static final String USER = Role.USER.name();
     private static final String LOGIN = "logIn";
@@ -72,10 +70,10 @@ public class LogInController {
 
         if (USER_PAGE.equals(view)) {
             model.addAttribute("user", user);
-            LOGGER.info(logInfo.getId() + LOG_LOGIN_SUCCESS);
+            LOGGER.info(logInfo.getId() + "login successful");
         } else if (ADMIN_PAGE.equals(view)) {
             model.addAttribute("user", user);
-            LOGGER.info(logInfo.getId() + LOG_LOGIN_SUCCESS);
+            LOGGER.info(logInfo.getId() + "login successful");
         }
 
         return view;
@@ -94,12 +92,12 @@ public class LogInController {
                 } else if (USER.equals(authority.toString())) {
                     view = USER_PAGE;
                 } else {
-                    throw new Exception(LOG_AUTHORITIES_ERROR);
+                    throw new Exception(AUTHORITIES_ERROR);
                 }
             }
 
         } else {
-            throw new Exception(LOG_AUTHORITIES_ERROR);
+            throw new Exception(AUTHORITIES_ERROR);
         }
 
         return view;

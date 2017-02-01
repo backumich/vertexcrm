@@ -27,10 +27,9 @@ public class CertificateDetailsPageController {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
 
-    private static final String LOG_PROCESS = "Processing request with certificateId=";
-    private static final String LOG_INVALID_DATA = "Requested data is invalid";
-    private static final String LOG_PASS_DATA = "Passing certificate and user data to JSP";
-
+    private static final String USER = "user";
+    private static final String CERTIFICATE = "certificate";
+    private static final String NEW_CERTIFICATE = "newCertificate";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String ERROR = "error";
 
@@ -38,7 +37,7 @@ public class CertificateDetailsPageController {
     public String showCertificateDetailsPage(Model model) {
         String returnPage = CERTIFICATE_DETAILS;
         try {
-            model.addAttribute("newCertificate", new Certificate());
+            model.addAttribute(NEW_CERTIFICATE, new Certificate());
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);
             returnPage = ERROR;
@@ -47,16 +46,17 @@ public class CertificateDetailsPageController {
     }
 
     @RequestMapping(value = "/processCertificateDetails")
-    public String processCertificateDetails(@Validated @ModelAttribute("newCertificate") Certificate certificate,
+    public String processCertificateDetails(@Validated @ModelAttribute(NEW_CERTIFICATE) Certificate certificate,
                                             BindingResult result, Model model) {
+
         String returnPage = CERTIFICATE_DETAILS;
         try {
             if (result.hasErrors()) {
-                model.addAttribute("error", "Entered value must be a positive integer!");
-                LOGGER.debug(logInfo.getId() + LOG_INVALID_DATA);
+                model.addAttribute(ERROR, "Entered value must be a positive integer!");
+                LOGGER.debug(logInfo.getId() + "Requested data are invalid");
             } else {
                 setUserAndCertificate(certificate, model);
-                LOGGER.debug(logInfo.getId() + LOG_PASS_DATA);
+                LOGGER.debug(logInfo.getId() + "Passing certificate and user data to JSP");
             }
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);
@@ -69,15 +69,15 @@ public class CertificateDetailsPageController {
     private void setUserAndCertificate(Certificate certificate, Model model) {
         int certificationId = certificate.getCertificationId();
 
-        LOGGER.debug(logInfo.getId() + LOG_PROCESS + certificationId);
+        LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificationId);
 
         certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
         if (!EMPTY_CERTIFICATE.equals(certificate)) {
-            model.addAttribute("certificate", certificate);
+            model.addAttribute(CERTIFICATE, certificate);
             User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);
-            model.addAttribute("user", user);
+            model.addAttribute(USER, user);
         } else {
-            model.addAttribute("error", "No certificate with this ID!");
+            model.addAttribute(ERROR, "No certificate with this ID!");
         }
     }
 

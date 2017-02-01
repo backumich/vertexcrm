@@ -16,9 +16,6 @@ public class IndexPageController {
 
     private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
 
-    private static final String LOG_ENTRY = " page accessed";
-    private static final String LOG_CLEAN = "Cleaning temporary file directory";
-
     private static final String ERROR = "error";
     private static final String INDEX = "index";
 
@@ -26,8 +23,8 @@ public class IndexPageController {
     public String showIndexPage() {
         String view = INDEX;
         try {
-            LOGGER.debug(logInfo.getId() + INDEX + LOG_ENTRY);
-            LOGGER.debug(logInfo.getId() + LOG_CLEAN);
+            LOGGER.debug(logInfo.getId() + INDEX + " page accessed");
+            LOGGER.debug(logInfo.getId() + "Cleaning temporary file directory");
             cleaner.cleanTempDir();
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);

@@ -19,27 +19,27 @@ public class ImageController {
 
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
 
-    private static final String LOG_PHOTO = "Passing user photo to JSP";
-    private static final String LOG_PASSPORT_SCAN = "Passing user passport scan to JSP";
-    private static final String LOG_ENTRY = " page accessed";
-
-    private static final String USER_PAGE = "userProfile";
+    private static final String USER_PROFILE = "userProfile";
+    private static final String PAGE = "page";
+    private static final String PREVIOUS_PAGE = "previousPage";
     private static final String IMAGE = "image";
+    private static final String IMAGE_TYPE = "imageType";
     private static final String ERROR = "error";
-    private static final String NO_IMAGE = "no image selected";
+    private static final String USER_ID = "userId";
+    private static final String USER = "user";
     private static final String IMAGE_ERROR = "imageError";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
 
     @RequestMapping(value = "/userPhoto")
-    public String showUserPhoto(@RequestParam("previousPage") String previousPage,
-                                @RequestParam("userId") int userId, Model model) {
+    public String showUserPhoto(@RequestParam(PREVIOUS_PAGE) String previousPage,
+                                @RequestParam(USER_ID) int userId, Model model) {
 
-        LOGGER.debug(logInfo.getId() + PHOTO + LOG_ENTRY);
+        LOGGER.debug(logInfo.getId() + PHOTO + " page accessed");
         String view = IMAGE;
         try {
             encode(model, userId, previousPage, PHOTO);
-            LOGGER.debug(logInfo.getId() + LOG_PHOTO);
+            LOGGER.debug(logInfo.getId() + "Passing user photo to JSP");
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
@@ -49,14 +49,14 @@ public class ImageController {
     }
 
     @RequestMapping(value = "/passportScan")
-    public String showPassportScan(@RequestParam("previousPage") String previousPage,
-                                   @RequestParam("userId") int userId, Model model) {
+    public String showPassportScan(@RequestParam(PREVIOUS_PAGE) String previousPage,
+                                   @RequestParam(USER_ID) int userId, Model model) {
 
-        LOGGER.debug(logInfo.getId() + PASSPORT_SCAN + LOG_ENTRY);
+        LOGGER.debug(logInfo.getId() + PASSPORT_SCAN + " page accessed");
         String view = IMAGE;
         try {
             encode(model, userId, previousPage, PASSPORT_SCAN);
-            LOGGER.debug(logInfo.getId() + LOG_PASSPORT_SCAN);
+            LOGGER.debug(logInfo.getId() + "Passing user passport scan to JSP");
         } catch (Throwable t) {
             LOGGER.error(logInfo.getId(), t, t);
             view = ERROR;
@@ -68,18 +68,19 @@ public class ImageController {
     private void encode(Model model, int userId, String previousPage, String imageType) {
         String encoded = Base64.encode(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
-        model.addAttribute("page", previousPage);
+        model.addAttribute(PAGE, previousPage);
     }
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
-    public String uploadImage(@ModelAttribute("user") User user,
-                              @RequestPart(value = "image", required = false) byte[] image,
-                              @RequestParam("imageType") String imageType, Model model) {
-        String view = USER_PAGE;
+    public String uploadImage(@ModelAttribute(USER) User user,
+                              @RequestPart(value = IMAGE, required = false) byte[] image,
+                              @RequestParam(IMAGE_TYPE) String imageType, Model model) {
+
+        String view = USER_PROFILE;
         try {
             if (image == null) {
                 view = IMAGE_ERROR;
-                LOGGER.debug(logInfo.getId() + NO_IMAGE);
+                LOGGER.debug(logInfo.getId() + "no image selected");
             } else {
                 userLogic.saveImage(user.getUserId(), image, imageType);
                 model.addAttribute(user);
