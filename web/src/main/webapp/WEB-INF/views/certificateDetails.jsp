@@ -111,62 +111,62 @@
     <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
     <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-            <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-            <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-            <input type="submit" value="Send">
-        </sf:form>
-        <br><br>
+        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
+        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
+        <input type="submit" value="Send">
+    </sf:form>
+    <br><br>
 
-        <c:if test="${error != null}">
-            <h3><span class="fontSize140 red">${error}</span></h3>
-        </c:if>
+    <c:if test="${error != null}">
+        <h3><span class="fontSize140 red">${error}</span></h3>
+    </c:if>
 
-        <c:if test="${error == null && certificate != null}">
-            <table class="table fontSize140">
-                <tr>
-                    <td>Certification ID:</td>
-                    <td>${String.format("%05d", certificate.certificationId)}</td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder First Name:</td>
-                    <td><span class="red">
+    <c:if test="${error == null && certificate != null}">
+        <table class="table fontSize140">
+            <tr>
+                <td>Certification ID:</td>
+                <td>${String.format("%05d", certificate.certificationId)}</td>
+            </tr>
+            <tr>
+                <td>Certificate Holder First Name:</td>
+                <td><span class="red">
                             <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                        <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder Last Name:</td>
-                    <td><span class="red">
+                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certificate Holder Last Name:</td>
+                <td><span class="red">
                             <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                        <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certification Date:</td>
-                    <td>${certificate.certificationDate}</td>
-                </tr>
-                <tr>
-                    <td>Course Name:</td>
-                    <td>${certificate.courseName}</td>
-                </tr>
-                <tr>
-                    <td>Programming Language:</td>
-                    <td>${certificate.language}</td>
-                </tr>
-            </table>
-            <br>
-            <sf:form method="get" action="/userPhoto">
-                <input type="hidden" name="userId" value="${user.userId}"/>
-                <input type="hidden" name="previousPage" value="/certificateDetails"/>
-                <input class="black" type="submit" value="Show Certificate Holder Photo">
-            </sf:form>
-        </c:if>
-
+                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certification Date:</td>
+                <td>${certificate.certificationDate}</td>
+            </tr>
+            <tr>
+                <td>Course Name:</td>
+                <td>${certificate.courseName}</td>
+            </tr>
+            <tr>
+                <td>Programming Language:</td>
+                <td>${certificate.language}</td>
+            </tr>
+        </table>
         <br>
+        <sf:form method="get" action="/userPhoto">
+            <input type="hidden" name="userId" value="${user.userId}"/>
+            <input type="hidden" name="previousPage" value="/certificateDetails"/>
+            <input class="black" type="submit" value="Show Certificate Holder Photo">
+        </sf:form>
+    </c:if>
+
+    <br>
 
     <div class="href">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
+</div>
 
 
 <div class="footer">
