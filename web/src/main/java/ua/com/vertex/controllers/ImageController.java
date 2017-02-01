@@ -41,7 +41,7 @@ public class ImageController {
             encode(model, userId, previousPage, PHOTO);
             LOGGER.debug(logInfo.getId() + "Passing user photo to JSP");
         } catch (Throwable t) {
-            LOGGER.error(logInfo.getId(), t, t);
+            LOGGER.debug(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -58,7 +58,7 @@ public class ImageController {
             encode(model, userId, previousPage, PASSPORT_SCAN);
             LOGGER.debug(logInfo.getId() + "Passing user passport scan to JSP");
         } catch (Throwable t) {
-            LOGGER.error(logInfo.getId(), t, t);
+            LOGGER.debug(logInfo.getId(), t, t);
             view = ERROR;
         }
 
@@ -86,7 +86,7 @@ public class ImageController {
                 model.addAttribute(user);
             }
         } catch (Throwable t) {
-            LOGGER.error(logInfo.getId(), t, t);
+            LOGGER.debug(logInfo.getId(), t, t);
             view = ERROR;
         }
 

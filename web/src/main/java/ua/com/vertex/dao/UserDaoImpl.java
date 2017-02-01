@@ -45,7 +45,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + "No user id=" + userId);
+            LOGGER.debug(logInfo.getId() + "No user id=" + userId);
         }
 
         LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
@@ -64,7 +64,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + "No user email=" + email);
+            LOGGER.debug(logInfo.getId() + "No user email=" + email);
         }
 
         LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
@@ -146,8 +146,7 @@ public class UserDaoImpl implements UserDaoInf {
             throw new RuntimeException("Wrong image type description");
         }
 
-        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId),
-                byte[].class);
+        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
 
         LOGGER.debug(logInfo.getId() + "image retrieved");
 

@@ -24,13 +24,11 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public Optional<User> getUserById(int id) {
-
         return userDao.getUser(id);
     }
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-
         return userDao.getUserByEmail(email);
     }
 
