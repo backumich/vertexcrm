@@ -101,7 +101,7 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public List<Integer> getAllUserIds() {
         String query = "SELECT user_id FROM Users order by user_id";
-        return jdbcTemplate.query(query, (resultSet, i) -> resultSet.getInt("user_id"));
+        return jdbcTemplate.query(query, new MapSqlParameterSource(), (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
     @Override
