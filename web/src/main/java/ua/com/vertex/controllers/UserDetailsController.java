@@ -15,6 +15,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -47,7 +48,14 @@ public class UserDetailsController {
         }
         try {
             List<Role> roles = userLogic.getListAllRoles();
-            modelAndView.addObject("roles", roles);
+            HashMap<Integer, String> productMap = new HashMap<>();
+            for (Role role : roles) {
+                productMap.put(role.getRoleId(), role.getName());
+            }
+
+
+            modelAndView.addObject("roles", productMap);
+//            modelAndView.addObject("roles", roles);
             LOGGER.debug("Get all roles for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all roles for user ID - " + userId + " there was a database error");

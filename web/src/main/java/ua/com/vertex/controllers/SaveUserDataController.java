@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
@@ -24,9 +23,10 @@ import java.util.List;
 @RequestMapping(value = "/saveUserData")
 public class SaveUserDataController {
 
-    static final String USER_DETAILS_PAGE = "userDetails";
+    static final String USER_DETAIL_PAGE = "userDetails";
+    static final String SAVE_USER_DATA_OK_PAGE = "userDetails";
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
-    private static final String REGISTRATION_ERROR_PAGE = "registrationError";
+    private static final String ERROR_PAGE = "error";
     private static final String USERDATA_MODEL_FOR_SAVE = "user";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
@@ -38,25 +38,39 @@ public class SaveUserDataController {
         this.userLogic = userLogic;
     }
 
+//    @PostMapping
+//    public ModelAndView saveUserData(@RequestParam("roleId") int role, @Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
+//            User user, BindingResult bindingResult, ModelAndView modelAndView) {
+
     @PostMapping
-    public ModelAndView saveUserData(@RequestParam("roleId") int role, @Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
-            User user, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
+                                             User user, BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName(USER_DETAILS_PAGE);
+            try {
+                List<Role> roles = userLogic.getListAllRoles();
+                modelAndView.addObject("roles", roles);
+            } catch (DataAccessException | SQLException e) {
+
+            }
+
+            modelAndView.setViewName(USER_DETAIL_PAGE);
             modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
         } else {
             try {
-                List<Role> roles = new ArrayList<>();
-                roles.add(userLogic.getRoleById(role));
-                user.setRole(roles);
+                List<Role> currentRoles = new ArrayList<>();
+//                currentRoles.add(userLogic.getRoleById(role));
+                user.setRole(currentRoles);
 
-            } catch (DataAccessException | SQLException e) {
+//                List<Role> roles = userLogic.getListAllRoles();
+//                modelAndView.addObject("roles", roles);
+
+            } catch (DataAccessException /*| SQLException*/ e) {
 
 
             }
 
-            modelAndView.setViewName(USER_DETAILS_PAGE);
+            modelAndView.setViewName(SAVE_USER_DATA_OK_PAGE);
             modelAndView.addObject(USERDATA_MODEL_FOR_SAVE, user);
 
         }
