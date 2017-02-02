@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -185,13 +186,13 @@
                     <c:if test="${!empty user.role}">
                         <tr>
                             <td>
-
-                                <form:select path="">
-                                    <form:option value="${user.role[0].roleId}" label="${user.role[0].name}"/>
-                                    <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
-                                    <form:options items="${roles}"/>
-                                </form:select>
-
+                                <spring:bind path="role">
+                                    <form:select path="role">
+                                        <%--<form:option value="${user.role[0].roleId}" label="${user.role[0].name}"/>--%>
+                                        <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
+                                        <form:options items="${roles}"/>
+                                    </form:select>
+                                </spring:bind>
 
                                     <%--<form:select path="" items="${roles}" />--%>
 
