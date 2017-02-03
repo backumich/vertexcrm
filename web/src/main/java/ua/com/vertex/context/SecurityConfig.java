@@ -2,21 +2,15 @@ package ua.com.vertex.context;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 
@@ -63,7 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/logIn")
                 .successForwardUrl("/loggedIn")
-                .failureHandler(handler())
+                .failureHandler((request, response, e) -> {
+                    if (e instanceof BadCredentialsException) {
+                        request.setAttribute("param", "error");
+                        response.sendRedirect("/logIn?error");
+                    } else {
+                        response.sendRedirect("/error");
+                    }
+                })
                 .permitAll()
                 .and()
                 .logout()
@@ -75,22 +76,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
-    }
-
-    @Bean
-    public SimpleUrlAuthenticationFailureHandler handler() {
-        return new SimpleUrlAuthenticationFailureHandler() {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                AuthenticationException e) throws IOException, ServletException {
-                if (e.toString().contains("BadCredentialsException")) {
-                    request.setAttribute("param", "error");
-                    response.sendRedirect("/logIn?error");
-                } else {
-                    response.sendRedirect("/error");
-                }
-            }
-        };
     }
 }
