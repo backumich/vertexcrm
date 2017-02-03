@@ -31,8 +31,8 @@ public class LogOutController {
             if (ANONYMOUS_USER.equals(principal)) {
                 view = LOGGED_OUT;
             }
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
             view = ERROR;
         }
 

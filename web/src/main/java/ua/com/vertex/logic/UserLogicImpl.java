@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ua.com.vertex.beans.User.EMPTY_USER;
-
 @Service
 public class UserLogicImpl implements UserLogic {
 
@@ -36,9 +34,9 @@ public class UserLogicImpl implements UserLogic {
     public Optional<User> logIn(String email) {
         User user;
         if (email.isEmpty()) {
-            user = EMPTY_USER;
+            user = null;
         } else {
-            user = userDao.logIn(email).orElse(EMPTY_USER);
+            user = userDao.logIn(email).orElse(null);
         }
 
         return Optional.ofNullable(user);

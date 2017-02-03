@@ -17,7 +17,6 @@ import ua.com.vertex.dao.UserDaoImpl;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static ua.com.vertex.beans.User.EMPTY_USER;
 import static ua.com.vertex.utils.Role.USER;
 
 
@@ -50,13 +49,13 @@ public class UserLogicImplTest {
     @Test
     public void logInWithEmptyEmailReturnsEmptyUser() {
         Optional<User> optional = logic.logIn("");
-        assertEquals(EMPTY_USER, optional.get());
+        assertTrue(!optional.isPresent());
     }
 
     @Test
     public void logInWithNotExistingEmailReturnsEmptyUser() {
         Optional<User> optional = logic.logIn(NOT_EXISTING_EMAIL);
-        assertEquals(EMPTY_USER, optional.get());
+        assertTrue(!optional.isPresent());
     }
 
     @Test

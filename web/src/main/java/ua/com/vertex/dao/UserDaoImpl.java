@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> logIn(String email) {
         String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug("Retrieving user password and role, email=" + email);
+        LOGGER.debug("Retrieving user password, role, email=" + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -87,7 +87,7 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.debug("No email=" + email);
         }
 
-        LOGGER.debug("Retrieved user password and role, email=" + email);
+        LOGGER.debug("Retrieved user password, role, email=" + email);
 
         return Optional.ofNullable(user);
     }

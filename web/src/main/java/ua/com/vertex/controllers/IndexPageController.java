@@ -26,8 +26,8 @@ public class IndexPageController {
             LOGGER.debug(logInfo.getId() + INDEX + " page accessed");
             LOGGER.debug(logInfo.getId() + "Cleaning temporary file directory");
             cleaner.cleanTempDir();
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
             view = ERROR;
         }
 

@@ -42,8 +42,8 @@ public class LogInController {
             if (!ANONYMOUS_USER.equals(principal)) {
                 view = setUser(logInfo.getEmail(), model);
             }
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
             view = ERROR;
         }
 
@@ -56,8 +56,8 @@ public class LogInController {
         String view;
         try {
             view = setUser(logInfo.getEmail(), model);
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
             view = ERROR;
         }
 

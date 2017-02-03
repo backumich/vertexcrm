@@ -36,8 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(springDataUserDetailsService())
+        auth.userDetailsService(springDataUserDetailsService())
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -48,11 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
 
-        http
-                .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers(permittedAllRequests)
                 .permitAll()
-                .antMatchers(permittedAdminRequests).hasAuthority(ADMIN.toString())
+                .antMatchers(permittedAdminRequests).hasAuthority(ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

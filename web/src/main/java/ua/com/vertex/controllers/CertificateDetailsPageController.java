@@ -35,21 +35,21 @@ public class CertificateDetailsPageController {
 
     @RequestMapping(value = "/certificateDetails")
     public String showCertificateDetailsPage(Model model) {
-        String returnPage = CERTIFICATE_DETAILS;
+        String view = CERTIFICATE_DETAILS;
         try {
             model.addAttribute(NEW_CERTIFICATE, new Certificate());
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
-            returnPage = ERROR;
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
+            view = ERROR;
         }
-        return returnPage;
+        return view;
     }
 
     @RequestMapping(value = "/processCertificateDetails")
     public String processCertificateDetails(@Validated @ModelAttribute(NEW_CERTIFICATE) Certificate certificate,
                                             BindingResult result, Model model) {
 
-        String returnPage = CERTIFICATE_DETAILS;
+        String view = CERTIFICATE_DETAILS;
         try {
             if (result.hasErrors()) {
                 model.addAttribute(ERROR, "Entered value must be a positive integer!");
@@ -58,12 +58,12 @@ public class CertificateDetailsPageController {
                 setUserAndCertificate(certificate, model);
                 LOGGER.debug(logInfo.getId() + "Passing certificate and user data to JSP");
             }
-        } catch (Throwable t) {
-            LOGGER.debug(logInfo.getId(), t, t);
-            returnPage = ERROR;
+        } catch (Exception e) {
+            LOGGER.debug(logInfo.getId(), e, e);
+            view = ERROR;
         }
 
-        return returnPage;
+        return view;
     }
 
     private void setUserAndCertificate(Certificate certificate, Model model) {

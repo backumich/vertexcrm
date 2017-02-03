@@ -12,8 +12,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static ua.com.vertex.beans.User.EMPTY_USER;
+import java.util.Optional;
 
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
@@ -22,11 +21,12 @@ public class SpringDataUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userLogic.logIn(username).orElse(EMPTY_USER);
+        Optional<User> userOptional = userLogic.logIn(username);
 
-        if (user.equals(EMPTY_USER)) {
+        if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         } else {
+            User user = userOptional.get();
             List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
