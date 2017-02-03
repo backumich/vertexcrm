@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.logic.LoggingLogicImpl;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
 
@@ -38,13 +40,17 @@ public class LogInControllerTest {
     @Mock
     private UserLogic userLogic;
 
+    @InjectMocks
+    private LoggingLogicImpl loggingLogic;
+
     @Mock
     private Model model;
 
     private MockMvc mockMvc;
     private LogInController controller;
+    private User user;
+    private Optional<User> optional;
 
-    private static final int EXISTING_USER_ID = 22;
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
     private static final String EMAIL = "test@test.com";
@@ -52,15 +58,14 @@ public class LogInControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new LogInController(logInfo, userLogic);
+        controller = new LogInController(logInfo, loggingLogic);
+        user = new User.Builder().getInstance();
+        optional = Optional.ofNullable(user);
     }
 
-    @SuppressWarnings("Duplicates")
     @Test
     @WithMockUser(authorities = "USER")
     public void showLogInPageForLoggedInUserReturnsUserView() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
@@ -72,13 +77,9 @@ public class LogInControllerTest {
                 .andExpect(view().name(USER_PAGE));
     }
 
-
-    @SuppressWarnings("Duplicates")
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void showLogInPageForLoggedInUserReturnsAdminView() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
@@ -91,23 +92,8 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
-    public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
-
-        when(logInfo.getEmail()).thenReturn(EMAIL);
-        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
-
-        controller.showLogInPage(model);
-        verify(model, times(1)).addAttribute("user", user);
-    }
-
-    @Test
     @WithMockUser(authorities = "NONE")
-    public void showLogInPageForLoggedInUserReturnsErrorIfWrongAuthorities() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
+    public void showLogInPageForLoggedInUserReturnsErrorPageIfWrongAuthorities() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
         when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
@@ -119,12 +105,20 @@ public class LogInControllerTest {
                 .andExpect(view().name("error"));
     }
 
-    @SuppressWarnings("Duplicates")
+    @Test
+    @WithMockUser(authorities = "USER")
+    public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
+
+        when(logInfo.getEmail()).thenReturn(EMAIL);
+        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
+
+        controller.showLogInPage(model);
+        verify(model, times(1)).addAttribute("user", user);
+    }
+
     @Test
     @WithMockUser(authorities = "USER")
     public void showLoggedInPageForLoggedInUserReturnsUserView() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
 
         when(logInfo.getEmail()).thenReturn("user");
         when(userLogic.getUserByEmail("user")).thenReturn(optional);
@@ -136,12 +130,9 @@ public class LogInControllerTest {
                 .andExpect(view().name(USER_PAGE));
     }
 
-    @SuppressWarnings("Duplicates")
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void showLoggedInPageForLoggedInUserReturnsAdminView() throws Exception {
-        User user = new User.Builder().setUserId(EXISTING_USER_ID).getInstance();
-        Optional<User> optional = Optional.ofNullable(user);
 
         when(logInfo.getEmail()).thenReturn("user");
         when(userLogic.getUserByEmail("user")).thenReturn(optional);

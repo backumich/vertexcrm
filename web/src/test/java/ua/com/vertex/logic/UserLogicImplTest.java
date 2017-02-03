@@ -47,30 +47,6 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void logInWithEmptyEmailReturnsEmptyUser() {
-        Optional<User> optional = logic.logIn("");
-        assertTrue(!optional.isPresent());
-    }
-
-    @Test
-    public void logInWithNotExistingEmailReturnsEmptyUser() {
-        Optional<User> optional = logic.logIn(NOT_EXISTING_EMAIL);
-        assertTrue(!optional.isPresent());
-    }
-
-    @Test
-    public void logInWithExistingEmailReturnsExistingUser() {
-        Optional<User> optional = logic.logIn(EXISTING_EMAIL);
-        User user = new User.Builder()
-                .setEmail(EXISTING_EMAIL)
-                .setPassword(PASSWORD)
-                .setRole(USER)
-                .getInstance();
-
-        assertEquals(user, optional.get());
-    }
-
-    @Test
     @WithMockUser
     public void getUserByIdWithNotExistingIdReturnsNullOptional() {
         Optional<User> optional = logic.getUserById(NOT_EXISTING_ID);

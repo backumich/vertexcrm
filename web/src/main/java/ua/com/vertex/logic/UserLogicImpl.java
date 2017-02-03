@@ -31,18 +31,6 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public Optional<User> logIn(String email) {
-        User user;
-        if (email.isEmpty()) {
-            user = null;
-        } else {
-            user = userDao.logIn(email).orElse(null);
-        }
-
-        return Optional.ofNullable(user);
-    }
-
-    @Override
     public void saveImage(int userId, byte[] image, String imageType) throws Exception {
         userDao.saveImage(userId, image, imageType);
     }

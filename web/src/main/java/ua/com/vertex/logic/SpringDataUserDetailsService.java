@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.logic.interfaces.LoggingLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
 
-    private UserLogic userLogic;
+    private LoggingLogic loggingLogic;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userLogic.logIn(username);
+        Optional<User> userOptional = loggingLogic.logIn(username);
 
         if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
@@ -36,7 +36,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     }
 
     @Autowired
-    public void setSpringDataUserDetailsService(UserLogic userLogic) {
-        this.userLogic = userLogic;
+    public void setSpringDataUserDetailsService(LoggingLogic loggingLogic) {
+        this.loggingLogic = loggingLogic;
     }
 }
