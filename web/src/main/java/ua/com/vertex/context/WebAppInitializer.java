@@ -23,7 +23,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
     private static final int MAX_FILE_SIZE_NOT_WRITTEN = 0;
 
-    public static final Path TEMP_DIR_PATH = Paths.get("c:/temp/vertexCrm/");
+    public static final Path TEMP_DIR_PATH = Paths.get("tempAppFolder/vertexCrm/");
 
     @Override
     protected String[] getServletMappings() {
@@ -43,10 +43,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         try {
-            if (!Files.exists(TEMP_DIR_PATH))
+            if (!Files.exists(TEMP_DIR_PATH)) {
                 Files.createDirectories(TEMP_DIR_PATH);
+            }
         } catch (IOException e) {
-            LOGGER.error(LOG_ERROR, e, e);
+            LOGGER.debug(LOG_ERROR, e, e);
         }
         registration.setMultipartConfig(new MultipartConfigElement(TEMP_DIR_PATH.toString(), MAX_FILE_SIZE_BYTES,
                 MAX_REQUEST_SIZE_BYTES, MAX_FILE_SIZE_NOT_WRITTEN));
