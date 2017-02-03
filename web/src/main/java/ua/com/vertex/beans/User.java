@@ -7,7 +7,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -38,10 +37,7 @@ public class User {
             message = "Invalid telephone number format!")
     private String phone;
 
-    private List<Role> role;
-    private List<Certificate> certificate;
-    private List<Accounting> accounting;
-    private List<Payments> payments;
+    private Role role;
 
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
@@ -108,25 +104,11 @@ public class User {
             return this;
         }
 
-        public Builder setRole(List<Role> role) {
+        public Builder setRole(Role role) {
             user.setRole(role);
             return this;
         }
 
-        public Builder setCertificate(List<Certificate> certificate) {
-            user.setCertificate(certificate);
-            return this;
-        }
-
-        public Builder setAccounting(List<Accounting> accounting) {
-            user.setAccounting(accounting);
-            return this;
-        }
-
-        public Builder setPayments(List<Payments> payments) {
-            user.setPayments(payments);
-            return this;
-        }
 
         public User getInstance() {
             return user;
@@ -141,10 +123,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", passportScan=" + passportScan +
-                ", photo=" + photo +
+                ", passportScan=" + Arrays.toString(passportScan) +
+                ", photo=" + Arrays.toString(photo) +
                 ", discount=" + discount +
                 ", phone='" + phone + '\'' +
+                ", role=" + role +
                 '}';
     }
 
@@ -161,12 +144,13 @@ public class User {
                 Objects.equals(lastName, user.lastName) &&
                 Arrays.equals(passportScan, user.passportScan) &&
                 Arrays.equals(photo, user.photo) &&
-                Objects.equals(phone, user.phone);
+                Objects.equals(phone, user.phone) &&
+                role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone);
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role);
     }
 
     public int getUserId() {
@@ -241,35 +225,12 @@ public class User {
         this.phone = phone;
     }
 
-    public List<Role> getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(List<Role> role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
-    public List<Certificate> getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(List<Certificate> certificate) {
-        this.certificate = certificate;
-    }
-
-    public List<Accounting> getAccounting() {
-        return accounting;
-    }
-
-    private void setAccounting(List<Accounting> accounting) {
-        this.accounting = accounting;
-    }
-
-    public List<Payments> getPayments() {
-        return payments;
-    }
-
-    private void setPayments(List<Payments> payments) {
-        this.payments = payments;
-    }
 }

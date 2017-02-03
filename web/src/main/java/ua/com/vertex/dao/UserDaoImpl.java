@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,8 +11,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
-import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
@@ -21,10 +18,12 @@ import ua.com.vertex.utils.Storage;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
+import static ua.com.vertex.beans.Role.ADMIN;
+import static ua.com.vertex.beans.Role.USER;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")
@@ -89,77 +88,68 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public User getUserDetailsByID(int userID) throws SQLException {
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.passport_scan, u.photo, u.discount, u.phone," +
-                "  r.role_id, r.name," +
-                "  c.certification_id, c.certification_date, c.course_name, c.language" +
-                "  FROM Users u" +
-                "  LEFT JOIN Roles r ON u.role_id = r.role_id" +
-                "  LEFT JOIN Certificate c ON u.user_id = c.user_id" +
-                "  WHERE u.user_id = :userId";
+        String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
+                "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping());
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping());
     }
 
-    private static final class UserDetailsRowMapping implements ResultSetExtractor<User> {
+    private static final class UserDetailsRowMapping implements RowMapper<User> {
         @Override
-        public User extractData(ResultSet rs) throws SQLException, DataAccessException {
-            User user = null;
-
-            HashSet<Role> roles = new HashSet<>();
-            HashSet<Certificate> certificates = new HashSet<>();
-
-            while (rs.next()) {
-                user = getUserFromDB(rs, user);
-                getUserRolesFromDB(rs, roles);
-                getUserCertificatesFromDB(rs, certificates);
-            }
-
-            if (user != null) {
-                user.setRole(new ArrayList<>(roles));
-                user.setCertificate(new ArrayList<>(certificates));
-            }
-            return user;
-        }
-
-        private void getUserCertificatesFromDB(ResultSet rs, HashSet<Certificate> certificates) throws SQLException {
-            int certification_id = rs.getInt("certification_id");
-            if (!rs.wasNull() && certification_id > 0) {
-                Certificate certificate = new Certificate();
-                certificate.setCertificationId(certification_id);
-                if (rs.getDate("certification_date") != null) {
-                    certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
-                }
-                certificate.setCourseName(rs.getString("course_name"));
-                certificate.setLanguage(rs.getString("language"));
-                certificates.add(certificate);
-            }
-        }
-
-        private void getUserRolesFromDB(ResultSet rs, HashSet<Role> roles) throws SQLException {
-            int role_id = rs.getInt("role_id");
-            if (!rs.wasNull() && role_id > 0) {
-                Role role = new Role();
-                role.setRoleId(role_id);
-                role.setName(rs.getString("name"));
-                roles.add(role);
-            }
-        }
-
-        private User getUserFromDB(ResultSet rs, User user) throws SQLException {
-            if (user == null) {
-                user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setEmail(rs.getString("email"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setLastName(rs.getString("last_name"));
-                user.setPassportScan(rs.getBytes("passport_scan"));
-                user.setPhoto(rs.getBytes("photo"));
-                user.setDiscount(rs.getInt("discount"));
-                user.setPhone(rs.getString("phone"));
-            }
+        public User mapRow(ResultSet rs, int i) throws SQLException {
+            User user = new User();
+            user.setUserId(rs.getInt("user_id"));
+            user.setEmail(rs.getString("email"));
+            user.setFirstName(rs.getString("first_name"));
+            user.setLastName(rs.getString("last_name"));
+            user.setPassportScan(rs.getBytes("passport_scan"));
+            user.setPhoto(rs.getBytes("photo"));
+            user.setDiscount(rs.getInt("discount"));
+            user.setPhone(rs.getString("phone"));
+            user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
             return user;
         }
     }
+
+//    private void getUserCertificatesFromDB(ResultSet rs, HashSet<Certificate> certificates) throws SQLException {
+//        int certification_id = rs.getInt("certification_id");
+//        if (!rs.wasNull() && certification_id > 0) {
+//            Certificate certificate = new Certificate();
+//            certificate.setCertificationId(certification_id);
+//            if (rs.getDate("certification_date") != null) {
+//                certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
+//            }
+//            certificate.setCourseName(rs.getString("course_name"));
+//            certificate.setLanguage(rs.getString("language"));
+//            certificates.add(certificate);
+//        }
+//    }
+
+//    private void getUserRolesFromDB(ResultSet rs, HashSet<Role> roles) throws SQLException {
+//        int role_id = rs.getInt("role_id");
+//        if (!rs.wasNull() && role_id > 0) {
+//            Role role = new Role();
+//            role.setRoleId(role_id);
+//            role.setName(rs.getString("name"));
+//            roles.add(role);
+//        }
+//    }
+
+//    private User getUserFromDB(ResultSet rs, User user) throws SQLException {
+//            if (user == null) {
+//                user = new User();
+//                user.setUserId(rs.getInt("user_id"));
+//                user.setEmail(rs.getString("email"));
+//                user.setFirstName(rs.getString("first_name"));
+//                user.setLastName(rs.getString("last_name"));
+//                user.setPassportScan(rs.getBytes("passport_scan"));
+//                user.setPhoto(rs.getBytes("photo"));
+//                user.setDiscount(rs.getInt("discount"));
+//                user.setPhone(rs.getString("phone"));
+//            }
+//        return user;
+//    }
+//}
 
     @Override
     public List<User> getListUsers() throws SQLException {
@@ -181,39 +171,42 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<Role> getListAllRoles() throws SQLException {
+    public HashMap<Integer, String> getListAllRoles() {
         LOGGER.debug("Select list all roles");
 
         String query = "SELECT r.role_id, r.name FROM Roles r";
-        return jdbcTemplate.query(query, new UserDaoImpl.GetListAllRolesRowMapping());
+        return jdbcTemplate.query(query, new GetListAllRolesRowMapping());
     }
 
-    private static final class GetListAllRolesRowMapping implements RowMapper<Role> {
-        public Role mapRow(ResultSet rs, int i) throws SQLException {
-            Role role = new Role();
-            role.setRoleId(rs.getInt("role_id"));
-            role.setName(rs.getString("name"));
-            return role;
+    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<HashMap<Integer, String>> {
+        @Override
+        public HashMap<Integer, String> extractData(ResultSet rs) throws SQLException {
+            HashMap<Integer, String> allRoles = new HashMap<>();
+            while (rs.next()) {
+                allRoles.put(rs.getInt("role_id"), rs.getString("name"));
+            }
+            return allRoles;
         }
     }
 
 
-    @Override
-    public Role getRoleById(int roleID) throws SQLException {
-        LOGGER.debug("Select user role " + roleID);
+//    @Override
+//    public Role getRoleById(int roleID) throws SQLException {
+//        LOGGER.debug("Select user role " + roleID);
+//
+//        String query = "SELECT r.role_id, r.name FROM Roles r WHERE r.role_id = :roleId";
+//        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("roleId", roleID), new RoleRowMapping());
+//    }
 
-        String query = "SELECT r.role_id, r.name FROM Roles r WHERE r.role_id = :roleId";
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("roleId", roleID), new RoleRowMapping());
-    }
-
-    private static final class RoleRowMapping implements RowMapper<Role> {
-        public Role mapRow(ResultSet rs, int i) throws SQLException {
-            Role role = new Role();
-            role.setRoleId(rs.getInt("role_id"));
-            role.setName(rs.getString("name"));
-            return role;
-        }
-    }
+//private static final class RoleRowMapping implements RowMapper<Role> {
+//    public Role mapRow(ResultSet rs, int i) throws SQLException {
+//        Role role = new Role();
+//        role.setRoleId(rs.getInt("role_id"));
+//        role.setName(rs.getString("name"));
+//        return role;
+//    }
+//
+//}
 
     @Override
     public int updateUser(User user) throws SQLException {

@@ -167,8 +167,10 @@
                     </tr>
                     <tr>
                         <td>Phone</td>
-                        <td><form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
-                                        path="phone" disabled="true"/>
+                        <td>
+                                <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
+                                            path="phone" disabled="true"/>
+                                <%--path="phone" disabled="true"/>--%>
                         <td><form:errors path="phone"/></td>
                         </td>
                     </tr>
@@ -176,6 +178,8 @@
                 <br/>
                 <br/>
                 <br/>
+                <c:out value="${user.role}"></c:out>
+                <c:out value="${allRoles}"></c:out>
                 <p>User roles</p>
                 <table bordercolor="red" border="2">
                     <c:if test="${empty user.role}">
@@ -183,62 +187,38 @@
                             <td>Error! The current user does not have roles in the system!</td>
                         </tr>
                     </c:if>
-                    <c:if test="${!empty user.role}">
+
+
+                    <c:if test="${!empty user.role && !empty allRoles}">
                         <tr>
                             <td>
-                                <spring:bind path="role">
-                                    <form:select path="role">
-                                        <%--<form:option value="${user.role[0].roleId}" label="${user.role[0].name}"/>--%>
-                                        <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
-                                        <form:options items="${roles}"/>
-                                    </form:select>
-                                </spring:bind>
 
-                                    <%--<form:select path="" items="${roles}" />--%>
+                                    <%--<form:select path="role" items="${allRoles}"/>--%>
 
+                                    <%--<form:select path="">--%>
+                                    <%--<form:options items="${allRoles} "/>--%>
+                                    <%--</form:select>--%>
 
-                                    <%--<select id="roles" class="buttonText" name="roleId" disabled="true">--%>
-                                    <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
-                                    <%--<c:forEach items="${roles}" var="roles">--%>
-
-                                    <%--<c:if test="${roles.roleId != user.role[0].roleId}">--%>
-                                    <%--<option value="${roles.roleId}">${roles.name}</option>--%>
-                                    <%--</c:if>--%>
-                                    <%--</c:forEach>--%>
-                                    <%--</select>--%>
-                                <br/>
+                                    <%--<spring:bind path="role">--%>
+                                    <%--<form:select path="role">--%>
+                                    <%--<form:options items="${allRoles} "/>--%>
+                                    <%--</form:select>--%>
+                                    <%--</spring:bind>--%>
                             </td>
                         </tr>
                     </c:if>
                 </table>
 
-                <p>User certification </p>
-                <c:if test="${empty user.certificate}">
-                    <tr>
-                        <td>Current user does not have certificates!</td>
-                    </tr>
-                </c:if>
+                <%--<c:if test="${roles.roleId != user.role}">--%>
+                <%--<option value="${roles.roleId}">${roles.name}</option>--%>
+                <%--</c:if>--%>
 
-                <c:if test="${!empty user.certificate}">
-                    <table bordercolor="red" border="2">
-                        <tr>
-                            <th width="100px">Certification date</th>
-                            <th width="150px">Course name</th>
-                            <th width="150px">Language</th>
-                        </tr>
-                        <c:forEach var="userCertificate" items="${user.certificate}">
-                            <tr>
-                                <td><input class="buttonText" type="text" size="20"
-                                           value="${userCertificate.certificationDate}" disabled></td>
-                                <td><input class="buttonText" type="text" size="40"
-                                           value="${userCertificate.courseName}"
-                                           disabled></td>
-                                <td><input class="buttonText" type="text" size="40" value="${userCertificate.language}"
-                                           disabled></td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </c:if>
+                <%--<form:option value="${user.role[0].roleId}" label="${user.role[0].name}"/>--%>
+                <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
+
+                <%--<form:option value="${user.role}" label="${user.role}"/>--%>
+
+
                 <td colspan="2" align="center">
                     <input id="save" class="buttonText" type="submit" value="Save" disabled/>
                 </td>

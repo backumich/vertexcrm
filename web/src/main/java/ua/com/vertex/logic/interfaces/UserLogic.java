@@ -1,10 +1,10 @@
 package ua.com.vertex.logic.interfaces;
 
 
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface UserLogic {
@@ -17,8 +17,8 @@ public interface UserLogic {
 
     String convertImage(byte[] image);
 
-    List<Role> getListAllRoles() throws SQLException;
+    HashMap<Integer, String> getListAllRoles();
 
-    Role getRoleById(int roleID) throws SQLException;
+//    Role getRoleById(int roleID) throws SQLException;
 
 }

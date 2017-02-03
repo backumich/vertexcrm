@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/userDetails")
@@ -35,30 +33,15 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @GetMapping
-    //@RequestMapping(value = "/userDetails")
     public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
         User user = null;
         try {
             user = userLogic.getUserDetailsByID(userId);
+
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
-            modelAndView.setViewName(ERROR_JSP);
-        }
-        try {
-            List<Role> roles = userLogic.getListAllRoles();
-            HashMap<Integer, String> productMap = new HashMap<>();
-            for (Role role : roles) {
-                productMap.put(role.getRoleId(), role.getName());
-            }
-
-
-            modelAndView.addObject("roles", productMap);
-//            modelAndView.addObject("roles", roles);
-            LOGGER.debug("Get all roles for user ID - " + userId);
-        } catch (DataAccessException | SQLException e) {
-            LOGGER.debug("During preparation the all roles for user ID - " + userId + " there was a database error");
             modelAndView.setViewName(ERROR_JSP);
         }
 
@@ -69,15 +52,24 @@ public class UserDetailsController {
                 modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
                 LOGGER.debug("Passports scan is obtained and converted for user ID - " + userId);
             } catch (Throwable t) {
-                LOGGER.debug("There are problems with access to passports scan for user ID - " + userId);
+                LOGGER.warn("There are problems with access to passports scan for user ID - " + userId);
             }
             try {
                 modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
                 LOGGER.debug("Photo is obtained and converted for user ID - " + userId);
             } catch (Throwable t) {
-                LOGGER.debug("There are problems with access to photos for user ID - " + userId);
+                LOGGER.warn("There are problems with access to photos for user ID - " + userId);
             }
         }
+
+        try {
+            HashMap<Integer, String> allRoles = userLogic.getListAllRoles();
+            modelAndView.addObject("allRoles", allRoles);
+            LOGGER.debug("We received all the roles of the system");
+        } catch (Exception e) {
+            LOGGER.debug("There are problems with access to roles of the system");
+        }
+
         return modelAndView;
     }
 }

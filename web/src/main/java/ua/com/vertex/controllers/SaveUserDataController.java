@@ -15,7 +15,6 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +47,9 @@ public class SaveUserDataController {
 
         if (bindingResult.hasErrors()) {
             try {
-                List<Role> roles = userLogic.getListAllRoles();
-                modelAndView.addObject("roles", roles);
-            } catch (DataAccessException | SQLException e) {
+//                List<Role> roles = userLogic.getListAllRoles();
+//                modelAndView.addObject("roles", roles);
+            } catch (DataAccessException /*| SQLException*/ e) {
 
             }
 
@@ -60,7 +59,7 @@ public class SaveUserDataController {
             try {
                 List<Role> currentRoles = new ArrayList<>();
 //                currentRoles.add(userLogic.getRoleById(role));
-                user.setRole(currentRoles);
+//                user.setRole(currentRoles);
 
 //                List<Role> roles = userLogic.getListAllRoles();
 //                modelAndView.addObject("roles", roles);
