@@ -11,7 +11,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 
-import static ua.com.vertex.utils.Role.ADMIN;
+import static ua.com.vertex.beans.Role.ADMIN;
 
 @Configuration
 @EnableWebSecurity

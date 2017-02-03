@@ -1,7 +1,5 @@
 package ua.com.vertex.beans;
 
-import ua.com.vertex.utils.Role;
-
 import java.util.Arrays;
 import java.util.Objects;
 

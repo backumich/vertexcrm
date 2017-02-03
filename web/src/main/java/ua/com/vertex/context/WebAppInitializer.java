@@ -23,7 +23,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
     private static final int MAX_FILE_SIZE_NOT_WRITTEN = 0;
 
-    public static final Path TEMP_DIR_PATH = Paths.get("tempAppFolder/vertexCrm/");
+    public static final Path TEMP_DIR_PATH = Paths.get("c:/tempAppFolder/vertexCrm/");
 
     @Override
     protected String[] getServletMappings() {

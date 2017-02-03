@@ -17,7 +17,7 @@ import ua.com.vertex.dao.UserDaoImpl;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static ua.com.vertex.utils.Role.USER;
+import static ua.com.vertex.beans.Role.USER;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

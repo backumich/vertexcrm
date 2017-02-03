@@ -18,8 +18,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.com.vertex.utils.Role.ADMIN;
-import static ua.com.vertex.utils.Role.USER;
+import static ua.com.vertex.beans.Role.ADMIN;
+import static ua.com.vertex.beans.Role.USER;
 
 @Repository
 @SuppressWarnings("SqlDialectInspection")

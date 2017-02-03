@@ -1,4 +1,4 @@
-package ua.com.vertex.utils;
+package ua.com.vertex.beans;
 
 public enum Role {
     ADMIN, USER
