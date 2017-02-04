@@ -18,23 +18,31 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+
 @Repository
-@SuppressWarnings("SqlDialectInspection")
 public class CertificateDaoImpl implements CertificateDaoInf {
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final LogInfo logInfo;
 
     private static final String USER_ID = "userId";
     private static final String CERTIFICATE_ID = "certificateId";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
+    private static final String LOG_CERT_IN = "Retrieving certificate id=";
+    private static final String LOG_CERT_OUT = "Retrieved certificate id=";
+    private static final String LOG_NO_CERT = "No certificate in DB, id=";
+    private static final String LOG_ALLCERT_OUT = "Retrieved all certificates by id=";
+
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final LogInfo logInfo;
 
     @Override
-    public List<Certificate> getAllCertificateByUserId(int userId) {
-        String query = "SELECT certification_id, user_id, certification_date, course_name, language "
+    public List<Certificate> getAllCertificatesByUserId(int userId) {
+
+        String query = "SELECT certification_id, certification_date, course_name "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
+        LOGGER.debug(LOG_ALLCERT_OUT + userId);
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
     @Override
@@ -73,5 +81,19 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     public CertificateDaoImpl(DataSource dataSource, LogInfo logInfo) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.logInfo = logInfo;
+    }
+
+    private static final class ShortCertificateRowMapper implements RowMapper<Certificate> {
+
+        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Certificate.Builder()
+                    .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(0)
+                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
+                    .setCourseName(resultSet.getString("course_name"))
+                    .setLanguage(null)
+                    .getInstance();
+        }
+
     }
 }

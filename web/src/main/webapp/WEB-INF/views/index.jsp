@@ -19,6 +19,7 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
     <script async="" src="../../javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -31,23 +32,12 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
-
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
 
     </style>
@@ -126,7 +116,8 @@
             <a href="<c:url value="/logIn"/>">Log in</a> |
             <a href="<c:url value="/logOut"/>">Log out</a>
             <br><br>
-            <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
+            <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
+            <a href="<c:url value="/user"/>">View user.jsp</a>
         </div>
 
     </div>

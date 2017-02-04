@@ -10,6 +10,9 @@ CREATE TABLE Users
   discount      INT,
   phone         VARCHAR(25),
   role_id       INT
+  phone         VARCHAR(25),
+  role_id       INT(11),
+  PRIMARY KEY (user_id)
 );
 
 CREATE TABLE Certificate
@@ -20,6 +23,9 @@ CREATE TABLE Certificate
   course_name        VARCHAR(500) NOT NULL,
   language           VARCHAR(255) NOT NULL
 );
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone)
+VALUES ('1', 'email1', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('22', '22@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
@@ -34,4 +40,13 @@ INSERT INTO Certificate (certification_id, user_id, certification_date, course_n
 VALUES ('333', '33', '2016-12-1', 'Java Professional', 'Java');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
-VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java')
+VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
+VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');

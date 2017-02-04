@@ -13,7 +13,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserLogicImpl implements UserLogic {
 
-    private final UserDaoImpl userDao;
+
+    private final UserDaoInf userDao;
+
+    @Autowired
+    public UserLogicImpl(UserDaoInf userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<String> getAllUserIds() {
