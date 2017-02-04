@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.List;
@@ -13,13 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserLogicImpl implements UserLogic {
 
-
     private final UserDaoInf userDao;
-
-    @Autowired
-    public UserLogicImpl(UserDaoInf userDao) {
-        this.userDao = userDao;
-    }
 
     @Override
     public List<String> getAllUserIds() {

@@ -1,6 +1,6 @@
 CREATE TABLE Users
 (
-  user_id       INT PRIMARY KEY,
+  user_id       INT(11)      NOT NULL AUTO_INCREMENT,
   email         VARCHAR(255) NOT NULL,
   password      VARCHAR(255) NOT NULL,
   first_name    VARCHAR(50)  NOT NULL,
@@ -8,8 +8,6 @@ CREATE TABLE Users
   passport_scan BLOB,
   photo         BLOB,
   discount      INT,
-  phone         VARCHAR(25),
-  role_id       INT
   phone         VARCHAR(25),
   role_id       INT(11),
   PRIMARY KEY (user_id)
@@ -22,6 +20,13 @@ CREATE TABLE Certificate
   certification_date DATE         NOT NULL,
   course_name        VARCHAR(500) NOT NULL,
   language           VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Roles
+(
+  role_id INT(11)     NOT NULL AUTO_INCREMENT,
+  name    VARCHAR(50) NOT NULL,
+  PRIMARY KEY (role_id)
 );
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone)

@@ -12,12 +12,12 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
-import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -79,12 +79,14 @@ public class CertificateDaoTest {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)
+    @WithMockUser
     public void getCertificateByIdReturnNull() throws Exception {
             certificateDao.getCertificateById(-1).get();
     }
 
 
     @Test
+    @WithMockUser
     public void getCertificateByIdReturnReturnCorectData() throws Exception {
         Certificate result = new Certificate.Builder()
                 .setCertificationId(1)
