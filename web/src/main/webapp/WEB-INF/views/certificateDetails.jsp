@@ -111,8 +111,7 @@
     <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
     <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
+        <sf:input path="certificationId" type="number"/>
         <input type="submit" value="Send">
     </sf:form>
     <br><br>
