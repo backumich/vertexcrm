@@ -31,6 +31,11 @@ public class CertificateLogicImpl implements CertificateLogic {
         return certificateDaoInf.getAllCertificatesByUserId(userId);
     }
 
+    public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
+        LOGGER.debug(String.format(LOG_ALLCERT, Integer.toString(userId)));
+        return certificateDaoInf.getAllCertificatesByUserIdFullData(userId);
+    }
+
     public Optional<Certificate> getCertificateById(int certificateId) {
         LOGGER.debug(String.format(LOG_CERT, Integer.toString(certificateId)));
         return certificateDaoInf.getCertificateById(certificateId);

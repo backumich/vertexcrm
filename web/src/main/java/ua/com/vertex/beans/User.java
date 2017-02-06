@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class User {
-    private int userId;
+
+    public int userId;
 
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
@@ -28,7 +29,8 @@ public class User {
 
     private byte[] photo;
 
-    @Min(value = 1, message = "This field must be between 0 and 100")
+    //    @Size (min = 1, message = "The field must be at least 5 characters")
+    @Min(value = 0, message = "This field must be between 0 and 100")
     @Max(value = 100, message = "This field must be between 0 and 100")
     private int discount;
 
@@ -232,5 +234,4 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
 }

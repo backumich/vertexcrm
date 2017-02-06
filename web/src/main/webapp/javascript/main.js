@@ -34,6 +34,10 @@ $(document).ready(function () {
         if ($("#save").length) {
             document.getElementById("save").disabled = false;
         }
+
+
+        $("#allowedit").hide();
+        $("#allowedit").fadeOut();
     });
 
     $(".typing").typed({

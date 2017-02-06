@@ -118,114 +118,113 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <button id="allowedit" class="buttonText">Allow editing</button>
+            <%--<button id="allowedit" class="buttonText">Allow editing</button>--%>
             <%--user - то что отсылается в контроллер--%>
             <form:form action="saveUserData" method="post" commandName="user">
-                <table bordercolor="red" border="2">
+
+            <table bordercolor="red" border="2">
+                <tr>
+                    <td>user Id</td>
+                    <td><form:label path="userId">${user.userId}</form:label>
+                        <form:hidden path="userId"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td>E-mail</td>
+                    <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
+                                    path="email"/></td>
+                    <td><form:errors path="email"/></td>
+                </tr>
+                <tr>
+                    <td>Last name</td>
+                    <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
+                                    path="lastName"/></td>
+                    <td><form:errors path="lastName"/></td>
+                </tr>
+                <tr>
+                    <td>First name</td>
+                    <td><form:input id="firstName" class="buttonText" type="text" size="40"
+                                    value="${user.firstName}" path="firstName"/></td>
+                    <td><form:errors path="firstName"/></td>
+
+                </tr>
+                <tr>
+                    <td>Passport scan</td>
+                    <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
+                </tr>
+                <tr>
+                    <td>Photo</td>
+                    <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
+                </tr>
+                <tr>
+                    <td>Discount</td>
+                    <td><form:input id="discount" class="buttonText" type="number" size="40"
+                                    value="${user.discount}" path="discount"/></td>
+                    <td><form:errors path="discount"/></td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td>
+                        <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
+                                    path="phone"/></td>
+                    <td><form:errors path="phone"/></td>
+
+                </tr>
+            </table>
+
+
+            <br/>
+            <br/>
+            <br/>
+            <p>User roles</p>
+            <table bordercolor="red" border="2">
+                <c:if test="${empty user.role}">
                     <tr>
-                        <td>User ID</td>
-                        <td><form:input id="userId" class="buttonText" type="number" size="40" value="${user.userId}"
-                                        path="userId" disabled="true"/>
-                        </td>
+                        <td>Error! The current user does not have roles in the system!</td>
                     </tr>
+                </c:if>
+
+                <c:if test="${!empty user.role}">
                     <tr>
-                        <td>E-mail</td>
-                        <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
-                                        path="email" disabled="true"/>
-                        </td>
-                        <td><form:errors path="email"/></td>
-                    </tr>
-                    <tr>
-                        <td>Last name</td>
-                        <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
-                                        path="lastName" disabled="true"/>
-                        <td><form:errors path="lastName"/></td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>First name</td>
-                        <td><form:input id="firstName" class="buttonText" type="text" size="40"
-                                        value="${user.firstName}" path="firstName" disabled="true"/>
-                        <td><form:errors path="firstName"/></td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Passport scan</td>
-                        <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
-                    </tr>
-                    <tr>
-                        <td>Photo</td>
-                        <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
-                    </tr>
-                    <tr>
-                        <td>Discount</td>
-                        <td><form:input id="discount" class="buttonText" type="number" size="40"
-                                        value="${user.discount}"
-                                        path="discount" disabled="true"/>
-                        <td><form:errors path="discount"/></td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Phone</td>
                         <td>
-                                <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
-                                            path="phone" disabled="true"/>
-                                <%--path="phone" disabled="true"/>--%>
-                        <td><form:errors path="phone"/></td>
+                            <form:select path="role" items="${allRoles}"/>
                         </td>
                     </tr>
-                </table>
-                <br/>
-                <br/>
-                <br/>
-                <c:out value="${user.role}"></c:out>
-                <c:out value="${allRoles}"></c:out>
-                <p>User roles</p>
+                </c:if>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <p>User certificates</p>
+            <table>
                 <table bordercolor="red" border="2">
-                    <c:if test="${empty user.role}">
+                    <tr>
+                        <th width="50px">№</th>
+                        <th width="100px">Certification date</th>
+                        <th width="150px">Course name</th>
+                        <th width="150px">Language</th>
+                    </tr>
+                    <c:forEach items="${certificates}" var="certificates" varStatus="status">
                         <tr>
-                            <td>Error! The current user does not have roles in the system!</td>
-                        </tr>
-                    </c:if>
-
-
-                    <c:if test="${!empty user.role && !empty allRoles}">
-                        <tr>
-                            <td>
-
-                                    <%--<form:select path="role" items="${allRoles}"/>--%>
-
-                                    <%--<form:select path="">--%>
-                                    <%--<form:options items="${allRoles} "/>--%>
-                                    <%--</form:select>--%>
-
-                                    <%--<spring:bind path="role">--%>
-                                    <%--<form:select path="role">--%>
-                                    <%--<form:options items="${allRoles} "/>--%>
-                                    <%--</form:select>--%>
-                                    <%--</spring:bind>--%>
+                            <td align="center">${status.count}</td>
+                            <td><input name="certificates[${status.index}].certificationDate"
+                                       value="${certificates.certificationDate}" class="buttonText" disabled="true"/>
+                            </td>
+                            <td><input name="certificates[${status.index}].courseName"
+                                       value="${certificates.courseName}" class="buttonText" disabled="true"/>
+                            </td>
+                            <td><input name="certificates[${status.index}].language"
+                                       value="${certificates.language}" class="buttonText" disabled="true"/>
                             </td>
                         </tr>
-                    </c:if>
+                    </c:forEach>
                 </table>
-
-                <%--<c:if test="${roles.roleId != user.role}">--%>
-                <%--<option value="${roles.roleId}">${roles.name}</option>--%>
-                <%--</c:if>--%>
-
-                <%--<form:option value="${user.role[0].roleId}" label="${user.role[0].name}"/>--%>
-                <%--<option value="${user.role[0].roleId}" selected>${user.role[0].name}</option>--%>
-
-                <%--<form:option value="${user.role}" label="${user.role}"/>--%>
 
 
                 <td colspan="2" align="center">
-                    <input id="save" class="buttonText" type="submit" value="Save" disabled/>
+                    <input id="save" class="buttonText" type="submit" value="Save"/>
                 </td>
-
-            </form:form>
+                </form:form>
         </div>
-
     </div>
 </div>
 <div class="footer">

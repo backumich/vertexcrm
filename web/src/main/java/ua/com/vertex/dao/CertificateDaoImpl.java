@@ -45,6 +45,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Override
+    public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
+
+        String query = "SELECT certification_id,  user_id, certification_date, course_name, language "
+                + "FROM Certificate WHERE user_id =:userId";
+
+        LOGGER.debug(LOG_ALLCERT_OUT + userId);
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new FullCertificateRowMapper());
+    }
+
+    @Override
     public Optional<Certificate> getCertificateById(int certificateId) {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
@@ -92,6 +103,19 @@ public class CertificateDaoImpl implements CertificateDaoInf {
                     .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
                     .setCourseName(resultSet.getString("course_name"))
                     .setLanguage(null)
+                    .getInstance();
+        }
+
+    }
+
+    private static final class FullCertificateRowMapper implements RowMapper<Certificate> {
+        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Certificate.Builder()
+                    .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(resultSet.getInt("user_id"))
+                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
+                    .setCourseName(resultSet.getString("course_name"))
+                    .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
 

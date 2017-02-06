@@ -12,4 +12,6 @@ public interface CertificateDaoInf {
 
     List<Certificate> getAllCertificatesByUserId(int userId);
 
+    List<Certificate> getAllCertificatesByUserIdFullData(int userId);
+
 }

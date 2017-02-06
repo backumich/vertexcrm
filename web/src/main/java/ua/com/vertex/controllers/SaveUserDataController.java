@@ -7,8 +7,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
@@ -19,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/saveUserData")
+//@RequestMapping(value = "saveUserData")
+//@RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
 public class SaveUserDataController {
 
     static final String USER_DETAIL_PAGE = "userDetails";
@@ -41,7 +40,7 @@ public class SaveUserDataController {
 //    public ModelAndView saveUserData(@RequestParam("roleId") int role, @Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
 //            User user, BindingResult bindingResult, ModelAndView modelAndView) {
 
-    @PostMapping
+    //@PostMapping
     public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL_FOR_SAVE)
                                              User user, BindingResult bindingResult, ModelAndView modelAndView) {
 

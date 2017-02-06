@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
@@ -171,19 +172,21 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public HashMap<Integer, String> getListAllRoles() {
+    public HashMap<Role, Role> getListAllRoles() {
         LOGGER.debug("Select list all roles");
 
         String query = "SELECT r.role_id, r.name FROM Roles r";
         return jdbcTemplate.query(query, new GetListAllRolesRowMapping());
     }
 
-    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<HashMap<Integer, String>> {
+    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<HashMap<Role, Role>> {
         @Override
-        public HashMap<Integer, String> extractData(ResultSet rs) throws SQLException {
-            HashMap<Integer, String> allRoles = new HashMap<>();
+        public HashMap<Role, Role> extractData(ResultSet rs) throws SQLException {
+            HashMap<Role, Role> allRoles = new HashMap<>();
             while (rs.next()) {
-                allRoles.put(rs.getInt("role_id"), rs.getString("name"));
+//                allRoles.put(rs.getInt("role_id"), rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
+                allRoles.put(rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER,
+                        rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
             }
             return allRoles;
         }
@@ -209,9 +212,8 @@ public class UserDaoImpl implements UserDaoInf {
 //}
 
     @Override
-    public int updateUser(User user) throws SQLException {
+    public void saveUserData(User user) {
 
-        return 0;
     }
 
     @Autowired

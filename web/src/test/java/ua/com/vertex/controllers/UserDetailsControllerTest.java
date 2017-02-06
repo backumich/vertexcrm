@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
@@ -25,12 +26,15 @@ public class UserDetailsControllerTest {
     private UserLogic logic;
 
     @Mock
+    private CertificateLogic certificateLogic;
+
+    @Mock
     private UserDetailsController userDetailsController;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        userDetailsController = new UserDetailsController(logic);
+        userDetailsController = new UserDetailsController(logic, certificateLogic);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
     }
 

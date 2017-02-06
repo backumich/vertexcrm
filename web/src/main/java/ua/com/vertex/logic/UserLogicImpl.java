@@ -3,6 +3,7 @@ package ua.com.vertex.logic;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -43,12 +44,12 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public HashMap<Integer, String> getListAllRoles() {
+    public HashMap<Role, Role> getListAllRoles() {
         return userDao.getListAllRoles();
     }
 
-//    @Override
-//    public Role getRoleById(int roleID) throws SQLException {
-//        return userDao.getRoleById(roleID);
-//    }
+    @Override
+    public void saveUserData(User user) {
+        userDao.saveUserData(user);
+    }
 }

@@ -1,6 +1,7 @@
 package ua.com.vertex.dao.interfaces;
 
 
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
@@ -20,10 +21,10 @@ public interface UserDaoInf {
 
     User getUserDetailsByID(int userID) throws SQLException;
 
-    HashMap<Integer, String> getListAllRoles();
+    HashMap<Role, Role> getListAllRoles();
 
 //    Role getRoleById(int roleID) throws SQLException;
 
-    int updateUser(User user) throws SQLException;
+    void saveUserData(User user);
 
 }
