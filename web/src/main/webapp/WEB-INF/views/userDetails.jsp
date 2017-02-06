@@ -120,7 +120,7 @@
         <div align="center">
             <%--<button id="allowedit" class="buttonText">Allow editing</button>--%>
             <%--user - то что отсылается в контроллер--%>
-            <form:form action="saveUserData" method="post" commandName="user">
+            <form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">
 
             <table bordercolor="red" border="2">
                 <tr>
@@ -150,6 +150,12 @@
                 <tr>
                     <td>Passport scan</td>
                     <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
+                    <td>
+                        File to upload: <input type="file" name="file">
+                        Name: <input type="text" name="name">
+                        <input type="submit" value="Upload">
+                    </td>
+
                 </tr>
                 <tr>
                     <td>Photo</td>

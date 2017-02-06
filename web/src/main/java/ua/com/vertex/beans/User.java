@@ -2,7 +2,8 @@ package ua.com.vertex.beans;
 
 import org.hibernate.validator.constraints.Email;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Arrays;
@@ -28,10 +29,8 @@ public class User {
 
     private byte[] photo;
 
-//    @Min(value = 0, message = "This field must be between 0 and 100")
-//    @Max(value = 100, message = "This field must be between 0 and 100")
-
-    @NotNull
+    @Min(value = 0, message = "This field must be between 0 and 100")
+    @Max(value = 100, message = "This field must be between 0 and 100")
     private int discount;
 
     @Size(min = 1, max = 15, message = "This field should not be longer than 15 characters")

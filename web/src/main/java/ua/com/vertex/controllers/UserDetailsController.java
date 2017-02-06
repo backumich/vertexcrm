@@ -114,32 +114,14 @@ public class UserDetailsController {
     //@PostMapping
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
     public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL) User user, BindingResult bindingResult, ModelAndView modelAndView) {
-//        if (user.getDiscount() >= 0 && user.getDiscount() <= 100) {
-//            bindingResult.rejectValue("discount", "discount", "discount");
-//        }
-        if (bindingResult.getFieldValue("discount").equals("")) {
-            int a = 0;
-            bindingResult.rejectValue("discount", "discount", "123");
-//            bindingResult.resolveMessageCodes("","");
-            //((BeanPropertyBindingResult) bindingResult).setMessageCodesResolver("");
-
-        }
-
-        if (bindingResult.hasErrors()) {
 
 
-            // bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
-//            int countErrors = bindingResult.getErrorCount();
-//            modelAndView.addObject("countErrors", countErrors);
+        if (!bindingResult.hasErrors()) {
 
         } else {
-            try {
-                //userLogic.saveUserData(user);
 
-            } catch (DataAccessException /*| SQLException*/ e) {
-
-            }
         }
+
         getListAllRoles(modelAndView);
         getAllCertificatesByUserId(user.getUserId(), modelAndView);
         modelAndView.setViewName(PAGE_JSP);
