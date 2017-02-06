@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+
 @Controller
 //@RequestMapping(value = "/userDetails")
 @SessionAttributes("users")
@@ -113,7 +114,10 @@ public class UserDetailsController {
 
     //@PostMapping
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
-    public ModelAndView saveUserData(@Valid @ModelAttribute(USERDATA_MODEL) User user, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) byte[] passportScan,
+                                     @RequestPart(value = "photo", required = false) byte[] photo,
+                                     @Valid @ModelAttribute(USERDATA_MODEL) User user,
+                                     BindingResult bindingResult, ModelAndView modelAndView) {
 
 
         if (!bindingResult.hasErrors()) {
@@ -121,13 +125,35 @@ public class UserDetailsController {
         } else {
 
         }
+        if (user != null) {
+            try {
+                if (passportScan != null) {
+                    user.setPassportScan(passportScan);
+                    modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
+                }
 
-        getListAllRoles(modelAndView);
-        getAllCertificatesByUserId(user.getUserId(), modelAndView);
-        modelAndView.setViewName(PAGE_JSP);
+            } catch (Exception e) {
+
+            }
+            try {
+                if (photo != null) {
+                    user.setPhoto(photo);
+                    modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
+                }
+            } catch (Exception e) {
+
+            }
+
+            userLogic.saveUserData(user);
+
+
+            getListAllRoles(modelAndView);
+            getAllCertificatesByUserId(user.getUserId(), modelAndView);
+            modelAndView.setViewName(PAGE_JSP);
+        } else {
+            modelAndView.setViewName(ERROR_JSP);
+        }
         return modelAndView;
     }
-
-
 }
 

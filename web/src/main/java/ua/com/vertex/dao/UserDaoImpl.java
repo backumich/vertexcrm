@@ -213,6 +213,30 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public void saveUserData(User user) {
+        String query = "UPDATE Users " +
+                "set email = :email , " +
+                "first_name = :first_name, " +
+                "last_name = :last_name, " +
+                "passport_scan = :passport_scan, " +
+                "photo = :photo, " +
+                "discount = :discount, " +
+                "phone = :phone, " +
+                "role_id = :role_id" +
+                " WHERE user_id = :user_id";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("email", user.getEmail());
+        parameters.addValue("first_name", user.getFirstName());
+        parameters.addValue("last_name", user.getLastName());
+        parameters.addValue("passport_scan", user.getPassportScan());
+        parameters.addValue("photo", user.getPhoto());
+        parameters.addValue("discount", user.getDiscount());
+        parameters.addValue("phone", user.getPhone());
+        parameters.addValue("role_id", user.getRole() == Role.ADMIN ? 1 : 2);
+
+        parameters.addValue("user_id", user.getUserId());
+
+        jdbcTemplate.update(query, parameters);
 
     }
 

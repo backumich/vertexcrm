@@ -120,8 +120,9 @@
         <div align="center">
             <%--<button id="allowedit" class="buttonText">Allow editing</button>--%>
             <%--user - то что отсылается в контроллер--%>
+            <%--<form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">--%>
             <form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">
-
+            <input type="hidden" name="user" value="user"/>
             <table bordercolor="red" border="2">
                 <tr>
                     <td>user Id</td>
@@ -131,7 +132,7 @@
                 <tr>
                     <td>E-mail</td>
                     <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
-                                    path="email"/></td>
+                                    path="email"/>
                     <td><form:errors path="email"/></td>
                 </tr>
                 <tr>
@@ -150,16 +151,12 @@
                 <tr>
                     <td>Passport scan</td>
                     <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
-                    <td>
-                        File to upload: <input type="file" name="file">
-                        Name: <input type="text" name="name">
-                        <input type="submit" value="Upload">
-                    </td>
-
+                    <td><input type="file" name="passportScan" accept="image/jpeg, image/png, image/gif"/></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
                     <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
+                    <td><input type="file" name="photo" accept="image/jpeg, image/png, image/gif"/></td>
                 </tr>
                 <tr>
                     <td>Discount</td>
