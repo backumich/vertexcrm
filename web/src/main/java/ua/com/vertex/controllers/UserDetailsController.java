@@ -19,9 +19,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-
 @Controller
-//@RequestMapping(value = "/userDetails")
 @SessionAttributes("users")
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
@@ -39,10 +37,8 @@ public class UserDetailsController {
         this.certificateLogic = certificateLogic;
     }
 
-
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    //    @GetMapping
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
     public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
