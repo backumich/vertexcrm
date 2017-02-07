@@ -146,9 +146,17 @@ public class UserDetailsController {
 
             userLogic.saveUserData(user);
 
+            if (user.getPassportScan() != null) {
+                modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
+            }
+            if (user.getPhoto() != null) {
+                modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
+            }
 
             getListAllRoles(modelAndView);
             getAllCertificatesByUserId(user.getUserId(), modelAndView);
+
+
             modelAndView.setViewName(PAGE_JSP);
         } else {
             modelAndView.setViewName(ERROR_JSP);

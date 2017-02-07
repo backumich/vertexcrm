@@ -152,11 +152,13 @@
                     <td>Passport scan</td>
                     <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
                     <td><input type="file" name="passportScan" accept="image/jpeg, image/png, image/gif"/></td>
+                    <form:hidden path="passportScan"></form:hidden>
                 </tr>
                 <tr>
                     <td>Photo</td>
                     <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
                     <td><input type="file" name="photo" accept="image/jpeg, image/png, image/gif"/></td>
+                    <form:hidden path="photo"></form:hidden>
                 </tr>
                 <tr>
                     <td>Discount</td>
@@ -209,9 +211,16 @@
                     <c:forEach items="${certificates}" var="certificates" varStatus="status">
                         <tr>
                             <td align="center">${status.count}</td>
+
+                                <%--<td><form:input name="certificates[${status.index}].certificationDate"--%>
+                                <%--value="${certificates.certificationDate}" class="buttonText"--%>
+                                <%--path="certificationDate"/>--%>
+                                <%--</td>--%>
+
                             <td><input name="certificates[${status.index}].certificationDate"
                                        value="${certificates.certificationDate}" class="buttonText" disabled="true"/>
                             </td>
+
                             <td><input name="certificates[${status.index}].courseName"
                                        value="${certificates.courseName}" class="buttonText" disabled="true"/>
                             </td>
