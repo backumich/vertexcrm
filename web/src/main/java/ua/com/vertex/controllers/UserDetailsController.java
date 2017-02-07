@@ -31,6 +31,7 @@ public class UserDetailsController {
 
     private UserLogic userLogic;
     private CertificateLogic certificateLogic;
+    private BindingResult bindingResult;
 
     @Autowired
     public UserDetailsController(UserLogic userLogic, CertificateLogic certificateLogic) {
@@ -45,11 +46,9 @@ public class UserDetailsController {
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
     public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
-
         User user = null;
         try {
             user = userLogic.getUserDetailsByID(userId);
-
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
@@ -72,20 +71,7 @@ public class UserDetailsController {
                 LOGGER.warn("There are problems with access to photos for user ID - " + userId);
             }
         }
-//        try {
-//            HashMap<Role, Role> allRoles = userLogic.getListAllRoles();
-//            modelAndView.addObject("allRoles", allRoles);
-//            LOGGER.debug("We received all the roles of the system");
-//        } catch (Exception e) {
-//            LOGGER.debug("There are problems with access to roles of the system");
-//        }
-//        try {
-//            List<Certificate> certificates = certificateLogic.getAllCertificatesByUserId(userId);
-//            modelAndView.addObject("certificates", certificates);
-//            LOGGER.debug("We received all the roles of the system");
-//        } catch (Exception e) {
-//            LOGGER.debug("There are problems with access to roles of the system");
-//        }
+
         getListAllRoles(modelAndView);
         getAllCertificatesByUserId(userId, modelAndView);
 
@@ -112,55 +98,69 @@ public class UserDetailsController {
         }
     }
 
-    //@PostMapping
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
     public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) byte[] passportScan,
                                      @RequestPart(value = "photo", required = false) byte[] photo,
                                      @Valid @ModelAttribute(USERDATA_MODEL) User user,
                                      BindingResult bindingResult, ModelAndView modelAndView) {
 
-
-        if (!bindingResult.hasErrors()) {
-
-        } else {
-
+        if (bindingResult.hasErrors()) {
+            modelAndView.addObject("error", "WARNING!!! User data is updated but not saved ");
+            LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         }
+
         if (user != null) {
             try {
                 if (passportScan != null) {
                     user.setPassportScan(passportScan);
                     modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
+                    LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
                 }
-
             } catch (Exception e) {
-
+                modelAndView.addObject("errorPassportScan", "An error occurred while processing passport scan");
+                LOGGER.warn("An error occurred while converting imagePassportScan for user ID - " + user.getUserId());
             }
+
             try {
                 if (photo != null) {
                     user.setPhoto(photo);
                     modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
+                    LOGGER.debug("Convert imagePhoto and save to display for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
-
+                modelAndView.addObject("errorPhoto", "An error occurred while processing photo");
+                LOGGER.warn("An error occurred while converting imagePhoto for user ID - " + user.getUserId());
             }
-
-            userLogic.saveUserData(user);
+            try {
+                if (userLogic.saveUserData(user) > 0) {
+                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+                } else {
+                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+                }
+            } catch (Exception e) {
+                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+            }
+            //userLogic.saveUserData(user);
 
             if (user.getPassportScan() != null) {
                 modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
+                LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
             }
             if (user.getPhoto() != null) {
                 modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
+                LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
             }
-
             getListAllRoles(modelAndView);
             getAllCertificatesByUserId(user.getUserId(), modelAndView);
-
-
             modelAndView.setViewName(PAGE_JSP);
+            //LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+
         } else {
             modelAndView.setViewName(ERROR_JSP);
+            LOGGER.debug("Something went wrong for user ID - " + user.getUserId());
+
         }
+
         return modelAndView;
     }
 }

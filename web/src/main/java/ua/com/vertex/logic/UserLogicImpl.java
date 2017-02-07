@@ -49,7 +49,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public void saveUserData(User user) {
-        userDao.saveUserData(user);
+    public int saveUserData(User user) {
+        return userDao.saveUserData(user);
     }
 }

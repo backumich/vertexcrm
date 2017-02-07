@@ -153,12 +153,14 @@
                     <td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>
                     <td><input type="file" name="passportScan" accept="image/jpeg, image/png, image/gif"/></td>
                     <form:hidden path="passportScan"></form:hidden>
+                        <%--<td><form:errors path="errorPassportScan"/></td>--%>
                 </tr>
                 <tr>
                     <td>Photo</td>
                     <td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>
                     <td><input type="file" name="photo" accept="image/jpeg, image/png, image/gif"/></td>
                     <form:hidden path="photo"></form:hidden>
+                        <%--<td><form:errors path="errorPhoto"/></td>--%>
                 </tr>
                 <tr>
                     <td>Discount</td>

@@ -25,6 +25,6 @@ public interface UserDaoInf {
 
 //    Role getRoleById(int roleID) throws SQLException;
 
-    void saveUserData(User user);
+    int saveUserData(User user);
 
 }

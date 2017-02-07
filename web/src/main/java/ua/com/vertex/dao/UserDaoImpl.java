@@ -212,7 +212,7 @@ public class UserDaoImpl implements UserDaoInf {
 //}
 
     @Override
-    public void saveUserData(User user) {
+    public int saveUserData(User user) {
         String query = "UPDATE Users " +
                 "set email = :email , " +
                 "first_name = :first_name, " +
@@ -236,8 +236,7 @@ public class UserDaoImpl implements UserDaoInf {
 
         parameters.addValue("user_id", user.getUserId());
 
-        jdbcTemplate.update(query, parameters);
-
+        return jdbcTemplate.update(query, parameters);
     }
 
     @Autowired

@@ -20,6 +20,6 @@ public interface UserLogic {
 
     HashMap<Role, Role> getListAllRoles();
 
-    void saveUserData(User user);
+    int saveUserData(User user);
 
 }

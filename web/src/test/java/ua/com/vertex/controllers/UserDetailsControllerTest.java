@@ -92,4 +92,10 @@ public class UserDetailsControllerTest {
         Assert.assertEquals(10, testUser.getDiscount());
         Assert.assertEquals("0000000000", testUser.getPhone());
     }
+
+    @Test
+    public void getUserDetailsByIDCheckCorrectUser() throws Exception {
+
+    }
+
 }
