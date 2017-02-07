@@ -20,18 +20,22 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class CertificateDetailsPageController {
-    private final CertDetailsPageLogic logic;
-    private final Storage storage;
-
+    static final String ERROR_JSP = "error";
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
     private static final String LOG_PHOTO = "Passing user photo to JSP";
     private static final String LOG_PROCESS = "Processing request with certificateId=";
     private static final String LOG_INVALID_DATA = "Requested data is invalid";
     private static final String LOG_PASS_DATA = "Passing certificate and user data to JSP";
-
     private static final String PAGE_JSP = "certificateDetails";
-    private static final String ERROR_JSP = "error";
     private static final String PHOTO_JSP = "certificateHolderPhoto";
+    private final CertDetailsPageLogic logic;
+    private final Storage storage;
+
+    @Autowired
+    public CertificateDetailsPageController(CertDetailsPageLogic logic, Storage storage) {
+        this.logic = logic;
+        this.storage = storage;
+    }
 
     @RequestMapping(value = "/" + PAGE_JSP)
     public String showCertificateDetailsPage(Model model, HttpServletRequest request) throws Exception {
@@ -108,11 +112,5 @@ public class CertificateDetailsPageController {
         }
 
         return returnPage;
-    }
-
-    @Autowired
-    public CertificateDetailsPageController(CertDetailsPageLogic logic, Storage storage) {
-        this.logic = logic;
-        this.storage = storage;
     }
 }

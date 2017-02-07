@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR_JSP;
+
 @Controller
 public class AdminController {
 
@@ -48,18 +50,26 @@ public class AdminController {
     public String checkCertificate(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                    BindingResult bindingResult, Model model) {
 
+        String returnPage = null;
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE);
 
         if (bindingResult.hasErrors()) {
             LOGGER.warn(LOG_CERTIFICATE_INCORRECT_DATA);
             model.addAttribute(MSG, LOG_CERTIFICATE_INCORRECT_DATA);
         } else {
-            int result = certificateLogic.addCertificate(certificate);
-            model.addAttribute(MSG, LOG_CERTIFICATE_ADDED + result);
-            LOGGER.info(LOG_CERTIFICATE_ADDED);
+            try {
+                int result = certificateLogic.addCertificate(certificate);
+                model.addAttribute(MSG, LOG_CERTIFICATE_ADDED + result);
+                LOGGER.info(LOG_CERTIFICATE_ADDED);
+                returnPage = ADD_CERTIFICATE_JSP;
+            } catch (Exception e) {
+                LOGGER.warn("Access denied .");
+                returnPage = ERROR_JSP;
+            }
+
         }
 
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_JSP);
-        return ADD_CERTIFICATE_JSP;
+        return returnPage;
     }
 }
