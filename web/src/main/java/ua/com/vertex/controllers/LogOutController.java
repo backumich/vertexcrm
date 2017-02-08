@@ -32,7 +32,7 @@ public class LogOutController {
                 view = LOGGED_OUT;
             }
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 

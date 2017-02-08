@@ -39,7 +39,7 @@ public class CertificateDetailsPageController {
         try {
             model.addAttribute(NEW_CERTIFICATE, new Certificate());
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
         return view;
@@ -59,7 +59,7 @@ public class CertificateDetailsPageController {
                 LOGGER.debug(logInfo.getId() + "Passing certificate and user data to JSP");
             }
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 
