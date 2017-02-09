@@ -106,6 +106,7 @@ public class UserDetailsController {
         }
 
         if (user != null) {
+            //-----------------
             try {
                 if (passportScan != null) {
                     user.setPassportScan(passportScan);
@@ -115,7 +116,6 @@ public class UserDetailsController {
             } catch (Exception e) {
                 LOGGER.warn("An error occurred while converting imagePassportScan for user ID - " + user.getUserId());
             }
-
             try {
                 if (photo != null) {
                     user.setPhoto(photo);
@@ -125,6 +125,7 @@ public class UserDetailsController {
             } catch (Exception e) {
                 LOGGER.warn("An error occurred while converting imagePhoto for user ID - " + user.getUserId());
             }
+            //------------------
             try {
                 if (userLogic.saveUserData(user) > 0) {
                     LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
