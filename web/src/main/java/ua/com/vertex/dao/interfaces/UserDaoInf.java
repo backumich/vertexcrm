@@ -5,7 +5,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public interface UserDaoInf {
 
     User getUserDetailsByID(int userID) throws SQLException;
 
-    HashMap<Role, Role> getListAllRoles();
+    EnumMap<Role, Role> getListAllRoles();
 
 //    Role getRoleById(int roleID) throws SQLException;
 

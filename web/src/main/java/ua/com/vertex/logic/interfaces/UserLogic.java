@@ -5,7 +5,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
 public interface UserLogic {
@@ -18,7 +18,7 @@ public interface UserLogic {
 
     String convertImage(byte[] image);
 
-    HashMap<Role, Role> getListAllRoles();
+    EnumMap<Role, Role> getListAllRoles();
 
     int saveUserData(User user);
 

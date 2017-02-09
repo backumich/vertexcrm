@@ -19,7 +19,7 @@ import ua.com.vertex.utils.Storage;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +54,6 @@ public class UserDaoImpl implements UserDaoInf {
         }
 
         LOGGER.info(storage.getSessionId() + LOG_USER_OUT + userId);
-
         return Optional.ofNullable(user);
     }
 
@@ -99,8 +98,8 @@ public class UserDaoImpl implements UserDaoInf {
         @Override
         public User mapRow(ResultSet rs, int i) throws SQLException {
             User user = null;
-            if (rs.getRow() != 0) {
-//                User user = new User();
+            if (rs.getRow() == 1) {
+                user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setEmail(rs.getString("email"));
                 user.setFirstName(rs.getString("first_name"));
@@ -111,17 +110,6 @@ public class UserDaoImpl implements UserDaoInf {
                 user.setPhone(rs.getString("phone"));
                 user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
             }
-
-            //User user = new User();
-//            user.setUserId(rs.getInt("user_id"));
-//            user.setEmail(rs.getString("email"));
-//            user.setFirstName(rs.getString("first_name"));
-//            user.setLastName(rs.getString("last_name"));
-//            user.setPassportScan(rs.getBytes("passport_scan"));
-//            user.setPhoto(rs.getBytes("photo"));
-//            user.setDiscount(rs.getInt("discount"));
-//            user.setPhone(rs.getString("phone"));
-//            user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
             return user;
         }
     }
@@ -146,44 +134,24 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public HashMap<Role, Role> getListAllRoles() {
+    public EnumMap<Role, Role> getListAllRoles() {
         LOGGER.debug("Select list all roles");
 
         String query = "SELECT r.role_id, r.name FROM Roles r";
         return jdbcTemplate.query(query, new GetListAllRolesRowMapping());
     }
 
-    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<HashMap<Role, Role>> {
+    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<EnumMap<Role, Role>> {
         @Override
-        public HashMap<Role, Role> extractData(ResultSet rs) throws SQLException {
-            HashMap<Role, Role> allRoles = new HashMap<>();
+        public EnumMap<Role, Role> extractData(ResultSet rs) throws SQLException {
+            EnumMap<Role, Role> allRoles = new EnumMap<>(Role.class);
             while (rs.next()) {
-//                allRoles.put(rs.getInt("role_id"), rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
                 allRoles.put(rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER,
                         rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
             }
             return allRoles;
         }
     }
-
-
-//    @Override
-//    public Role getRoleById(int roleID) throws SQLException {
-//        LOGGER.debug("Select user role " + roleID);
-//
-//        String query = "SELECT r.role_id, r.name FROM Roles r WHERE r.role_id = :roleId";
-//        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("roleId", roleID), new RoleRowMapping());
-//    }
-
-//private static final class RoleRowMapping implements RowMapper<Role> {
-//    public Role mapRow(ResultSet rs, int i) throws SQLException {
-//        Role role = new Role();
-//        role.setRoleId(rs.getInt("role_id"));
-//        role.setName(rs.getString("name"));
-//        return role;
-//    }
-//
-//}
 
     @Override
     public int saveUserData(User user) {

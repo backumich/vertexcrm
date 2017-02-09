@@ -14,7 +14,6 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -117,28 +116,15 @@ public class UserDetailsControllerTest {
 //        user.setDiscount(10);
 //        user.setPhone("0000000000");
 
-//        modelAndView.addObject("user", user);
-//        modelAndView.setViewName("userDetails");
 
-
-//        userDetailsController.getUserDetailsByID(1);
-
-
-//        ModelAndView modelAndView = new ModelAndView();
-
-
-        when(logic.getUserDetailsByID(1)).thenReturn(new User());
-        userDetailsController.getUserDetails(1);
-        verify(modelAndView).setViewName("userDetails");
-
-
-        when(logic.getUserDetailsByID(-1)).thenReturn(null);
-        userDetailsController.getUserDetails(-1);
-        verify(modelAndView).setViewName("error");
-
-
-//        verify(modelAndView).addObject(null);
-        //verify(modelAndView).setViewName("error");
+//        when(logic.getUserDetailsByID(1)).thenReturn(new User());
+//        userDetailsController.getUserDetails(1);
+//        verify(modelAndView).setViewName("userDetails");
+//
+//        when(logic.getUserDetailsByID(-1)).thenReturn(null);
+//
+//        userDetailsController.getUserDetails(-1);
+//        verify(modelAndView).setViewName("error");
 
 
     }

@@ -16,7 +16,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
 @Controller
@@ -24,12 +24,10 @@ import java.util.List;
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "userDetails";
-    private static final String SAVE_USER_DATA_OK_PAGE = "viewAllUsers";
     private static final String USERDATA_MODEL = "user";
 
     private UserLogic userLogic;
     private CertificateLogic certificateLogic;
-    private BindingResult bindingResult;
 
     @Autowired
     public UserDetailsController(UserLogic userLogic, CertificateLogic certificateLogic) {
@@ -45,7 +43,6 @@ public class UserDetailsController {
         User user = null;
         try {
             user = userLogic.getUserDetailsByID(userId);
-            //user = null;
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
@@ -74,7 +71,6 @@ public class UserDetailsController {
             modelAndView.setViewName(ERROR_JSP);
         }
 
-
         return modelAndView;
     }
 
@@ -90,7 +86,7 @@ public class UserDetailsController {
 
     private void getListAllRoles(ModelAndView modelAndView) {
         try {
-            HashMap<Role, Role> allRoles = userLogic.getListAllRoles();
+            EnumMap<Role, Role> allRoles = userLogic.getListAllRoles();
             modelAndView.addObject("allRoles", allRoles);
             LOGGER.debug("We received all the roles of the system");
         } catch (Exception e) {
@@ -105,7 +101,7 @@ public class UserDetailsController {
                                      BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("error", "WARNING!!! User data is updated but not saved");
+            modelAndView.addObject("msg", "WARNING!!! User data is updated but not saved");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         }
 
@@ -117,7 +113,6 @@ public class UserDetailsController {
                     LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
-                modelAndView.addObject("errorPassportScan", "An error occurred while processing passport scan");
                 LOGGER.warn("An error occurred while converting imagePassportScan for user ID - " + user.getUserId());
             }
 
@@ -128,7 +123,6 @@ public class UserDetailsController {
                     LOGGER.debug("Convert imagePhoto and save to display for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
-                modelAndView.addObject("errorPhoto", "An error occurred while processing photo");
                 LOGGER.warn("An error occurred while converting imagePhoto for user ID - " + user.getUserId());
             }
             try {
@@ -140,7 +134,6 @@ public class UserDetailsController {
             } catch (Exception e) {
                 LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
             }
-            //userLogic.saveUserData(user);
 
             if (user.getPassportScan() != null) {
                 modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
@@ -153,12 +146,10 @@ public class UserDetailsController {
             getListAllRoles(modelAndView);
             getAllCertificatesByUserId(user.getUserId(), modelAndView);
             modelAndView.setViewName(PAGE_JSP);
-            //LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-
+            modelAndView.addObject("msg", "Congratulations! Your data is saved!");
         } else {
             modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Something went wrong for user ID - " + user.getUserId());
-
         }
 
         return modelAndView;

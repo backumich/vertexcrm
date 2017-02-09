@@ -9,7 +9,7 @@ import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +44,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public HashMap<Role, Role> getListAllRoles() {
+    public EnumMap<Role, Role> getListAllRoles() {
         return userDao.getListAllRoles();
     }
 
