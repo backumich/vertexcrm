@@ -3,7 +3,7 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -93,6 +93,7 @@ public class UserDaoTest {
     }
 
     @Test(expected = RuntimeException.class)
+    @WithMockUser
     public void saveImageThrowsExceptionIfWrongImageType() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, WRONG_IMAGE_TYPE);
@@ -119,9 +120,9 @@ public class UserDaoTest {
         assertEquals(null, optional.orElse(null));
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = EmptyResultDataAccessException.class)
     @WithMockUser
-    public void getImageThrowsExceptionForNotExistingUser() {
+    public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() {
         userDao.getImage(NOT_EXISTING_ID, PHOTO);
     }
 

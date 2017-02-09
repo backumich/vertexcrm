@@ -100,7 +100,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<Integer> getAllUserIds() {
-        String query = "SELECT user_id FROM Users order by user_id";
+        String query = "SELECT user_id FROM Users ORDER BY user_id";
         return jdbcTemplate.query(query, new MapSqlParameterSource(), (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
@@ -129,7 +129,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<byte[]> getImage(int userId, String imageType) {
-        byte[] image = null;
+        byte[] image;
         String query;
 
         if (PHOTO.equals(imageType)) {
@@ -142,11 +142,9 @@ public class UserDaoImpl implements UserDaoInf {
             throw new RuntimeException("Wrong image type description: " + imageType);
         }
 
-        try {
-            image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "User ID=" + userId + " not found");
-        }
+        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
+
+        LOGGER.debug(logInfo.getId() + "Image of userId=" + userId + " retrieved");
 
         return Optional.ofNullable(image);
     }
