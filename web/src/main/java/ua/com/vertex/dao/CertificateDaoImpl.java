@@ -47,8 +47,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug(logInfo.getId() + "Retrieving certificate id=" + certificateId);
-
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
@@ -57,7 +55,9 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             LOGGER.debug(logInfo.getId() + "No certificate in DB, id=" + certificateId);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
+        if (certificate != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
+        }
 
         return Optional.ofNullable(certificate);
     }
