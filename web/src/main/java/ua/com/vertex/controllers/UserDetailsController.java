@@ -40,11 +40,12 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
-    public ModelAndView getUserDetailsByID(@RequestParam("userId") int userId) {
+    public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
         User user = null;
         try {
             user = userLogic.getUserDetailsByID(userId);
+            //user = null;
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
@@ -66,10 +67,13 @@ public class UserDetailsController {
             } catch (Throwable t) {
                 LOGGER.warn("There are problems with access to photos for user ID - " + userId);
             }
+            getListAllRoles(modelAndView);
+            getAllCertificatesByUserId(userId, modelAndView);
+        } else {
+            LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
+            modelAndView.setViewName(ERROR_JSP);
         }
 
-        getListAllRoles(modelAndView);
-        getAllCertificatesByUserId(userId, modelAndView);
 
         return modelAndView;
     }
@@ -101,7 +105,7 @@ public class UserDetailsController {
                                      BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("error", "WARNING!!! User data is updated but not saved ");
+            modelAndView.addObject("error", "WARNING!!! User data is updated but not saved");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         }
 

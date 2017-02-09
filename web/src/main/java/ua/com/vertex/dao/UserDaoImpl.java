@@ -98,59 +98,33 @@ public class UserDaoImpl implements UserDaoInf {
     private static final class UserDetailsRowMapping implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int i) throws SQLException {
-            User user = new User();
-            user.setUserId(rs.getInt("user_id"));
-            user.setEmail(rs.getString("email"));
-            user.setFirstName(rs.getString("first_name"));
-            user.setLastName(rs.getString("last_name"));
-            user.setPassportScan(rs.getBytes("passport_scan"));
-            user.setPhoto(rs.getBytes("photo"));
-            user.setDiscount(rs.getInt("discount"));
-            user.setPhone(rs.getString("phone"));
-            user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
+            User user = null;
+            if (rs.getRow() != 0) {
+//                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setPassportScan(rs.getBytes("passport_scan"));
+                user.setPhoto(rs.getBytes("photo"));
+                user.setDiscount(rs.getInt("discount"));
+                user.setPhone(rs.getString("phone"));
+                user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
+            }
+
+            //User user = new User();
+//            user.setUserId(rs.getInt("user_id"));
+//            user.setEmail(rs.getString("email"));
+//            user.setFirstName(rs.getString("first_name"));
+//            user.setLastName(rs.getString("last_name"));
+//            user.setPassportScan(rs.getBytes("passport_scan"));
+//            user.setPhoto(rs.getBytes("photo"));
+//            user.setDiscount(rs.getInt("discount"));
+//            user.setPhone(rs.getString("phone"));
+//            user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
             return user;
         }
     }
-
-//    private void getUserCertificatesFromDB(ResultSet rs, HashSet<Certificate> certificates) throws SQLException {
-//        int certification_id = rs.getInt("certification_id");
-//        if (!rs.wasNull() && certification_id > 0) {
-//            Certificate certificate = new Certificate();
-//            certificate.setCertificationId(certification_id);
-//            if (rs.getDate("certification_date") != null) {
-//                certificate.setCertificationDate(rs.getDate("certification_date").toLocalDate());
-//            }
-//            certificate.setCourseName(rs.getString("course_name"));
-//            certificate.setLanguage(rs.getString("language"));
-//            certificates.add(certificate);
-//        }
-//    }
-
-//    private void getUserRolesFromDB(ResultSet rs, HashSet<Role> roles) throws SQLException {
-//        int role_id = rs.getInt("role_id");
-//        if (!rs.wasNull() && role_id > 0) {
-//            Role role = new Role();
-//            role.setRoleId(role_id);
-//            role.setName(rs.getString("name"));
-//            roles.add(role);
-//        }
-//    }
-
-//    private User getUserFromDB(ResultSet rs, User user) throws SQLException {
-//            if (user == null) {
-//                user = new User();
-//                user.setUserId(rs.getInt("user_id"));
-//                user.setEmail(rs.getString("email"));
-//                user.setFirstName(rs.getString("first_name"));
-//                user.setLastName(rs.getString("last_name"));
-//                user.setPassportScan(rs.getBytes("passport_scan"));
-//                user.setPhoto(rs.getBytes("photo"));
-//                user.setDiscount(rs.getInt("discount"));
-//                user.setPhone(rs.getString("phone"));
-//            }
-//        return user;
-//    }
-//}
 
     @Override
     public List<User> getListUsers() throws SQLException {
