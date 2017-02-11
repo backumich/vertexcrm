@@ -1,5 +1,6 @@
 package ua.com.vertex.beans;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Max;
@@ -198,8 +199,16 @@ public class User {
         return passportScan;
     }
 
+    public String getPassportScanAsString() {
+        return Base64.encode(passportScan);
+    }
+
     public void setPassportScan(byte[] data) {
         this.passportScan = data;
+    }
+
+    public String getPhotoAsString() {
+        return Base64.encode(photo);
     }
 
     public byte[] getPhoto() {

@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.Role;
@@ -94,6 +95,13 @@ public class UserDetailsController {
         }
     }
 
+    private boolean checkImageFile(MultipartFile imageFile) {
+
+        boolean result = true;
+
+        return result;
+    }
+
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
     public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) byte[] passportScan,
                                      @RequestPart(value = "photo", required = false) byte[] photo,
@@ -106,26 +114,20 @@ public class UserDetailsController {
         }
 
         if (user != null) {
-            //-----------------
             try {
                 if (passportScan != null) {
                     user.setPassportScan(passportScan);
-                    modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
                     LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
+                }
+                if (photo != null) {
+                    user.setPhoto(photo);
+                    LOGGER.debug("Convert imagePhoto and save to display for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
                 LOGGER.warn("An error occurred while converting imagePassportScan for user ID - " + user.getUserId());
             }
-            try {
-                if (photo != null) {
-                    user.setPhoto(photo);
-                    modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
-                    LOGGER.debug("Convert imagePhoto and save to display for user ID - " + user.getUserId());
-                }
-            } catch (Exception e) {
-                LOGGER.warn("An error occurred while converting imagePhoto for user ID - " + user.getUserId());
-            }
-            //------------------
+
+
             try {
                 if (userLogic.saveUserData(user) > 0) {
                     LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
@@ -136,14 +138,6 @@ public class UserDetailsController {
                 LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
             }
 
-            if (user.getPassportScan() != null) {
-                modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
-                LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
-            }
-            if (user.getPhoto() != null) {
-                modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
-                LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
-            }
             getListAllRoles(modelAndView);
             getAllCertificatesByUserId(user.getUserId(), modelAndView);
             modelAndView.setViewName(PAGE_JSP);
