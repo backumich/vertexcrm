@@ -11,6 +11,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public User getUserDetailsByID(int userId) throws SQLException {
+    public Optional<User> getUserDetailsByID(int userId) throws SQLException {
         return userDao.getUserDetailsByID(userId);
     }
 

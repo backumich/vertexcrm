@@ -19,7 +19,7 @@ public interface UserDaoInf {
 
     List<User> getListUsers() throws SQLException;
 
-    User getUserDetailsByID(int userID) throws SQLException;
+    Optional<User> getUserDetailsByID(int userID) throws SQLException;
 
     EnumMap<Role, Role> getListAllRoles();
 

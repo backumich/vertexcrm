@@ -7,6 +7,7 @@ import ua.com.vertex.beans.User;
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserLogic {
 
@@ -14,7 +15,7 @@ public interface UserLogic {
 
     List<User> getListUsers() throws SQLException;
 
-    User getUserDetailsByID(int userId) throws SQLException;
+    Optional<User> getUserDetailsByID(int userId) throws SQLException;
 
     String convertImage(byte[] image);
 

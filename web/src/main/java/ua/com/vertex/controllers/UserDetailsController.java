@@ -9,16 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @SessionAttributes("users")
@@ -41,70 +38,46 @@ public class UserDetailsController {
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
-        User user = null;
+
+        // -- Get user data by ID
         try {
-            user = userLogic.getUserDetailsByID(userId);
+            Optional<User> optionalUser = userLogic.getUserDetailsByID(userId);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                modelAndView.setViewName(PAGE_JSP);
+                modelAndView.addObject("user", user);
+            }
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (DataAccessException | SQLException e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
             modelAndView.setViewName(ERROR_JSP);
         }
 
-        if (user != null) {
-            modelAndView.setViewName(PAGE_JSP);
-            modelAndView.addObject("user", user);
-            try {
-                modelAndView.addObject("imagePassportScan", userLogic.convertImage(user.getPassportScan()));
-                LOGGER.debug("Passports scan is obtained and converted for user ID - " + userId);
-            } catch (Throwable t) {
-                LOGGER.warn("There are problems with access to passports scan for user ID - " + userId);
-            }
-            try {
-                modelAndView.addObject("imagePhoto", userLogic.convertImage(user.getPhoto()));
-                LOGGER.debug("Photo is obtained and converted for user ID - " + userId);
-            } catch (Throwable t) {
-                LOGGER.warn("There are problems with access to photos for user ID - " + userId);
-            }
-            getListAllRoles(modelAndView);
-            getAllCertificatesByUserId(userId, modelAndView);
-        } else {
-            LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
-            modelAndView.setViewName(ERROR_JSP);
+        //  -- Update list roles user
+        try {
+            modelAndView.addObject("allRoles", userLogic.getListAllRoles());
+            LOGGER.debug("We received all the roles of the system");
+        } catch (Exception e) {
+            LOGGER.warn("There are problems with access to roles of the system");
         }
 
+        //  -- Update list certificates user
+        try {
+            modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
+            LOGGER.debug("We received all the roles of the system");
+        } catch (Exception e) {
+            LOGGER.warn("There are problems with access to roles of the system");
+        }
         return modelAndView;
     }
 
-    private void getAllCertificatesByUserId(@RequestParam("userId") int userId, ModelAndView modelAndView) {
-        try {
-            List<Certificate> certificates = certificateLogic.getAllCertificatesByUserIdFullData(userId);
-            modelAndView.addObject("certificates", certificates);
-            LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
-            LOGGER.debug("There are problems with access to roles of the system");
-        }
-    }
-
-    private void getListAllRoles(ModelAndView modelAndView) {
-        try {
-            EnumMap<Role, Role> allRoles = userLogic.getListAllRoles();
-            modelAndView.addObject("allRoles", allRoles);
-            LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
-            LOGGER.debug("There are problems with access to roles of the system");
-        }
-    }
-
-    private boolean checkImageFile(MultipartFile imageFile) {
-
-        boolean result = true;
-
-        return result;
+    private boolean checkImageFile(MultipartFile file) {
+        return !file.isEmpty() && file.getContentType().split("/")[0].equals("image");
     }
 
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
-    public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) byte[] passportScan,
-                                     @RequestPart(value = "photo", required = false) byte[] photo,
+    public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) MultipartFile passportScan,
+                                     @RequestPart(value = "photo", required = false) MultipartFile photo,
                                      @Valid @ModelAttribute(USERDATA_MODEL) User user,
                                      BindingResult bindingResult, ModelAndView modelAndView) {
 
@@ -114,33 +87,57 @@ public class UserDetailsController {
         }
 
         if (user != null) {
+            modelAndView.setViewName(PAGE_JSP);
+            // -- check image files
             try {
-                if (passportScan != null) {
-                    user.setPassportScan(passportScan);
-                    LOGGER.debug("Convert imagePassportScan and save to display for user ID - " + user.getUserId());
+                if (checkImageFile(passportScan)) {
+                    user.setPassportScan(passportScan.getBytes());
+                    LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
+                } else {
+                    LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
                 }
-                if (photo != null) {
-                    user.setPhoto(photo);
-                    LOGGER.debug("Convert imagePhoto and save to display for user ID - " + user.getUserId());
+                if (checkImageFile(photo)) {
+                    user.setPhoto(photo.getBytes());
+                    LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
+                } else {
+                    LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
-                LOGGER.warn("An error occurred while converting imagePassportScan for user ID - " + user.getUserId());
+                LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
             }
 
-
+            // -- check correct update user data
             try {
-                if (userLogic.saveUserData(user) > 0) {
+                if (userLogic.saveUserData(user) == 1) {
                     LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
                 } else {
+                    modelAndView.setViewName(ERROR_JSP);
                     LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
+                modelAndView.setViewName(ERROR_JSP);
                 LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
             }
 
-            getListAllRoles(modelAndView);
-            getAllCertificatesByUserId(user.getUserId(), modelAndView);
-            modelAndView.setViewName(PAGE_JSP);
+            //  -- Update list roles user
+            try {
+                modelAndView.addObject("allRoles", userLogic.getListAllRoles());
+                LOGGER.debug("We received all the roles of the system");
+            } catch (Exception e) {
+                modelAndView.setViewName(ERROR_JSP);
+                LOGGER.debug("There are problems with access to roles of the system");
+            }
+
+            //  -- Update list certificates user
+            try {
+                modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
+                LOGGER.debug("We received all the roles of the system");
+            } catch (Exception e) {
+                modelAndView.setViewName(ERROR_JSP);
+                LOGGER.debug("There are problems with access to roles of the system");
+            }
+
+//            modelAndView.setViewName(PAGE_JSP);
             modelAndView.addObject("msg", "Congratulations! Your data is saved!");
         } else {
             modelAndView.setViewName(ERROR_JSP);

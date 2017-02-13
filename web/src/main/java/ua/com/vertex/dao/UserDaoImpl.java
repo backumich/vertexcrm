@@ -87,11 +87,11 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public User getUserDetailsByID(int userID) throws SQLException {
+    public Optional<User> getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
 
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping());
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping()));
     }
 
     private static final class UserDetailsRowMapping implements RowMapper<User> {

@@ -13,6 +13,7 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,16 +36,22 @@ public class UserDetailsControllerTest {
     @Mock
     ModelAndView modelAndView;
 
+    private User user;
+    private Optional<User> optional;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userDetailsController = new UserDetailsController(logic, certificateLogic);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
+        user = new User.Builder().getInstance();
+        optional = Optional.ofNullable(user);
     }
 
     @Test
     public void userDetailsControllerReturnedPassViewTest() throws Exception {
-        when(logic.getUserDetailsByID(1)).thenReturn(new User());
+//        when(logic.getUserDetailsByID(1)).thenReturn(new User());
+        when(logic.getUserDetailsByID(1)).thenReturn(optional);
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("userDetails"))
                 .build();
