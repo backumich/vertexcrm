@@ -80,69 +80,70 @@ public class UserDetailsController {
                                      @RequestPart(value = "photo", required = false) MultipartFile photo,
                                      @Valid @ModelAttribute(USERDATA_MODEL) User user,
                                      BindingResult bindingResult, ModelAndView modelAndView) {
-
+        modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg", "WARNING!!! User data is updated but not saved");
-            LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
+            modelAndView.setViewName(ERROR_JSP);
+            LOGGER.debug("Requested data are invalid for user ID - ");
         }
 
-        if (user != null) {
-            modelAndView.setViewName(PAGE_JSP);
-            // -- check image files
-            try {
-                if (checkImageFile(passportScan)) {
-                    user.setPassportScan(passportScan.getBytes());
-                    LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
-                } else {
-                    LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
-                }
-                if (checkImageFile(photo)) {
-                    user.setPhoto(photo.getBytes());
-                    LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
-                } else {
-                    LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
-                }
-            } catch (Exception e) {
-                LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
-            }
+        //if (user != null) {
 
-            // -- check correct update user data
-            try {
-                if (userLogic.saveUserData(user) == 1) {
-                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-                } else {
-                    modelAndView.setViewName(ERROR_JSP);
-                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
-                }
-            } catch (Exception e) {
+        // -- check image files
+        try {
+            if (checkImageFile(passportScan)) {
+                user.setPassportScan(passportScan.getBytes());
+                LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
+            } else {
+                LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
+            }
+            if (checkImageFile(photo)) {
+                user.setPhoto(photo.getBytes());
+                LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
+            } else {
+                LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
+            }
+        } catch (Exception e) {
+            LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
+        }
+
+        // -- check correct update user data
+        try {
+            if (userLogic.saveUserData(user) == 1) {
+                LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+            } else {
                 modelAndView.setViewName(ERROR_JSP);
                 LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
             }
+        } catch (Exception e) {
+            modelAndView.setViewName(ERROR_JSP);
+            LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+        }
 
-            //  -- Update list roles user
-            try {
-                modelAndView.addObject("allRoles", userLogic.getListAllRoles());
-                LOGGER.debug("We received all the roles of the system");
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.debug("There are problems with access to roles of the system");
-            }
+        //  -- Update list roles user
+        try {
+            modelAndView.addObject("allRoles", userLogic.getListAllRoles());
+            LOGGER.debug("We received all the roles of the system");
+        } catch (Exception e) {
+            modelAndView.setViewName(ERROR_JSP);
+            LOGGER.debug("There are problems with access to roles of the system");
+        }
 
-            //  -- Update list certificates user
-            try {
-                modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
-                LOGGER.debug("We received all the roles of the system");
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.debug("There are problems with access to roles of the system");
-            }
+        //  -- Update list certificates user
+        try {
+            modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
+            LOGGER.debug("We received all the roles of the system");
+        } catch (Exception e) {
+            modelAndView.setViewName(ERROR_JSP);
+            LOGGER.debug("There are problems with access to roles of the system");
+        }
 
 //            modelAndView.setViewName(PAGE_JSP);
-            modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-        } else {
-            modelAndView.setViewName(ERROR_JSP);
-            LOGGER.debug("Something went wrong for user ID - " + user.getUserId());
-        }
+        modelAndView.addObject("msg", "Congratulations! Your data is saved!");
+//        } else {
+//            modelAndView.setViewName(ERROR_JSP);
+//            LOGGER.debug("Something went wrong for user ID - " + user.getUserId());
+//        }
 
         return modelAndView;
     }
