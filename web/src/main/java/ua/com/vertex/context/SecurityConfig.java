@@ -20,10 +20,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
-    private final String[] permittedAllRequests = {"/css/**", "/javascript/**", "/", "/registration",
+    private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
             "/userPhoto", "/403", "/error"};
-    private final String[] permittedAdminRequests = {};
+    private static final String[] ADMIN_REQUESTS = {};
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -49,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http.authorizeRequests()
-                .antMatchers(permittedAllRequests)
+                .antMatchers(UNAUTHENTICATED_REQUESTS)
                 .permitAll()
-                .antMatchers(permittedAdminRequests).hasAuthority(ADMIN.name())
+                .antMatchers(ADMIN_REQUESTS).hasAuthority(ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -59,7 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successForwardUrl("/loggedIn")
                 .failureHandler((request, response, e) -> {
                     if (e instanceof BadCredentialsException) {
-                        request.setAttribute("param", "error");
                         response.sendRedirect("/logIn?error");
                     } else {
                         response.sendRedirect("/error");

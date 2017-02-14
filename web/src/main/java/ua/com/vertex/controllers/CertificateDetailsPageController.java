@@ -35,14 +35,8 @@ public class CertificateDetailsPageController {
 
     @RequestMapping(value = "/certificateDetails")
     public String showCertificateDetailsPage(Model model) {
-        String view = CERTIFICATE_DETAILS;
-        try {
-            model.addAttribute(NEW_CERTIFICATE, new Certificate());
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
-            view = ERROR;
-        }
-        return view;
+        model.addAttribute(NEW_CERTIFICATE, new Certificate());
+        return CERTIFICATE_DETAILS;
     }
 
     @RequestMapping(value = "/processCertificateDetails")
