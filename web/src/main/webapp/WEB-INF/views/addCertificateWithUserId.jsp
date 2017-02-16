@@ -103,7 +103,7 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateAndCreateUser">
+        <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateWithUserId">
 
 
             <table border="0" align="center" style="align-content: center">
@@ -114,7 +114,9 @@
                     <td><form:hidden path="certificationId" value="1"/></td>
                 </tr>
                 <tr>
-                    <td><form:hidden path="userId" value="1"/></td>
+                    <td><form:label path="userId">User id :</form:label></td>
+                    <td><form:input placeholder="User id" type="number" path="userId"/></td>
+                    <td><form:errors path="userId"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="certificationDate">Certification date :</form:label></td>
@@ -135,12 +137,13 @@
                     <td colspan="5" align="center"><input type="submit" value="Add certificate"/></td>
                 </tr>
             </table>
-
-            <c:if test="${!empty msg}">
-                <h3><span class="errorText125">${msg}</span></h3>
-            </c:if>
-
         </form:form>
+        <br>
+        <br>
+
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText125">${msg}</span></h3>
+        </c:if>
         <br>
         <br>
         <br>

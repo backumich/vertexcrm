@@ -103,36 +103,30 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateAndCreateUser">
+        <form:form cssClass="buttonText" method="post" commandName="user" action="checkUser">
 
 
             <table border="0" align="center" style="align-content: center">
                 <tr>
-                    <td colspan="2" align="center"><h2>Add new certificate :</h2></td>
+                    <td colspan="2" align="center"><h2>Add new user :</h2></td>
                 </tr>
                 <tr>
-                    <td><form:hidden path="certificationId" value="1"/></td>
+                    <td><form:label path="email">E-mail:</form:label></td>
+                    <td><form:input placeholder="E-mail" path="email"/></td>
+                    <td><form:errors path="email"/></td>
                 </tr>
                 <tr>
-                    <td><form:hidden path="userId" value="1"/></td>
+                    <td><form:label path="firstName">First name:</form:label></td>
+                    <td><form:input placeholder="First name" path="firstName"/></td>
+                    <td><form:errors path="firstName"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="certificationDate">Certification date :</form:label></td>
-                    <td><form:input placeholder="yyyy-MM-dd" type="date" path="certificationDate"/></td>
-                    <td><form:errors path="certificationDate"/></td>
+                    <td><form:label path="lastName">Last name:</form:label></td>
+                    <td><form:input placeholder="Last name" path="lastName"/></td>
+                    <td><form:errors path="lastName"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="courseName">Course name:</form:label></td>
-                    <td><form:input placeholder="Course name:" path="courseName"/></td>
-                    <td><form:errors path="courseName"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="language">Language:</form:label></td>
-                    <td><form:input placeholder="Language:" path="language"/></td>
-                    <td><form:errors path="language"/></td>
-                </tr>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Add certificate"/></td>
+                    <td colspan="5" align="center"><input type="submit" value="Add user"/></td>
                 </tr>
             </table>
 

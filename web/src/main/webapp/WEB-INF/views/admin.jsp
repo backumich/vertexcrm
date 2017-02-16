@@ -108,9 +108,22 @@
             </c:if>
         </div>
 
-        <form:form cssClass="buttonText" method="post" action="addCertificate">
-            <input type="submit" name="addCertificate" value="Add Certificate"/>
-        </form:form>
+        <div>
+            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
+            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
+                <input type="submit" name="addCertificate" value="Add Certificate"/>
+            </form:form>
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div>
+            <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
+            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
+                <input type="submit" name="addCertificate" value="Add Certificate"/>
+            </form:form>
+        </div>
         <br>
         <br>
         <br>

@@ -4,12 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.time.LocalDate;
 
@@ -22,6 +24,9 @@ import static ua.com.vertex.controllers.AdminController.*;
 
 public class AdminControllerTest {
 
+    private final String MSG_INVALID_DATA = "Have wrong objects in model";
+    private final String MSG_INVALID_VIEW = "Have wrong viewName in ModelAndView";
+
     private AdminController underTest;
 
     private Model model;
@@ -32,12 +37,15 @@ public class AdminControllerTest {
     private CertificateLogic certificateLogic;
 
     @Mock
+    private UserLogic userLogic;
+
+    @Mock
     private BindingResult bindingResult;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTest = new AdminController(certificateLogic);
+        underTest = new AdminController(certificateLogic, userLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder()
                 .setUserId(1)
@@ -50,35 +58,44 @@ public class AdminControllerTest {
     @Test
     public void adminHasCorrectDataInModel() throws Exception {
         ModelAndView result = underTest.admin();
-        assertEquals("Have wrong viewName in ModelAndView", result.getViewName(), ADMIN_JSP);
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADMIN_JSP);
     }
 
     @Test
     public void addCertificateHasCorrectDataInModel() throws Exception {
-        ModelAndView result = underTest.addCertificate();
-        assertEquals("Have wrong viewName in ModelAndView", result.getViewName(), ADD_CERTIFICATE_JSP);
-        assertTrue("Have wrong objects in model", result.getModel().containsValue(new Certificate()));
+        ModelAndView result = underTest.addCertificateWithUserIde();
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_JSP);
+        assertTrue(MSG_INVALID_DATA, result.getModel().containsValue(new Certificate()));
     }
 
     @Test
     public void checkCertificateIsCalledInCertificateLogic() throws Exception {
-        underTest.checkCertificate(certificate, bindingResult, model);
+        underTest.checkCertificateWithUserId(certificate, bindingResult, model);
         verify(certificateLogic).addCertificate(certificate);
     }
 
     @Test
     public void checkCertificateRedirectToCorrectPage() throws Exception {
-        assertEquals("Return wrong view", underTest.checkCertificate(certificate, bindingResult, model)
-                , ADD_CERTIFICATE_JSP);
+        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
+                , ADD_CERTIFICATE_WITH_USER_ID_JSP);
     }
 
     @Test
     public void checkCertificateHasCorrectDataInModel() throws Exception {
         when(certificateLogic.addCertificate(certificate)).thenReturn(1);
-        underTest.checkCertificate(certificate, bindingResult, model);
-        assertTrue("Have wrong objects in model", model.containsAttribute(MSG));
+        underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
 
-        assertTrue("Have wrong message in model ", model.asMap().containsValue("Certificate added. Certificate id=1"));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_CERTIFICATE_ADDED + "1"));
+    }
+
+    @Test
+    public void checkCertificateHasCorrectMSGInModel() throws Exception {
+        when(certificateLogic.addCertificate(certificate)).thenThrow( new DataIntegrityViolationException(""));
+        underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INVALID_USER_ID));
     }
 
 }

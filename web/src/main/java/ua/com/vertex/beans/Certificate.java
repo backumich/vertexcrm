@@ -16,6 +16,8 @@ public class Certificate {
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
+    @Min(value = 1, message = "Entered value must be a positive integer!")
+    @Max(value = Integer.MAX_VALUE, message = "Invalid value!")
     private int userId;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
