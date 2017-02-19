@@ -1,8 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
-<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -19,9 +17,8 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
+    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
+    <script async="" src="../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -40,12 +37,50 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
     }
 
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
 
+    .hrefText {
+        font-size: 120%;
+    }
+
+    .formHeader {
+        font-size: 125%;
+        font-weight: bold;
+        color: #adadad;
+    }
+
+    .pageHeader {
+        font-size: 180%
+    }
+
+    .errorText140 {
+        font-size: 140%;
+        color: red;
+    }
+
+    .errorField {
+        background-color: #ffcccc;
+        border: 2px solid red;
+    }
+
+    .buttonText {
+        color: black;
+    }
+
+    .up-padding {
+        padding-top: 100px;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -74,7 +109,6 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -105,68 +139,57 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
+    <span class="fontSize180 silver">Log into the system</span><br><br><br>
 
-    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
+        <c:if test="${param.error != null}">
+            <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
+        </c:if>
 
-    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
+        <c:if test="${param.logout != null}">
+            <p><span class="fontSize140 red">You have been logged out</span></p>
+        </c:if>
 
-    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-        <input type="submit" value="Send">
-    </sf:form>
-    <br><br>
+        <form action="${pageContext.request.contextPath}/logIn" method="post">
+            <table>
+                <tr>
+                    <td><span class="fontSize125 bold silver">E-mail:</span></td>
+                    <c:if test="${param.error == null}">
+                        <td><input type="text" name="username"/></td>
+                    </c:if>
+                    <c:if test="${param.error != null}">
+                        <td><input type="text" name="username" class="errorField"/></td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td><span class="fontSize125 bold silver">Password:</span></td>
+                    <c:if test="${param.error == null}">
+                        <td><input type="password" name="password"/></td>
+                    </c:if>
+                    <c:if test="${param.error != null}">
+                        <td><input type="password" name="password" class="errorField"/></td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td align="right" colspan="2">
+                        <label for="remember_me" class="fontSize125 bold silver">Remember me</label>
+                        <input id="remember_me" name="remember-me" type="checkbox"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
+                </tr>
+                <tr>
+                    <td align="right" colspan="2"><input type="submit" value="Send" class="black"></td>
+                </tr>
+            </table>
+        </form>
 
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
-    </c:if>
-
-    <c:if test="${error == null && certificate != null}">
-        <table class="table fontSize140">
-            <tr>
-                <td>Certification ID:</td>
-                <td>${String.format("%05d", certificate.certificationId)}</td>
-            </tr>
-            <tr>
-                <td>Certificate Holder First Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certificate Holder Last Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certification Date:</td>
-                <td>${certificate.certificationDate}</td>
-            </tr>
-            <tr>
-                <td>Course Name:</td>
-                <td>${certificate.courseName}</td>
-            </tr>
-            <tr>
-                <td>Programming Language:</td>
-                <td>${certificate.language}</td>
-            </tr>
-        </table>
-        <br>
-        <sf:form method="get" action="/userPhoto">
-            <input type="hidden" name="userId" value="${user.userId}"/>
-            <input type="hidden" name="previousPage" value="/certificateDetails"/>
-            <input class="black" type="submit" value="Show Certificate Holder Photo">
-        </sf:form>
-    </c:if>
-
-    <br>
-
+        <br><br>
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/"/>">Home</a>
+        </div>
     </div>
-</div>
 
 
 <div class="footer">
@@ -223,11 +246,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+<script src="../../javascript/typed.js"></script>
+<script src="../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../javascript/main.js"></script>
 
 </body>
 </html>

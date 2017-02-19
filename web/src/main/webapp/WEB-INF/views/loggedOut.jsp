@@ -1,8 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
-<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -19,9 +17,8 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
+    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
+    <script async="" src="../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -40,11 +37,18 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
     }
 
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
 
     </style>
 </head>
@@ -74,7 +78,6 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -105,67 +108,12 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
+    <span class="fontSize180 silver">You are logged out</span><br><br><br>
 
-    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
-
-    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
-
-    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-        <input type="submit" value="Send">
-    </sf:form>
-    <br><br>
-
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
-    </c:if>
-
-    <c:if test="${error == null && certificate != null}">
-        <table class="table fontSize140">
-            <tr>
-                <td>Certification ID:</td>
-                <td>${String.format("%05d", certificate.certificationId)}</td>
-            </tr>
-            <tr>
-                <td>Certificate Holder First Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certificate Holder Last Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certification Date:</td>
-                <td>${certificate.certificationDate}</td>
-            </tr>
-            <tr>
-                <td>Course Name:</td>
-                <td>${certificate.courseName}</td>
-            </tr>
-            <tr>
-                <td>Programming Language:</td>
-                <td>${certificate.language}</td>
-            </tr>
-        </table>
-        <br>
-        <sf:form method="get" action="/userPhoto">
-            <input type="hidden" name="userId" value="${user.userId}"/>
-            <input type="hidden" name="previousPage" value="/certificateDetails"/>
-            <input class="black" type="submit" value="Show Certificate Holder Photo">
-        </sf:form>
-    </c:if>
-
-    <br>
 
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
-    </div>
+            <a href="<c:url value="/"/>">Home</a>
+        </div>
 </div>
 
 
@@ -223,11 +171,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+<script src="../../javascript/typed.js"></script>
+<script src="../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../javascript/main.js"></script>
 
 </body>
 </html>

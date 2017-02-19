@@ -13,6 +13,10 @@ public interface UserDaoInf {
 
     Optional<User> getUser(int id);
 
+    Optional<User> getUserByEmail(String email);
+
+    Optional<User> logIn(String username);
+
     void deleteUser(int id);
 
     List<Integer> getAllUserIds();
@@ -23,8 +27,9 @@ public interface UserDaoInf {
 
     EnumMap<Role, Role> getListAllRoles();
 
-//    Role getRoleById(int roleID) throws SQLException;
-
     int saveUserData(User user);
 
+    void saveImage(int userId, byte[] image, String imageType) throws Exception;
+
+    Optional<byte[]> getImage(int userId, String imageType);
 }

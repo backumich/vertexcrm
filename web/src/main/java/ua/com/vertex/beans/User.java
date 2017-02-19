@@ -111,7 +111,6 @@ public class User {
             return this;
         }
 
-
         public User getInstance() {
             return user;
         }

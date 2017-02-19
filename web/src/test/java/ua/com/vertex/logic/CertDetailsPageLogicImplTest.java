@@ -4,15 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
-import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import java.util.Optional;
 
@@ -26,53 +25,31 @@ import static org.junit.Assert.assertNotNull;
 public class CertDetailsPageLogicImplTest {
 
     @Autowired
-    private UserDaoInf userDao;
-
-    @Autowired
     private CertificateDaoInf certificateDao;
 
     private CertDetailsPageLogicImpl logic;
 
+    private static final int EXISTING_CERT_ID = 222;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+
     @Before
     public void setUp() {
-        logic = new CertDetailsPageLogicImpl(userDao, certificateDao);
+        logic = new CertDetailsPageLogicImpl(certificateDao);
     }
 
     @Test
-    public void userDaoShouldNotBeNull() {
-        assertNotNull(userDao);
-    }
-
-    @Test
-    public void certificateDaoShouldNotBeNull() {
-        assertNotNull(certificateDao);
-    }
-
-    @Test
+    @WithMockUser
     public void certificateOptionalForCertificateStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(222);
+        Optional<Certificate> optional = logic.getCertificateDetails(EXISTING_CERT_ID);
         assertNotNull(optional);
-        assertEquals(222, optional.get().getCertificationId());
+        assertEquals(EXISTING_CERT_ID, optional.get().getCertificationId());
     }
 
     @Test
-    public void certificateOptionalForCertificateNotStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(55555);
+    @WithMockUser
+    public void certificateNullOptionalForCertificateNotStoredInDBShouldBeReturned() {
+        Optional<Certificate> optional = logic.getCertificateDetails(NOT_EXISTING_ID);
         assertNotNull(optional);
-        assertEquals(new Certificate(), optional.orElse(new Certificate()));
-    }
-
-    @Test
-    public void userOptionalForUserStoredInDBShouldBeReturned() {
-        Optional<User> optional = logic.getUserDetails(22);
-        assertNotNull(optional);
-        assertEquals(22, optional.get().getUserId());
-    }
-
-    @Test
-    public void userOptionalForUserNotStoredInDBShouldBeReturned() {
-        Optional<User> optional = logic.getUserDetails(55555);
-        assertNotNull(optional);
-        assertEquals(new User(), optional.orElse(new User()));
+        assertEquals(null, optional.orElse(null));
     }
 }

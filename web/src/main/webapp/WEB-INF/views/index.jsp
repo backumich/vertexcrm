@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/slick.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -39,9 +40,6 @@
         margin-left: 0 !important;
     }
 
-    .hrefText {
-        font-size: 120%;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -60,6 +58,7 @@
             } catch (e) {
             }
         });
+
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -68,6 +67,7 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
+
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -104,18 +104,20 @@
             <div class="registration">
                 <div id="registration-form">
                     <div class="reg-form">
-                        <span style="font-size: 200%">Welcome to Vertex CRM</span>
+                        <span class="fontSize200 silver">Welcome to Vertex CRM</span>
                         <br><br><br>
                     </div>
                 </div>
             </div>
         </main>
 
-        <div class="hrefText">
+        <div class="href">
             <a href="<c:url value="/registration"/>">Register</a> |
-            <a href="signIn.jsp">Log in</a> |
-            <a href="<c:url value="/certificateDetails"/>">Get certificate details by certificate ID</a>|
-            <a href="<c:url value="/user"/>">View user.jsp</a>|
+            <a href="<c:url value="/logIn"/>">Log in</a> |
+            <a href="<c:url value="/logOut"/>">Log out</a>
+            <br><br>
+            <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
+            <a href="<c:url value="/user"/>">View user.jsp</a>
             <a href="<c:url value="/viewAllUsers"/>">View all user registered into CRM</a>
         </div>
 

@@ -1,0 +1,53 @@
+.fontSize125 {
+    font-size: 125%;
+}
+
+.fontSize140 {
+    font-size: 140%;
+}
+
+.fontSize180 {
+    font-size: 180%;
+}
+
+.fontSize200 {
+    font-size: 200%;
+}
+
+.red {
+    color: red;
+}
+
+.black {
+    color: black;
+}
+
+.silver {
+    color: silver;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.href {
+    font-size: 120%;
+}
+
+.errorField {
+    background-color: #ffcccc;
+    border: 2px solid red;
+}
+
+.table {
+    width: auto;
+    border-spacing: 5px;
+}
+
+.up-padding {
+    padding-top: 100px;
+}
+
+a:hover {
+    color: white;
+}

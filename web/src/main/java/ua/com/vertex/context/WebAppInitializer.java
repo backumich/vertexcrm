@@ -12,6 +12,9 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     private static final int MAX_FILE_SIZE_BYTES = 10485760;
     private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
 
+    private static final int MAX_FILE_SIZE_BYTES = 10485760;
+    private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
+
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
@@ -19,7 +22,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class<?>[]{RootConfig.class, SecurityConfig.class};
     }
 
     @Override

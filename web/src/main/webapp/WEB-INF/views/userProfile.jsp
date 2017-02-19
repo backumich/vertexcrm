@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -44,7 +43,6 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
-
 
     </style>
 </head>
@@ -106,66 +104,80 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
+    <span class="fontSize200 silver">User Profile</span><br><br><br>
 
-    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
-
-    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-        <input type="submit" value="Send">
-    </sf:form>
-    <br><br>
-
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
-    </c:if>
-
-    <c:if test="${error == null && certificate != null}">
-        <table class="table fontSize140">
-            <tr>
-                <td>Certification ID:</td>
-                <td>${String.format("%05d", certificate.certificationId)}</td>
-            </tr>
-            <tr>
-                <td>Certificate Holder First Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certificate Holder Last Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certification Date:</td>
-                <td>${certificate.certificationDate}</td>
-            </tr>
-            <tr>
-                <td>Course Name:</td>
-                <td>${certificate.courseName}</td>
-            </tr>
-            <tr>
-                <td>Programming Language:</td>
-                <td>${certificate.language}</td>
-            </tr>
-        </table>
-        <br>
-        <sf:form method="get" action="/userPhoto">
-            <input type="hidden" name="userId" value="${user.userId}"/>
-            <input type="hidden" name="previousPage" value="/certificateDetails"/>
-            <input class="black" type="submit" value="Show Certificate Holder Photo">
-        </sf:form>
-    </c:if>
-
-    <br>
+    <table class="table fontSize125">
+        <tr>
+            <td>User ID:</td>
+            <td>${String.format("%05d", user.userId)}</td>
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td>${user.firstName}</td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td>${user.lastName}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>${user.email}</td>
+        </tr>
+        <tr>
+            <td>Discount:</td>
+            <td>${user.discount}</td>
+        </tr>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <sf:form method="get" action="/userPhoto">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="previousPage" value="/logIn"/>
+                    <input class="black" type="submit" value="Show Photo">
+                </sf:form><br>
+            </td>
+            <td>
+                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="firstName" value="${user.firstName}"/>
+                    <input type="hidden" name="lastName" value="${user.lastName}"/>
+                    <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="discount" value="${user.discount}"/>
+                    <input type="hidden" name="imageType" value="photo"/>
+                    <input type="file" name="image" accept="image/jpeg, image/png"/>
+                    <input class="black" type="submit" value="Upload New Photo">
+                </sf:form>
+            </td>
+        </tr>
+        <tr>
+            <td>Passport scan:</td>
+            <td>
+                <sf:form method="get" action="/passportScan">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="previousPage" value="/logIn"/>
+                    <input class="black" type="submit" value="Show Passport Scan">
+                </sf:form><br>
+            </td>
+            <td>
+                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                    <input type="hidden" name="userId" value="${user.userId}"/>
+                    <input type="hidden" name="firstName" value="${user.firstName}"/>
+                    <input type="hidden" name="lastName" value="${user.lastName}"/>
+                    <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="discount" value="${user.discount}"/>
+                    <input type="hidden" name="imageType" value="passport_scan"/>
+                    <input type="file" name="image" accept="image/jpeg, image/png"/>
+                    <input class="black" type="submit" value="Upload New Passport Scan">
+                </sf:form>
+            </td>
+        </tr>
+    </table>
 
     <div class="href">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/" />">Home</a>
     </div>
+
 </div>
 
 
