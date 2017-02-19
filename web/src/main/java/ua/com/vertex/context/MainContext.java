@@ -1,13 +1,10 @@
 package ua.com.vertex.context;
 
-import org.apache.commons.dbcp.BasicDataSourceFactory;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -17,30 +14,13 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
 @EnableWebMvc
+
 public class MainContext extends WebMvcConfigurerAdapter {
-    private static final String DB_PROPERTIES = "db.properties";
-
-    @Bean
-    public DataSource dataSource() throws Exception {
-        return BasicDataSourceFactory.createDataSource(getDbProperties());
-    }
-
-    private Properties getDbProperties() throws IOException {
-        final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
-
-        final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
-        factoryBean.setLocation(classPathResource);
-        factoryBean.afterPropertiesSet();
-
-        return factoryBean.getObject();
-    }
 
     @Bean
     public ViewResolver viewResolver() {
@@ -49,21 +29,6 @@ public class MainContext extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         resolver.setExposeContextBeansAsAttributes(true);
         return resolver;
-    }
-
-    @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setFallbackToSystemLocale(true);
-        return messageSource;
-    }
-
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("/index");
     }
 
     @Override
@@ -76,4 +41,19 @@ public class MainContext extends WebMvcConfigurerAdapter {
     public MultipartResolver multipartResolver() throws IOException {
         return new StandardServletMultipartResolver();
     }
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setFallbackToSystemLocale(true);
+        return messageSource;
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("/index");
+    }
+
 }

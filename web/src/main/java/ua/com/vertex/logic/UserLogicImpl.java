@@ -49,10 +49,10 @@ public class UserLogicImpl implements UserLogic {
         return userDao.getImage(userId, imageType);
     }
 
-    @Autowired
-    public UserLogicImpl(UserDaoImpl userDao) {
-        this.userDao = userDao;
-    }
+//    @Autowired
+//    public UserLogicImpl(UserDaoImpl userDao) {
+//        this.userDao = userDao;
+//    }
 
     @Override
     public List<User> getListUsers() throws SQLException {

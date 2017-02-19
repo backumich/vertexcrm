@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
-                "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:userId";
+                "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
 
         LOGGER.debug(logInfo.getId() + "Retrieving user, id=" + userId);
 
@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query = "SELECT user_id, email, password, first_name, last_name, discount, " +
+        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
         LOGGER.debug(logInfo.getId() + "Retrieving user, email=" + email);

@@ -9,8 +9,6 @@ import javax.servlet.ServletRegistration;
 
 @Configuration
 public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-    private static final int MAX_FILE_SIZE_BYTES = 10485760;
-    private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
 
     private static final int MAX_FILE_SIZE_BYTES = 10485760;
     private static final int MAX_REQUEST_SIZE_BYTES = 11534336;
