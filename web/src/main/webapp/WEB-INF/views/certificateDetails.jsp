@@ -108,12 +108,14 @@
 
     <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
-    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
+    <c:if test="${noForm == null}">
+        <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
-    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <sf:input path="certificationId" type="number"/>
-        <input type="submit" value="Send">
-    </sf:form>
+        <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
+            <sf:input path="certificationId" type="number"/>
+            <input type="submit" value="Send">
+        </sf:form>
+    </c:if>
     <br><br>
 
     <c:if test="${error != null}">

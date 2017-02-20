@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
@@ -31,6 +32,7 @@ public class CertificateDetailsPageController {
     private static final String CERTIFICATE = "certificate";
     private static final String NEW_CERTIFICATE = "newCertificate";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
+    private static final String NO_FORM = "noForm";
     private static final String ERROR = "error";
 
     @RequestMapping(value = "/certificateDetails")
@@ -73,6 +75,21 @@ public class CertificateDetailsPageController {
         } else {
             model.addAttribute(ERROR, "No certificate with this ID!");
         }
+    }
+
+    @RequestMapping(value = "/processCertificateDetails/{certificateId}")
+    public String processCertificateDetailsByCertificateId(@PathVariable int certificateId, Model model) {
+        String view = CERTIFICATE_DETAILS;
+        try {
+            Certificate certificate = new Certificate.Builder().setCertificationId(certificateId).getInstance();
+            setUserAndCertificate(certificate, model);
+            model.addAttribute(NO_FORM, true);
+        } catch (Exception e) {
+            LOGGER.warn(logInfo.getId(), e, e);
+            view = ERROR;
+        }
+
+        return view;
     }
 
     @Autowired
