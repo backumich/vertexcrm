@@ -104,7 +104,7 @@ public class AnonymousUserAccessRightsTest {
     @Test
     @WithAnonymousUser
     public void testProcessCertificateDetails() throws Exception {
-        mockMvc.perform(post("/processCertificateDetails"))
+        mockMvc.perform(post("/getCertificate"))
                 .andExpect(redirectedUrl(null));
     }
 

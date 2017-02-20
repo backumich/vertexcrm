@@ -15,6 +15,7 @@ public class Certificate {
     private LocalDate certificationDate;
     private String courseName;
     private String language;
+    private String encodedCertificationId;
 
     public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
 
@@ -124,5 +125,13 @@ public class Certificate {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getEncodedCertificationId() {
+        return encodedCertificationId;
+    }
+
+    public void setEncodedCertificationId(String encodedCertificationId) {
+        this.encodedCertificationId = encodedCertificationId;
     }
 }

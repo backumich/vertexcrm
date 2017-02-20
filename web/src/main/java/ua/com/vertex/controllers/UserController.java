@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.utils.TransformId;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class UserController {
         LOGGER.debug(LOG_REQ_IN + userId);
 
         List<Certificate> result = certificateLogic.getAllCertificatesByUserId(userId);
+        result.forEach(e -> e.setEncodedCertificationId(TransformId.encode(e.getCertificationId())));
         model.addAttribute(CERTIFICATES, result);
 
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());

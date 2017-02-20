@@ -108,11 +108,11 @@
 
     <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
-    <c:if test="${noForm == null}">
+    <c:if test="${certificateLink == null}">
         <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
-        <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-            <sf:input path="certificationId" type="number"/>
+        <sf:form cssClass="black" method="post" action="getCertificate">
+            <input type="text" name="certificateIdEncoded"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
@@ -151,6 +151,10 @@
             <tr>
                 <td>Programming Language:</td>
                 <td>${certificate.language}</td>
+            </tr>
+            <tr>
+                <td>Certificate Link:</td>
+                <td class="fontSize60">localhost:8080/getCertificate/${certificateLink}</td>
             </tr>
         </table>
         <br>

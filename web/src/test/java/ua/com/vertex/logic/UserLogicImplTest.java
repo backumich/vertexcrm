@@ -100,14 +100,14 @@ public class UserLogicImplTest {
     @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPhotoPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
-        logic.saveImage(EXISTING_ID1, image, PHOTO);
+        logic.saveImage(EXISTING_ID2, image, PHOTO);
     }
 
     @Test
     @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPassportPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
-        logic.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
+        logic.saveImage(EXISTING_ID2, image, PASSPORT_SCAN);
     }
 
     @Test
