@@ -28,9 +28,9 @@ public class ImageController {
     private static final String IMAGE_ERROR = "imageError";
 
     @RequestMapping(value = "/showImage")
-    public String showUserPhoto(@ModelAttribute(USER) User user,
-                                @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
-                                @RequestParam(IMAGE_TYPE) String imageType, Model model) {
+    public String showImage(@ModelAttribute(USER) User user,
+                            @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
+                            @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         LOGGER.debug(logInfo.getId() + pageToDisplay + " page accessed");
         String view = pageToDisplay;
