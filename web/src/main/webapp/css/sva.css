@@ -52,6 +52,10 @@
     padding-top: 100px;
 }
 
+.buttonWidth {
+    width: 100px;
+}
+
 a:hover {
     color: white;
 }

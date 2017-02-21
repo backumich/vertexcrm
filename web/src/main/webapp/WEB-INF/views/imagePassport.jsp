@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -18,9 +18,8 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
+    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
+    <script async="" src="../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -39,11 +38,22 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
     }
 
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
+
+    .hrefText {
+        font-size: 120%;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -72,7 +82,6 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -104,74 +113,47 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <span class="fontSize200 silver">User Profile</span><br><br><br>
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
+    </c:if>
 
-    <table class="table fontSize125">
-        <tr>
-            <td>User ID:</td>
-            <td>${String.format("%05d", user.userId)}</td>
-        </tr>
-        <tr>
-            <td>First Name:</td>
-            <td>${user.firstName}</td>
-        </tr>
-        <tr>
-            <td>Last Name:</td>
-            <td>${user.lastName}</td>
-        </tr>
-        <tr>
-            <td>Email:</td>
-            <td>${user.email}</td>
-        </tr>
-        <tr>
-            <td>Discount:</td>
-            <td>${user.discount}</td>
-        </tr>
-        <tr>
-            <td>My certificates:</td>
-            <td><a href="<c:url value="/getCertificateByUserId?userId=${user.userId}"/>">Go to certificates page</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Photo:</td>
-            <td>
-                <sf:form method="get" action="/showImage" commandName="user">
-                    <input type="hidden" name="userId" value="${user.userId}"/>
-                    <input type="hidden" name="firstName" value="${user.firstName}"/>
-                    <input type="hidden" name="lastName" value="${user.lastName}"/>
-                    <input type="hidden" name="email" value="${user.email}"/>
-                    <input type="hidden" name="discount" value="${user.discount}"/>
-                    <input type="hidden" name="pageToDisplay" value="imagePhoto"/>
-                    <input type="hidden" name="imageType" value="photo"/>
-                    <input class="black" type="submit" value="Show Photo">
-                </sf:form><br>
-            </td>
-        </tr>
-        <tr>
-            <td>Passport scan:</td>
-            <td>
-                <sf:form method="get" action="/showImage" commandName="user">
-                    <input type="hidden" name="userId" value="${user.userId}"/>
-                    <input type="hidden" name="firstName" value="${user.firstName}"/>
-                    <input type="hidden" name="lastName" value="${user.lastName}"/>
-                    <input type="hidden" name="email" value="${user.email}"/>
-                    <input type="hidden" name="discount" value="${user.discount}"/>
-                    <input type="hidden" name="pageToDisplay" value="imagePassport"/>
-                    <input type="hidden" name="imageType" value="passportScan"/>
-                    <input class="black" type="submit" value="Show Passport Scan">
-                </sf:form><br>
-            </td>
-        </tr>
-    </table>
+    <c:if test="${passportScan != null}">
+        <img src="data:image/jpeg;base64,${passportScan}" width="auto" height="500" alt="no passport scan">
+    </c:if>
+
+    <br><br>
+
+    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+        <input type="hidden" name="userId" value="${user.userId}"/>
+        <input type="hidden" name="firstName" value="${user.firstName}"/>
+        <input type="hidden" name="lastName" value="${user.lastName}"/>
+        <input type="hidden" name="email" value="${user.email}"/>
+        <input type="hidden" name="discount" value="${user.discount}"/>
+        <input type="hidden" name="imageType" value="passportScan"/>
+        <table>
+            <tr>
+                <td class="silver"><input type="file" name="image" accept="image/jpeg, image/png"/></td>
+            </tr>
+            <tr>
+                <td><input class="black" type="submit" value="Upload New Passport Scan"></td>
+            </tr>
+        </table>
+    </sf:form>
+
+    <br><br>
+
 
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+        <a href="<c:url value="/logIn"/>">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
     </div>
 
 </div>
 
 
+<div class="wrapper">
+
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -226,11 +208,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+<script src="../../javascript/typed.js"></script>
+<script src="../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../javascript/main.js"></script>
 
 </body>
 </html>

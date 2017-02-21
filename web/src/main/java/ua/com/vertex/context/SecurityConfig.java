@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final int VALIDITY_SECONDS = 604800;
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/getCertificate/**",
-            "/userPhoto", "/403", "/error"};
+            "/showImage", "/403", "/error"};
     private static final String[] ADMIN_REQUESTS = {};
 
     @Bean

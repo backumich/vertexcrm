@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -50,21 +51,6 @@
         margin-left: 0px !important;
     }
 
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .button {
-        width: 100px;
-    }
-
-    .up-padding {
-        padding-top: 100px;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -129,15 +115,14 @@
         <table>
             <tr>
                 <td>
-                    <form action="${pageContext.request.contextPath}/logOut" method="post">
-                        <input type="submit" class="black" value="Yes"/>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                    </form>
+                    <sf:form action="/logOut" method="post">
+                        <input type="submit" class="black buttonWidth" value="Yes"/>
+                    </sf:form>
                 </td>
                 <td>
-                    <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
-                        <input type="submit" class="black" value="No"/>
-                    </form>
+                    <sf:form action="/logOutRefuse" method="get">
+                        <input type="submit" class="black buttonWidth" value="No"/>
+                    </sf:form>
                 </td>
             </tr>
         </table>
