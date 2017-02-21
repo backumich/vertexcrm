@@ -135,7 +135,7 @@
                 <td class="silver"><input type="file" name="image" accept="image/jpeg, image/png"/></td>
             </tr>
             <tr>
-                <td><input class="black" type="submit" value="Upload New Passport Scan"></td>
+                <td><input class="black" type="submit" value="Upload New Photo"></td>
             </tr>
         </table>
     </sf:form>
