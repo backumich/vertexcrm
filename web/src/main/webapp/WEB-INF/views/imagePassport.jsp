@@ -113,12 +113,8 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <c:if test="${photo != null}">
-        <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
-    </c:if>
-
     <c:if test="${passportScan != null}">
-        <img src="data:image/jpeg;base64,${passportScan}" width="auto" height="500" alt="no passport scan">
+        <img src="data:image/jpeg;base64,${passportScan}" width="auto" height="600" alt="no passport scan">
     </c:if>
 
     <br><br>
