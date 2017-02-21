@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan("ua.com.vertex")
@@ -55,5 +58,26 @@ public class MainContext extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("/index");
     }
+
+//    @Bean
+//    public JavaMailSender getMailSender() {
+//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+//
+//        mailSender.setHost("smtp.gmail.com");
+//        mailSender.setPort(587);
+//        mailSender.setUsername("vertex.academy.robot@gmail.com");
+//        mailSender.setPassword("1qaz2wsx()");
+//
+//        Properties javaMailProperties = new Properties();
+//        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+//        javaMailProperties.put("mail.smtp.auth", "true");
+//        javaMailProperties.put("mail.transport.protocol", "smtp");
+//        javaMailProperties.put("mail.debug", "true");
+//
+//        mailSender.setJavaMailProperties(javaMailProperties);
+//        return mailSender;
+//    }
+
+
 
 }

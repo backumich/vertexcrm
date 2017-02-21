@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
+import ua.com.vertex.utils.MailService;
 
 import javax.validation.Valid;
 
@@ -35,6 +36,9 @@ public class RegistrationController {
         this.registrationUserLogic = registrationUserLogic;
     }
 
+//    @Autowired
+//    private MailService mailService;
+
     @GetMapping
     public ModelAndView viewRegistrationForm() {
         LOGGER.info("First request to " + REGISTRATION_PAGE);
@@ -48,6 +52,10 @@ public class RegistrationController {
         isMatchPassword(userFormRegistration, bindingResult);
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
+        ///
+//        mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "123");
+        ////
+
         if (bindingResult.hasErrors()) {
             LOGGER.info("There are errors in filling in the form " + REGISTRATION_PAGE);
             modelAndView.setViewName(REGISTRATION_PAGE);
@@ -56,6 +64,9 @@ public class RegistrationController {
                 int userID = registrationUserLogic.registrationUser(new User(userFormRegistration));
                 modelAndView.addObject("userID", userID);
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                ///////
+                //mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "123");
+                ////
             } catch (DataAccessException e) {
                 modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
             }
