@@ -120,11 +120,11 @@
     <br><br>
 
     <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
-        <input type="hidden" name="userId" value="${user.userId}"/>
-        <input type="hidden" name="firstName" value="${user.firstName}"/>
-        <input type="hidden" name="lastName" value="${user.lastName}"/>
-        <input type="hidden" name="email" value="${user.email}"/>
-        <input type="hidden" name="discount" value="${user.discount}"/>
+        <sf:hidden path="userId" value="${user.userId}"/>
+        <sf:hidden path="firstName" value="${user.firstName}"/>
+        <sf:hidden path="lastName" value="${user.lastName}"/>
+        <sf:hidden path="email" value="${user.email}"/>
+        <sf:hidden path="discount" value="${user.discount}"/>
         <input type="hidden" name="imageType" value="passportScan"/>
         <table>
             <tr>
