@@ -86,6 +86,23 @@ public class UserDetailsController {
             //modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Requested data are invalid for user ID - ");
         } else {
+            // -- check image files
+            try {
+                if (checkImageFile(imagePassportScan)) {
+                    user.setPassportScan(imagePassportScan.getBytes());
+                    LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
+                } else {
+                    LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
+                }
+                if (checkImageFile(imagePhoto)) {
+                    user.setPhoto(imagePhoto.getBytes());
+                    LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
+                } else {
+                    LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
+                }
+            } catch (Exception e) {
+                LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
+            }
             // -- check correct update user data
             try {
                 if (userLogic.saveUserData(user) == 1) {
@@ -117,24 +134,6 @@ public class UserDetailsController {
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("There are problems with access to roles of the system");
-        }
-
-        // -- check image files
-        try {
-            if (checkImageFile(imagePassportScan)) {
-                user.setPassportScan(imagePassportScan.getBytes());
-                LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
-            } else {
-                LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
-            }
-            if (checkImageFile(imagePhoto)) {
-                user.setPhoto(imagePhoto.getBytes());
-                LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
-            } else {
-                LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
-            }
-        } catch (Exception e) {
-            LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
         }
         return modelAndView;
     }

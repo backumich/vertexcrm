@@ -162,16 +162,15 @@
                     <td>Passport scan</td>
                     <td><img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport"></td>
                     <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
+                        <%--<input type="hidden" name="passportScan"/>--%>
                     <form:hidden path="passportScan"/>
                 </tr>
-
-
                 <tr>
                     <td>Photo</td>
                     <td><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
                     <td><input type="file" name="imagePhoto" accept="image/*"/></td>
                     <form:hidden path="photo"/>
-                    <%--<form:hidden path="photo"></form:hidden>--%>
+                        <%--<form:hidden path="photo"></form:hidden>--%>
                 </tr>
                 <tr>
                     <td>Discount</td>
