@@ -10,8 +10,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
 
 import javax.sql.DataSource;
@@ -21,8 +25,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-
 
 @Repository
 public class CertificateDaoImpl implements CertificateDaoInf {
@@ -31,30 +33,27 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String CERTIFICATION_DATE = "certificationDate";
     private static final String COURSE_NAME = "courseName";
     private static final String LANGUAGE = "language";
-
     private static final String COLUMN_CERTIFICATE_ID = "certification_id";
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_CERTIFICATION_DATE = "certification_date";
     private static final String COLUMN_COURSE_NAME = "course_name";
     private static final String COLUMN_LANGUAGE = "language";
-
-
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
     private static final String LOG_CERT_IN = "Retrieving certificate id=";
     private static final String LOG_CERT_OUT = "Retrieved certificate id=";
     private static final String LOG_NO_CERT = "No certificate in DB, id=";
     private static final String LOG_ALL_CERTIFICATE_OUT = "Retrieved all certificates by id=";
 
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    //    private final SimpleJdbcInsert insertCertificate;
     private final Storage storage;
+    private final UserDaoInf userDaoInf;
 
     @Autowired
-    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
+    public CertificateDaoImpl(DataSource dataSource, Storage storage, UserDaoInf userDaoInf) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.storage = storage;
-//        this.insertCertificate = new SimpleJdbcInsert(dataSource).withTableName(TABLE_NAME)
-//                .usingColumns(COLUMN_USER_ID, COLUMN_CERTIFICATION_DATE, COLUMN_COURSE_NAME, COLUMN_LANGUAGE);
+        this.userDaoInf = userDaoInf;
     }
 
     @Override
@@ -68,14 +67,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-//    @Override
-//    public int addCertificate(Certificate certificate) {
-//
-//        return insertCertificate.executeAndReturnKey(addParametrToMapSqlParameterSourceFromCertificate(certificate))
-//                .intValue();
-//    }
-
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public int addCertificate(Certificate certificate) {
         String query = "INSERT INTO Certificate (user_id,certification_date, course_name, language) " +
                 "VALUES ( :userId, :certificationDate, :courseName, :language)";
@@ -85,9 +78,21 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         return keyHolder.getKey().intValue();
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int addCertificateAndCreateUser(Certificate certificate, User user) {
+
+        int userID = userDaoInf.addUserForCreateCertificate(user);
+
+        certificate.setUserId(userID);
+
+        return addCertificate(certificate);
+
+    }
+
     private MapSqlParameterSource addParametrToMapSqlParameterSourceFromCertificate(Certificate certificate) {
         MapSqlParameterSource source = new MapSqlParameterSource();
-        source.addValue(USER_ID, certificate.getUserId());
+        source.addValue(USER_ID, 111111);
         source.addValue(CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
         source.addValue(COURSE_NAME, certificate.getCourseName());
         source.addValue(LANGUAGE, certificate.getLanguage());

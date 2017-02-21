@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class User {
 
-    private final String NAME_MSG = "This field must be longer than 1 and less than  256 characters";
+    private final String NAME_MSG = "This field must be longer than 3 and less than  256 characters";
     private final String MAIL_MSG = "E-mail must be longer than 5 and less than 256 characters";
     private final String MAIL_FORMAT_MSG = "E-mail address format is incorrect";
 
@@ -17,9 +17,9 @@ public class User {
     @Email(message = MAIL_FORMAT_MSG)
     private String email;
     private String password;
-    @Size(min = 5, max = 30, message = NAME_MSG)
+    @Size(min = 2, max = 30, message = NAME_MSG)
     private String firstName;
-    @Size(min = 5, max = 30, message = NAME_MSG)
+    @Size(min = 2, max = 30, message = NAME_MSG)
     private String lastName;
     private byte[] passportScan;
     private byte[] photo;

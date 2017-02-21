@@ -15,4 +15,6 @@ public interface UserDaoInf {
 
     @SuppressWarnings("unused")
     List<Integer> getAllUserIds();
+
+    int addUserForCreateCertificate(User user);
 }

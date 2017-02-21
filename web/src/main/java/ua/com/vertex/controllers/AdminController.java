@@ -13,34 +13,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+
+import javax.validation.Valid;
 
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR_JSP;
 
 @Controller
 public class AdminController {
 
-    static final String ADD_CERTIFICATE_JSP = "addCertificate";
-    static final String ADD_USER_JSP = "addUser";
+    static final String ADD_CERTIFICATE_AND_USER_JSP = "addCertificateAndUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String ADMIN_JSP = "admin";
     static final String MSG = "msg";
     private static final String CERTIFICATE = "certificate";
-    private static final String USER = "user";
+    private static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private static final String LOG_REQ_ADD_CERTIFICATE = "Request to '/addCertificate' redirect to page - ";
     private static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
     static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id=";
-    static final String LOG_USER_ADDED = "User added. User id=";
     static final String LOG_INVALID_USER_ID = "Invalid user id, try again.";
+    static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
     static final String LOG_EXEPTION = "Access denied or other exception.";
 
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
-    private Certificate certificate = null;
-
 
     @Autowired
     public AdminController(CertificateLogic certificateLogic, UserLogic userLogic) {
@@ -55,12 +54,12 @@ public class AdminController {
 
     @RequestMapping(value = "/addCertificateAndCreateUser", method = RequestMethod.POST)
     public ModelAndView addCertificateAndCreateUser() {
-        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_JSP);
-        return new ModelAndView(ADD_USER_JSP, USER, new User());
+        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_AND_USER_JSP);
+        return new ModelAndView(ADD_CERTIFICATE_AND_USER_JSP, CERTIFICATE_WITH_USER_FORM, new CertificateWithUserForm());
     }
 
     @RequestMapping(value = "/addCertificateWithUserId", method = RequestMethod.POST)
-    public ModelAndView addCertificateWithUserIde() {
+    public ModelAndView addCertificateWithUserId() {
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_WITH_USER_ID_JSP);
         return new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
     }
@@ -92,27 +91,39 @@ public class AdminController {
             }
         }
 
-        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + ADD_CERTIFICATE_JSP);
+        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + returnPage);
         return returnPage;
     }
 
-    @RequestMapping(value = "/checkUser", method = RequestMethod.POST)
-    public ModelAndView checkUser(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
-                                  BindingResult bindingResult, Model model) {
+    @RequestMapping(value = "/checkCertificateAndUser", method = RequestMethod.POST)
+    public String checkCertificateAndUser(@Validated @ModelAttribute(CERTIFICATE_WITH_USER_FORM) CertificateWithUserForm certificateWithUserForm,
+                                          BindingResult bindingResult, @Valid Model model) {
 
         String returnPage;
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, LOG_INCORRECT_DATA);
-            returnPage = ADD_USER_JSP;
+            returnPage = ADD_CERTIFICATE_AND_USER_JSP;
             LOGGER.warn(LOG_INCORRECT_DATA);
         } else {
-            returnPage = ADD_CERTIFICATE_JSP;
+            try {
+                int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
+                        , certificateWithUserForm.getUser());
+                returnPage = ADMIN_JSP;
+                LOGGER.info(LOG_CERTIFICATE_ADDED + result);
+            } catch (DataIntegrityViolationException e) {
+                model.addAttribute(MSG, LOG_INVALID_USER_EMAIL);
+                returnPage = ADD_CERTIFICATE_AND_USER_JSP;
+                LOGGER.warn(LOG_INVALID_USER_EMAIL);
+            } catch (Exception e) {
+                returnPage = ERROR_JSP;
+                LOGGER.warn(LOG_EXEPTION);
+            }
         }
 
-        return new ModelAndView(returnPage);
+        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE + returnPage);
+        return returnPage;
     }
-
 
 }

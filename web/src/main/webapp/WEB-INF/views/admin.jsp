@@ -127,6 +127,12 @@
         <br>
         <br>
         <br>
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText125">${msg}</span></h3>
+        </c:if>
+        <br>
+        <br>
+        <br>
 
         <div class="hrefText">
             <a href="javascript:history.back();">Back</a> |

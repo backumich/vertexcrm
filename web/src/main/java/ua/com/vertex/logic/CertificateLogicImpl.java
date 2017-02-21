@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
@@ -18,6 +19,7 @@ public class CertificateLogicImpl implements CertificateLogic {
     private static final String LOG_ALLCERT = "Call - certificateDao.getAllCertificateByUserId(%s);";
     private static final String LOG_CERT = "Call - certificateDao.getCertificateById(%s);";
     private static final String LOG_ADD_CERT = "Call - certificateDao.addCertificate ;";
+    private static final String LOG_ADD_CERT_AND_NEW_USER = "Call - certificateDao.addCertificateAndCreateUser ;";
 
 
 
@@ -41,5 +43,10 @@ public class CertificateLogicImpl implements CertificateLogic {
     public int addCertificate(Certificate certificate) {
         LOGGER.debug(LOG_ADD_CERT);
         return certificateDaoInf.addCertificate(certificate);
+    }
+
+    public int addCertificateAndCreateUser(Certificate certificate, User user) {
+        LOGGER.debug(LOG_ADD_CERT_AND_NEW_USER);
+        return certificateDaoInf.addCertificateAndCreateUser(certificate, user);
     }
 }

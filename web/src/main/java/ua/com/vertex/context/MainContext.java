@@ -8,6 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -22,8 +25,14 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("ua.com.vertex")
 @EnableWebMvc
+@EnableTransactionManagement
 public class MainContext extends WebMvcConfigurerAdapter {
     private static final String DB_PROPERTIES = "db.properties";
+
+    @Bean
+    public PlatformTransactionManager txManager() throws Exception {
+        return new DataSourceTransactionManager(dataSource());
+    }
 
     @Bean
     public DataSource dataSource() throws Exception {

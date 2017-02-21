@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -105,5 +106,17 @@ public class CertificateDaoTest {
             assertEquals("Maybe method was changed",
                     result, certificateDao.getCertificateById(1).get());
         }
+    }
+
+    @Test
+    public void addCertificateReturnCorectCertificationId() throws Exception {
+        Certificate certificate = new Certificate.Builder()
+                .setUserId(1)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage("Java")
+                .getInstance();
+        int result = certificateDao.addCertificate(certificate);
+        assertEquals("", result, 501);
     }
 }

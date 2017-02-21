@@ -63,8 +63,8 @@ public class AdminControllerTest {
 
     @Test
     public void addCertificateHasCorrectDataInModel() throws Exception {
-        ModelAndView result = underTest.addCertificateWithUserIde();
-        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_JSP);
+        ModelAndView result = underTest.addCertificateWithUserId();
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_WITH_USER_ID_JSP);
         assertTrue(MSG_INVALID_DATA, result.getModel().containsValue(new Certificate()));
     }
 
@@ -77,7 +77,7 @@ public class AdminControllerTest {
     @Test
     public void checkCertificateRedirectToCorrectPage() throws Exception {
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
-                , ADD_CERTIFICATE_WITH_USER_ID_JSP);
+                , ADMIN_JSP);
     }
 
     @Test
