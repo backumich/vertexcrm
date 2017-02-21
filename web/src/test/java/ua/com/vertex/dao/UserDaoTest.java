@@ -41,7 +41,6 @@ public class UserDaoTest {
     private static final String PASSPORT_SCAN = "passportScan";
     private static final String WRONG_IMAGE_TYPE = "wrongImageType";
 
-
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -65,14 +64,6 @@ public class UserDaoTest {
         Optional<User> optional = userDao.getUser(NOT_EXISTING_ID);
         assertEquals(null, optional.orElse(null));
     }
-
-//todo:
-//    @Test
-//    public void daoShouldReturnUserOptionalForUserExistingInDatabase() {
-//        Optional<User> optional = userDao.getUser(22);
-//        assertNotNull(optional);
-//        assertEquals(22, optional.get().getUserId());
-//    }
 
     @Test
     @WithMockUser
@@ -99,14 +90,6 @@ public class UserDaoTest {
         Optional<User> optional = userDao.logIn(NOT_EXISTING_EMAIL);
         assertEquals(new User(), optional.orElse(new User()));
     }
-
-//todo:
-//    @Test
-//    public void daoShouldReturnUserOptionalForUserNotExistingInDatabase() {
-//        Optional<User> optional = userDao.getUser(55555);
-//        assertNotNull(optional);
-//        assertEquals(new User(), optional.orElse(new User()));
-//    }
 
     @Test
     public void getListUsersNotEmpty() throws Exception {
@@ -137,17 +120,10 @@ public class UserDaoTest {
     }
 
     @Test
-    public void getUserDetailsByIDForUserNotExistingInDatabase() throws Exception {
-//        User user = userDao.getUserDetailsByID(1111);
-//        Assert.assertNull(user);
-    }
-
-    @Test
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPhotoSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PHOTO);
-
     }
 
     @Test
@@ -155,7 +131,6 @@ public class UserDaoTest {
     public void saveImageNotThrowsExceptionIfSuccessfulPassportSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
-
     }
 
     @Test(expected = RuntimeException.class)

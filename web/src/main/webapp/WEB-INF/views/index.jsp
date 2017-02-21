@@ -117,7 +117,7 @@
             <a href="<c:url value="/logOut"/>">Log out</a>
             <br><br>
             <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
-            <a href="<c:url value="/user"/>">View user.jsp</a>
+            <a href="<c:url value="/user"/>">View user.jsp</a> |
             <a href="<c:url value="/viewAllUsers"/>">View all user registered into CRM</a>
         </div>
 

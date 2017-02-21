@@ -160,19 +160,18 @@
                 </tr>
                 <tr>
                     <td>Passport scan</td>
-                        <%--<td><img src="data:image/jpeg;base64,${imagePassportScan}" alt="No scan passport"></td>--%>
                     <td><img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport"></td>
-                        <%--<td><input type="file" name="passportScan" accept="image/jpeg, image/png, image/gif"/></td>--%>
-                    <td><input type="file" name="passportScan" accept="image/*"/></td>
-                    <form:hidden path="passportScan"></form:hidden>
+                    <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
+                    <form:hidden path="passportScan"/>
                 </tr>
+
+
                 <tr>
                     <td>Photo</td>
-                        <%--<td><img src="data:image/jpeg;base64,${imagePhoto}" alt="No photo"></td>--%>
                     <td><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
-                    <td><input type="file" name="photo" accept="image/*"/></td>
-                        <%--<td><input type="file" name="photo" accept="image/jpeg, image/png, image/gif"/></td>--%>
-                    <form:hidden path="photo"></form:hidden>
+                    <td><input type="file" name="imagePhoto" accept="image/*"/></td>
+                    <form:hidden path="photo"/>
+                    <%--<form:hidden path="photo"></form:hidden>--%>
                 </tr>
                 <tr>
                     <td>Discount</td>

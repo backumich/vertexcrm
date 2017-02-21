@@ -76,15 +76,29 @@ public class UserDetailsController {
     }
 
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
-    public ModelAndView saveUserData(@RequestPart(value = "passportScan", required = false) MultipartFile passportScan,
-                                     @RequestPart(value = "photo", required = false) MultipartFile photo,
+    public ModelAndView saveUserData(@RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
+                                     @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
                                      @Valid @ModelAttribute(USERDATA_MODEL) User user,
                                      BindingResult bindingResult, ModelAndView modelAndView) {
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg", "WARNING!!! User data is updated but not saved");
-            modelAndView.setViewName(ERROR_JSP);
+            //modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Requested data are invalid for user ID - ");
+        } else {
+            // -- check correct update user data
+            try {
+                if (userLogic.saveUserData(user) == 1) {
+                    modelAndView.addObject("msg", "Congratulations! Your data is saved!");
+                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+                } else {
+                    modelAndView.setViewName(ERROR_JSP);
+                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+                }
+            } catch (Exception e) {
+                modelAndView.setViewName(ERROR_JSP);
+                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+            }
         }
 
         //  -- Update list roles user
@@ -107,34 +121,20 @@ public class UserDetailsController {
 
         // -- check image files
         try {
-            if (checkImageFile(passportScan)) {
-                user.setPassportScan(passportScan.getBytes());
+            if (checkImageFile(imagePassportScan)) {
+                user.setPassportScan(imagePassportScan.getBytes());
                 LOGGER.debug("Checked passportScan file is image for user ID - " + user.getUserId());
             } else {
                 LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
             }
-            if (checkImageFile(photo)) {
-                user.setPhoto(photo.getBytes());
+            if (checkImageFile(imagePhoto)) {
+                user.setPhoto(imagePhoto.getBytes());
                 LOGGER.debug("Checked photo file is image for user ID - " + user.getUserId());
             } else {
                 LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
             }
         } catch (Exception e) {
             LOGGER.warn("An error occurred when working with files for user ID - " + user.getUserId());
-        }
-
-        // -- check correct update user data
-        try {
-            if (userLogic.saveUserData(user) == 1) {
-                modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-                LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-            } else {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
-            }
-        } catch (Exception e) {
-            modelAndView.setViewName(ERROR_JSP);
-            LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
         }
         return modelAndView;
     }
