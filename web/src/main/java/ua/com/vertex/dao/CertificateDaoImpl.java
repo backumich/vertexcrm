@@ -92,7 +92,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     private MapSqlParameterSource addParametrToMapSqlParameterSourceFromCertificate(Certificate certificate) {
         MapSqlParameterSource source = new MapSqlParameterSource();
-        source.addValue(USER_ID, 111111);
+        source.addValue(USER_ID, certificate.getUserId());
         source.addValue(CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
         source.addValue(COURSE_NAME, certificate.getCourseName());
         source.addValue(LANGUAGE, certificate.getLanguage());

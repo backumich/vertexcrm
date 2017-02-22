@@ -23,11 +23,12 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
 @ComponentScan("ua.com.vertex")
 @EnableWebMvc
-@EnableTransactionManagement
 public class MainContext extends WebMvcConfigurerAdapter {
     private static final String DB_PROPERTIES = "db.properties";
+
 
     @Bean
     public PlatformTransactionManager txManager() throws Exception {
@@ -78,5 +79,4 @@ public class MainContext extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/javascript/**").addResourceLocations("/javascript/");
     }
-
 }

@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 
@@ -28,23 +27,21 @@ public class AdminController {
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String ADMIN_JSP = "admin";
     static final String MSG = "msg";
+    static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id=";
+    static final String LOG_INVALID_USER_ID = "Invalid user id, try again.";
+    static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
+    static final String LOG_EXEPTION = "Access denied or other exception.";
     private static final String CERTIFICATE = "certificate";
     private static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private static final String LOG_REQ_ADD_CERTIFICATE = "Request to '/addCertificate' redirect to page - ";
     private static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
-    static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id=";
-    static final String LOG_INVALID_USER_ID = "Invalid user id, try again.";
-    static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
-    static final String LOG_EXEPTION = "Access denied or other exception.";
-
     private final CertificateLogic certificateLogic;
-    private final UserLogic userLogic;
+
 
     @Autowired
-    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic) {
+    public AdminController(CertificateLogic certificateLogic) {
         this.certificateLogic = certificateLogic;
-        this.userLogic = userLogic;
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)

@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.time.LocalDate;
 
@@ -36,8 +35,6 @@ public class AdminControllerTest {
     @Mock
     private CertificateLogic certificateLogic;
 
-    @Mock
-    private UserLogic userLogic;
 
     @Mock
     private BindingResult bindingResult;
@@ -45,7 +42,7 @@ public class AdminControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTest = new AdminController(certificateLogic, userLogic);
+        underTest = new AdminController(certificateLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder()
                 .setUserId(1)
