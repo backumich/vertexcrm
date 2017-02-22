@@ -4,14 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 @Service("mailService")
 public class MailService {
 
+//    @Autowired
+//    private MailSender mailSender;
+
+
+    private final MailSender mailSender;
+
     @Autowired
-    private MailSender mailSender;
+    MailService(JavaMailSender javaMailSender) {
+        this.mailSender = javaMailSender;
+    }
 
     public void sendMail(String from, String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
