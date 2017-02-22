@@ -36,8 +36,8 @@ public class RegistrationController {
         this.registrationUserLogic = registrationUserLogic;
     }
 
-//    @Autowired
-//    private MailService mailService;
+    @Autowired
+    private MailService mailService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
