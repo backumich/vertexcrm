@@ -12,8 +12,8 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.IdTransformer;
 import ua.com.vertex.utils.LogInfo;
-import ua.com.vertex.utils.TransformId;
 
 import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
 import static ua.com.vertex.beans.User.EMPTY_USER;
@@ -64,7 +64,7 @@ public class CertificateDetailsPageController {
     private int decodeId(String certificateIdEncoded, Model model) {
         int certificateId = WRONG_ID;
         try {
-            certificateId = TransformId.decode(certificateIdEncoded);
+            certificateId = IdTransformer.decode(certificateIdEncoded);
             model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
         } catch (Exception e2) {
             LOGGER.warn(logInfo.getId(), e2, e2);
