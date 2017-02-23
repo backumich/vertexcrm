@@ -48,6 +48,7 @@ public class UserLogicImpl implements UserLogic {
         return userDao.getImage(userId, imageType);
     }
 
+    // TODO: 23.02.17 clean up please
 //    @Autowired
 //    public UserLogicImpl(UserDaoImpl userDao) {
 //        this.userDao = userDao;
