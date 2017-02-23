@@ -53,16 +53,6 @@ public class RegistrationController {
         isMatchPassword(userFormRegistration, bindingResult);
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
-        ///
-        String stringEmailAES = "";
-        try {
-            stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), "123");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
-        ////
-
         if (bindingResult.hasErrors()) {
             LOGGER.info("There are errors in filling in the form " + REGISTRATION_PAGE);
             modelAndView.setViewName(REGISTRATION_PAGE);
@@ -71,9 +61,19 @@ public class RegistrationController {
                 int userID = registrationUserLogic.registrationUser(new User(userFormRegistration));
                 modelAndView.addObject("userID", userID);
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                ///////
-                //mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "123");
-                ////
+                String stringEmailAES = "";
+                try {
+                    stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), "123");
+                } catch (Exception e) {
+                    LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
+                }
+                try {
+                    mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123",
+                            "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
+                } catch (Exception e) {
+                    LOGGER.warn("While mail sending error occurred " + userFormRegistration.getEmail());
+                }
+
             } catch (DataAccessException e) {
                 modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
             }
