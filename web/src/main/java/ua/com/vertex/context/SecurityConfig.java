@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final int VALIDITY_SECONDS = 604800;
     private final String[] permittedAllRequests = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
-            "/userPhoto", "/403", "/error"};
+            "/userPhoto", "/403", "/error", "/activationUser"};
     private final String[] permittedAdminRequests = {"/viewAllUsers", "/userDetails", "/saveUserData"};
 
 

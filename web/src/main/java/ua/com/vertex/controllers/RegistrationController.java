@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
+import ua.com.vertex.utils.AES;
 import ua.com.vertex.utils.MailService;
 
 import javax.validation.Valid;
@@ -53,7 +54,13 @@ public class RegistrationController {
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
         ///
-//        mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "123");
+        String stringEmailAES = "";
+        try {
+            stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), "123");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123", "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
         ////
 
         if (bindingResult.hasErrors()) {

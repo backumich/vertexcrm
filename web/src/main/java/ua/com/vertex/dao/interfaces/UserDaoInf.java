@@ -32,4 +32,6 @@ public interface UserDaoInf {
     void saveImage(int userId, byte[] image, String imageType) throws Exception;
 
     Optional<byte[]> getImage(int userId, String imageType);
+
+    int activateUser(String email);
 }

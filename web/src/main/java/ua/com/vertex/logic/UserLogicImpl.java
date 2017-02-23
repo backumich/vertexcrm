@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.UserDaoImpl;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -78,5 +77,10 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public int saveUserData(User user) {
         return userDao.saveUserData(user);
+    }
+
+    @Override
+    public int activateUser(String email) {
+        return userDao.activateUser(email);
     }
 }

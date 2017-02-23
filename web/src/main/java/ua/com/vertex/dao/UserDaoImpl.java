@@ -282,6 +282,13 @@ public class UserDaoImpl implements UserDaoInf {
         return jdbcTemplate.update(query, parameters);
     }
 
+    public int activateUser(String email) {
+
+
+        return 1;
+    }
+
+
     @Autowired
     public UserDaoImpl(DataSource dataSource, LogInfo logInfo) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);

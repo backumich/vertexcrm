@@ -30,4 +30,6 @@ public interface UserLogic {
 
     int saveUserData(User user);
 
+    int activateUser(String email);
+
 }
