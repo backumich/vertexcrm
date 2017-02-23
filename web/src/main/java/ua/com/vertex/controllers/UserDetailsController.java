@@ -57,7 +57,7 @@ public class UserDetailsController {
         try {
             modelAndView.addObject("allRoles", userLogic.getListAllRoles());
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
+        } catch (Exception ignore) {
             LOGGER.warn("There are problems with access to roles of the system");
         }
 
@@ -65,7 +65,7 @@ public class UserDetailsController {
         try {
             modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
+        } catch (Exception ignore) {
             LOGGER.warn("There are problems with access to roles of the system");
         }
         return modelAndView;

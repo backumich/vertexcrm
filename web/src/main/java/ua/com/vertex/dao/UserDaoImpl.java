@@ -220,18 +220,12 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug("Select list all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
-        return jdbcTemplate.query(query, new UserDaoImpl.ViewAllUserRowMapping());
-    }
-
-    private static final class ViewAllUserRowMapping implements RowMapper<User> {
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder().
-                    setUserId(resultSet.getInt("user_id")).
-                    setEmail(resultSet.getString("email")).
-                    setFirstName(resultSet.getString("first_name")).
-                    setLastName(resultSet.getString("last_name")).
-                    setPhone(resultSet.getString("phone")).getInstance();
-        }
+        return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
+                setUserId(resultSet.getInt("user_id")).
+                setEmail(resultSet.getString("email")).
+                setFirstName(resultSet.getString("first_name")).
+                setLastName(resultSet.getString("last_name")).
+                setPhone(resultSet.getString("phone")).getInstance());
     }
 
     @Override
