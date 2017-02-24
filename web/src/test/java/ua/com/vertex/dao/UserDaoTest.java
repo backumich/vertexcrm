@@ -1,5 +1,6 @@
 package ua.com.vertex.dao;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,29 +95,28 @@ public class UserDaoTest {
     @Test
     public void getListUsersNotEmpty() throws Exception {
         List<User> users = userDao.getAllUsers();
-        //assertEquals(4, users.size());
         assertEquals(false, users.isEmpty());
     }
 
     @Test
     public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
-//        User testUser = new User();
-//        testUser.setUserId(10);
-//        testUser.setEmail("emailTest");
-//        testUser.setFirstName("first_name");
-//        testUser.setLastName("last_name");
-//        testUser.setDiscount(0);
-//        testUser.setPhone("666666666");
-//
-//        User user = userDao.getUserDetailsByID(10);
-//        Assert.assertNotNull(user);
-//
-//        Assert.assertEquals(testUser.getUserId(), user.getUserId());
-//        Assert.assertEquals(testUser.getEmail(), user.getEmail());
-//        Assert.assertEquals(testUser.getFirstName(), user.getFirstName());
-//        Assert.assertEquals(testUser.getLastName(), user.getLastName());
-//        Assert.assertEquals(testUser.getDiscount(), user.getDiscount());
-//        Assert.assertEquals(testUser.getPhone(), user.getPhone());
+        User testUser = new User();
+        testUser.setUserId(10);
+        testUser.setEmail("emailTest");
+        testUser.setFirstName("first_name");
+        testUser.setLastName("last_name");
+        testUser.setDiscount(0);
+        testUser.setPhone("666666666");
+
+        Optional<User> optional = userDao.getUserDetailsByID(10);
+        Assert.assertNotNull(optional.get());
+
+        Assert.assertEquals(testUser.getUserId(), optional.get().getUserId());
+        Assert.assertEquals(testUser.getEmail(), optional.get().getEmail());
+        Assert.assertEquals(testUser.getFirstName(), optional.get().getFirstName());
+        Assert.assertEquals(testUser.getLastName(), optional.get().getLastName());
+        Assert.assertEquals(testUser.getDiscount(), optional.get().getDiscount());
+        Assert.assertEquals(testUser.getPhone(), optional.get().getPhone());
     }
 
     @Test

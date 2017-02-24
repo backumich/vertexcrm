@@ -24,7 +24,7 @@ public interface UserLogic {
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;
 
-    EnumMap<Role, Role> getListAllRoles();
+    EnumMap<Role, Role> getAllRoles();
 
     int saveUserData(User user);
 

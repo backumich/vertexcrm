@@ -68,20 +68,20 @@ public class AES {
         return new String(decrypted, "UTF-8");
     }
 
-    public static void main(String[] args) {
-        String text = "Some text";
-        String password = "jopa";
-        try {
-            System.out.println("text is " + text);
-            System.out.println("password is " + password);
-            String cripted = AES.encrypt(text, password);
-            System.out.println("cripted is " + cripted);
-            String decripted = AES.decrypt(cripted, password);
-            System.out.println("decripted is " + decripted);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        String text = "Some text";
+//        String password = "jopa";
+//        try {
+//            System.out.println("text is " + text);
+//            System.out.println("password is " + password);
+//            String cripted = AES.encrypt(text, password);
+//            System.out.println("cripted is " + cripted);
+//            String decripted = AES.decrypt(cripted, password);
+//            System.out.println("decripted is " + decripted);
+//        } catch (Throwable t) {
+//            t.printStackTrace();
+//        }
+//    }
 
 }
 

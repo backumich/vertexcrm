@@ -104,13 +104,7 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <span class="fontSize200 red">Something went wrong... Try again!</span><br><br>
-    <br/>
-    <br/>
-    <br/>
-    <c:if test="${!empty errorMessage}">
-        <div name="errorMessage" class="fontSize200 red">${errorMessage}</div>
-    </c:if>
+    <span class="fontSize200 red">Your account has been successfully activated!</span><br><br>
     <br/>
     <br/>
     <br/>

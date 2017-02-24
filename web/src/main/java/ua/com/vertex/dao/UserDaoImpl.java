@@ -223,7 +223,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public EnumMap<Role, Role> getListAllRoles() {
+    public EnumMap<Role, Role> getAllRoles() {
         LOGGER.debug("Get a list of all users roles");
 
         String query = "SELECT r.role_id, r.name FROM Roles r";
@@ -266,11 +266,13 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     public int activateUser(String email) {
-
-
-        return 1;
+        String query = "UPDATE Users " +
+                "set is_active = 1 " +
+                "WHERE email = :email";
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("email", email);
+        return jdbcTemplate.update(query, parameters);
     }
-
 
     @Autowired
     public UserDaoImpl(DataSource dataSource, LogInfo logInfo) {

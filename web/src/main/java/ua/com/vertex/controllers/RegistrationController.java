@@ -27,6 +27,7 @@ public class RegistrationController {
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     private static final String REGISTRATION_ERROR_PAGE = "registrationError";
     private static final String NAME_USER_MODEL_FOR_REGISTRATION_PAGE = "userFormRegistration";
+    private static final String ENCRYPT_KEY = "VeRtEx AcAdeMy";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -49,7 +50,20 @@ public class RegistrationController {
     @PostMapping
     public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE)
                                                     UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
-
+        //---
+//        String stringEmailAES = "";
+//        try {
+//            stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
+//        } catch (Exception e) {
+//            LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
+//        }
+//        try {
+//            mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123",
+//                    "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
+//        } catch (Exception e) {
+//            LOGGER.warn("While mail sending error occurred " + userFormRegistration.getEmail());
+//        }
+        //-----
         isMatchPassword(userFormRegistration, bindingResult);
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
@@ -63,7 +77,7 @@ public class RegistrationController {
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
                 String stringEmailAES = "";
                 try {
-                    stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), "123");
+                    stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
                 } catch (Exception e) {
                     LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
                 }

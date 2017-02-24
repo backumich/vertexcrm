@@ -58,8 +58,8 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public EnumMap<Role, Role> getListAllRoles() {
-        return userDao.getListAllRoles();
+    public EnumMap<Role, Role> getAllRoles() {
+        return userDao.getAllRoles();
     }
 
     @Override

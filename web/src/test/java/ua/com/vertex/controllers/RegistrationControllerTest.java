@@ -44,33 +44,33 @@ public class RegistrationControllerTest {
         assertEquals(RegistrationController.REGISTRATION_PAGE, modelAndView.getViewName());
     }
 
-//    @Test
-//    public void processRegistration_checkReturnViewName() throws Exception {
-//        UserFormRegistration userFormRegistration = new UserFormRegistration();
-//        userFormRegistration.setPassword("testPassword");
-//        userFormRegistration.setVerifyPassword("testPassword");
-//
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//        ModelAndView outModelAndView =
-//                registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-//        assertEquals("registrationSuccess", outModelAndView.getViewName());
-//    }
+    @Test
+    public void processRegistration_checkReturnViewName() throws Exception {
+        UserFormRegistration userFormRegistration = new UserFormRegistration();
+        userFormRegistration.setPassword("testPassword");
+        userFormRegistration.setVerifyPassword("testPassword");
 
-//    @Test
-//    public void processRegistration_checkReturnModelAndModelName() throws Exception {
-//        UserFormRegistration userFormRegistration = new UserFormRegistration();
-//        userFormRegistration.setPassword("testPassword");
-//        userFormRegistration.setVerifyPassword("testPassword");
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//        ModelAndView outModelAndView;
-//        modelAndView.addObject("userFormRegistration", userFormRegistration);
-//
-//        outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
-//
-//        ModelMap modelMap = outModelAndView.getModelMap();
-//        assertTrue(modelMap.containsAttribute("userFormRegistration"));
-//        assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
-//    }
+        ModelAndView modelAndView = new ModelAndView();
+
+        ModelAndView outModelAndView =
+                registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
+        assertEquals("registrationSuccess", outModelAndView.getViewName());
+    }
+
+    @Test
+    public void processRegistration_checkReturnModelAndModelName() throws Exception {
+        UserFormRegistration userFormRegistration = new UserFormRegistration();
+        userFormRegistration.setPassword("testPassword");
+        userFormRegistration.setVerifyPassword("testPassword");
+        ModelAndView modelAndView = new ModelAndView();
+
+        ModelAndView outModelAndView;
+        modelAndView.addObject("userFormRegistration", userFormRegistration);
+
+        outModelAndView = registrationController.processRegistration(userFormRegistration, bindingResult, modelAndView);
+
+        ModelMap modelMap = outModelAndView.getModelMap();
+        assertTrue(modelMap.containsAttribute("userFormRegistration"));
+        assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
+    }
 }
