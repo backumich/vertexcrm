@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -111,10 +112,17 @@
             </div>
         </main>
 
+        <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
+            <sec:authentication property="principal.username" var="authority"/>
+        </sec:authorize>
+
         <div class="href">
             <a href="<c:url value="/registration"/>">Register</a> |
-            <a href="<c:url value="/logIn"/>">Log in</a> |
-            <a href="<c:url value="/logOut"/>">Log out</a>
+            <a href="<c:url value="/logIn"/>">Log in</a>
+            <c:if test="${authority != null}"> |
+                <a href="<c:url value="/logOut"/>">Log out</a>
+            </c:if>
+
             <br><br>
             <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
             <a href="<c:url value="/user"/>">View user.jsp</a>
