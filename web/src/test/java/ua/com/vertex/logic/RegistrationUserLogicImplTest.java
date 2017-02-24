@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.context.ContextConfiguration;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.UserDaoRealization;
 
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("Duplicates")
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationUserLogicImplTest {
 

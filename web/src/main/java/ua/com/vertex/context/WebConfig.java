@@ -16,7 +16,7 @@ import java.io.IOException;
 @Configuration
 @ComponentScan("ua.com.vertex")
 @EnableWebMvc
-public class MainContext extends WebMvcConfigurerAdapter {
+public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {

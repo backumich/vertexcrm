@@ -12,15 +12,16 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class AnonymousUserAccessRightsTest {
@@ -29,6 +30,9 @@ public class AnonymousUserAccessRightsTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
+    private static final String CORRECT_PASSWORD = "123456";
+    private static final String INCORRECT_PASSWORD = "1234567";
+    private static final String EXISTING_EMAIL = "44@test.com";
 
     @Before
     public void setUp() {
@@ -36,6 +40,26 @@ public class AnonymousUserAccessRightsTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+    }
+
+    @Test
+    public void testFormLoginWithCorrectPassword() throws Exception {
+        mockMvc.perform(post("/logIn")
+                .param("username", EXISTING_EMAIL)
+                .param("password", CORRECT_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/loggedIn"));
+    }
+
+    @Test
+    public void testFormLoginWithIncorrectPassword() throws Exception {
+        mockMvc.perform(post("/logIn")
+                .param("username", EXISTING_EMAIL)
+                .param("password", INCORRECT_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/logIn?error"));
     }
 
     @Test
