@@ -17,4 +17,6 @@ public interface UserDaoInf {
     List<Integer> getAllUserIds();
 
     int addUserForCreateCertificate(User user);
+
+    List<User> searchUser(String userData);
 }

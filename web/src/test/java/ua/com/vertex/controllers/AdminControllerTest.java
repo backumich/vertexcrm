@@ -42,7 +42,7 @@ public class AdminControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTest = new AdminController(certificateLogic);
+        underTest = new AdminController(certificateLogic, userLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder()
                 .setUserId(1)

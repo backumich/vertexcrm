@@ -39,6 +39,10 @@ public class CertificateDetails {
         ModelAndView result = new ModelAndView();
 
         try {
+
+//            result.addObject(CERTIFICATE_DETAIL,certificateLogic.getCertificateById(certificateId).isPresent()
+//                    ? certificateLogic.getCertificateById(certificateId).get() : null );
+
             if (certificateLogic.getCertificateById(certificateId).isPresent()) {
 
                 result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId).get());
@@ -47,7 +51,7 @@ public class CertificateDetails {
             }
             result.setViewName(CERTIFICATE_JSP);
         } catch (Exception e) {
-            LOGGER.warn("Access denied .");
+            LOGGER.warn(e);
             result.setViewName(ERROR_JSP);
         }
 
