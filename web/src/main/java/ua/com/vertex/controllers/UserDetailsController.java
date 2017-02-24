@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,10 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.Optional;
 
 @Controller
-@SessionAttributes("users")
+//@SessionAttributes("users")
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "userDetails";
@@ -48,7 +46,7 @@ public class UserDetailsController {
                 modelAndView.addObject("user", user);
             }
             LOGGER.debug("Get full data for user ID - " + userId);
-        } catch (DataAccessException | SQLException e) {
+        } catch (Exception e) {
             LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error");
             modelAndView.setViewName(ERROR_JSP);
         }
@@ -71,10 +69,6 @@ public class UserDetailsController {
         return modelAndView;
     }
 
-    private boolean checkImageFile(MultipartFile file) {
-        return !file.isEmpty() && file.getContentType().split("/")[0].equals("image");
-    }
-
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
     public ModelAndView saveUserData(@RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
                                      @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
@@ -83,7 +77,6 @@ public class UserDetailsController {
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg", "WARNING!!! User data is updated but not saved");
-            //modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Requested data are invalid for user ID - ");
         } else {
             // -- check image files
@@ -136,6 +129,10 @@ public class UserDetailsController {
             LOGGER.debug("There are problems with access to roles of the system");
         }
         return modelAndView;
+    }
+
+    private boolean checkImageFile(MultipartFile file) {
+        return !file.isEmpty() && file.getContentType().split("/")[0].equals("image");
     }
 }
 

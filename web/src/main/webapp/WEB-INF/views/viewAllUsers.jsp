@@ -151,33 +151,13 @@
                 </c:forEach>
 
             </table>
-
-
-            <%--<form:form action="userDetailsByID" method="post" commandName="users">--%>
-
-            <%--<table bordercolor="red" border="2">--%>
-            <%--<tr>--%>
-            <%--<th width="60px">User ID</th>--%>
-            <%--<th width="150px">E-mail</th>--%>
-            <%--<th width="150px">Last name</th>--%>
-            <%--<th width="150px">First name</th>--%>
-            <%--<th width="150px">Phone</th>--%>
-            <%--<th width="100px"></th>--%>
-            <%--</tr>--%>
-            <%--<c:forEach var="users" items="${users}">--%>
-            <%--<tr>--%>
-            <%--<td>${users.userID} </td>--%>
-            <%--<td>${users.email} </td>--%>
-            <%--<td>${users.lastName} </td>--%>
-            <%--<td>${users.firstName} </td>--%>
-            <%--<td>${users.phone} </td>--%>
-            <%--<td>--%>
-            <%--<a href="userDetailsByID?userID=${users.userID}">Detail</a>--%>
-            <%--</td>--%>
-            <%--</tr>--%>
-            <%--</c:forEach>--%>
-            <%--</table>--%>
-            <%--</form:form>--%>
+            <br/>
+            <br/>
+            <br/>
+            <div class="href">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
         </div>
     </div>
 </div>

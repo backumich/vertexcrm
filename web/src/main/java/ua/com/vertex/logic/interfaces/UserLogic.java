@@ -20,11 +20,9 @@ public interface UserLogic {
 
     Optional<byte[]> getImage(int userId, String imageType);
 
-    List<User> getListUsers() throws SQLException;
+    List<User> getAllUsers() throws SQLException;
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;
-
-    String convertImage(byte[] image);
 
     EnumMap<Role, Role> getListAllRoles();
 

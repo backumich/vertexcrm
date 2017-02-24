@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -192,12 +191,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
 
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserDetailsRowMapping()));
-    }
-
-    private static final class UserDetailsRowMapping implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet rs, int i) throws SQLException {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), (rs, i) -> {
             User user = null;
             if (rs.getRow() == 1) {
                 user = new User();
@@ -212,12 +206,12 @@ public class UserDaoImpl implements UserDaoInf {
                 user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
             }
             return user;
-        }
+        }));
     }
 
     @Override
-    public List<User> getListUsers() throws SQLException {
-        LOGGER.debug("Select list all users");
+    public List<User> getAllUsers() throws SQLException {
+        LOGGER.debug("Get a list of all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
@@ -230,22 +224,17 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public EnumMap<Role, Role> getListAllRoles() {
-        LOGGER.debug("Select list all roles");
+        LOGGER.debug("Get a list of all users roles");
 
         String query = "SELECT r.role_id, r.name FROM Roles r";
-        return jdbcTemplate.query(query, new GetListAllRolesRowMapping());
-    }
-
-    private static final class GetListAllRolesRowMapping implements ResultSetExtractor<EnumMap<Role, Role>> {
-        @Override
-        public EnumMap<Role, Role> extractData(ResultSet rs) throws SQLException {
+        return jdbcTemplate.query(query, rs -> {
             EnumMap<Role, Role> allRoles = new EnumMap<>(Role.class);
             while (rs.next()) {
                 allRoles.put(rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER,
                         rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
             }
             return allRoles;
-        }
+        });
     }
 
     @Override

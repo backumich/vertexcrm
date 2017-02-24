@@ -4,11 +4,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
-<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html lang="en" charset="UTF-8">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="./css" rel="stylesheet" type="text/css">
@@ -16,6 +14,7 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sva.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -118,20 +117,14 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <%--<button id="allowedit" class="buttonText">Allow editing</button>--%>
             <%--user - то что отсылается в контроллер--%>
-            <%--<form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">--%>
             <form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">
             <input type="hidden" name="user" value="user"/>
             <table bordercolor="red" border="2">
                 <c:if test="${!empty msg}">
                     <tr>
-                            <%--<td>--%>
-                        <div name="msg">${msg}</div>
-                            <%--<input type="number" name="msg" class="buttonText"></td>--%>
-                            <%--</td>--%>
+                        <div name="msg" class="fontSize200 red">${msg}</div>
                     </tr>
-                    <%--<input type="number" name="errorPhoto" class="buttonText">--%>
                 </c:if>
 
                 <tr>
@@ -162,7 +155,6 @@
                     <td>Passport scan</td>
                     <td><img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport"></td>
                     <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
-                        <%--<input type="hidden" name="passportScan"/>--%>
                     <form:hidden path="passportScan"/>
                 </tr>
                 <tr>
@@ -170,7 +162,6 @@
                     <td><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
                     <td><input type="file" name="imagePhoto" accept="image/*"/></td>
                     <form:hidden path="photo"/>
-                        <%--<form:hidden path="photo"></form:hidden>--%>
                 </tr>
                 <tr>
                     <td>Discount</td>
@@ -184,10 +175,8 @@
                         <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
                                     path="phone"/></td>
                     <td><form:errors path="phone"/></td>
-
                 </tr>
             </table>
-
             <br/>
             <br/>
             <br/>
@@ -242,12 +231,19 @@
                     </c:forEach>
                 </table>
 
-
                 <td colspan="2" align="center">
                     <input id="save" class="buttonText" type="submit" value="Save"/>
                 </td>
                 </form:form>
+                <br/>
+                <br/>
+                <br/>
+                <div class="href">
+                    <a href="javascript:history.back();">Back</a> |
+                    <a href="<c:url value="/" />">Home</a>
+                </div>
         </div>
+
     </div>
 </div>
 <div class="footer">

@@ -1,6 +1,5 @@
 package ua.com.vertex.logic;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Role;
@@ -48,26 +47,14 @@ public class UserLogicImpl implements UserLogic {
         return userDao.getImage(userId, imageType);
     }
 
-    // TODO: 23.02.17 clean up please
-//    @Autowired
-//    public UserLogicImpl(UserDaoImpl userDao) {
-//        this.userDao = userDao;
-//    }
-
     @Override
-    public List<User> getListUsers() throws SQLException {
-        userDao.getListUsers();
-        return userDao.getListUsers();
+    public List<User> getAllUsers() throws SQLException {
+        return userDao.getAllUsers();
     }
 
     @Override
     public Optional<User> getUserDetailsByID(int userId) throws SQLException {
         return userDao.getUserDetailsByID(userId);
-    }
-
-    @Override
-    public String convertImage(byte[] image) {
-        return Base64.encode(image);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class ViewAllUsersControllerTest {
     public void viewAllUsersControllerReturnedListUsersTest() throws Exception {
         List<User> users = new ArrayList<>();
         users.add(new User());
-        when(logic.getListUsers()).thenReturn(users);
+        when(logic.getAllUsers()).thenReturn(users);
 
         ModelAndView mav = viewAllUsersController.viewAllUsers();
         assertEquals(users, mav.getModel().get("users"));

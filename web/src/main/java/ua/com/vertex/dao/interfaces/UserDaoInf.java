@@ -21,7 +21,7 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds();
 
-    List<User> getListUsers() throws SQLException;
+    List<User> getAllUsers() throws SQLException;
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 

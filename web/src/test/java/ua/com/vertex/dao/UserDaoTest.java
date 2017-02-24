@@ -93,7 +93,7 @@ public class UserDaoTest {
 
     @Test
     public void getListUsersNotEmpty() throws Exception {
-        List<User> users = userDao.getListUsers();
+        List<User> users = userDao.getAllUsers();
         //assertEquals(4, users.size());
         assertEquals(false, users.isEmpty());
     }
