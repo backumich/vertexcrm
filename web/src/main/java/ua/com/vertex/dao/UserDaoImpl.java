@@ -29,6 +29,7 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDaoInf {
     private static final String USER_ID = "userId";
 
+    private final String COLUMN_USER_ID = "user_id";
     private final String COLUMN_USER_EMAIL = "email";
     private final String COLUMN_FIRST_NAME = "first_name";
     private final String COLUMN_LARST_NAME = "last_name";
@@ -91,6 +92,20 @@ public class UserDaoImpl implements UserDaoInf {
         return source;
     }
 
+    @Override
+    public List<User> searchUser(String userData) throws Exception {
+
+        String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
+                "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
+
+        return jdbcTemplate.query(query, (rs, i) -> new User.Builder()
+                .setUserId(rs.getInt(COLUMN_USER_ID))
+                .setEmail(rs.getString(COLUMN_USER_EMAIL))
+                .setFirstName(rs.getString(COLUMN_FIRST_NAME))
+                .setLastName(rs.getString(COLUMN_LARST_NAME))
+                .getInstance());
+    }
+
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             LobHandler handler = new DefaultLobHandler();
@@ -107,6 +122,7 @@ public class UserDaoImpl implements UserDaoInf {
                     .getInstance();
         }
     }
+
 
     @Autowired
     public UserDaoImpl(DataSource dataSource, Storage storage) {

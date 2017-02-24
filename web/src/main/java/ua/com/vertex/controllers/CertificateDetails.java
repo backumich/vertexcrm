@@ -35,26 +35,16 @@ public class CertificateDetails {
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
 
         LOGGER.info(LOG_REQ_IN + certificateId);
-
         ModelAndView result = new ModelAndView();
 
         try {
-
-//            result.addObject(CERTIFICATE_DETAIL,certificateLogic.getCertificateById(certificateId).isPresent()
-//                    ? certificateLogic.getCertificateById(certificateId).get() : null );
-
-            if (certificateLogic.getCertificateById(certificateId).isPresent()) {
-
-                result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId).get());
-            } else {
-                result.addObject(CERTIFICATE_DETAIL, null);
-            }
+            result.addObject(CERTIFICATE_DETAIL, certificateLogic.getCertificateById(certificateId).isPresent()
+                    ? certificateLogic.getCertificateById(certificateId).get() : null);
             result.setViewName(CERTIFICATE_JSP);
         } catch (Exception e) {
             LOGGER.warn(e);
             result.setViewName(ERROR_JSP);
         }
-
 
         LOGGER.info(LOG_REQ_OUT + result.getViewName());
         return result;

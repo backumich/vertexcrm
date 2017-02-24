@@ -26,7 +26,7 @@ public class AdminController {
 
     static final String ADD_CERTIFICATE_AND_USER_JSP = "addCertificateAndUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
-    static final String SELECT_USER_JSP = "selectUserId";
+    static final String SELECT_USER_JSP = "selectUser";
     static final String ADMIN_JSP = "admin";
     static final String USER_DATA = "userDataForSearch";
     static final String MSG = "msg";
@@ -34,7 +34,7 @@ public class AdminController {
     static final String LOG_INVALID_USER_ID = "Invalid user id, try again.";
     static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
     private static final String CERTIFICATE = "certificate";
-    private static final String USERS = "Users";
+    private static final String USERS = "users";
     private static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     private static final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER = "Request to '/addCertificateAndCreateUser' redirect to page - ";
     private static final String LOG_REQ_ADMIN = "Request to '/admin' redirect to page - ";

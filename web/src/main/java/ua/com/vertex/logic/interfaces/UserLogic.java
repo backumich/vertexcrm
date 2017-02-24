@@ -9,6 +9,6 @@ public interface UserLogic {
     @SuppressWarnings("unused")
     List<String> getAllUserIds();
 
-    List<User> searchUser(String userData);
+    List<User> searchUser(String userData) throws Exception;
 
 }

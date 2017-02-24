@@ -30,7 +30,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<User> searchUser(String userData) {
+    public List<User> searchUser(String userData) throws Exception {
         LOGGER.debug(String.format(LOG_CERT, userData));
         return userDao.searchUser(userData);
     }

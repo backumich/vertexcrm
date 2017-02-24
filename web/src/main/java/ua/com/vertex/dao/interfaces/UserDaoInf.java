@@ -18,5 +18,5 @@ public interface UserDaoInf {
 
     int addUserForCreateCertificate(User user);
 
-    List<User> searchUser(String userData);
+    List<User> searchUser(String userData) throws Exception;
 }

@@ -103,38 +103,51 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateWithUserId">
-
-
-            <table border="0" align="center" style="align-content: center">
-                <tr>
-                    <td colspan="2" align="center"><h2>Add new certificate :</h2></td>
-                </tr>
-                <tr>
-                    <td><form:label path="courseName">Course name:</form:label></td>
-                    <td><form:input placeholder="Course name:" path="courseName"/></td>
-                    <td><form:errors path="courseName"/></td>
-                </tr>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Add certificate"/></td>
-                </tr>
-            </table>
-        </form:form>
-        <br>
-        <br>
-
-        <c:if test="${!empty msg}">
-            <h3><span class="errorText125">${msg}</span></h3>
+        <c:if test="${empty users}">
+            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
+                       action="searchUser">
+                <table border="0" align="center" style="align-content: center">
+                    <tr>
+                        <td colspan="2" align="center"><h2> Enter user data :</h2></td>
+                    </tr>
+                    <tr>
+                            <%--<td><form:input placeholder="User data:"  path="userDataForSearch"/></td>--%>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                    </tr>
+                </table>
+            </form:form>
         </c:if>
-        <br>
-        <br>
-        <br>
-
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
     </div>
+
+    <%--<div class="container pt1_5" align="centr">--%>
+    <%--<c:if test="${!empty users}">--%>
+    <%--<form:form cssClass="buttonText" method="post" commandName="users"--%>
+    <%--action="checkCertificateWithUserId">--%>
+    <%--<table border="0" align="center" style="align-content: center">--%>
+    <%--<tr>--%>
+    <%--<td colspan="2" align="center"><h2>Add new certificate :</h2></td>--%>
+    <%--</tr>--%>
+
+    <%--</form:form>--%>
+    <%--</c:if>--%>
+    <%--<br>--%>
+    <%--<br>--%>
+    <%--</div>--%>
+
+    <c:if test="${!empty msg}">
+        <h3><span class="errorText125">${msg}</span></h3>
+    </c:if>
+    <br>
+    <br>
+    <br>
+
+    <div class="hrefText">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
+    </div>
+</div>
 
 </div>
 <div class="footer">
