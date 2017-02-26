@@ -48,15 +48,6 @@ public class LogOutControllerTest {
     }
 
     @Test
-    public void showLogOutPageForLoggedOutUserReturnsCorrectView() throws Exception {
-        mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("loggedOut"))
-                .build();
-        mockMvc.perform(get("/loggedOut"))
-                .andExpect(view().name("loggedOut"));
-    }
-
-    @Test
     public void logOutRefuseReturnsCorrectView() throws Exception {
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView("logOut"))

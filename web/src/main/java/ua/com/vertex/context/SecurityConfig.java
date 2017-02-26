@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
-            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/getCertificate/**",
+            "/logIn", "/logOut", "/certificateDetails", "/getCertificate/**",
             "/showImage", "/403", "/error"};
     private static final String[] ADMIN_REQUESTS = {};
 
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logOut")
-                .logoutSuccessUrl("/loggedOut")
+                .logoutSuccessUrl("/")
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(VALIDITY_SECONDS)

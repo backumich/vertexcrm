@@ -113,13 +113,17 @@
         </main>
 
         <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
-            <sec:authentication property="principal.username" var="authority"/>
+            <sec:authentication property="principal.username" var="authenticated"/>
         </sec:authorize>
 
         <div class="href">
-            <a href="<c:url value="/registration"/>">Register</a> |
-            <a href="<c:url value="/logIn"/>">Log in</a>
-            <c:if test="${authority != null}"> |
+            <c:if test="${authenticated == null}">
+                <a href="<c:url value="/registration"/>">Register</a> |
+                <a href="<c:url value="/logIn"/>">Log in</a>
+            </c:if>
+
+            <c:if test="${authenticated != null}">
+                <a href="<c:url value="/logIn"/>">User profile</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a>
             </c:if>
 

@@ -69,7 +69,7 @@ public class AnonymousUserAccessRightsTest {
         mockMvc.perform(post("/logOut")
                 .with(csrf()))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/loggedOut"));
+                .andExpect(redirectedUrl("/"));
     }
 
     @Test
@@ -118,13 +118,6 @@ public class AnonymousUserAccessRightsTest {
     @WithAnonymousUser
     public void testLogOut() throws Exception {
         mockMvc.perform(get("/logOut"))
-                .andExpect(redirectedUrl(null));
-    }
-
-    @Test
-    @WithAnonymousUser
-    public void testLoggedOut() throws Exception {
-        mockMvc.perform(get("/loggedOut"))
                 .andExpect(redirectedUrl(null));
     }
 
