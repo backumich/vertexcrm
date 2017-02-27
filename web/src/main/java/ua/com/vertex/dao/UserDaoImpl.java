@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@SuppressWarnings("SqlDialectInspection")
+
 public class UserDaoImpl implements UserDaoInf {
     private static final String USER_ID = "userId";
 
@@ -122,7 +122,6 @@ public class UserDaoImpl implements UserDaoInf {
                     .getInstance();
         }
     }
-
 
     @Autowired
     public UserDaoImpl(DataSource dataSource, Storage storage) {

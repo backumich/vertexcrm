@@ -30,14 +30,15 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getAllUserIds() throws Exception {
-        userLogic.getAllUserIds();
+    public void getAllUserIdsCalledInUserDaoAndReturnNotNull() throws Exception {
+        assertNotNull(userLogic.getAllUserIds());
         verify(userDao).getAllUserIds();
     }
 
     @Test
-    public void searchUser() throws Exception {
-        userLogic.searchUser("test");
+    public void searchUserCalledInUserDaoAndReturnNotNull() throws Exception {
+        assertNotNull(userLogic.searchUser("test"));
         verify(userDao).searchUser("test");
+
     }
 }

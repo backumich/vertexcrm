@@ -39,32 +39,17 @@ public class AdminController {
     static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
     static final String LOG_USER_NOT_FOUND = "User not found, try again.";
     static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
-    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final String USER_DATA = "userDataForSearch";
-    private final String LOG_REQ_ADMIN = "Request to '/admin' redirect to page - ";
     private final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER = "Request to '/addCertificateAndCreateUser' ";
-    private final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER_RETURN = "Request to " +
-            "'/addCertificateAndCreateUser' return (%s).jsp";
-    private final String LOG_REQ_SELECT_USER_RETURN = "Request to '/selectUser' redirect to page - ";
-    private final String LOG_REQ_ADD_CERTIFICATE_WITH_USER_ID = "Request to '/addCertificateWithUserId' ";
-    private final String LOG_REQ_ADD_CERTIFICATE_WITH_USER_ID_RETURN = "Request to '/addCertificateWithUserId' " +
-            "return (%s).jsp";
-    private final String LOG_REQ_SEARCH_USER = "Call - userLogic.searchUser(%s);";
     private final String LOG_REQ_SELECT_USER = "Request to '/selectUser' with user id = (%s). Redirect to ";
-    private final String LOG_SEARCH_USER = "Call - userLogic.searchUser(%s);";
+
+    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
 
-
-    @Autowired
-    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic) {
-        this.certificateLogic = certificateLogic;
-        this.userLogic = userLogic;
-    }
-
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView admin() {
-        LOGGER.debug(LOG_REQ_ADMIN + ADMIN_JSP);
+        LOGGER.debug("Request to '/admin' redirect to page - " + ADMIN_JSP);
         return new ModelAndView(ADMIN_JSP);
     }
 
@@ -77,19 +62,19 @@ public class AdminController {
     @RequestMapping(value = "/searchUser", method = RequestMethod.POST)
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
 
-        LOGGER.debug(String.format(LOG_REQ_SEARCH_USER, userData));
+        LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
 
         String result;
 
         if (userData.isEmpty()) {
             model.addAttribute(MSG, LOG_INCORRECT_DATA);
             result = SELECT_USER_JSP;
-            LOGGER.info(String.format(LOG_SEARCH_USER, userData) + LOG_INCORRECT_DATA);
+            LOGGER.info(String.format("Call - userLogic.searchUser(%s);", userData) + LOG_INCORRECT_DATA);
         } else {
             try {
                 List<User> users = userLogic.searchUser(userData);
                 model.addAttribute(USERS, users);
-                LOGGER.debug(String.format(LOG_SEARCH_USER, userData));
+                LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
                 if (users.isEmpty()) {
                     model.addAttribute(MSG, LOG_USER_NOT_FOUND);
                     LOGGER.debug(LOG_USER_NOT_FOUND);
@@ -101,7 +86,7 @@ public class AdminController {
             }
         }
 
-        LOGGER.debug(LOG_REQ_SELECT_USER_RETURN + result);
+        LOGGER.debug("Request to '/selectUser' redirect to page - " + result);
         return result;
     }
 
@@ -118,7 +103,7 @@ public class AdminController {
                                              BindingResult bindingResult, Model model) {
 
         String returnPage;
-        LOGGER.debug(LOG_REQ_ADD_CERTIFICATE_WITH_USER_ID);
+        LOGGER.debug("Request to '/addCertificateWithUserId' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, LOG_INCORRECT_DATA);
@@ -136,7 +121,7 @@ public class AdminController {
             }
         }
 
-        LOGGER.debug(String.format(LOG_REQ_ADD_CERTIFICATE_WITH_USER_ID_RETURN, returnPage));
+        LOGGER.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
         return returnPage;
     }
 
@@ -174,8 +159,14 @@ public class AdminController {
             }
         }
 
-        LOGGER.debug(String.format(LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER_RETURN, returnPage));
+        LOGGER.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));
         return returnPage;
+    }
+
+    @Autowired
+    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic) {
+        this.certificateLogic = certificateLogic;
+        this.userLogic = userLogic;
     }
 
 }
