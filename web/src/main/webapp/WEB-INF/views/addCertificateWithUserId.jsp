@@ -105,7 +105,6 @@
 
         <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateWithUserId">
 
-
             <table border="0" align="center" style="align-content: center">
                 <tr>
                     <td colspan="2" align="center"><h2>Add new certificate :</h2></td>
@@ -114,9 +113,7 @@
                     <td><form:hidden path="certificationId" value="1"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="userId">User id :</form:label></td>
-                    <td><form:input placeholder="User id" type="number" path="userId"/></td>
-                    <td><form:errors path="userId"/></td>
+                    <td><form:hidden path="userId" value="${userIdForCertificate}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="certificationDate">Certification date :</form:label></td>

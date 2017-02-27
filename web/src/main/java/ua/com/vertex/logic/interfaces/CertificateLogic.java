@@ -12,7 +12,7 @@ public interface CertificateLogic {
 
     Optional<Certificate> getCertificateById(int certificateId);
 
-    int addCertificate(Certificate certificate);
+    int addCertificate(Certificate certificate) throws Exception;
 
-    int addCertificateAndCreateUser(Certificate certificate, User user);
+    int addCertificateAndCreateUser(Certificate certificate, User user) throws Exception;
 }

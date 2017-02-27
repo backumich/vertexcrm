@@ -13,10 +13,10 @@ import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = MainTestContext.class)
@@ -24,8 +24,8 @@ import static org.junit.Assert.assertNotNull;
 @ActiveProfiles("test")
 public class UserDaoTest {
 
+    private final String MSG = "Maybe method was changed";
     private NamedParameterJdbcTemplate jdbcTemplate;
-
     @Autowired
     private UserDaoInf userDao;
 
@@ -51,5 +51,17 @@ public class UserDaoTest {
         Optional<User> optional = userDao.getUser(55555);
         assertNotNull(optional);
         assertEquals(new User(), optional.orElse(new User()));
+    }
+
+    @Test
+    public void searchUser() throws Exception {
+        List<User> users = userDao.searchUser("TTTTTTTTT");
+        assertTrue(users.isEmpty());
+
+        users = userDao.searchUser("Name");
+        assertFalse(MSG, users.isEmpty());
+        assertEquals(MSG, users.size(), 3);
+        assertEquals(MSG, users.get(1), new User.Builder().setUserId(22).setEmail("email").setPassword("password")
+                .setFirstName("FirstName").setLastName("LastName"));
     }
 }

@@ -102,12 +102,6 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <div class="hrefText">
-            <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
-            </c:if>
-        </div>
-
         <div>
             <span class="formHeaderText1">Add certificate with user id:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
@@ -127,9 +121,12 @@
         <br>
         <br>
         <br>
-        <c:if test="${!empty msg}">
-            <h3><span class="errorText125">${msg}</span></h3>
-        </c:if>
+
+        <div class="hrefText">
+            <c:if test="${!empty msg}">
+                <h3><span class="alert-success">${msg}</span></h3>
+            </c:if>
+        </div>
         <br>
         <br>
         <br>

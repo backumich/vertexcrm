@@ -14,6 +14,23 @@ public class CertificateWithUserForm {
     public CertificateWithUserForm() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CertificateWithUserForm)) return false;
+
+        CertificateWithUserForm that = (CertificateWithUserForm) o;
+
+        return (getCertificate() != null ? getCertificate().equals(that.getCertificate()) : that.getCertificate() == null) && (getUser() != null ? getUser().equals(that.getUser()) : that.getUser() == null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCertificate() != null ? getCertificate().hashCode() : 0;
+        result = 31 * result + (getUser() != null ? getUser().hashCode() : 0);
+        return result;
+    }
+
     public Certificate getCertificate() {
         return certificate;
     }

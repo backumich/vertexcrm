@@ -10,16 +10,21 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.CertificateWithUserForm;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.*;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR_JSP;
 
 
 public class AdminControllerTest {
@@ -28,17 +33,16 @@ public class AdminControllerTest {
     private final String MSG_INVALID_VIEW = "Have wrong viewName in ModelAndView";
 
     private AdminController underTest;
-
     private Model model;
-
     private Certificate certificate;
+    private User user;
+    private CertificateWithUserForm certificateWithUserForm;
 
     @Mock
     private CertificateLogic certificateLogic;
 
     @Mock
     private UserLogic userLogic;
-
 
     @Mock
     private BindingResult bindingResult;
@@ -48,12 +52,19 @@ public class AdminControllerTest {
         MockitoAnnotations.initMocks(this);
         underTest = new AdminController(certificateLogic, userLogic);
         model = new ExtendedModelMap();
-        certificate = new Certificate.Builder()
-                .setUserId(1)
-                .setCertificationDate(LocalDate.parse("2016-12-01"))
-                .setCourseName("Java Professional")
-                .setLanguage("Java")
+        certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional").setLanguage("Java").getInstance();
+        user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
+        certificateWithUserForm = new CertificateWithUserForm();
+        certificateWithUserForm.setCertificate(certificate);
+        certificateWithUserForm.setUser(user);
+    }
+
+    @Test
+    public void logicNotBeNull() throws Exception {
+        assertNotNull(userLogic);
+        assertNotNull(certificateLogic);
     }
 
     @Test
@@ -62,42 +73,117 @@ public class AdminControllerTest {
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADMIN_JSP);
     }
 
-//    @Test
-//    public void addCertificateHasCorrectDataInModel() throws Exception {
-//        ModelAndView result = underTest.addCertificateWithUserId();
-//        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_WITH_USER_ID_JSP);
-//        assertTrue(MSG_INVALID_DATA, result.getModel().containsValue(new String));
-//    }
+    @Test
+    public void addCertificateWithUserIdReturnCorrectView() throws Exception {
+        ModelAndView result = underTest.addCertificateWithUserId();
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_JSP);
+    }
 
     @Test
-    public void checkCertificateIsCalledInCertificateLogic() throws Exception {
+    public void searchUserHasCorrectDataInModelAndReturnCorrectView() throws Exception {
+
+        underTest.searchUser("Test", model);
+        verify(userLogic).searchUser("Test");
+
+        String returnPage = underTest.searchUser("", model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, SELECT_USER_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INCORRECT_DATA));
+
+        when(userLogic.searchUser("Test")).thenReturn(new ArrayList<>());
+        returnPage = underTest.searchUser("Test", model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, SELECT_USER_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(USERS));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_USER_NOT_FOUND));
+        @SuppressWarnings("unchecked") List<User> users = (List<User>) model.asMap().get(USERS);
+        assertTrue(MSG_INVALID_DATA, users.isEmpty());
+
+        when(userLogic.searchUser("Test")).thenReturn(Collections.singletonList(user));
+        returnPage = underTest.searchUser("Test", model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, SELECT_USER_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(USERS));
+        //noinspection unchecked
+        users = (List<User>) model.asMap().get(USERS);
+        assertFalse(MSG_INVALID_DATA, users.isEmpty());
+        assertEquals(MSG_INVALID_DATA, users.get(0), user);
+
+        when(userLogic.searchUser("Test")).thenThrow(new Exception("Test"));
+        returnPage = underTest.searchUser("Test", model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ERROR_JSP);
+    }
+
+    @Test
+    public void selectUserHasCorrectDataInModelAndView() throws Exception {
+        ModelAndView result = underTest.selectUser(333);
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_WITH_USER_ID_JSP);
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(USER_ID), 333);
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(CERTIFICATE), new Certificate());
+    }
+
+    @Test
+    public void checkCertificateWithUserIdHasCorrectDataInModelAndReturnCorrectView() throws Exception {
+
         underTest.checkCertificateWithUserId(certificate, bindingResult, model);
         verify(certificateLogic).addCertificate(certificate);
-    }
 
-    @Test
-    public void checkCertificateRedirectToCorrectPage() throws Exception {
-        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
-                , ADMIN_JSP);
-    }
-
-
-    @Test
-    public void checkCertificateHasCorrectDataInModel() throws Exception {
-        when(certificateLogic.addCertificate(certificate)).thenReturn(1);
-        underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        when(certificateLogic.addCertificate(certificate)).thenReturn(333);
+        String returnPage = underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ADMIN_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_CERTIFICATE_ADDED + "333"));
 
-        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_CERTIFICATE_ADDED + "1"));
+        when(certificateLogic.addCertificate(certificate)).thenThrow(new Exception("Test"));
+        returnPage = underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ERROR_JSP);
+
+        when(bindingResult.hasErrors()).thenReturn(true);
+        returnPage = underTest.checkCertificateWithUserId(certificate, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ADD_CERTIFICATE_WITH_USER_ID_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INCORRECT_DATA));
     }
 
-    @Test
-    public void checkCertificateHasCorrectMSGInModel() throws Exception {
-        when(certificateLogic.addCertificate(certificate)).thenThrow( new DataIntegrityViolationException(""));
-        underTest.checkCertificateWithUserId(certificate, bindingResult, model);
-        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
 
-        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INVALID_USER_ID));
+    @Test
+    public void addCertificateAndCreateUserReturnCorrectDataToModelAndView() throws Exception {
+        ModelAndView result = underTest.addCertificateAndCreateUser();
+
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_AND_USER_JSP);
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(CERTIFICATE_WITH_USER_FORM), new CertificateWithUserForm());
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectView() throws Exception {
+
+        underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+        verify(certificateLogic).addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
+                , certificateWithUserForm.getUser());
+
+        when(certificateLogic.addCertificateAndCreateUser(certificate
+                , user)).thenReturn(333);
+        String returnPage = underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ADMIN_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_CERTIFICATE_ADDED + "333"));
+
+        when(certificateLogic.addCertificateAndCreateUser(certificate
+                , user)).thenThrow(new DataIntegrityViolationException("Test"));
+        returnPage = underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ADD_CERTIFICATE_AND_USER_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INVALID_USER_EMAIL));
+
+        when(certificateLogic.addCertificateAndCreateUser(certificate
+                , user)).thenThrow(new Exception("Test"));
+        returnPage = underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ERROR_JSP);
+
+        when(bindingResult.hasErrors()).thenReturn(true);
+        returnPage = underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+        assertEquals(MSG_INVALID_VIEW, returnPage, ADD_CERTIFICATE_AND_USER_JSP);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INCORRECT_DATA));
     }
 
 }

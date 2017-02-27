@@ -15,11 +15,12 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ua.com.vertex.controllers.CertificateDetails.CERTIFICATE_DETAIL;
-import static ua.com.vertex.controllers.CertificateDetails.CERTIFICATE_JSP;
+import static ua.com.vertex.controllers.AdminController.CERTIFICATE;
 
 
 public class CertificateDetailsTest {
+
+    private final String MSG_INVALID_DATA = "Have wrong objects in model";
 
     private CertificateDetails underTest;
 
@@ -52,7 +53,7 @@ public class CertificateDetailsTest {
 
         assertNotNull(modelAndView);
         assertTrue(modelAndView.hasView());
-        assertEquals("Have wrong viewName in ModelAndView", CERTIFICATE_JSP, modelAndView.getViewName());
+        assertEquals("Have wrong viewName in ModelAndView", CERTIFICATE, modelAndView.getViewName());
     }
 
     @Test
@@ -63,16 +64,16 @@ public class CertificateDetailsTest {
 
         assertNotNull(modelAndView);
 
-        Object actualResult = modelAndView.getModel().get(CERTIFICATE_DETAIL);
+        Object actualResult = modelAndView.getModel().get(CERTIFICATE);
 
         assertNotNull(actualResult);
-        assertEquals("Have wrong objects in ModelAndView", certificate, actualResult);
+        assertEquals(MSG_INVALID_DATA, certificate, actualResult);
     }
 
     @Test
     public void getCertificateByIdShouldInserNull() throws Exception {
         when(certificateLogic.getCertificateById(-1)).thenReturn(Optional.empty());
 
-        assertNull("Have wrong objects in ModelAndView", underTest.getCertificateDetails(-1).getModel().get(CERTIFICATE_DETAIL));
+        assertNull(MSG_INVALID_DATA, underTest.getCertificateDetails(-1).getModel().get(CERTIFICATE));
     }
 }

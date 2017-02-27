@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -104,40 +103,54 @@
     <div class="container pt1_5" align="centr">
 
         <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
-                       action="searchUser">
-                <table border="0" align="center" style="align-content: center">
+            <form cssClass="buttonText" method="post" commandName="userDataForSearch"
+                  action="searchUser">
+                <tr>
+                    <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                </tr>
+            </form>
+        </c:if>
+    </div>
+    <div>
+        <c:if test="${!empty users}">
+            <form method="post" commandName="userIdForCertificate"
+                  action="selectUser">
+                <table class="active" width="500">
                     <tr>
-                        <td colspan="2" align="center"><h2> Enter user data :</h2></td>
+                        <th>Select user</th>
+                        <th>User Id</th>
+                        <th>User E-mail</th>
+                        <th>User first name</th>
+                        <th>User last name</th>
                     </tr>
-                    <tr>
-                            <%--<td><form:input placeholder="User data:"  path="userDataForSearch"/></td>--%>
-                    </tr>
-                    <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
-                    </tr>
+                    <c:forEach items="${users}" var="user">
+                        <tr>
+                            <td><input type="radio" name="userIdForCertificate" value=${user.userId}></td>
+                            <td>${user.userId}</td>
+                            <td>${user.email}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>
+                            </td>
+                        </tr>
+                    </c:forEach>
                 </table>
-            </form:form>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                </tr>
+            </form>
+
         </c:if>
     </div>
 
-    <%--<div class="container pt1_5" align="centr">--%>
-    <%--<c:if test="${!empty users}">--%>
-    <%--<form:form cssClass="buttonText" method="post" commandName="users"--%>
-    <%--action="checkCertificateWithUserId">--%>
-    <%--<table border="0" align="center" style="align-content: center">--%>
-    <%--<tr>--%>
-    <%--<td colspan="2" align="center"><h2>Add new certificate :</h2></td>--%>
-    <%--</tr>--%>
-
-    <%--</form:form>--%>
-    <%--</c:if>--%>
-    <%--<br>--%>
-    <%--<br>--%>
-    <%--</div>--%>
-
+    <br>
+    <br>
+    <br>
     <c:if test="${!empty msg}">
-        <h3><span class="errorText125">${msg}</span></h3>
+        <h3><span class="errorText250">${msg}</span></h3>
     </c:if>
     <br>
     <br>

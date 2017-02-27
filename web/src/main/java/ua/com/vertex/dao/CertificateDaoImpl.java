@@ -10,12 +10,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
-import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.Storage;
 
 import javax.sql.DataSource;
@@ -47,13 +43,11 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final Storage storage;
-    private final UserDaoInf userDaoInf;
 
     @Autowired
-    public CertificateDaoImpl(DataSource dataSource, Storage storage, UserDaoInf userDaoInf) {
+    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.storage = storage;
-        this.userDaoInf = userDaoInf;
     }
 
     @Override
@@ -67,29 +61,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
 
-    @Override
-    @Transactional(propagation = Propagation.MANDATORY)
-    public int addCertificate(Certificate certificate) {
-        String query = "INSERT INTO Certificate (user_id,certification_date, course_name, language) " +
-                "VALUES ( :userId, :certificationDate, :courseName, :language)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromCertificate(certificate), keyHolder);
-        return keyHolder.getKey().intValue();
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public int addCertificateAndCreateUser(Certificate certificate, User user) {
-
-        int userID = userDaoInf.addUserForCreateCertificate(user);
-
-        certificate.setUserId(userID);
-
-        return addCertificate(certificate);
-
-    }
-
     private MapSqlParameterSource addParametrToMapSqlParameterSourceFromCertificate(Certificate certificate) {
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(USER_ID, certificate.getUserId());
@@ -97,6 +68,16 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         source.addValue(COURSE_NAME, certificate.getCourseName());
         source.addValue(LANGUAGE, certificate.getLanguage());
         return source;
+    }
+
+    @Override
+    public int addCertificate(Certificate certificate) throws Exception {
+        String query = "INSERT INTO Certificate (user_id,certification_date, course_name, language) " +
+                "VALUES ( :userId, :certificationDate, :courseName, :language)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromCertificate(certificate), keyHolder);
+        return keyHolder.getKey().intValue();
     }
 
     @Override
