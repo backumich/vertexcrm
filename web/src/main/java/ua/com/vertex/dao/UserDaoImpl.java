@@ -104,7 +104,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<Integer> getAllUserIds() {
-        String query = "SELECT user_id FROM Users order by user_id";
+        String query = "SELECT user_id FROM Users ORDER BY user_id";
         return jdbcTemplate.query(query, new MapSqlParameterSource(), (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
@@ -191,7 +191,8 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
 
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), (rs, i) -> {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId",
+                userID), (rs, i) -> {
             User user = null;
             if (rs.getRow() == 1) {
                 user = new User();
@@ -240,7 +241,7 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public int saveUserData(User user) {
         String query = "UPDATE Users " +
-                "set email = :email , " +
+                "SET email = :email , " +
                 "first_name = :first_name, " +
                 "last_name = :last_name, " +
                 "passport_scan = :passport_scan, " +
@@ -258,8 +259,7 @@ public class UserDaoImpl implements UserDaoInf {
         parameters.addValue("photo", user.getPhoto());
         parameters.addValue("discount", user.getDiscount());
         parameters.addValue("phone", user.getPhone());
-        parameters.addValue("role_id", user.getRole() == Role.ADMIN ? 1 : 2);
-
+        parameters.addValue("role_id", user.getRole().getId());
         parameters.addValue("user_id", user.getUserId());
 
         return jdbcTemplate.update(query, parameters);
@@ -267,7 +267,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     public int activateUser(String email) {
         String query = "UPDATE Users " +
-                "set is_active = 1 " +
+                "SET is_active = 1 " +
                 "WHERE email = :email";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("email", email);
