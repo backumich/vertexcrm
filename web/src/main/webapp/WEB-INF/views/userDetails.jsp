@@ -1,26 +1,25 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
-<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
-<html>
+<html lang="en" charset="UTF-8">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
-    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
+    <link href="./css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sva.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -39,11 +38,27 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255, 255, 255, .38) solid !important;
+        border-radius: 4px !important;
     }
 
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0px !important;
+    }
+
+    .colortext {
+        background-color: #ffe; /* Цвет фона */
+        color: black; /* Цвет текста */
+    }
+
+    .buttonText {
+        color: black;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -72,7 +87,6 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -100,25 +114,138 @@
         </div>
     </div>
 </div>
+<div class="page gray-page mh100">
+    <div class="container pt1_5">
+        <div align="center">
+            <%--user - то что отсылается в контроллер--%>
+            <form:form action="saveUserData" method="post" commandName="user" enctype="multipart/form-data">
+            <input type="hidden" name="user" value="user"/>
+            <table bordercolor="red" border="2">
+                <c:if test="${!empty msg}">
+                    <tr>
+                        <div name="msg" class="fontSize200 red">${msg}</div>
+                    </tr>
+                </c:if>
 
+                <tr>
+                    <td>user Id</td>
+                    <td><form:label path="userId">${user.userId}</form:label>
+                        <form:hidden path="userId"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td>E-mail</td>
+                    <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
+                                    path="email"/>
+                    <td><form:errors path="email"/></td>
+                </tr>
+                <tr>
+                    <td>Last name</td>
+                    <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
+                                    path="lastName"/></td>
+                    <td><form:errors path="lastName"/></td>
+                </tr>
+                <tr>
+                    <td>First name</td>
+                    <td><form:input id="firstName" class="buttonText" type="text" size="40"
+                                    value="${user.firstName}" path="firstName"/></td>
+                    <td><form:errors path="firstName"/></td>
 
-<div align="center" class="page gray-page mh100 up-padding">
+                </tr>
+                <tr>
+                    <td>Passport scan</td>
+                    <td><img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport"></td>
+                    <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
+                    <form:hidden path="passportScan"/>
+                </tr>
+                <tr>
+                    <td>Photo</td>
+                    <td><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
+                    <td><input type="file" name="imagePhoto" accept="image/*"/></td>
+                    <form:hidden path="photo"/>
+                </tr>
+                <tr>
+                    <td>Discount</td>
+                    <td><form:input id="discount" class="buttonText" type="number" size="40"
+                                    value="${user.discount}" path="discount"/></td>
+                    <td><form:errors path="discount"/></td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td>
+                        <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
+                                    path="phone"/></td>
+                    <td><form:errors path="phone"/></td>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <p>User roles</p>
+            <table bordercolor="red" border="2">
+                <c:if test="${empty user.role}">
+                    <tr>
+                        <td>Error! The current user does not have roles in the system!</td>
+                    </tr>
+                </c:if>
 
-    <span class="fontSize200 red">Something went wrong... Try again!</span><br><br>
-    <br/>
-    <br/>
-    <br/>
-    <c:if test="${!empty errorMessage}">
-        <div name="errorMessage" class="fontSize200 red">${errorMessage}</div>
-    </c:if>
-    <br/>
-    <br/>
-    <br/>
-    <span class="href"><a href="<c:url value="/" />">Home</a></span>
+                <c:if test="${!empty user.role}">
+                    <tr>
+                        <td>
+                            <form:select path="role" items="${allRoles}"/>
+                        </td>
+                    </tr>
+                </c:if>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <p>User certificates</p>
+            <table>
+                <table bordercolor="red" border="2">
+                    <tr>
+                        <th width="50px">№</th>
+                        <th width="100px">Certification date</th>
+                        <th width="150px">Course name</th>
+                        <th width="150px">Language</th>
+                    </tr>
+                    <c:forEach items="${certificates}" var="certificates" varStatus="status">
+                        <tr>
+                            <td align="center">${status.count}</td>
 
+                                <%--<td><form:input name="certificates[${status.index}].certificationDate"--%>
+                                <%--value="${certificates.certificationDate}" class="buttonText"--%>
+                                <%--path="certificationDate"/>--%>
+                                <%--</td>--%>
+
+                            <td><input name="certificates[${status.index}].certificationDate"
+                                       value="${certificates.certificationDate}" class="buttonText" disabled="true"/>
+                            </td>
+
+                            <td><input name="certificates[${status.index}].courseName"
+                                       value="${certificates.courseName}" class="buttonText" disabled="true"/>
+                            </td>
+                            <td><input name="certificates[${status.index}].language"
+                                       value="${certificates.language}" class="buttonText" disabled="true"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+
+                <td colspan="2" align="center">
+                    <input id="save" class="buttonText" type="submit" value="Save"/>
+                </td>
+                </form:form>
+                <br/>
+                <br/>
+                <br/>
+                <div class="href">
+                    <a href="javascript:history.back();">Back</a> |
+                    <a href="<c:url value="/" />">Home</a>
+                </div>
+        </div>
+
+    </div>
 </div>
-
-
 <div class="footer">
     <div class="container">
         <div class="right">

@@ -81,7 +81,7 @@ public class CertificateDaoTest {
     @Test(expected = NoSuchElementException.class)
     @WithMockUser
     public void getCertificateByIdReturnNull() throws Exception {
-            certificateDao.getCertificateById(-1).get();
+        certificateDao.getCertificateById(-1).get();
     }
 
 

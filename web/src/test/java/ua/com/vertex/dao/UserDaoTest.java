@@ -1,9 +1,11 @@
 package ua.com.vertex.dao;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,6 +15,8 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
+import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -23,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class UserDaoTest {
+
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     private UserDaoInf userDao;
@@ -35,6 +41,16 @@ public class UserDaoTest {
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
     private static final String WRONG_IMAGE_TYPE = "wrongImageType";
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Test
+    public void jdbcTemplateShouldNotBeNull() {
+        assertNotNull(jdbcTemplate);
+    }
 
     @Test
     @WithMockUser
@@ -77,11 +93,37 @@ public class UserDaoTest {
     }
 
     @Test
+    public void getListUsersNotEmpty() throws Exception {
+        List<User> users = userDao.getAllUsers();
+        assertEquals(false, users.isEmpty());
+    }
+
+    @Test
+    public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
+        User testUser = new User();
+        testUser.setUserId(10);
+        testUser.setEmail("emailTest");
+        testUser.setFirstName("first_name");
+        testUser.setLastName("last_name");
+        testUser.setDiscount(0);
+        testUser.setPhone("666666666");
+
+        Optional<User> optional = userDao.getUserDetailsByID(10);
+        Assert.assertNotNull(optional.get());
+
+        Assert.assertEquals(testUser.getUserId(), optional.get().getUserId());
+        Assert.assertEquals(testUser.getEmail(), optional.get().getEmail());
+        Assert.assertEquals(testUser.getFirstName(), optional.get().getFirstName());
+        Assert.assertEquals(testUser.getLastName(), optional.get().getLastName());
+        Assert.assertEquals(testUser.getDiscount(), optional.get().getDiscount());
+        Assert.assertEquals(testUser.getPhone(), optional.get().getPhone());
+    }
+
+    @Test
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPhotoSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PHOTO);
-
     }
 
     @Test
@@ -89,7 +131,6 @@ public class UserDaoTest {
     public void saveImageNotThrowsExceptionIfSuccessfulPassportSave() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
-
     }
 
     @Test(expected = RuntimeException.class)

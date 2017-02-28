@@ -1,6 +1,7 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -8,17 +9,17 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -32,10 +33,13 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
+
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
@@ -68,6 +72,7 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -97,37 +102,17 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <main class="content">
-            <div class="registration">
-                <div id="registration-form">
-                    <div class="reg-form">
-                        <span class="fontSize200 silver">Welcome to Vertex CRM</span>
-                        <br><br><br>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <div class="href">
-            <a href="<c:url value="/registration"/>">Register</a> |
-            <a href="<c:url value="/logIn"/>">Log in</a> |
-            <a href="<c:url value="/logOut"/>">Log out</a>
-            <br><br>
-            <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
-            <a href="<c:url value="/user"/>">View user.jsp</a> |
-            <a href="<c:url value="/viewAllUsers"/>">View all users</a>
-        </div>
-
-    </div>
-</div>
-
-
-<div class="wrapper">
+    <span class="fontSize200 red">Your account has been successfully activated!</span><br><br>
+    <br/>
+    <br/>
+    <br/>
+    <span class="href"><a href="<c:url value="/" />">Home</a></span>
 
 </div>
+
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -182,11 +167,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>

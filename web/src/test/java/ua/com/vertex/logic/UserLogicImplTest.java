@@ -67,7 +67,6 @@ public class UserLogicImplTest {
                 .setPhone("38066 000 00 00")
                 .setRole(USER)
                 .getInstance();
-
         assertEquals(user, optional.get());
     }
 
@@ -100,14 +99,14 @@ public class UserLogicImplTest {
     @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPhotoPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
-        logic.saveImage(EXISTING_ID1, image, PHOTO);
+        logic.saveImage(EXISTING_ID2, image, PHOTO);
     }
 
     @Test
     @WithMockUser
     public void saveImageShouldNotThrowExceptionsIfPassportPassed() throws Exception {
         byte[] image = new byte[]{1, 2, 3};
-        logic.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
+        logic.saveImage(EXISTING_ID2, image, PASSPORT_SCAN);
     }
 
     @Test
