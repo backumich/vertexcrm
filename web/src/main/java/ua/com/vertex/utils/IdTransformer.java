@@ -3,10 +3,10 @@ package ua.com.vertex.utils;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 public class IdTransformer {
-    private static String key = "what a pain";
+    private static final String KEY = "what a pain";
 
     public static String encode(int id) {
-        String interim = encodingStep(id + key);
+        String interim = encodingStep(id + KEY);
         return encodingStep(interim);
     }
 
@@ -18,7 +18,7 @@ public class IdTransformer {
         String interim = decodingStep(toDecode);
         String result = decodingStep(interim);
 
-        return Integer.parseInt(result.replace(key, ""));
+        return Integer.parseInt(result.replace(KEY, ""));
     }
 
     private static String decodingStep(String toDecode) {

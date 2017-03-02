@@ -12,6 +12,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
 
@@ -27,20 +30,26 @@ public class CertDetailsPageLogicImplTest {
     @Autowired
     private CertificateDaoInf certificateDao;
 
-    private CertDetailsPageLogicImpl logic;
+    @Autowired
+    private UserLogic userLogic;
+
+    @Autowired
+    private LogInfo logInfo;
+
+    private CertDetailsPageLogic certLogic;
 
     private static final int EXISTING_CERT_ID = 222;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Before
     public void setUp() {
-        logic = new CertDetailsPageLogicImpl(certificateDao);
+        certLogic = new CertDetailsPageLogicImpl(certificateDao, userLogic, logInfo);
     }
 
     @Test
     @WithMockUser
     public void certificateOptionalForCertificateStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(EXISTING_CERT_ID);
+        Optional<Certificate> optional = certLogic.getCertificateDetails(EXISTING_CERT_ID);
         assertNotNull(optional);
         assertEquals(EXISTING_CERT_ID, optional.get().getCertificationId());
     }
@@ -48,7 +57,7 @@ public class CertDetailsPageLogicImplTest {
     @Test
     @WithMockUser
     public void certificateNullOptionalForCertificateNotStoredInDBShouldBeReturned() {
-        Optional<Certificate> optional = logic.getCertificateDetails(NOT_EXISTING_ID);
+        Optional<Certificate> optional = certLogic.getCertificateDetails(NOT_EXISTING_ID);
         assertNotNull(optional);
         assertEquals(null, optional.orElse(null));
     }

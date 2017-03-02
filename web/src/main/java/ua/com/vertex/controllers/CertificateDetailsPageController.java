@@ -8,30 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
-import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.IdTransformer;
 import ua.com.vertex.utils.LogInfo;
-
-import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
-import static ua.com.vertex.beans.User.EMPTY_USER;
 
 @Controller
 public class CertificateDetailsPageController {
 
     private final CertDetailsPageLogic certLogic;
-    private final UserLogic userLogic;
     private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
 
     private static final int WRONG_ID = -1;
-    private static final String USER = "user";
-    private static final String CERTIFICATE = "certificate";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
-    private static final String CERTIFICATE_LINK = "certificateLink";
     private static final String ERROR = "error";
 
     @RequestMapping(value = "/certificateDetails")
@@ -44,13 +33,13 @@ public class CertificateDetailsPageController {
 
         String view = CERTIFICATE_DETAILS;
 
-        int certificateId = decodeId(certificateIdEncoded, model);
+        int certificateId = certLogic.decodeId(certificateIdEncoded, model);
         if (certificateId == WRONG_ID) {
             model.addAttribute(ERROR, "Invalid entered data");
             LOGGER.debug(logInfo.getId() + "Entered certificateId data are invalid");
         } else {
             try {
-                setUserAndCertificate(certificateId, model);
+                certLogic.setUserAndCertificate(certificateId, model);
                 LOGGER.debug(logInfo.getId() + "Passing certificate and user data to JSP");
             } catch (Exception e) {
                 LOGGER.warn(logInfo.getId(), e, e);
@@ -66,13 +55,13 @@ public class CertificateDetailsPageController {
 
         String view = CERTIFICATE_DETAILS;
 
-        int certificateId = decodeId(certificateIdEncoded, model);
+        int certificateId = certLogic.decodeId(certificateIdEncoded, model);
         if (certificateId == WRONG_ID) {
             model.addAttribute(ERROR, "Invalid entered data");
             LOGGER.debug(logInfo.getId() + "Entered certificateId data are invalid");
         } else {
             try {
-                setUserAndCertificate(certificateId, model);
+                certLogic.setUserAndCertificate(certificateId, model);
             } catch (Exception e) {
                 LOGGER.warn(logInfo.getId(), e, e);
                 view = ERROR;
@@ -82,35 +71,9 @@ public class CertificateDetailsPageController {
         return view;
     }
 
-    private int decodeId(String certificateIdEncoded, Model model) {
-        int certificateId = WRONG_ID;
-        try {
-            certificateId = IdTransformer.decode(certificateIdEncoded);
-            model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
-        }
-
-        return certificateId;
-    }
-
-    private void setUserAndCertificate(int certificationId, Model model) {
-        LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificationId);
-
-        Certificate certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
-        if (!EMPTY_CERTIFICATE.equals(certificate)) {
-            model.addAttribute(CERTIFICATE, certificate);
-            User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);
-            model.addAttribute(USER, user);
-        } else {
-            model.addAttribute(ERROR, "No certificate with this ID!");
-        }
-    }
-
     @Autowired
-    public CertificateDetailsPageController(CertDetailsPageLogic certLogic, UserLogic userLogic, LogInfo logInfo) {
+    public CertificateDetailsPageController(CertDetailsPageLogic certLogic, LogInfo logInfo) {
         this.certLogic = certLogic;
-        this.userLogic = userLogic;
         this.logInfo = logInfo;
     }
 }
