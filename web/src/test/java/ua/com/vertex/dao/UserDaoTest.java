@@ -85,7 +85,12 @@ public class UserDaoTest {
     @Test
     @Transactional
     public void addUserForCreateCertificateReturnCorrectData() throws Exception {
-        assertEquals(MSG, userDao.addUserForCreateCertificate(user), 36);
+        User userForTest = new User.Builder().setEmail("email33").setFirstName("Test")
+                .setLastName("Test").getInstance();
+        int result = userDao.addUserForCreateCertificate(userForTest);
+        userForTest.setUserId(result);
+        //noinspection OptionalGetWithoutIsPresent
+        assertEquals(MSG, userForTest, userDao.getUser(result).get());
     }
 
     @Test(expected = IllegalTransactionStateException.class)

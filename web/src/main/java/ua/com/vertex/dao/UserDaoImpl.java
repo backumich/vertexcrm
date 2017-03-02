@@ -79,8 +79,11 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "INSERT INTO Users (email, first_name, last_name) " +
                 "VALUES (:email, :first_name, :last_name)";
 
+        LOGGER.debug(String.format("Try add user -(%s) ;", user));
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromUser(user), keyHolder);
+
+        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
     }
 
@@ -98,6 +101,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
                 "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
 
+        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, (rs, i) -> new User.Builder()
                 .setUserId(rs.getInt(COLUMN_USER_ID))
                 .setEmail(rs.getString(COLUMN_USER_EMAIL))
