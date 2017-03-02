@@ -61,31 +61,6 @@ public class CertificateDetailsPageController {
         return view;
     }
 
-    private int decodeId(String certificateIdEncoded, Model model) {
-        int certificateId = WRONG_ID;
-        try {
-            certificateId = IdTransformer.decode(certificateIdEncoded);
-            model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
-        } catch (Exception e2) {
-            LOGGER.warn(logInfo.getId(), e2, e2);
-        }
-
-        return certificateId;
-    }
-
-    private void setUserAndCertificate(int certificationId, Model model) {
-        LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificationId);
-
-        Certificate certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
-        if (!EMPTY_CERTIFICATE.equals(certificate)) {
-            model.addAttribute(CERTIFICATE, certificate);
-            User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);
-            model.addAttribute(USER, user);
-        } else {
-            model.addAttribute(ERROR, "No certificate with this ID!");
-        }
-    }
-
     @RequestMapping(value = "/getCertificate/{certificateIdEncoded}")
     public String getCertificateByCertificateId(@PathVariable String certificateIdEncoded, Model model) {
 
@@ -105,6 +80,31 @@ public class CertificateDetailsPageController {
         }
 
         return view;
+    }
+
+    private int decodeId(String certificateIdEncoded, Model model) {
+        int certificateId = WRONG_ID;
+        try {
+            certificateId = IdTransformer.decode(certificateIdEncoded);
+            model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
+        } catch (Exception e) {
+            LOGGER.warn(logInfo.getId(), e, e);
+        }
+
+        return certificateId;
+    }
+
+    private void setUserAndCertificate(int certificationId, Model model) {
+        LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificationId);
+
+        Certificate certificate = certLogic.getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
+        if (!EMPTY_CERTIFICATE.equals(certificate)) {
+            model.addAttribute(CERTIFICATE, certificate);
+            User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);
+            model.addAttribute(USER, user);
+        } else {
+            model.addAttribute(ERROR, "No certificate with this ID!");
+        }
     }
 
     @Autowired
