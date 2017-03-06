@@ -4,7 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class IdTransformer {
+public class IdEncryptor {
     private static final String KEY = "ArgentinaJamaica";
     private static final String INIT_VECTOR = "ImpossibleTask11";
 
@@ -17,8 +17,6 @@ public class IdTransformer {
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
             byte[] encrypted = cipher.doFinal((String.valueOf(value)).getBytes());
-            System.out.println("encrypted string: "
-                    + org.apache.commons.codec.binary.Base64.encodeBase64String(encrypted));
 
             return org.apache.commons.codec.binary.Base64.encodeBase64String(encrypted);
         } catch (Exception ex) {

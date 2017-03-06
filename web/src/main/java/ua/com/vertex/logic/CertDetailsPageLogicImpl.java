@@ -10,7 +10,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.IdTransformer;
+import ua.com.vertex.utils.IdEncryptor;
 import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
@@ -42,7 +42,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     public int decodeId(String certificateIdEncoded, Model model) {
         int certificateId = WRONG_ID;
         try {
-            certificateId = IdTransformer.decode(certificateIdEncoded);
+            certificateId = IdEncryptor.decode(certificateIdEncoded);
             model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e, e);
