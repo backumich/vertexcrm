@@ -154,7 +154,7 @@
             </tr>
             <tr>
                 <td>Certificate Link:</td>
-                <td class="fontSize60">localhost:8080/getCertificate/${certificateLink}</td>
+                <td class="fontSize70">localhost:8080/getCertificate/${certificateLink}</td>
             </tr>
         </table>
         <br>

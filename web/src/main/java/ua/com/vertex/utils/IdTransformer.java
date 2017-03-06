@@ -1,27 +1,48 @@
 package ua.com.vertex.utils;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class IdTransformer {
-    private static final String KEY = "what a pain";
+    private static final String KEY = "ArgentinaJamaica";
+    private static final String INIT_VECTOR = "ImpossibleTask11";
 
-    public static String encode(int id) {
-        String interim = encodingStep(id + KEY);
-        return encodingStep(interim);
+    public static String encode(int value) {
+        try {
+            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal((String.valueOf(value)).getBytes());
+            System.out.println("encrypted string: "
+                    + org.apache.commons.codec.binary.Base64.encodeBase64String(encrypted));
+
+            return org.apache.commons.codec.binary.Base64.encodeBase64String(encrypted);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 
-    private static String encodingStep(String toEncode) {
-        return Base64.encode(toEncode.getBytes());
-    }
+    public static int decode(String encrypted) {
+        try {
+            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(KEY.getBytes("UTF-8"), "AES");
 
-    public static int decode(String toDecode) {
-        String interim = decodingStep(toDecode);
-        String result = decodingStep(interim);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 
-        return Integer.parseInt(result.replace(KEY, ""));
-    }
+            byte[] original = cipher.doFinal(org.apache.commons.codec.binary.Base64.decodeBase64(encrypted));
 
-    private static String decodingStep(String toDecode) {
-        return new String(Base64.decode(toDecode));
+            return Integer.parseInt(new String(original));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return 0;
     }
 }
