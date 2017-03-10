@@ -21,13 +21,15 @@ public class LogInController {
     private static final String LOGIN = "logIn";
     private static final String ERROR = "error";
     private static final String ANONYMOUS_USER = "anonymousUser";
+    private static final String ANONYMOUS = "anonymous";
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {
+
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (!ANONYMOUS_USER.equals(principal)) {
+            if (!ANONYMOUS_USER.equals(principal) && !ANONYMOUS.equals(principal)) {
                 view = loggingLogic.setUser(logInfo.getEmail(), model);
             }
         } catch (Exception e) {

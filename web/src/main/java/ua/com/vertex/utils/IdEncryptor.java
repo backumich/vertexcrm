@@ -1,10 +1,16 @@
 package ua.com.vertex.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class IdEncryptor {
+
+    private static final Logger LOGGER = LogManager.getLogger(IdEncryptor.class);
+
     private static final String KEY = "ArgentinaJamaica";
     private static final String INIT_VECTOR = "ImpossibleTask11";
 
@@ -19,8 +25,8 @@ public class IdEncryptor {
             byte[] encrypted = cipher.doFinal((String.valueOf(value)).getBytes());
 
             return org.apache.commons.codec.binary.Base64.encodeBase64String(encrypted);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.debug(e);
         }
 
         return null;
@@ -37,10 +43,14 @@ public class IdEncryptor {
             byte[] original = cipher.doFinal(org.apache.commons.codec.binary.Base64.decodeBase64(encrypted));
 
             return Integer.parseInt(new String(original));
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.debug(e);
         }
 
-        return 0;
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(encode(1234987));
     }
 }
