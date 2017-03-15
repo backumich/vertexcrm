@@ -6,15 +6,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.dao.UserDaoRealization;
 import ua.com.vertex.logic.RegistrationUserLogicImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SuppressWarnings("Duplicates")
 public class RegistrationControllerTest {
@@ -72,5 +78,15 @@ public class RegistrationControllerTest {
         ModelMap modelMap = outModelAndView.getModelMap();
         assertTrue(modelMap.containsAttribute("userFormRegistration"));
         assertEquals(userFormRegistration, modelMap.get("userFormRegistration"));
+    }
+
+    @Test
+    public void registrationControllerReturnedViewTest() throws Exception {
+        MockMvc mockMvc = standaloneSetup(registrationController)
+                .setSingleView(new InternalResourceView("registration"))
+                .build();
+        mockMvc.perform(get("/registration"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("registration"));
     }
 }
