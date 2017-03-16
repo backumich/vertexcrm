@@ -10,11 +10,12 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -44,47 +45,6 @@
         margin-left: 0 !important;
     }
 
-    .errorText125 {
-        font-size: 125%;
-        color: red;
-    }
-
-    .errorText100 {
-        font-size: 100%;
-        color: red;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .formHeaderText1 {
-        font-size: 125%;
-        font-weight: bold;
-    }
-
-    .formHeaderText2 {
-        font-size: 180%
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .table {
-        width: auto;
-        font-size: 115%;
-        border-spacing: 10px;
-    }
-
-    .up-padding {
-        padding-top: 100px;
-    }
 
     </style>
 </head>
@@ -144,70 +104,67 @@
 </div>
 
 
-<div class="page gray-page mh100">
-    <div class="up-padding" align="center">
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <span class="formHeaderText2">Certificate Details</span><br><br><br>
+    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
-        <span class="formHeaderText1">Enter certificate ID:</span><br><br>
+    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
-        <sf:form cssClass="buttonText" method="post" action="processCertificateDetails" commandName="newCertificate">
-            <c:if test="${empty error}"><input type="number" name="certificationId"/></c:if>
-            <c:if test="${!empty error}"><input type="number" name="certificationId" class="errorField"></c:if>
-            <input type="submit" value="Send">
-        </sf:form>
-        <br><br>
+    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
+        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
+        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
+        <input type="submit" value="Send">
+    </sf:form>
+    <br><br>
 
-        <c:if test="${!empty error}">
-            <h3><span class="errorText125">${error}</span></h3>
-        </c:if>
+    <c:if test="${error != null}">
+        <h3><span class="fontSize140 red">${error}</span></h3>
+    </c:if>
 
-        <c:if test="${empty error && !empty certificate}">
-            <table class="table">
-                <tr>
-                    <td>Certification ID:</td>
-                    <td>${String.format("%05d", certificate.certificationId)}</td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder First Name:</td>
-                    <td><span class="errorText100">
-                            <c:if test="${empty user.firstName}">No holder assigned</c:if></span>
-                        <c:if test="${!empty user.firstName}">${user.firstName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certificate Holder Last Name:</td>
-                    <td><span class="errorText100">
-                            <c:if test="${empty user.lastName}">No holder assigned</c:if></span>
-                        <c:if test="${!empty user.lastName}">${user.lastName}</c:if></td>
-                </tr>
-                <tr>
-                    <td>Certification Date:</td>
-                    <td>${certificate.certificationDate}</td>
-                </tr>
-                <tr>
-                    <td>Course Name:</td>
-                    <td>${certificate.courseName}</td>
-                </tr>
-                <tr>
-                    <td>Programming Language:</td>
-                    <td>${certificate.language}</td>
-                </tr>
-            </table>
-            <br>
-        </c:if>
-
-
-        <c:if test="${!empty user.photo}">
-            <sf:form method="get" action="/certificateHolderPhoto">
-                <input class="buttonText" type="submit" value="Show Certificate Holder Photo">
-            </sf:form>
-        </c:if>
+    <c:if test="${error == null && certificate != null}">
+        <table class="table fontSize140">
+            <tr>
+                <td>Certification ID:</td>
+                <td>${String.format("%05d", certificate.certificationId)}</td>
+            </tr>
+            <tr>
+                <td>Certificate Holder First Name:</td>
+                <td><span class="red">
+                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
+                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certificate Holder Last Name:</td>
+                <td><span class="red">
+                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
+                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certification Date:</td>
+                <td>${certificate.certificationDate}</td>
+            </tr>
+            <tr>
+                <td>Course Name:</td>
+                <td>${certificate.courseName}</td>
+            </tr>
+            <tr>
+                <td>Programming Language:</td>
+                <td>${certificate.language}</td>
+            </tr>
+        </table>
         <br>
+        <sf:form method="get" action="/userPhoto">
+            <input type="hidden" name="userId" value="${user.userId}"/>
+            <input type="hidden" name="previousPage" value="/certificateDetails"/>
+            <input class="black" type="submit" value="Show Certificate Holder Photo">
+        </sf:form>
+    </c:if>
 
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
+    <br>
+
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
 </div>
 

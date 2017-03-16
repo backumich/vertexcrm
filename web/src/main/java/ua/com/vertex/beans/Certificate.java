@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
-
 public class Certificate {
 
     public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();

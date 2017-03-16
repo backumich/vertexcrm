@@ -12,7 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.Date;
@@ -24,6 +24,7 @@ import java.util.Optional;
 
 @Repository
 public class CertificateDaoImpl implements CertificateDaoInf {
+
     private static final String USER_ID = "userId";
     private static final String CERTIFICATE_ID = "certificateId";
     private static final String CERTIFICATION_DATE = "certificationDate";
@@ -41,14 +42,11 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
 
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final Storage storage;
+    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
+    private static final String LOG_ALLCERT_OUT = "Retrieved all certificates by id=";
 
-    @Autowired
-    public CertificateDaoImpl(DataSource dataSource, Storage storage) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.storage = storage;
-    }
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final LogInfo logInfo;
 
     @Override
     public List<Certificate> getAllCertificatesByUserId(int userId) {
@@ -85,18 +83,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug(storage.getSessionId() + LOG_CERT_IN + certificateId);
+        LOGGER.debug(logInfo.getId() + "Retrieving certificate id=" + certificateId);
 
-        Certificate certificate;
+        Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            certificate = null;
-            LOGGER.error(storage.getSessionId() + LOG_NO_CERT + certificateId);
+            LOGGER.debug(logInfo.getId() + "No certificate in DB, id=" + certificateId);
         }
 
-        LOGGER.debug(storage.getSessionId() + LOG_CERT_OUT + certificateId);
+        LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
 
         return Optional.ofNullable(certificate);
     }
@@ -114,7 +111,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     private static final class ShortCertificateRowMapper implements RowMapper<Certificate> {
-
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Certificate.Builder()
                     .setCertificationId(resultSet.getInt(COLUMN_CERTIFICATE_ID))
@@ -122,6 +118,24 @@ public class CertificateDaoImpl implements CertificateDaoInf {
                     .setCertificationDate(resultSet.getDate(COLUMN_CERTIFICATION_DATE).toLocalDate())
                     .setCourseName(resultSet.getString(COLUMN_COURSE_NAME))
                     .setLanguage(null)
+                    .getInstance();
+        }
+    }
+
+    @Autowired
+    public CertificateDaoImpl(DataSource dataSource, LogInfo logInfo) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.logInfo = logInfo;
+    }
+
+    private static final class FullCertificateRowMapper implements RowMapper<Certificate> {
+        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Certificate.Builder()
+                    .setCertificationId(resultSet.getInt("certification_id"))
+                    .setUserId(resultSet.getInt("user_id"))
+                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
+                    .setCourseName(resultSet.getString("course_name"))
+                    .setLanguage(resultSet.getString("language"))
                     .getInstance();
         }
 

@@ -20,6 +20,17 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
     <script async="" src="../../javascript/analytics.js"></script>
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
+    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -43,6 +54,7 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
     </style>
 </head>
 <body class="inside footer-under">

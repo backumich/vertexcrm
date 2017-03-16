@@ -14,5 +14,6 @@ public interface CertificateDaoInf {
 
     int addCertificate(Certificate certificate) throws Exception;
 
+    List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 
 }

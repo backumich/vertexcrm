@@ -33,8 +33,9 @@
     <packaging>war</packaging>
 
     <dependencies>
+
+        <!--Spring-->
         <dependency>
-            <!--Spring-->
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.3.6.RELEASE</version>
@@ -69,6 +70,31 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
             <version>4.3.6.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>4.2.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.3.4.RELEASE</version>
         </dependency>
 
         <!--Servlet+JSTL+JSP-->
@@ -146,6 +172,17 @@
             <scope>test</scope>
         </dependency>
 
+        <!--Email-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>
