@@ -19,10 +19,6 @@ import java.util.Optional;
 public class CertificateLogicImpl implements CertificateLogic {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateLogicImpl.class);
-    private static final String LOG_ALLCERT = "Call - certificateDao.getAllCertificateByUserId(%s);";
-    private static final String LOG_ALLCERT_FULL_DATA = "Call - certificateDao.getAllCertificatesByUserIdFullData(%s);";
-    private static final String LOG_CERT = "Call - certificateDao.getCertificateById(%s);";
-
 
     private final UserDaoInf userDaoInf;
     private CertificateDaoInf certificateDaoInf;
@@ -39,7 +35,8 @@ public class CertificateLogicImpl implements CertificateLogic {
     }
 
     public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
-        LOGGER.debug(String.format(LOG_ALLCERT_FULL_DATA, Integer.toString(userId)));
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificatesByUserIdFullData(%s);"
+                , Integer.toString(userId)));
         return certificateDaoInf.getAllCertificatesByUserIdFullData(userId);
     }
 

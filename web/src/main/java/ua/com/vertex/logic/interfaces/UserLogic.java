@@ -2,6 +2,7 @@ package ua.com.vertex.logic.interfaces;
 
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;

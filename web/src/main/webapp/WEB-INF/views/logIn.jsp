@@ -141,55 +141,55 @@
 <div align="center" class="page gray-page mh100 up-padding">
     <span class="fontSize180 silver">Log into the system</span><br><br><br>
 
-        <c:if test="${param.error != null}">
-            <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
-        </c:if>
+    <c:if test="${param.error != null}">
+        <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
+    </c:if>
 
-        <c:if test="${param.logout != null}">
-            <p><span class="fontSize140 red">You have been logged out</span></p>
-        </c:if>
+    <c:if test="${param.logout != null}">
+        <p><span class="fontSize140 red">You have been logged out</span></p>
+    </c:if>
 
-        <form action="${pageContext.request.contextPath}/logIn" method="post">
-            <table>
-                <tr>
-                    <td><span class="fontSize125 bold silver">E-mail:</span></td>
-                    <c:if test="${param.error == null}">
-                        <td><input type="text" name="username"/></td>
-                    </c:if>
-                    <c:if test="${param.error != null}">
-                        <td><input type="text" name="username" class="errorField"/></td>
-                    </c:if>
-                </tr>
-                <tr>
-                    <td><span class="fontSize125 bold silver">Password:</span></td>
-                    <c:if test="${param.error == null}">
-                        <td><input type="password" name="password"/></td>
-                    </c:if>
-                    <c:if test="${param.error != null}">
-                        <td><input type="password" name="password" class="errorField"/></td>
-                    </c:if>
-                </tr>
-                <tr>
-                    <td align="right" colspan="2">
-                        <label for="remember_me" class="fontSize125 bold silver">Remember me</label>
-                        <input id="remember_me" name="remember-me" type="checkbox"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
-                </tr>
-                <tr>
-                    <td align="right" colspan="2"><input type="submit" value="Send" class="black"></td>
-                </tr>
-            </table>
-        </form>
+    <form action="${pageContext.request.contextPath}/logIn" method="post">
+        <table>
+            <tr>
+                <td><span class="fontSize125 bold silver">E-mail:</span></td>
+                <c:if test="${param.error == null}">
+                    <td><input type="text" name="username"/></td>
+                </c:if>
+                <c:if test="${param.error != null}">
+                    <td><input type="text" name="username" class="errorField"/></td>
+                </c:if>
+            </tr>
+            <tr>
+                <td><span class="fontSize125 bold silver">Password:</span></td>
+                <c:if test="${param.error == null}">
+                    <td><input type="password" name="password"/></td>
+                </c:if>
+                <c:if test="${param.error != null}">
+                    <td><input type="password" name="password" class="errorField"/></td>
+                </c:if>
+            </tr>
+            <tr>
+                <td align="right" colspan="2">
+                    <label for="remember_me" class="fontSize125 bold silver">Remember me</label>
+                    <input id="remember_me" name="remember-me" type="checkbox"/>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
+            </tr>
+            <tr>
+                <td align="right" colspan="2"><input type="submit" value="Send" class="black"></td>
+            </tr>
+        </table>
+    </form>
 
-        <br><br>
+    <br><br>
     <div class="href">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
     </div>
+</div>
 
 
 <div class="footer">

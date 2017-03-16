@@ -35,15 +35,9 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String COLUMN_CERTIFICATION_DATE = "certification_date";
     private static final String COLUMN_COURSE_NAME = "course_name";
     private static final String COLUMN_LANGUAGE = "language";
-    private static final String LOG_CERT_IN = "Retrieving certificate id=";
-    private static final String LOG_CERT_OUT = "Retrieved certificate id=";
-    private static final String LOG_NO_CERT = "No certificate in DB, id=";
-    private static final String LOG_ALL_CERTIFICATE_OUT = "Retrieved all certificates by id=";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
 
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
-    private static final String LOG_ALLCERT_OUT = "Retrieved all certificates by id=";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
@@ -54,7 +48,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, certification_date, course_name "
                 + "FROM Certificate WHERE user_id =:userId";
 
-        LOGGER.debug(LOG_ALL_CERTIFICATE_OUT + userId);
+        LOGGER.debug("Retrieved all certificates by id=" + userId);
 
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
     }
@@ -76,6 +70,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromCertificate(certificate), keyHolder);
         return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
+
+        String query = "SELECT certification_id,  user_id, certification_date, course_name, language "
+                + "FROM Certificate WHERE user_id =:userId";
+
+        LOGGER.debug("Retrieved all certificates by id=" + userId);
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
     }
 
     @Override
@@ -128,16 +133,4 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         this.logInfo = logInfo;
     }
 
-    private static final class FullCertificateRowMapper implements RowMapper<Certificate> {
-        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Certificate.Builder()
-                    .setCertificationId(resultSet.getInt("certification_id"))
-                    .setUserId(resultSet.getInt("user_id"))
-                    .setCertificationDate(resultSet.getDate("certification_date").toLocalDate())
-                    .setCourseName(resultSet.getString("course_name"))
-                    .setLanguage(resultSet.getString("language"))
-                    .getInstance();
-        }
-
-    }
 }

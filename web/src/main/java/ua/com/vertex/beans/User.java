@@ -7,18 +7,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Email;
-
-import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class User {
-
-    public int userId;
-
-    @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
-    @Email(message = "E-mail address format is incorrect")
 
     private final String NAME_MSG = "This field must be longer than 3 and less than  256 characters";
     private final String MAIL_MSG = "E-mail must be longer than 5 and less than 256 characters";
@@ -31,11 +23,9 @@ public class User {
 
     private String password;
 
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
     @Size(min = 2, max = 30, message = NAME_MSG)
     private String firstName;
 
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
     @Size(min = 2, max = 30, message = NAME_MSG)
     private String lastName;
 

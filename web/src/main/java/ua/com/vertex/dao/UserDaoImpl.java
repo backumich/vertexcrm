@@ -12,9 +12,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
-import ua.com.vertex.beans.Role;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.LogInfo;
@@ -32,18 +32,6 @@ import static ua.com.vertex.beans.Role.USER;
 @Repository
 
 public class UserDaoImpl implements UserDaoInf {
-    private static final String USER_ID = "userId";
-
-    private final String COLUMN_USER_ID = "user_id";
-    private final String COLUMN_USER_EMAIL = "email";
-    private final String COLUMN_FIRST_NAME = "first_name";
-    private final String COLUMN_LARST_NAME = "last_name";
-
-    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
-    private static final String LOG_USER_IN = "Retrieving user id=";
-    private static final String LOG_USER_OUT = "Retrieved user id=";
-    private static final String LOG_NO_USER = "No user id=";
-
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
 
@@ -53,6 +41,16 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String EMAIL = "email";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
+    private static final String COLUMN_USER_ID = "user_id";
+    private static final String COLUMN_USER_EMAIL = "email";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_FIRST_NAME = "first_name";
+    private static final String COLUMN_LAST_NAME = "last_name";
+    private static final String COLUMN_PHONE = "phone";
+    private static final String COLUMN_PASSPORT_SCAN = "passport_scan";
+    private static final String COLUMN_PHOTO = "photo";
+    private static final String COLUMN_DISCOUNT = "discount";
+    private static final String COLUMN_ROLE_ID = "role_id";
 
     @Override
     public Optional<User> getUser(int userId) {
@@ -65,7 +63,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No user id=" + userId);
+            LOGGER.warn(logInfo.getId() + "No user id=" + userId);
         }
 
         LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
@@ -84,7 +82,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No user email=" + email);
+            LOGGER.warn(logInfo.getId() + "No user email=" + email);
         }
 
         LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
@@ -104,7 +102,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("No email=" + email);
+            LOGGER.warn("No email=" + email);
         }
 
         LOGGER.debug("Retrieved user password, role, email=" + email);
@@ -174,72 +172,6 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
-    public int addUserForCreateCertificate(User user) {
-        String query = "INSERT INTO Users (email, first_name, last_name) " +
-                "VALUES (:email, :first_name, :last_name)";
-
-        LOGGER.debug(String.format("Try add user -(%s) ;", user));
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromUser(user), keyHolder);
-
-        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
-        return keyHolder.getKey().intValue();
-    }
-
-    private MapSqlParameterSource addParametrToMapSqlParameterSourceFromUser(User user) {
-        MapSqlParameterSource source = new MapSqlParameterSource();
-        source.addValue(COLUMN_USER_EMAIL, user.getEmail());
-        source.addValue(COLUMN_FIRST_NAME, user.getFirstName());
-        source.addValue(COLUMN_LARST_NAME, user.getLastName());
-        return source;
-    }
-
-    @Override
-    public List<User> searchUser(String userData) throws Exception {
-
-        String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
-                "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
-
-        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
-        return jdbcTemplate.query(query, (rs, i) -> new User.Builder()
-                .setUserId(rs.getInt(COLUMN_USER_ID))
-                .setEmail(rs.getString(COLUMN_USER_EMAIL))
-                .setFirstName(rs.getString(COLUMN_FIRST_NAME))
-                .setLastName(rs.getString(COLUMN_LARST_NAME))
-                .getInstance());
-    }
-
-    private static final class UserRowMapping implements RowMapper<User> {
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            LobHandler handler = new DefaultLobHandler();
-            return new User.Builder()
-                    .setUserId(resultSet.getInt("user_id"))
-                    .setEmail(resultSet.getString("email"))
-                    .setPassword(resultSet.getString("password"))
-                    .setFirstName(resultSet.getString("first_name"))
-                    .setLastName(resultSet.getString("last_name"))
-                    .setPassportScan(handler.getBlobAsBytes(resultSet, "passport_scan"))
-                    .setPhoto(handler.getBlobAsBytes(resultSet, "photo"))
-                    .setDiscount(resultSet.getInt("discount"))
-                    .setPhone(resultSet.getString("phone"))
-                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperLogIn implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString("email"))
-                    .setPassword(resultSet.getString("password"))
-                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
-    }
-
-    @Override
     public Optional<User> getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
@@ -249,15 +181,15 @@ public class UserDaoImpl implements UserDaoInf {
             User user = null;
             if (rs.getRow() == 1) {
                 user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setEmail(rs.getString("email"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setLastName(rs.getString("last_name"));
-                user.setPassportScan(rs.getBytes("passport_scan"));
-                user.setPhoto(rs.getBytes("photo"));
-                user.setDiscount(rs.getInt("discount"));
-                user.setPhone(rs.getString("phone"));
-                user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
+                user.setUserId(rs.getInt(COLUMN_USER_ID));
+                user.setEmail(rs.getString(COLUMN_USER_EMAIL));
+                user.setFirstName(rs.getString(COLUMN_FIRST_NAME));
+                user.setLastName(rs.getString(COLUMN_LAST_NAME));
+                user.setPassportScan(rs.getBytes(COLUMN_PASSPORT_SCAN));
+                user.setPhoto(rs.getBytes(COLUMN_PHOTO));
+                user.setDiscount(rs.getInt(COLUMN_DISCOUNT));
+                user.setPhone(rs.getString(COLUMN_PHONE));
+                user.setRole(rs.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER);
             }
             return user;
         }));
@@ -269,11 +201,11 @@ public class UserDaoImpl implements UserDaoInf {
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
-                setUserId(resultSet.getInt("user_id")).
-                setEmail(resultSet.getString("email")).
-                setFirstName(resultSet.getString("first_name")).
-                setLastName(resultSet.getString("last_name")).
-                setPhone(resultSet.getString("phone")).getInstance());
+                setUserId(resultSet.getInt(COLUMN_USER_ID)).
+                setEmail(resultSet.getString(COLUMN_USER_EMAIL)).
+                setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
+                setLastName(resultSet.getString(COLUMN_LAST_NAME)).
+                setPhone(resultSet.getString(COLUMN_PHONE)).getInstance());
     }
 
     @Override
@@ -327,8 +259,74 @@ public class UserDaoImpl implements UserDaoInf {
         return jdbcTemplate.update(query, parameters);
     }
 
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public int addUserForCreateCertificate(User user) {
+        String query = "INSERT INTO Users (email, first_name, last_name) " +
+                "VALUES (:email, :first_name, :last_name)";
+
+        LOGGER.debug(String.format("Try add user -(%s) ;", user));
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromUser(user), keyHolder);
+
+        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
+        return keyHolder.getKey().intValue();
+    }
+
+    private MapSqlParameterSource addParametrToMapSqlParameterSourceFromUser(User user) {
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue(COLUMN_USER_EMAIL, user.getEmail());
+        source.addValue(COLUMN_FIRST_NAME, user.getFirstName());
+        source.addValue(COLUMN_LAST_NAME, user.getLastName());
+        return source;
+    }
+
+    @Override
+    public List<User> searchUser(String userData) throws Exception {
+
+        String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
+                "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
+
+        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
+        return jdbcTemplate.query(query, (rs, i) -> new User.Builder()
+                .setUserId(rs.getInt(COLUMN_USER_ID))
+                .setEmail(rs.getString(COLUMN_USER_EMAIL))
+                .setFirstName(rs.getString(COLUMN_FIRST_NAME))
+                .setLastName(rs.getString(COLUMN_LAST_NAME))
+                .getInstance());
+    }
+
+    private static final class UserRowMapping implements RowMapper<User> {
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            LobHandler handler = new DefaultLobHandler();
+            return new User.Builder()
+                    .setUserId(resultSet.getInt(COLUMN_USER_ID))
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                    .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                    .setPassportScan(handler.getBlobAsBytes(resultSet, COLUMN_PASSPORT_SCAN))
+                    .setPhoto(handler.getBlobAsBytes(resultSet, COLUMN_PHOTO))
+                    .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
+                    .setPhone(resultSet.getString(COLUMN_PHONE))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
+    private static final class UserRowMapperLogIn implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
     @Autowired
-    public UserDaoImpl(DataSource dataSource, Storage storage) {
+    public UserDaoImpl(DataSource dataSource, LogInfo logInfo) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.logInfo = logInfo;
     }

@@ -126,28 +126,28 @@
 
     <span class="fontSize180 silver">Want to log out?</span><br><br><br>
 
-        <table>
-            <tr>
-                <td>
-                    <form action="${pageContext.request.contextPath}/logOut" method="post">
-                        <input type="submit" class="black" value="Yes"/>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                    </form>
-                </td>
-                <td>
-                    <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
-                        <input type="submit" class="black" value="No"/>
-                    </form>
-                </td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <td>
+                <form action="${pageContext.request.contextPath}/logOut" method="post">
+                    <input type="submit" class="black" value="Yes"/>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                </form>
+            </td>
+            <td>
+                <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
+                    <input type="submit" class="black" value="No"/>
+                </form>
+            </td>
+        </tr>
+    </table>
 
-        <br><br>
+    <br><br>
     <div class="href">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
     </div>
+</div>
 
 
 <div class="footer">

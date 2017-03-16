@@ -11,6 +11,8 @@ import java.util.Objects;
 
 public class Certificate {
 
+    private final String NAME_MSG = "This field must be longer than 1 and less than  256 characters";
+
     public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
@@ -21,9 +23,9 @@ public class Certificate {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate certificationDate;
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
+    @Size(min = 1, max = 256, message = NAME_MSG)
     private String courseName;
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
+    @Size(min = 1, max = 256, message = NAME_MSG)
     private String language;
 
     public Certificate() {

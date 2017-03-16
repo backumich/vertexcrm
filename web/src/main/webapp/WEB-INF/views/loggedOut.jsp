@@ -112,7 +112,7 @@
 
 
     <div class="href">
-            <a href="<c:url value="/"/>">Home</a>
+        <a href="<c:url value="/"/>">Home</a>
         </div>
 </div>
 

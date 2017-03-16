@@ -27,6 +27,7 @@ public class CertificateDetailsPageController {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
 
+    static final String ERROR_JSP = "error";
     private static final String USER = "user";
     private static final String CERTIFICATE = "certificate";
     private static final String NEW_CERTIFICATE = "newCertificate";

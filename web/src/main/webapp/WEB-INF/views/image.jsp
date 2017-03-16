@@ -112,20 +112,20 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-        <c:if test="${photo != null}">
-            <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
-        </c:if>
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
+    </c:if>
 
-        <c:if test="${passportScan != null}">
-            <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="no passport scan">
-        </c:if>
+    <c:if test="${passportScan != null}">
+        <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="no passport scan">
+    </c:if>
 
-        <br><br>
+    <br><br>
 
     <div class="href">
-            <a href="<c:url value="${page}"/>">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="<c:url value="${page}"/>">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
+    </div>
 
 </div>
 
