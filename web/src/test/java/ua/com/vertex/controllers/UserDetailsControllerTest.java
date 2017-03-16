@@ -127,12 +127,12 @@ public class UserDetailsControllerTest {
         user.setPhone("0000000000");
 
 
-        when(logic.getUserDetailsByID(-1)).thenReturn(null);
-        logic.getUserDetailsByID(-1);
+        when(logic.getUserDetailsByID(-1)).thenReturn(Optional.of(new User()));
+        //logic.getUserDetailsByID(-1);
 
-        //Optional<User> optional = logic.getUserDetailsByID(-1);
-        //assertEquals(null, optional.orElse(null));
-        //assertEquals(false, optional.isPresent());
+        Optional<User> optional = logic.getUserDetailsByID(-1);
+        //assertEquals(null, optional.orElse());
+        assertEquals(true, optional.isPresent());
 
 
     }
