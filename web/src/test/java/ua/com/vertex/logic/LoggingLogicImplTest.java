@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
@@ -39,7 +39,7 @@ public class LoggingLogicImplTest {
     private UserLogic userLogic;
 
     @Autowired
-    private UserDaoImpl userDao;
+    private UserDaoInf userDao;
 
     private static final String EXISTING_EMAIL = "33@test.com";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";

@@ -3,6 +3,7 @@ package ua.com.vertex.logic;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -12,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ import static ua.com.vertex.beans.Role.USER;
 public class UserLogicImplTest {
 
     @Autowired
-    private UserDaoImpl userDao;
+    private UserDaoInf userDao;
 
     private UserLogicImpl userLogic;
 
