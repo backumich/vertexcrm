@@ -10,7 +10,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@Import(WebConfig.class)
+@Import(RootConfig.class)
 @Profile("test")
 public class TestConfig {
 
