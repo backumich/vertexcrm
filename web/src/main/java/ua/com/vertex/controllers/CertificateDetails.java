@@ -19,14 +19,7 @@ public class CertificateDetails {
     private static final String LOG_REQ_IN = "Request to '/getCertificateDetails' with certificateId=";
     private static final String LOG_REQ_OUT = "Request to '/getCertificateDetails' return ";
 
-
     private CertificateLogic certificateLogic;
-
-    @Autowired
-    public CertificateDetails(CertificateLogic certificateLogic) {
-        this.certificateLogic = certificateLogic;
-    }
-
 
     @GetMapping(value = "/getCertificateDetails")
     public ModelAndView getCertificateDetails(@RequestParam("certificateDetails") int certificateId) {
@@ -46,4 +39,10 @@ public class CertificateDetails {
         LOGGER.info(LOG_REQ_OUT + result.getViewName());
         return result;
     }
+
+    @Autowired
+    public CertificateDetails(CertificateLogic certificateLogic) {
+        this.certificateLogic = certificateLogic;
+    }
+
 }

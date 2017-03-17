@@ -30,11 +30,6 @@ public class UserController {
 
     private final CertificateLogic certificateLogic;
 
-    @Autowired
-    public UserController(CertificateLogic certificateLogic) {
-        this.certificateLogic = certificateLogic;
-    }
-
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView user() {
         return new ModelAndView(USER_JSP);
@@ -55,5 +50,9 @@ public class UserController {
         return USER_JSP;
     }
 
+    @Autowired
+    public UserController(CertificateLogic certificateLogic) {
+        this.certificateLogic = certificateLogic;
+    }
 
 }

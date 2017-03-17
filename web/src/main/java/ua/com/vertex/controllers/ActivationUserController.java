@@ -25,11 +25,6 @@ public class ActivationUserController {
 
     private UserLogic userLogic;
 
-    @Autowired
-    public ActivationUserController(UserLogic userLogic) {
-        this.userLogic = userLogic;
-    }
-
     @GetMapping
     public ModelAndView activateUser(@RequestParam("activeUser") String encodedEmail) {
         ModelAndView modelAndView = new ModelAndView();
@@ -56,5 +51,11 @@ public class ActivationUserController {
 
         return modelAndView;
     }
+
+    @Autowired
+    public ActivationUserController(UserLogic userLogic) {
+        this.userLogic = userLogic;
+    }
+
 }
 

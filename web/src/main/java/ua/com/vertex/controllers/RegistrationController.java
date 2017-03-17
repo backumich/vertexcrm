@@ -33,13 +33,7 @@ public class RegistrationController {
 
     private RegistrationUserLogic registrationUserLogic;
 
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic) {
-        this.registrationUserLogic = registrationUserLogic;
-    }
-
-    @Autowired
-    private MailService mailService;
+    private final MailService mailService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
@@ -109,5 +103,12 @@ public class RegistrationController {
             bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
         }
     }
+
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic, MailService mailService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.mailService = mailService;
+    }
+
 }
 

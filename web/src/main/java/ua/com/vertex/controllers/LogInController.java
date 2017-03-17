@@ -7,14 +7,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.com.vertex.logic.LoggingLogicImpl;
+import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class LogInController {
 
     private final LogInfo logInfo;
-    private final LoggingLogicImpl loggingLogic;
+    private final LoggingLogic loggingLogic;
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
@@ -53,7 +53,7 @@ public class LogInController {
     }
 
     @Autowired
-    public LogInController(LogInfo logInfo, LoggingLogicImpl loggingLogic) {
+    public LogInController(LogInfo logInfo, LoggingLogic loggingLogic) {
         this.logInfo = logInfo;
         this.loggingLogic = loggingLogic;
     }
