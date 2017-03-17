@@ -19,7 +19,6 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static ua.com.vertex.beans.Role.USER;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
