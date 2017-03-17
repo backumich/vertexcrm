@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
@@ -108,9 +109,9 @@ public class UserDetailsControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getUserDetailsByIDRequestingWrongId() throws Exception {
         User testUser = new User();
-//        ModelAndView modelAndView = new ModelAndView();
         String passportScan = "passportScan";
         byte[] passportScanByte = passportScan.getBytes();
 
@@ -128,11 +129,10 @@ public class UserDetailsControllerTest {
 
 
         when(logic.getUserDetailsByID(-1)).thenReturn(Optional.of(new User()));
-        //logic.getUserDetailsByID(-1);
 
         Optional<User> optional = logic.getUserDetailsByID(-1);
-        //assertEquals(null, optional.orElse());
-        assertEquals(true, optional.isPresent());
+//        assertEquals(null, optional.orElse(null));
+//        assertEquals(true, optional.isPresent());
 
 
     }

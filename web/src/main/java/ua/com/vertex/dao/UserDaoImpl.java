@@ -191,8 +191,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
 
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId",
-                userID), (rs, i) -> {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), (rs, i) -> {
             User user = null;
             if (rs.getRow() == 1) {
                 user = new User();
