@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class AnonymousUserAccessRightsTest {
+public class LogInLogOutTest {
 
     @Autowired
     private WebApplicationContext context;

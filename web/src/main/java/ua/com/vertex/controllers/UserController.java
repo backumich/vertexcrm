@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.IdEncryptor;
+import ua.com.vertex.utils.Aes;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class UserController {
     private static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
     private static final String LOG_REQ_IN = "Request to '/getCertificateByUserId' with userId=";
     private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserId' return 'user.jsp' ";
+    private static final String KEY = "ArgentinaJamaica";
 
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
@@ -47,7 +48,7 @@ public class UserController {
         LOGGER.debug(LOG_REQ_IN + userId);
 
         List<Certificate> result = certificateLogic.getAllCertificatesByUserId(userId);
-        result.forEach(e -> e.setEncodedCertificationId(IdEncryptor.encode(e.getCertificationId())));
+        result.forEach(e -> e.setEncodedCertificationId(Aes.encrypt(String.valueOf(e.getCertificationId()), KEY)));
         model.addAttribute(CERTIFICATES, result);
 
         model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
@@ -56,6 +57,4 @@ public class UserController {
 
         return USER_JSP;
     }
-
-
 }

@@ -54,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(ADMIN_REQUESTS).hasAuthority(ADMIN.name())
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/logIn")
@@ -66,13 +67,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .permitAll()
+
                 .and()
                 .logout()
                 .logoutUrl("/logOut")
                 .logoutSuccessUrl("/")
+
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(VALIDITY_SECONDS)
+
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;

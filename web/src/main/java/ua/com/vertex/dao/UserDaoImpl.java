@@ -159,7 +159,6 @@ public class UserDaoImpl implements UserDaoInf {
             return new User.Builder()
                     .setUserId(resultSet.getInt("user_id"))
                     .setEmail(resultSet.getString("email"))
-                    .setPassword(resultSet.getString("password"))
                     .setFirstName(resultSet.getString("first_name"))
                     .setLastName(resultSet.getString("last_name"))
                     .setPassportScan(handler.getBlobAsBytes(resultSet, "passport_scan"))

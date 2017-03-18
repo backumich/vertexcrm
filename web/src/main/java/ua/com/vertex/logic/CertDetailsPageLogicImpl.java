@@ -10,7 +10,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.IdEncryptor;
+import ua.com.vertex.utils.Aes;
 import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
@@ -32,6 +32,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     private static final String CERTIFICATE = "certificate";
     private static final String CERTIFICATE_LINK = "certificateLink";
     private static final String ERROR = "error";
+    private static final String KEY = "ArgentinaJamaica";
 
     @Override
     public Optional<Certificate> getCertificateDetails(int certificationId) {
@@ -42,7 +43,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     public int decodeId(String certificateIdEncoded, Model model) {
         int certificateId = WRONG_ID;
         try {
-            certificateId = IdEncryptor.decode(certificateIdEncoded);
+            certificateId = Integer.parseInt(Aes.decrypt(certificateIdEncoded, KEY));
             model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e, e);

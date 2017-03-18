@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.AES;
+import ua.com.vertex.utils.Aes;
 
 
 @Controller
@@ -37,7 +37,7 @@ public class ActivationUserController {
         String email = "";
 
         try {
-            email = AES.decrypt(encodedEmail, DECRYPT_KEY);
+            email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Your link is not correct");
             modelAndView.setViewName(ERROR_JSP);

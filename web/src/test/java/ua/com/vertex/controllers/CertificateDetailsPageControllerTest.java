@@ -52,8 +52,8 @@ public class CertificateDetailsPageControllerTest {
 
     private static final int EXISTING_USER_ID = 22;
     private static final int EXISTING_CERT_ID = 222;
-    private static final String EXISTING_CERT_ID_ENC = "iQNPevRvEFBE6fypFaynIA==";
-    private static final String NOT_EXISTING_CERT_ID_ENC = "hTR8czTACBNS5cPU5movZQ==";
+    private static final String EXISTING_CERT_ID_ENC = "4fa70a1d04f2746b08248afa69df19e4";
+    private static final String NOT_EXISTING_CERT_ID_ENC = "00274718ec2443c64fa8b733f17bd1a9";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String CERTIFICATE_LINK = "certificateLink";
     private static final String GET_CERTIFICATE = "getCertificate";
@@ -73,10 +73,11 @@ public class CertificateDetailsPageControllerTest {
         user = new User.Builder()
                 .setUserId(EXISTING_USER_ID)
                 .setEmail("22@test.com")
-                .setPassword("password")
                 .setFirstName("FirstName")
                 .setLastName("LastName")
                 .setDiscount(0)
+                .setPhoto(new byte[]{100})
+                .setPassportScan(new byte[]{100})
                 .setPhone("38066 000 00 00")
                 .setRole(Role.USER)
                 .getInstance();

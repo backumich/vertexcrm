@@ -32,10 +32,8 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
     .en-markup-crop-options {
@@ -50,7 +48,6 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -69,7 +66,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -78,7 +74,6 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -112,27 +107,27 @@
 
     <span class="fontSize180 silver">Want to log out?</span><br><br><br>
 
-        <table>
-            <tr>
-                <td>
-                    <sf:form action="/logOut" method="post">
-                        <input type="submit" class="black buttonWidth" value="Yes"/>
-                    </sf:form>
-                </td>
-                <td>
-                    <sf:form action="/logOutRefuse" method="get">
-                        <input type="submit" class="black buttonWidth" value="No"/>
-                    </sf:form>
-                </td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <td>
+                <sf:form action="/logOut" method="post">
+                    <input type="submit" class="black buttonWidth" value="Yes"/>
+                </sf:form>
+            </td>
+            <td>
+                <sf:form action="/logOutRefuse" method="get">
+                    <input type="submit" class="black buttonWidth" value="No"/>
+                </sf:form>
+            </td>
+        </tr>
+    </table>
 
-        <br><br>
+    <br><br>
     <div class="href">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
     </div>
+</div>
 
 
 <div class="footer">
