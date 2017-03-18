@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,13 +23,13 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 public class UserDetailsControllerTest {
-
-
     @Mock
     private UserLogic logic;
 
@@ -54,7 +56,6 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerReturnedPassViewTest() throws Exception {
-//        when(logic.getUserDetailsByID(1)).thenReturn(new User());
         when(logic.getUserDetailsByID(1)).thenReturn(optional);
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("userDetails"))
@@ -111,7 +112,6 @@ public class UserDetailsControllerTest {
     @Test
     @WithMockUser
     public void getUserDetailsByIDRequestingWrongId() throws Exception {
-        User testUser = new User();
         String passportScan = "passportScan";
         byte[] passportScanByte = passportScan.getBytes();
 
@@ -127,14 +127,25 @@ public class UserDetailsControllerTest {
         user.setDiscount(10);
         user.setPhone("0000000000");
 
-
-        when(logic.getUserDetailsByID(-1)).thenReturn(Optional.of(new User()));
+        when(logic.getUserDetailsByID(-1)).thenReturn(Optional.empty());
 
         Optional<User> optional = logic.getUserDetailsByID(-1);
-//        assertEquals(null, optional.orElse(null));
-//        assertEquals(true, optional.isPresent());
-
-
+        assertEquals(null, optional.orElse(null));
     }
 
+    @Test
+    public void userDetailsControllerSaveUserDataReturnedPassViewTest() throws Exception {
+
+        MockMultipartFile multipartFile = new MockMultipartFile("file", new byte[]{1, 2, 3});
+
+        MockMvc mockMvc = standaloneSetup(userDetailsController)
+                .setSingleView(new InternalResourceView("userDetails"))
+                .build();
+        mockMvc.perform(post("/saveUserData")
+                //.param("userId", String.valueOf(1)))
+                .content(multipartFile.getBytes())
+                .param("user", String.valueOf(new User())))
+                .andExpect(status().isOk())
+                .andExpect(view().name("userDetails"));
+    }
 }

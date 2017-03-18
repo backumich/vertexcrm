@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
+//import sun.invoke.empty.Empty;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -190,23 +191,13 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
-
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), (rs, i) -> {
-            User user = null;
-            if (rs.getRow() == 1) {
-                user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setEmail(rs.getString("email"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setLastName(rs.getString("last_name"));
-                user.setPassportScan(rs.getBytes("passport_scan"));
-                user.setPhoto(rs.getBytes("photo"));
-                user.setDiscount(rs.getInt("discount"));
-                user.setPhone(rs.getString("phone"));
-                user.setRole(rs.getInt("role_id") == 1 ? ADMIN : USER);
-            }
-            return user;
-        }));
+        User user = null;
+        try {
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("Get user with a non-existent id " + userID);
+        }
+        return Optional.ofNullable(user);
     }
 
     @Override
