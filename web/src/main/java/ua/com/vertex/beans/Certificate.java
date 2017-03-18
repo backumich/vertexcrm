@@ -5,7 +5,6 @@ import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Objects;
 
-
 public class Certificate {
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)

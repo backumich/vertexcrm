@@ -22,7 +22,7 @@ public class UserFormRegistration {
     @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String lastName;
 
-    @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
+    @Size(min = 1, max = 15, message = "This field should not be longer than 15 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
             message = "Invalid telephone number format!")
     /* regex to validate phone numbers   ^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$

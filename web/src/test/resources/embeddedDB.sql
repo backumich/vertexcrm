@@ -24,8 +24,8 @@ CREATE TABLE Certificate
 
 CREATE TABLE Roles
 (
-  role_id INT(11)     NOT NULL AUTO_INCREMENT,
-  name    VARCHAR(50) NOT NULL,
+  role_id     INT(11)       NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(50)   NOT NULL,
   PRIMARY KEY (role_id)
 );
 
@@ -59,3 +59,7 @@ VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
 VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
+
+INSERT INTO Users(user_id, email, password, first_name, last_name , discount, phone, role_id)
+VALUES(10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
+

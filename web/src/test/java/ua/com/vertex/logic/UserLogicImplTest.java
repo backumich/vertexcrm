@@ -66,7 +66,6 @@ public class UserLogicImplTest {
                 .setPhone("38066 000 00 00")
                 .setRole(USER)
                 .getInstance();
-
         assertEquals(user, optional.get());
     }
 
