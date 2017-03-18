@@ -34,7 +34,7 @@ public class CertDetailsPageLogicImplTest {
     }
 
     @Test
-    public void certificateOptionalForCertificateStoredInDBShouldBeReturned() {
+    public void getCertificateDetailsInvokesDao() {
         certLogic.getCertificateDetails(EXISTING_CERT_ID);
         verify(dao, times(1)).getCertificateById(EXISTING_CERT_ID);
     }
