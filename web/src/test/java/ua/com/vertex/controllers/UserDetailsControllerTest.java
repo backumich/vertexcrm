@@ -3,16 +3,27 @@ package ua.com.vertex.controllers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -20,27 +31,38 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = MainTestContext.class)
+@WebAppConfiguration
+@ActiveProfiles("test")
+
 public class UserDetailsControllerTest {
+    @Autowired
+    private WebApplicationContext context;
+
+    MockMvc mockMvc;
+
     @Mock
     private UserLogic logic;
 
     @Mock
     private CertificateLogic certificateLogic;
 
-    @Mock
     private UserDetailsController userDetailsController;
 
     @Mock
     ModelAndView modelAndView;
+
+    @Mock
+    BindingResult bindingResult;
 
     private User user;
     private Optional<User> optional;
@@ -49,7 +71,7 @@ public class UserDetailsControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userDetailsController = new UserDetailsController(logic, certificateLogic);
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).dispatchOptions(true).build();
         user = new User.Builder().getInstance();
         optional = Optional.ofNullable(user);
     }
@@ -135,17 +157,14 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerSaveUserDataReturnedPassViewTest() throws Exception {
+        MockMultipartFile passportScan = new MockMultipartFile("data", "fakePassportScan.png", "text/plain", "fakePassportScan".getBytes());
+        MockMultipartFile photo = new MockMultipartFile("data", "fakePhoto.png", "text/plain", "fakePhoto".getBytes());
 
-        MockMultipartFile multipartFile = new MockMultipartFile("file", new byte[]{1, 2, 3});
-
-        MockMvc mockMvc = standaloneSetup(userDetailsController)
-                .setSingleView(new InternalResourceView("userDetails"))
-                .build();
-        mockMvc.perform(post("/saveUserData")
-                //.param("userId", String.valueOf(1)))
-                .content(multipartFile.getBytes())
-                .param("user", String.valueOf(new User())))
+        mockMvc.perform(post("/saveUserData"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("userDetails"));
+                .andExpect(model().size(4))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("allRoles"))
+                .andExpect(model().attributeExists("certificates"));
     }
 }
