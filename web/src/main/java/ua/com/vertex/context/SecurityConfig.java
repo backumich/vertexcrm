@@ -50,8 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http.authorizeRequests()
-                .antMatchers(UNAUTHENTICATED_REQUESTS)
-                .permitAll()
+                .antMatchers(UNAUTHENTICATED_REQUESTS).permitAll()
                 .antMatchers(ADMIN_REQUESTS).hasAuthority(ADMIN.name())
                 .anyRequest().authenticated()
 

@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,7 +15,7 @@ public class UserLogicImplTest {
     @Mock
     private UserDaoInf dao;
 
-    private UserLogicImpl logic;
+    private UserLogic logic;
 
     private static final String EMAIL = "33@test.com";
     private static final String PHOTO = "photo";

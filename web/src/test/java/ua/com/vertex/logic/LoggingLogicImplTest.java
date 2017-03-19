@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
@@ -25,7 +25,7 @@ public class LoggingLogicImplTest {
     private UserLogic userLogic;
 
     @Mock
-    private UserDaoImpl userDao;
+    private UserDaoInf userDao;
 
     private LoggingLogic loggingLogic;
 

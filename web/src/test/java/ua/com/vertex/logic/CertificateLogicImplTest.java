@@ -4,7 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ua.com.vertex.dao.CertificateDaoImpl;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -12,10 +13,10 @@ import static org.mockito.Mockito.verify;
 
 public class CertificateLogicImplTest {
 
-    private CertificateLogicImpl certificateLogic;
+    private CertificateLogic certificateLogic;
 
     @Mock
-    private CertificateDaoImpl certificateDao;
+    private CertificateDaoInf certificateDao;
 
     @Before
     public void setUp() throws Exception {
