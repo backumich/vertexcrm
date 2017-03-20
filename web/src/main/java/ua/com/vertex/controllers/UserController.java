@@ -43,7 +43,7 @@ public class UserController {
 
         String eMail = logInfo.getEmail();
         LOGGER.debug(LOG_REQ_IN + eMail);
-        List<Certificate> result = certificateLogic.getAllCertificatesByEmail(eMail);
+        List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(eMail);
         result.forEach(e -> e.setEncodedCertificationId(Aes.encrypt(String.valueOf(e.getCertificationId()), KEY)));
         model.addAttribute(CERTIFICATES, result);
 

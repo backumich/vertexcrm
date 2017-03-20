@@ -44,7 +44,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private final LogInfo logInfo;
 
     @Override
-    public List<Certificate> getAllCertificatesByEmail(String eMail) {
+    public List<Certificate> getAllCertificatesByUserEmail(String eMail) {
 
         String query = "SELECT c.certification_id,c.user_id, c.certification_date, c.course_name " +
                 "FROM Certificate c INNER JOIN  Users u ON c.user_id = u.user_id WHERE email = :userEmail";

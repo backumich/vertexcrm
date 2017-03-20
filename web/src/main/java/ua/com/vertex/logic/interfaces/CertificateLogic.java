@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CertificateLogic {
 
-    List<Certificate> getAllCertificatesByEmail(String eMail);
+    List<Certificate> getAllCertificatesByUserEmail(String eMail);
 
     List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 

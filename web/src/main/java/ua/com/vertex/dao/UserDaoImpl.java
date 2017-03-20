@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
     private static final String COLUMN_ROLE_ID = "role_id";
-    private static final String COLUMN_IS_ACTIVE = "is_active";
+
     @Override
     public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +

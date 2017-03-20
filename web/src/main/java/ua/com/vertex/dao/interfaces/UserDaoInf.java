@@ -17,6 +17,7 @@ public interface UserDaoInf {
 
     Optional<User> logIn(String username);
 
+    @SuppressWarnings("unused")
     void deleteUser(int id);
 
     List<Integer> getAllUserIds();

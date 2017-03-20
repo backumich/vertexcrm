@@ -116,6 +116,7 @@ public class User {
             return this;
         }
 
+        @SuppressWarnings("unused")
         public Builder setIsActive(boolean isActive) {
             user.setActive(isActive);
             return this;
