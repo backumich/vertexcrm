@@ -26,6 +26,7 @@ import java.util.Optional;
 public class CertificateDaoImpl implements CertificateDaoInf {
 
     private static final String USER_ID = "userId";
+    private static final String USER_EMAIL = "userEmail";
     private static final String CERTIFICATE_ID = "certificateId";
     private static final String CERTIFICATION_DATE = "certificationDate";
     private static final String COURSE_NAME = "courseName";
@@ -43,14 +44,14 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private final LogInfo logInfo;
 
     @Override
-    public List<Certificate> getAllCertificatesByUserId(int userId) {
+    public List<Certificate> getAllCertificatesByEmail(String eMail) {
 
-        String query = "SELECT certification_id, certification_date, course_name "
-                + "FROM Certificate WHERE user_id =:userId";
+        String query = "SELECT c.certification_id,c.user_id, c.certification_date, c.course_name " +
+                "FROM Certificate c INNER JOIN  Users u ON c.user_id = u.user_id WHERE email = :userEmail";
 
-        LOGGER.debug("Retrieved all certificates by id=" + userId);
+        LOGGER.debug("Retrieved all certificates by eMail=" + eMail);
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new ShortCertificateRowMapper());
+        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_EMAIL, eMail), new ShortCertificateRowMapper());
     }
 
     private MapSqlParameterSource addParametrToMapSqlParameterSourceFromCertificate(Certificate certificate) {
@@ -88,8 +89,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        LOGGER.debug(logInfo.getId() + "Retrieving certificate id=" + certificateId);
-
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
@@ -98,7 +97,9 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             LOGGER.debug(logInfo.getId() + "No certificate in DB, id=" + certificateId);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
+        if (certificate != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
+        }
 
         return Optional.ofNullable(certificate);
     }

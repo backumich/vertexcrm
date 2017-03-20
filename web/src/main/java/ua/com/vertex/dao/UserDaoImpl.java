@@ -51,13 +51,11 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
     private static final String COLUMN_ROLE_ID = "role_id";
-
+    private static final String COLUMN_IS_ACTIVE = "is_active";
     @Override
     public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
-
-        LOGGER.debug(logInfo.getId() + "Retrieving user, id=" + userId);
 
         User user = null;
         try {
@@ -66,7 +64,9 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.warn(logInfo.getId() + "No user id=" + userId);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
+        if (user != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -76,8 +76,6 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug(logInfo.getId() + "Retrieving user, email=" + email);
-
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
@@ -85,7 +83,9 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.warn(logInfo.getId() + "No user email=" + email);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
+        if (user != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -93,8 +93,6 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public Optional<User> logIn(String email) {
         String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
-
-        LOGGER.debug("Retrieving user password, role, email=" + email);
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -105,7 +103,9 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.warn("No email=" + email);
         }
 
-        LOGGER.debug("Retrieved user password, role, email=" + email);
+        if (user != null) {
+            LOGGER.debug("Retrieved user password, role, email=" + email);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -128,8 +128,6 @@ public class UserDaoImpl implements UserDaoInf {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
 
-        LOGGER.debug(logInfo.getId() + "Saving image, user id=" + userId + ", " + imageType);
-
         if (PHOTO.equals(imageType)) {
             query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
             parameters.addValue(PHOTO, image);
@@ -139,7 +137,7 @@ public class UserDaoImpl implements UserDaoInf {
             parameters.addValue(PASSPORT_SCAN, image);
 
         } else {
-            throw new RuntimeException("Image not saved: wrong image type description");
+            throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
         }
 
         LOGGER.debug(logInfo.getId() + "image saved");
@@ -152,8 +150,6 @@ public class UserDaoImpl implements UserDaoInf {
         byte[] image;
         String query;
 
-        LOGGER.debug(logInfo.getId() + "Retrieving image, user id=" + userId + ", " + imageType);
-
         if (PHOTO.equals(imageType)) {
             query = "SELECT photo FROM Users WHERE user_id=:userId";
 
@@ -161,12 +157,12 @@ public class UserDaoImpl implements UserDaoInf {
             query = "SELECT passport_scan FROM Users WHERE user_id=:userId";
 
         } else {
-            throw new RuntimeException("Wrong image type description");
+            throw new RuntimeException("Wrong image type description: " + imageType);
         }
 
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
 
-        LOGGER.debug(logInfo.getId() + "image retrieved");
+        LOGGER.debug(logInfo.getId() + "Image of userId=" + userId + " retrieved");
 
         return Optional.ofNullable(image);
     }

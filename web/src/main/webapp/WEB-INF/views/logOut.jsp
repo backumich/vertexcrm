@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -31,10 +32,8 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
     .en-markup-crop-options {
@@ -48,22 +47,6 @@
 
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0px !important;
-    }
-
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .button {
-        width: 100px;
-    }
-
-    .up-padding {
-        padding-top: 100px;
     }
     </style>
 </head>
@@ -83,7 +66,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -92,7 +74,6 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -129,15 +110,14 @@
     <table>
         <tr>
             <td>
-                <form action="${pageContext.request.contextPath}/logOut" method="post">
-                    <input type="submit" class="black" value="Yes"/>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                </form>
+                <sf:form action="/logOut" method="post">
+                    <input type="submit" class="black buttonWidth" value="Yes"/>
+                </sf:form>
             </td>
             <td>
-                <form action="${pageContext.request.contextPath}/logOutRefuse" method="get">
-                    <input type="submit" class="black" value="No"/>
-                </form>
+                <sf:form action="/logOutRefuse" method="get">
+                    <input type="submit" class="black buttonWidth" value="No"/>
+                </sf:form>
             </td>
         </tr>
     </table>

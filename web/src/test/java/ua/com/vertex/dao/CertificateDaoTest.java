@@ -9,21 +9,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class CertificateDaoTest {
@@ -53,25 +50,25 @@ public class CertificateDaoTest {
         assertEquals(null, optional.orElse(null));
     }
 
-    @Test
-    public void getAllCertificateByUserIdReturnNotNull() throws Exception {
-        List<Certificate> result = certificateDao.getAllCertificatesByUserId(-1);
-        assertNotNull(MSG, result);
-    }
-
-    @Test
-    public void getAllCertificateByUserIdReturnNotEmpty() throws Exception {
-        assertFalse(certificateDao.getAllCertificatesByUserId(1).isEmpty());
-    }
-
-    @Test
-    public void getAllCertificateByUserIdReturnCorectData() throws Exception {
-        ArrayList<Certificate> certificates = new ArrayList<>();
-        certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
-                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage(null).getInstance());
-        assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserId(1));
-    }
+//    @Test
+//    public void getAllCertificateByUserIdReturnNotNull() throws Exception {
+//        List<Certificate> result = certificateDao.getAllCertificatesByUserId(-1);
+//        assertNotNull(MSG, result);
+//    }
+//
+//    @Test
+//    public void getAllCertificateByUserIdReturnNotEmpty() throws Exception {
+//        assertFalse(certificateDao.getAllCertificatesByUserId(1).isEmpty());
+//    }
+//
+//    @Test
+//    public void getAllCertificateByUserIdReturnCorectData() throws Exception {
+//        ArrayList<Certificate> certificates = new ArrayList<>();
+//        certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
+//                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
+//                .setLanguage(null).getInstance());
+//        assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserId(1));
+//    }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)

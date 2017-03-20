@@ -44,6 +44,8 @@ public class User {
 
     private Role role;
 
+    private boolean isActive;
+
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
     public User() {
@@ -114,6 +116,11 @@ public class User {
             return this;
         }
 
+        public Builder setIsActive(boolean isActive) {
+            user.setActive(isActive);
+            return this;
+        }
+
         public User getInstance() {
             return user;
         }
@@ -132,6 +139,7 @@ public class User {
                 ", discount=" + discount +
                 ", phone='" + phone + '\'' +
                 ", role=" + role +
+                ", isActive=" + isActive +
                 '}';
     }
 
@@ -149,12 +157,13 @@ public class User {
                 Arrays.equals(passportScan, user.passportScan) &&
                 Arrays.equals(photo, user.photo) &&
                 Objects.equals(phone, user.phone) &&
+                Objects.equals(isActive, user.isActive) &&
                 role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role);
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role, isActive);
     }
 
     public int getUserId() {
@@ -243,5 +252,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
-import ua.com.vertex.utils.AES;
+import ua.com.vertex.utils.Aes;
 import ua.com.vertex.utils.MailService;
 
 import javax.validation.Valid;
@@ -33,7 +33,13 @@ public class RegistrationController {
 
     private RegistrationUserLogic registrationUserLogic;
 
-    private final MailService mailService;
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic) {
+        this.registrationUserLogic = registrationUserLogic;
+    }
+
+    @Autowired
+    private MailService mailService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
@@ -47,7 +53,7 @@ public class RegistrationController {
         //---
 //        String stringEmailAES = "";
 //        try {
-//            stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
+//            stringEmailAES = Aes.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
 //        } catch (Exception e) {
 //            LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
 //        }
@@ -71,7 +77,7 @@ public class RegistrationController {
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
                 String stringEmailAES = "";
                 try {
-                    stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
+                    stringEmailAES = Aes.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
                 } catch (Exception e) {
                     LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
                 }
@@ -103,12 +109,4 @@ public class RegistrationController {
             bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
         }
     }
-
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic, MailService mailService) {
-        this.registrationUserLogic = registrationUserLogic;
-        this.mailService = mailService;
-    }
-
 }
-

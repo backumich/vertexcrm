@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -50,6 +51,9 @@
         margin-left: 0px !important;
     }
 
+    .hrefText {
+        font-size: 120%;
+    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -108,15 +112,44 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize180 silver">You are logged out</span><br><br><br>
+
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
+    </c:if>
+
+    <br><br>
+
+    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+        <sf:hidden path="userId" value="${user.userId}"/>
+        <sf:hidden path="firstName" value="${user.firstName}"/>
+        <sf:hidden path="lastName" value="${user.lastName}"/>
+        <sf:hidden path="email" value="${user.email}"/>
+        <sf:hidden path="discount" value="${user.discount}"/>
+        <input type="hidden" name="imageType" value="photo"/>
+        <table>
+            <tr>
+                <td class="silver"><input type="file" name="image" accept="image/jpeg, image/png"/></td>
+            </tr>
+            <tr>
+                <td><input class="black" type="submit" value="Upload New Photo"></td>
+            </tr>
+        </table>
+    </sf:form>
+
+    <br><br>
 
 
     <div class="href">
+        <a href="<c:url value="/logIn"/>">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
-        </div>
+    </div>
+
 </div>
 
 
+<div class="wrapper">
+
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">

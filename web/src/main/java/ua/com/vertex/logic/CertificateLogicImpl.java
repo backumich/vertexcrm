@@ -29,9 +29,9 @@ public class CertificateLogicImpl implements CertificateLogic {
         this.userDaoInf = userDaoInf;
     }
 
-    public List<Certificate> getAllCertificatesByUserId(int userId) {
-        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", Integer.toString(userId)));
-        return certificateDaoInf.getAllCertificatesByUserId(userId);
+    public List<Certificate> getAllCertificatesByEmail(String eMail) {
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", eMail));
+        return certificateDaoInf.getAllCertificatesByEmail(eMail);
     }
 
     public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
