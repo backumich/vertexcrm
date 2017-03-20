@@ -22,11 +22,6 @@ public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     private final UserDaoInf userDao;
 
-    @Autowired
-    public UserLogicImpl(UserDaoInf userDao) {
-        this.userDao = userDao;
-    }
-
     @Override
     public List<String> getAllUserIds() {
         LOGGER.debug("Call - userDao.getAllUserIds() ;");
@@ -83,4 +78,10 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
         return userDao.searchUser(userData);
     }
+
+    @Autowired
+    public UserLogicImpl(UserDaoInf userDao) {
+        this.userDao = userDao;
+    }
+
 }

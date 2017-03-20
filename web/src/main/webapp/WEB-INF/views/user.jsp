@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -103,10 +103,7 @@
     <div class="container pt1_5" align="centr">
 
         <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
-            <label>
-                <input type="number" name="userId" value="certificateId"/>
-            </label>
-            <input type="submit" name="enter" value="enter"/>
+            <input type="submit" name="enter" value="Show certificate"/>
         </form>
         <c:if test="${listCertificatesIsEmpty==true}">
             <h1>You do not have certificates!!!</h1>
@@ -126,11 +123,8 @@
                         <td>${certificate.certificationDate}</td>
                         <td>${certificate.courseName}</td>
                         <td>
-                            <form action="${pageContext.request.contextPath}/getCertificateDetails" method="get">
-                                <button type="submit" name="certificateDetails" value="${certificate.certificationId}"
-                                        class="btn-link">Details
-                                </button>
-                            </form>
+                            <a href="<c:url value="/getCertificate/${certificate.encodedCertificationId}"/>">
+                                Details</a>
                         </td>
                     </tr>
                 </c:forEach>

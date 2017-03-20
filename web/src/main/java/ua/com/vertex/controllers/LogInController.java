@@ -7,31 +7,33 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.com.vertex.logic.LoggingLogicImpl;
+import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class LogInController {
 
     private final LogInfo logInfo;
-    private final LoggingLogicImpl loggingLogic;
+    private final LoggingLogic loggingLogic;
 
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
 
     private static final String LOGIN = "logIn";
     private static final String ERROR = "error";
     private static final String ANONYMOUS_USER = "anonymousUser";
+    private static final String ANONYMOUS = "anonymous";
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {
+
         String view = LOGIN;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if (!ANONYMOUS_USER.equals(principal)) {
+            if (!ANONYMOUS_USER.equals(principal) && !ANONYMOUS.equals(principal)) {
                 view = loggingLogic.setUser(logInfo.getEmail(), model);
             }
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 
@@ -45,7 +47,7 @@ public class LogInController {
         try {
             view = loggingLogic.setUser(logInfo.getEmail(), model);
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 
@@ -53,7 +55,7 @@ public class LogInController {
     }
 
     @Autowired
-    public LogInController(LogInfo logInfo, LoggingLogicImpl loggingLogic) {
+    public LogInController(LogInfo logInfo, LoggingLogic loggingLogic) {
         this.logInfo = logInfo;
         this.loggingLogic = loggingLogic;
     }

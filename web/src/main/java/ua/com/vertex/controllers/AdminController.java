@@ -21,7 +21,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import javax.validation.Valid;
 import java.util.List;
 
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR_JSP;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
 public class AdminController {
@@ -81,7 +81,7 @@ public class AdminController {
                 }
                 result = SELECT_USER_JSP;
             } catch (Exception e) {
-                result = ERROR_JSP;
+                result = ERROR;
                 LOGGER.warn(e);
             }
         }
@@ -116,7 +116,7 @@ public class AdminController {
                 returnPage = ADMIN_JSP;
                 LOGGER.info(LOG_CERTIFICATE_ADDED + result);
             } catch (Exception e) {
-                returnPage = ERROR_JSP;
+                returnPage = ERROR;
                 LOGGER.warn(e);
             }
         }
@@ -154,7 +154,7 @@ public class AdminController {
                 returnPage = ADD_CERTIFICATE_AND_USER_JSP;
                 LOGGER.warn(e);
             } catch (Exception e) {
-                returnPage = ERROR_JSP;
+                returnPage = ERROR;
                 LOGGER.warn(e);
             }
         }

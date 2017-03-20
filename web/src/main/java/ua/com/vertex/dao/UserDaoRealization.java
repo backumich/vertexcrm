@@ -27,11 +27,6 @@ public class UserDaoRealization implements UserDaoRealizationInf {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
     public User getUser(long id) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone FROM Users WHERE user_id=:id";
@@ -96,5 +91,11 @@ public class UserDaoRealization implements UserDaoRealizationInf {
                     setPhone(resultSet.getString("phone")).getInstance();
         }
     }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
 }
 

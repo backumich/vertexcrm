@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,8 +14,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -24,8 +25,9 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("ALL")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class UserDaoTest {
@@ -42,6 +44,8 @@ public class UserDaoTest {
     private static final int EXISTING_ID2 = 33;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     private static final String EXISTING_EMAIL = "22@test.com";
+    private static final String EXISTING_FIRST_NAME = "FirstName";
+    private static final String EXISTING_LAST_NAME = "LastName";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
@@ -54,8 +58,8 @@ public class UserDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        user = new User.Builder().setUserId(22).setEmail("email").setFirstName("FirstName")
-                .setLastName("LastName").setDiscount(0).getInstance();
+        user = new User.Builder().setUserId(EXISTING_ID1).setEmail(EXISTING_EMAIL).setFirstName(EXISTING_FIRST_NAME)
+                .setLastName(EXISTING_LAST_NAME).setDiscount(0).getInstance();
     }
 
     @Test
@@ -145,6 +149,7 @@ public class UserDaoTest {
     }
 
     @Test(expected = RuntimeException.class)
+    @WithMockUser
     public void saveImageThrowsExceptionIfWrongImageType() throws Exception {
         byte[] image = {1};
         userDao.saveImage(EXISTING_ID1, image, WRONG_IMAGE_TYPE);
@@ -171,9 +176,9 @@ public class UserDaoTest {
         assertEquals(null, optional.orElse(null));
     }
 
-    @Test(expected = DataAccessException.class)
+    @Test(expected = EmptyResultDataAccessException.class)
     @WithMockUser
-    public void getImageThrowsExceptionForNotExistingUser() {
+    public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() {
         userDao.getImage(NOT_EXISTING_ID, PHOTO);
     }
 
@@ -193,7 +198,7 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.size(), 3);
+        assertEquals(MSG, users.size(), 4);
         assertEquals(MSG, users.get(1), user);
 
     }
@@ -202,10 +207,9 @@ public class UserDaoTest {
     @Transactional
     public void addUserForCreateCertificateReturnCorrectData() throws Exception {
         User userForTest = new User.Builder().setEmail("email33").setFirstName("Test")
-                .setLastName("Test").getInstance();
+                .setLastName("Test").setRole(Role.USER).getInstance();
         int result = userDao.addUserForCreateCertificate(userForTest);
         userForTest.setUserId(result);
-        //noinspection OptionalGetWithoutIsPresent
         assertEquals(MSG, userForTest, userDao.getUser(result).get());
     }
 

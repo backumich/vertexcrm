@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.*;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR_JSP;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 
 public class AdminControllerTest {
@@ -122,7 +122,7 @@ public class AdminControllerTest {
     @Test
     public void searchUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
         when(userLogic.searchUser("Test")).thenThrow(new Exception("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR_JSP);
+        assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class AdminControllerTest {
     public void checkCertificateWithUserIdReturnCorrectViewWhenException() throws Exception {
         when(certificateLogic.addCertificate(certificate)).thenThrow(new Exception("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
-                , ERROR_JSP);
+                , ERROR);
     }
 
     @Test
@@ -205,7 +205,7 @@ public class AdminControllerTest {
         when(certificateLogic.addCertificateAndCreateUser(certificate
                 , user)).thenThrow(new Exception("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
-                , ERROR_JSP);
+                , ERROR);
     }
 
     @Test

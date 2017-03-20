@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.utils.LogInfo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class LogOutControllerTest {
@@ -45,15 +45,6 @@ public class LogOutControllerTest {
                 .build();
         mockMvc.perform(get("/logOut"))
                 .andExpect(view().name("logOut"));
-    }
-
-    @Test
-    public void showLogOutPageForLoggedOutUserReturnsCorrectView() throws Exception {
-        mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("loggedOut"))
-                .build();
-        mockMvc.perform(get("/loggedOut"))
-                .andExpect(view().name("loggedOut"));
     }
 
     @Test

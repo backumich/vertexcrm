@@ -108,13 +108,14 @@
 
     <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
-    <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
+    <c:if test="${certificateLink == null}">
+        <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
 
-    <sf:form cssClass="black" method="post" action="processCertificateDetails" commandName="newCertificate">
-        <c:if test="${error == null}"><input type="number" name="certificationId"/></c:if>
-        <c:if test="${error != null}"><input type="number" name="certificationId" class="errorField"></c:if>
-        <input type="submit" value="Send">
-    </sf:form>
+        <sf:form cssClass="black" method="post" action="getCertificate">
+            <input type="text" name="certificateIdEncoded"/>
+            <input type="submit" value="Send">
+        </sf:form>
+    </c:if>
     <br><br>
 
     <c:if test="${error != null}">
@@ -151,11 +152,16 @@
                 <td>Programming Language:</td>
                 <td>${certificate.language}</td>
             </tr>
+            <tr>
+                <td>Certificate Link:</td>
+                <td class="fontSize70">localhost:8080/getCertificate/${certificateLink}</td>
+            </tr>
         </table>
         <br>
-        <sf:form method="get" action="/userPhoto">
+        <sf:form method="get" action="/showImage" commandName="user">
             <input type="hidden" name="userId" value="${user.userId}"/>
-            <input type="hidden" name="previousPage" value="/certificateDetails"/>
+            <input type="hidden" name="pageToDisplay" value="image"/>
+            <input type="hidden" name="imageType" value="photo"/>
             <input class="black" type="submit" value="Show Certificate Holder Photo">
         </sf:form>
     </c:if>

@@ -14,6 +14,7 @@ public class Certificate {
     private final String NAME_MSG = "This field must be longer than 1 and less than  256 characters";
 
     public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
+
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
@@ -27,8 +28,47 @@ public class Certificate {
     private String courseName;
     @Size(min = 1, max = 256, message = NAME_MSG)
     private String language;
+    private String encodedCertificationId;
+
 
     public Certificate() {
+    }
+
+    public static class Builder {
+        private final Certificate instance;
+
+        public Builder() {
+            instance = new Certificate();
+        }
+
+        public Builder setCertificationId(int id) {
+            instance.setCertificationId(id);
+            return this;
+        }
+
+        public Builder setUserId(int id) {
+            instance.setUserId(id);
+            return this;
+        }
+
+        public Builder setCertificationDate(LocalDate date) {
+            instance.setCertificationDate(date);
+            return this;
+        }
+
+        public Builder setCourseName(String name) {
+            instance.setCourseName(name);
+            return this;
+        }
+
+        public Builder setLanguage(String language) {
+            instance.setLanguage(language);
+            return this;
+        }
+
+        public Certificate getInstance() {
+            return instance;
+        }
     }
 
     @Override
@@ -99,40 +139,11 @@ public class Certificate {
         this.language = language;
     }
 
-    public static class Builder {
-        private final Certificate instance;
+    public String getEncodedCertificationId() {
+        return encodedCertificationId;
+    }
 
-        public Builder() {
-            instance = new Certificate();
-        }
-
-        public Builder setCertificationId(int id) {
-            instance.setCertificationId(id);
-            return this;
-        }
-
-        public Builder setUserId(int id) {
-            instance.setUserId(id);
-            return this;
-        }
-
-        public Builder setCertificationDate(LocalDate date) {
-            instance.setCertificationDate(date);
-            return this;
-        }
-
-        public Builder setCourseName(String name) {
-            instance.setCourseName(name);
-            return this;
-        }
-
-        public Builder setLanguage(String language) {
-            instance.setLanguage(language);
-            return this;
-        }
-
-        public Certificate getInstance() {
-            return instance;
-        }
+    public void setEncodedCertificationId(String encodedCertificationId) {
+        this.encodedCertificationId = encodedCertificationId;
     }
 }
