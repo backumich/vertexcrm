@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@SuppressWarnings("ALL")
 public class Certificate {
 
     private final String NAME_MSG = "This field must be longer than 1 and less than  256 characters";

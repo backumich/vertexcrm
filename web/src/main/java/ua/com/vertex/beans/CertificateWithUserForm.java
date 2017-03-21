@@ -1,6 +1,5 @@
 package ua.com.vertex.beans;
 
-
 import javax.validation.Valid;
 
 public class CertificateWithUserForm {
@@ -18,10 +17,9 @@ public class CertificateWithUserForm {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CertificateWithUserForm)) return false;
-
         CertificateWithUserForm that = (CertificateWithUserForm) o;
-
-        return (getCertificate() != null ? getCertificate().equals(that.getCertificate()) : that.getCertificate() == null) && (getUser() != null ? getUser().equals(that.getUser()) : that.getUser() == null);
+        return (getCertificate() != null ? getCertificate().equals(that.getCertificate()) : that.getCertificate() == null)
+                && (getUser() != null ? getUser().equals(that.getUser()) : that.getUser() == null);
     }
 
     @Override

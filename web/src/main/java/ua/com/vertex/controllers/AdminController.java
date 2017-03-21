@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
@@ -47,19 +45,19 @@ public class AdminController {
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
 
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @GetMapping(value = "/admin")
     public ModelAndView admin() {
         LOGGER.debug("Request to '/admin' redirect to page - " + ADMIN_JSP);
         return new ModelAndView(ADMIN_JSP);
     }
 
-    @RequestMapping(value = "/addCertificateWithUserId", method = RequestMethod.POST)
+    @PostMapping(value = "/addCertificateWithUserId")
     public ModelAndView addCertificateWithUserId() {
         LOGGER.debug(LOG_REQ_SELECT_USER + SELECT_USER_JSP);
         return new ModelAndView(SELECT_USER_JSP);
     }
 
-    @RequestMapping(value = "/searchUser", method = RequestMethod.POST)
+    @PostMapping(value = "/searchUser")
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
 
         LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
@@ -90,7 +88,7 @@ public class AdminController {
         return result;
     }
 
-    @RequestMapping(value = "/selectUser", method = RequestMethod.POST)
+    @PostMapping(value = "/selectUser")
     public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
         LOGGER.debug(String.format(LOG_REQ_SELECT_USER, userId) + SELECT_USER_JSP);
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
@@ -98,7 +96,7 @@ public class AdminController {
         return result;
     }
 
-    @RequestMapping(value = "/checkCertificateWithUserId", method = RequestMethod.POST)
+    @PostMapping(value = "/checkCertificateWithUserId")
     public String checkCertificateWithUserId(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                              BindingResult bindingResult, Model model) {
 
@@ -125,13 +123,13 @@ public class AdminController {
         return returnPage;
     }
 
-    @RequestMapping(value = "/addCertificateAndCreateUser", method = RequestMethod.POST)
+    @PostMapping(value = "/addCertificateAndCreateUser")
     public ModelAndView addCertificateAndCreateUser() {
         LOGGER.debug(LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER + ADD_CERTIFICATE_AND_USER_JSP);
         return new ModelAndView(ADD_CERTIFICATE_AND_USER_JSP, CERTIFICATE_WITH_USER_FORM, new CertificateWithUserForm());
     }
 
-    @RequestMapping(value = "/checkCertificateAndUser", method = RequestMethod.POST)
+    @PostMapping(value = "/checkCertificateAndUser")
     public String checkCertificateAndUser(@Validated @ModelAttribute(CERTIFICATE_WITH_USER_FORM) CertificateWithUserForm certificateWithUserForm,
                                           BindingResult bindingResult, @Valid Model model) {
 

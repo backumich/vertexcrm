@@ -2,7 +2,6 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-@SuppressWarnings("ALL")
 public class Payments {
     private int paytmensId;
     private int dealId;

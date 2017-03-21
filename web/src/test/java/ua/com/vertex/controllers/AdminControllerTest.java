@@ -2,8 +2,9 @@ package ua.com.vertex.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.*;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class AdminControllerTest {
 
     private final String MSG_INVALID_DATA = "Have wrong objects in model";
@@ -49,7 +50,6 @@ public class AdminControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         underTest = new AdminController(certificateLogic, userLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
@@ -59,12 +59,6 @@ public class AdminControllerTest {
         certificateWithUserForm = new CertificateWithUserForm();
         certificateWithUserForm.setCertificate(certificate);
         certificateWithUserForm.setUser(user);
-    }
-
-    @Test
-    public void logicNotBeNull() throws Exception {
-        assertNotNull(userLogic);
-        assertNotNull(certificateLogic);
     }
 
     @Test
@@ -91,7 +85,7 @@ public class AdminControllerTest {
         when(userLogic.searchUser("Test")).thenReturn(new ArrayList<>());
         assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), SELECT_USER_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-        assertNotNull(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertNotNull(MSG_INVALID_DATA, model.asMap().get(MSG));
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(USERS));
         assertNotNull(MSG_INVALID_DATA, model.containsAttribute(USERS));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_USER_NOT_FOUND));

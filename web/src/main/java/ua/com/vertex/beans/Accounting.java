@@ -1,6 +1,6 @@
 package ua.com.vertex.beans;
 
-@SuppressWarnings("ALL")
+
 public class Accounting {
     private int dealId;
     private int userId;
