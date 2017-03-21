@@ -103,10 +103,7 @@
     <div class="container pt1_5" align="centr">
 
         <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
-            <label>
-                <input type="number" name="userId" value="certificateId"/>
-            </label>
-            <input type="submit" name="enter" value="enter"/>
+            <input type="submit" name="enter" value="Show certificate"/>
         </form>
         <c:if test="${listCertificatesIsEmpty==true}">
             <h1>You do not have certificates!!!</h1>

@@ -73,6 +73,7 @@ public class CertificateDetailsPageControllerTest {
         user = new User.Builder()
                 .setUserId(EXISTING_USER_ID)
                 .setEmail("22@test.com")
+                .setPassword("password")
                 .setFirstName("FirstName")
                 .setLastName("LastName")
                 .setDiscount(0)

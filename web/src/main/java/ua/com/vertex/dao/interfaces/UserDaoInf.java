@@ -17,6 +17,7 @@ public interface UserDaoInf {
 
     Optional<User> logIn(String username);
 
+    @SuppressWarnings("unused")
     void deleteUser(int id);
 
     List<Integer> getAllUserIds();
@@ -34,4 +35,9 @@ public interface UserDaoInf {
     Optional<byte[]> getImage(int userId, String imageType);
 
     int activateUser(String email);
+
+    int addUserForCreateCertificate(User user);
+
+    List<User> searchUser(String userData) throws Exception;
+
 }

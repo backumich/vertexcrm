@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -51,5 +52,17 @@ public class UserLogicImplTest {
     public void getImageInvokesDao() throws Exception {
         logic.getImage(EXISTING_ID, PHOTO);
         verify(dao, times(1)).getImage(EXISTING_ID, PHOTO);
+    }
+
+    @Test
+    public void getAllUserIdsCalledInUserDaoAndReturnNotNull() throws Exception {
+        assertNotNull(logic.getAllUserIds());
+        verify(dao).getAllUserIds();
+    }
+
+    @Test
+    public void searchUserCalledInUserDaoAndReturnNotNull() throws Exception {
+        assertNotNull(logic.searchUser("test"));
+        verify(dao).searchUser("test");
     }
 }

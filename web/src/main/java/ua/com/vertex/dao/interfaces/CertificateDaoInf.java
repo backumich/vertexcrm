@@ -10,7 +10,9 @@ public interface CertificateDaoInf {
 
     Optional<Certificate> getCertificateById(int certificateId);
 
-    List<Certificate> getAllCertificatesByUserId(int userId);
+    List<Certificate> getAllCertificatesByUserEmail(String eMail);
+
+    int addCertificate(Certificate certificate) throws Exception;
 
     List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 

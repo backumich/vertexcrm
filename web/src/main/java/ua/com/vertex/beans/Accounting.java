@@ -1,5 +1,6 @@
 package ua.com.vertex.beans;
 
+
 public class Accounting {
     private int dealId;
     private int userId;

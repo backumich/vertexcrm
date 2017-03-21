@@ -113,17 +113,17 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-        <c:if test="${photo != null}">
-            <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
-        </c:if>
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
+    </c:if>
 
-        <br><br>
+    <br><br>
 
 
     <div class="href">
         <a href="<c:url value="/certificateDetails"/>">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="<c:url value="/"/>">Home</a>
+    </div>
 
 </div>
 
