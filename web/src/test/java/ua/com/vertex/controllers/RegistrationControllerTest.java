@@ -35,7 +35,7 @@ public class RegistrationControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        registrationController = new RegistrationController(registrationUserLogic);
+        registrationController = new RegistrationController(registrationUserLogic, userLogic, userLogic1);
     }
 
     @Test

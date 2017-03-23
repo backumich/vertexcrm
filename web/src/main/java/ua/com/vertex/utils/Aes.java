@@ -1,9 +1,12 @@
 package ua.com.vertex.utils;
 
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class Aes {
 
@@ -35,7 +38,7 @@ public class Aes {
         return safe;
     }
 
-    public static String encrypt(String value, String password) {
+    public static String encrypt(String value, String password) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
         byte[] encrypted = {};
         try {
             SecretKey key = new SecretKeySpec(safePassword(password).getBytes("UTF-8"), "Aes");

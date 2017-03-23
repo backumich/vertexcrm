@@ -57,6 +57,7 @@ public class UserController {
 
             view = USER_JSP;
         } catch (Exception e) {
+            LOGGER.warn(e);
             view = ERROR;
         }
 

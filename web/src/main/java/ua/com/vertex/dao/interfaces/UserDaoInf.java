@@ -26,6 +26,8 @@ public interface UserDaoInf {
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 
+    Optional<User> isRegisteredEmail(String userEmail) throws Exception;
+
     EnumMap<Role, Role> getAllRoles();
 
     int saveUserData(User user);

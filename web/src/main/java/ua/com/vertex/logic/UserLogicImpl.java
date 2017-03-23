@@ -79,6 +79,12 @@ public class UserLogicImpl implements UserLogic {
         return userDao.searchUser(userData);
     }
 
+    @Override
+    public Optional<User> isRegisteredEmail(String userEmail) throws Exception {
+        LOGGER.debug(String.format("Call - userDao.isRegisteredEmail(%s) ;", userEmail));
+        return userDao.isRegisteredEmail(userEmail);
+    }
+
     @Autowired
     public UserLogicImpl(UserDaoInf userDao) {
         this.userDao = userDao;

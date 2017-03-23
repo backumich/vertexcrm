@@ -51,6 +51,7 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
     private static final String COLUMN_ROLE_ID = "role_id";
+    private static final String COLUMN_IS_ACTIVE = "is_active";
 
     @Override
     public Optional<User> getUser(int userId) {
@@ -192,6 +193,27 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
+    public Optional<User> isRegisteredEmail(String userEmail) throws Exception {
+
+        LOGGER.debug(String.format("Call - isRegisteredEmail(%s) ;", userEmail));
+        String query = "SELECT email, is_active FROM Users u WHERE email=:userEmail";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, userEmail);
+
+        User user = null;
+
+        try {
+            user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperRegistrationCheck());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("isRegisteredEmail(%s) return empty user");
+        }
+        if (user != null) {
+            LOGGER.warn(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
+        }
+        return Optional.ofNullable(user);
+    }
+
+    @Override
     public List<User> getAllUsers() throws SQLException {
         LOGGER.debug("Get a list of all users");
 
@@ -317,6 +339,16 @@ public class UserDaoImpl implements UserDaoInf {
                     .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                     .setPassword(resultSet.getString(COLUMN_PASSWORD))
                     .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
+    private static final class UserRowMapperRegistrationCheck implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
                     .getInstance();
         }
     }

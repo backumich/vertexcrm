@@ -32,4 +32,5 @@ public interface UserLogic {
 
     List<User> searchUser(String userData) throws Exception;
 
+    Optional<User> isRegisteredEmail(String userEmail) throws Exception;
 }
