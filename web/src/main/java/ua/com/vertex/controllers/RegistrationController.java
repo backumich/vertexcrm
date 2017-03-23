@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
+import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
-import ua.com.vertex.utils.AES;
 import ua.com.vertex.utils.MailService;
 
 import javax.validation.Valid;
@@ -26,44 +26,30 @@ public class RegistrationController {
     static final String REGISTRATION_PAGE = "registration";
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     private static final String REGISTRATION_ERROR_PAGE = "registrationError";
-    private static final String NAME_USER_MODEL_FOR_REGISTRATION_PAGE = "userFormRegistration";
-    private static final String ENCRYPT_KEY = "VeRtEx AcAdeMy";
+    private static final String NAME_MODEL = "userFormRegistration";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private RegistrationUserLogic registrationUserLogic;
+    private EmailLogic emailLogic;
+    private final MailService mailService;
 
     @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic) {
+    public RegistrationController(RegistrationUserLogic registrationUserLogic, EmailLogic emailLogic, MailService mailService) {
         this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
     }
-
-    @Autowired
-    private MailService mailService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
         LOGGER.info("First request to " + REGISTRATION_PAGE);
-        return new ModelAndView(REGISTRATION_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, new UserFormRegistration());
+        return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 
     @PostMapping
-    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE)
+    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
                                                     UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
-        //---
-//        String stringEmailAES = "";
-//        try {
-//            stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
-//        } catch (Exception e) {
-//            LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
-//        }
-//        try {
-//            mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123",
-//                    "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
-//        } catch (Exception e) {
-//            LOGGER.warn("While mail sending error occurred " + userFormRegistration.getEmail());
-//        }
-        //-----
         isMatchPassword(userFormRegistration, bindingResult);
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
@@ -75,24 +61,20 @@ public class RegistrationController {
                 int userID = registrationUserLogic.registrationUser(new User(userFormRegistration));
                 modelAndView.addObject("userID", userID);
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                String stringEmailAES = "";
+
                 try {
-                    stringEmailAES = AES.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY);
-                } catch (Exception e) {
-                    LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail());
-                }
-                try {
-                    mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123",
-                            "http://localhost:8080/activationUser?activeUser=" + stringEmailAES);
+                    String bodyMessage = emailLogic.createRegistrationMessage(userFormRegistration);
+                    mailService.sendMail("vertex.academy.robot@gmail.com",
+                            userFormRegistration.getEmail(), "Confirmation of registration",
+                            bodyMessage);
                 } catch (Exception e) {
                     LOGGER.warn("While mail sending error occurred " + userFormRegistration.getEmail());
                 }
-
             } catch (DataAccessException e) {
                 modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
             }
         }
-        modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+        modelAndView.addObject(NAME_MODEL, userFormRegistration);
         return modelAndView;
     }
 

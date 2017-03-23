@@ -16,7 +16,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
-//@SessionAttributes("users")
 public class UserDetailsController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "userDetails";

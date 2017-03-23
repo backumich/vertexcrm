@@ -1,28 +1,54 @@
 package ua.com.vertex.controllers;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.context.MainTestContext;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-public class UserDetailsControllerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = MainTestContext.class)
+@WebAppConfiguration
+@ActiveProfiles("test")
 
+public class UserDetailsControllerTest {
+    @Autowired
+    private WebApplicationContext context;
+
+    MockMvc mockMvc;
 
     @Mock
     private UserLogic logic;
@@ -30,11 +56,13 @@ public class UserDetailsControllerTest {
     @Mock
     private CertificateLogic certificateLogic;
 
-    @Mock
     private UserDetailsController userDetailsController;
 
     @Mock
     ModelAndView modelAndView;
+
+    @Mock
+    BindingResult bindingResult;
 
     private User user;
     private Optional<User> optional;
@@ -43,14 +71,13 @@ public class UserDetailsControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userDetailsController = new UserDetailsController(logic, certificateLogic);
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(userDetailsController).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).dispatchOptions(true).build();
         user = new User.Builder().getInstance();
         optional = Optional.ofNullable(user);
     }
 
     @Test
     public void userDetailsControllerReturnedPassViewTest() throws Exception {
-//        when(logic.getUserDetailsByID(1)).thenReturn(new User());
         when(logic.getUserDetailsByID(1)).thenReturn(optional);
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("userDetails"))
@@ -73,67 +100,71 @@ public class UserDetailsControllerTest {
                 .andExpect(view().name("error"));
     }
 
-//    @Test
-//    public void viewAllUsersControllerCheckDataTest() throws Exception {
-//        String passportScan = "passportScan";
-//        byte[] passportScanByte = passportScan.getBytes();
-//
-//        String photo = "photo";
-//        byte[] photoByte = photo.getBytes();
-//
-//        User testUser = new User();
-//        testUser.setUserId(1);
-//        testUser.setEmail("chewed.mole@gmail.com");
-//        testUser.setLastName("Bond");
-//        testUser.setFirstName("James");
-//        testUser.setPassportScan(passportScanByte);
-//        testUser.setPhoto(photoByte);
-//        testUser.setDiscount(10);
-//        testUser.setPhone("0000000000");
-//
-//        when(logic.getUserDetailsByID(1)).thenReturn(testUser);
-//        Assert.assertNotNull(testUser);
-//
-//        Assert.assertEquals(1, testUser.getUserId());
-//        Assert.assertEquals("chewed.mole@gmail.com", testUser.getEmail());
-//        Assert.assertEquals("Bond", testUser.getLastName());
-//        Assert.assertEquals("James", testUser.getFirstName());
-//        Assert.assertEquals("passportScan", new String(testUser.getPassportScan()));
-//        Assert.assertEquals("photo", new String(testUser.getPhoto()));
-//        Assert.assertEquals(10, testUser.getDiscount());
-//        Assert.assertEquals("0000000000", testUser.getPhone());
-//    }
-
     @Test
-    public void getUserDetailsByIDRequestingWrongId() throws Exception {
+    public void viewAllUsersControllerCheckDataTest() throws Exception {
+        String passportScan = "passportScan";
+        byte[] passportScanByte = passportScan.getBytes();
 
+        String photo = "photo";
+        byte[] photoByte = photo.getBytes();
 
-//        String passportScan = "passportScan";
-//        byte[] passportScanByte = passportScan.getBytes();
-//
-//        String photo = "photo";
-//        byte[] photoByte = photo.getBytes();
-//
-//        user.setUserId(1);
-//        user.setEmail("chewed.mole@gmail.com");
-//        user.setLastName("Bond");
-//        user.setFirstName("James");
-//        user.setPassportScan(passportScanByte);
-//        user.setPhoto(photoByte);
-//        user.setDiscount(10);
-//        user.setPhone("0000000000");
+        User testUser = new User();
+        testUser.setUserId(1);
+        testUser.setEmail("chewed.mole@gmail.com");
+        testUser.setLastName("Bond");
+        testUser.setFirstName("James");
+        testUser.setPassportScan(passportScanByte);
+        testUser.setPhoto(photoByte);
+        testUser.setDiscount(10);
+        testUser.setPhone("0000000000");
 
+        when(logic.getUserDetailsByID(1)).thenReturn(Optional.ofNullable(testUser));
+        Assert.assertNotNull(testUser);
 
-//        when(logic.getUserDetailsByID(1)).thenReturn(new User());
-//        userDetailsController.getUserDetails(1);
-//        verify(modelAndView).setViewName("userDetails");
-//
-//        when(logic.getUserDetailsByID(-1)).thenReturn(null);
-//
-//        userDetailsController.getUserDetails(-1);
-//        verify(modelAndView).setViewName("error");
-
-
+        Assert.assertEquals(1, testUser.getUserId());
+        Assert.assertEquals("chewed.mole@gmail.com", testUser.getEmail());
+        Assert.assertEquals("Bond", testUser.getLastName());
+        Assert.assertEquals("James", testUser.getFirstName());
+        Assert.assertEquals("passportScan", new String(testUser.getPassportScan()));
+        Assert.assertEquals("photo", new String(testUser.getPhoto()));
+        Assert.assertEquals(10, testUser.getDiscount());
+        Assert.assertEquals("0000000000", testUser.getPhone());
     }
 
+    @Test
+    @WithMockUser
+    public void getUserDetailsByIDRequestingWrongId() throws Exception {
+        String passportScan = "passportScan";
+        byte[] passportScanByte = passportScan.getBytes();
+
+        String photo = "photo";
+        byte[] photoByte = photo.getBytes();
+
+        user.setUserId(1);
+        user.setEmail("chewed.mole@gmail.com");
+        user.setLastName("Bond");
+        user.setFirstName("James");
+        user.setPassportScan(passportScanByte);
+        user.setPhoto(photoByte);
+        user.setDiscount(10);
+        user.setPhone("0000000000");
+
+        when(logic.getUserDetailsByID(-1)).thenReturn(Optional.empty());
+
+        Optional<User> optional = logic.getUserDetailsByID(-1);
+        assertEquals(null, optional.orElse(null));
+    }
+
+    @Test
+    public void userDetailsControllerSaveUserDataReturnedPassViewTest() throws Exception {
+        MockMultipartFile passportScan = new MockMultipartFile("data", "fakePassportScan.png", "text/plain", "fakePassportScan".getBytes());
+        MockMultipartFile photo = new MockMultipartFile("data", "fakePhoto.png", "text/plain", "fakePhoto".getBytes());
+
+        mockMvc.perform(post("/saveUserData"))
+                .andExpect(status().isOk())
+                .andExpect(model().size(4))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("allRoles"))
+                .andExpect(model().attributeExists("certificates"));
+    }
 }
