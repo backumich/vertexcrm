@@ -21,7 +21,7 @@ public class CertificateDetailsPageController {
 
     private static final int WRONG_ID = -1;
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
-    private static final String ERROR = "error";
+    static final String ERROR = "error";
 
     @RequestMapping(value = "/certificateDetails")
     public String showCertificateDetailsPage() {

@@ -2,7 +2,7 @@ CREATE TABLE Users
 (
   user_id       INT(11)      NOT NULL AUTO_INCREMENT,
   email         VARCHAR(255) NOT NULL,
-  password      VARCHAR(255) NOT NULL,
+  password      VARCHAR(255),
   first_name    VARCHAR(50)  NOT NULL,
   last_name     VARCHAR(50)  NOT NULL,
   passport_scan BLOB,
@@ -15,7 +15,7 @@ CREATE TABLE Users
 
 CREATE TABLE Certificate
 (
-  certification_id   INT PRIMARY KEY,
+  certification_id   INT AUTO_INCREMENT PRIMARY KEY,
   user_id            INT,
   certification_date DATE         NOT NULL,
   course_name        VARCHAR(500) NOT NULL,
@@ -24,8 +24,8 @@ CREATE TABLE Certificate
 
 CREATE TABLE Roles
 (
-  role_id     INT(11)       NOT NULL AUTO_INCREMENT,
-  name        VARCHAR(50)   NOT NULL,
+  role_id INT(11)     NOT NULL AUTO_INCREMENT,
+  name    VARCHAR(50) NOT NULL,
   PRIMARY KEY (role_id)
 );
 
@@ -60,6 +60,6 @@ VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java');
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language)
 VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
 
-INSERT INTO Users(user_id, email, password, first_name, last_name , discount, phone, role_id)
-VALUES(10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
+INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
+VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 

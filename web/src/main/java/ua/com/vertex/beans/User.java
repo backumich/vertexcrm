@@ -12,18 +12,21 @@ import java.util.Objects;
 
 public class User {
 
-    public int userId;
+    private final String NAME_MSG = "This field must be longer than 3 and less than  256 characters";
+    private final String MAIL_MSG = "E-mail must be longer than 5 and less than 256 characters";
+    private final String MAIL_FORMAT_MSG = "E-mail address format is incorrect";
 
-    @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
-    @Email(message = "E-mail address format is incorrect")
+    private int userId;
+    @Size(min = 5, max = 256, message = MAIL_MSG)
+    @Email(message = MAIL_FORMAT_MSG)
     private String email;
 
     private String password;
 
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
+    @Size(min = 2, max = 30, message = NAME_MSG)
     private String firstName;
 
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than 256 characters")
+    @Size(min = 2, max = 30, message = NAME_MSG)
     private String lastName;
 
     private byte[] passportScan;
@@ -40,6 +43,8 @@ public class User {
     private String phone;
 
     private Role role;
+
+    private boolean isActive;
 
     public static final User EMPTY_USER = new Builder().setUserId(-1).getInstance();
 
@@ -111,6 +116,12 @@ public class User {
             return this;
         }
 
+        @SuppressWarnings("unused")
+        public Builder setIsActive(boolean isActive) {
+            user.setActive(isActive);
+            return this;
+        }
+
         public User getInstance() {
             return user;
         }
@@ -129,6 +140,7 @@ public class User {
                 ", discount=" + discount +
                 ", phone='" + phone + '\'' +
                 ", role=" + role +
+                ", isActive=" + isActive +
                 '}';
     }
 
@@ -146,12 +158,13 @@ public class User {
                 Arrays.equals(passportScan, user.passportScan) &&
                 Arrays.equals(photo, user.photo) &&
                 Objects.equals(phone, user.phone) &&
+                Objects.equals(isActive, user.isActive) &&
                 role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role);
+        return Objects.hash(userId, email, password, firstName, lastName, passportScan, photo, discount, phone, role, isActive);
     }
 
     public int getUserId() {
@@ -240,5 +253,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

@@ -51,7 +51,7 @@ $(document).ready(function () {
 
     $(window).scroll(function () {
         showNavbar();
-    })
+    });
 
     $('.slider-logo').slick({
         infinite: true,
@@ -150,7 +150,7 @@ $(document).ready(function () {
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $('.slider-person').slick('setPosition');
-    })
+    });
 
 
     $('.c-a-slider').slick({
@@ -241,7 +241,7 @@ $(document).ready(function () {
         $(".video").fadeIn(800);
     });
     $('.box-video').on("YTPTime", function (e) {
-        console.log("YTPTime")
+        console.log("YTPTime");
         var currentTime = e.time;
         if (currentTime == 16) {
             $(".video").fadeOut(800);
@@ -259,7 +259,7 @@ $(document).ready(function () {
     });
     $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
         tileSliderJoin();
-    })
+    });
 
     $('.tile-slider').each(function () {
         var thEl = $(this);
@@ -267,7 +267,6 @@ $(document).ready(function () {
         if (thEl.find('.slick-arrow').length) {
             thEl.find('.btns-split-slider').addClass('active');
         }
-        ;
     });
 
     // $(".load-popup").click(function(){
@@ -281,8 +280,8 @@ $(document).ready(function () {
             type: 'POST',
             success: function (html) {
                 if (html = "done") {
-                    alert("Письмо успешно отправлено")
-                    $('#myModal').modal('hide')
+                    alert("Письмо успешно отправлено");
+                    $('#myModal').modal('hide');
                     clearForm($('#myModal'));
                 } else {
                     alert("Произошла ошибка. Повторите позже.")
@@ -300,7 +299,7 @@ $(document).ready(function () {
             type: 'POST',
             success: function (html) {
                 if (html = "done") {
-                    alert("Письмо успешно отправлено")
+                    alert("Письмо успешно отправлено");
                     clearForm($('#sendmessage-footer'));
                 } else {
                     alert("Произошла ошибка. Повторите позже.")
@@ -317,9 +316,9 @@ $(document).ready(function () {
             data: $('#subscribe-form').serialize(),
             type: 'POST',
             success: function (html) {
-                console.log(html)
+                console.log(html);
                 if (html = "done") {
-                    alert("Вы подписаны на новости!")
+                    alert("Вы подписаны на новости!");
                     clearForm($('#subscribe-form'));
                 } else {
                     alert("Произошла ошибка. Повторите позже.")
@@ -329,7 +328,7 @@ $(document).ready(function () {
         return false;
     });
 
-})
+});
 
 // function hideSly(){
 // 	console.log("hide");

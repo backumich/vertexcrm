@@ -25,12 +25,6 @@ public class UserDetailsController {
     private UserLogic userLogic;
     private CertificateLogic certificateLogic;
 
-    @Autowired
-    public UserDetailsController(UserLogic userLogic, CertificateLogic certificateLogic) {
-        this.userLogic = userLogic;
-        this.certificateLogic = certificateLogic;
-    }
-
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
@@ -134,5 +128,12 @@ public class UserDetailsController {
     private boolean checkImageFile(MultipartFile file) {
         return !file.isEmpty() && file.getContentType().split("/")[0].equals("image");
     }
+
+    @Autowired
+    public UserDetailsController(UserLogic userLogic, CertificateLogic certificateLogic) {
+        this.userLogic = userLogic;
+        this.certificateLogic = certificateLogic;
+    }
+
 }
 

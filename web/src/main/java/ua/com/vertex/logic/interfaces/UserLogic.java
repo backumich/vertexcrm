@@ -30,4 +30,6 @@ public interface UserLogic {
 
     int activateUser(String email);
 
+    List<User> searchUser(String userData) throws Exception;
+
 }
