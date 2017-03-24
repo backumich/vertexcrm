@@ -38,6 +38,7 @@ public class ActivationUserController {
 
         try {
             email = AES.decrypt(encodedEmail, DECRYPT_KEY);
+            LOGGER.debug("Encrypted email " + encodedEmail);
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Your link is not correct");
             modelAndView.setViewName(ERROR_JSP);
@@ -47,13 +48,13 @@ public class ActivationUserController {
         try {
             if (userLogic.activateUser(email) != 1) {
                 modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
+                LOGGER.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
                 modelAndView.setViewName(ERROR_JSP);
             }
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Activate user failed", e);
         }
-
         return modelAndView;
     }
 }
