@@ -45,6 +45,7 @@ public class UserDaoTest {
     private static final int EXISTING_ID2 = 33;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     private static final String EXISTING_EMAIL = "22@test.com";
+    private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
     private static final String EXISTING_LAST_NAME = "LastName";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
@@ -219,10 +220,39 @@ public class UserDaoTest {
         userDao.addUserForCreateCertificate(user);
     }
 
+    @Test
+    public void userForRegistrationCheckReturnEmptyOptional() throws Exception {
+        assertFalse(MSG, userDao.userForRegistrationCheck("test@test.com").isPresent());
+    }
+
+    @Test
+    public void userForRegistrationCheckReturnCorrectData() throws Exception {
+        assertEquals(MSG, new User.Builder().setEmail(EXISTING_EMAIL).setIsActive(false).getInstance()
+                , userDao.userForRegistrationCheck(EXISTING_EMAIL).get());
+    }
+
     @Test(expected = DataAccessException.class)
-    public void registrationUserInsertTryIsertEmptyUser() throws Exception {
-        User user = new User();
-        userDao.registrationUserInsert(user);
+    public void registrationUserInsertInsertEmptyUser() throws Exception {
+        userDao.registrationUserInsert(new User());
+    }
+
+    @Test
+    public void registrationUserInsertCorrectInsert() throws Exception {
+        User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
+                setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
+                .setRole(Role.USER).getInstance();
+        userDao.registrationUserInsert(userForInsert);
+        User userForCheck = userDao.getUserByEmail("testInsert@Test.com").get();
+        userForInsert.setUserId(userForCheck.getUserId());
+        assertEquals(MSG, userForInsert, userForCheck);
+    }
+
+    @Test
+    public void registrationUserCorrectUpdate() throws Exception {
+        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("33@test.com").setPassword("test")
+                .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
+        userDao.registrationUserUpdate(userForUpdate);
+        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("33@test.com").get());
     }
 
 }

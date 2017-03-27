@@ -52,9 +52,9 @@ public class RegistrationController {
                 modelAndView.setViewName(REGISTRATION_PAGE);
             } else {
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
-                        "Confirmation of registration",
-                        "");
+//                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
+//                        "Confirmation of registration",
+//                        emailLogic.createRegistrationMessage(userFormRegistration));
             }
         } catch (DataAccessException e) {
             modelAndView.setViewName(REGISTRATION_ERROR_PAGE);

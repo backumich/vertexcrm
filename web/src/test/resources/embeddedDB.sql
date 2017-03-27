@@ -10,6 +10,7 @@ CREATE TABLE Users
   discount      INT,
   phone         VARCHAR(25),
   role_id       INT(11),
+  is_active tinyint(1) default '0' not null,
   PRIMARY KEY (user_id)
 );
 
