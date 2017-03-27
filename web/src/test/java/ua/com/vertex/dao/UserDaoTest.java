@@ -200,7 +200,7 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.size(), 4);
+        assertEquals(MSG, users.size(), 5);
         assertEquals(MSG, users.get(1), user);
 
     }
