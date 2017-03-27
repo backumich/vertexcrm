@@ -23,7 +23,9 @@ public class PdfGenerator {
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
-    public void generatePdf(String firstName, String lastName, String courseName, String certificationDate) {
+    public void generatePdf(String firstName, String lastName, String courseName, String certificationDate,
+                            int certificationId) {
+
         Document document = new Document();
 
         try (FileOutputStream outputStream = new FileOutputStream("certificate.pdf")) {
@@ -45,7 +47,8 @@ public class PdfGenerator {
 
             setText(writer, fullName, BaseFont.TIMES_BOLDITALIC, 35, 560, 270);
             setText(writer, courseName, BaseFont.TIMES_ROMAN, 32, 560, 185);
-            setText(writer, date, BaseFont.TIMES_BOLD, 15, 713, 112);
+            setText(writer, date, BaseFont.TIMES_BOLD, 16, 715, 115);
+            setText(writer, String.format("%05d", certificationId), BaseFont.TIMES_BOLD, 16, 310, 115);
 
             document.close();
 

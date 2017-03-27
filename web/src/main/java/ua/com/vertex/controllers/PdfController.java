@@ -28,9 +28,9 @@ public class PdfController {
     @PostMapping
     public void generatePdf(@RequestParam String firstName, @RequestParam String lastName,
                             @RequestParam String courseName, @RequestParam String certificationDate,
-                            HttpServletResponse response) throws IOException {
+                            @RequestParam int certificationId, HttpServletResponse response) throws IOException {
 
-        pdfGenerator.generatePdf(firstName, lastName, courseName, certificationDate);
+        pdfGenerator.generatePdf(firstName, lastName, courseName, certificationDate, certificationId);
 
         try {
             File pdfToDownload = new File("certificate.pdf");

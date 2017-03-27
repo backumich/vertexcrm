@@ -174,6 +174,7 @@
 
         <c:if test="${(user.email).equals(authenticated)}">
             <sf:form method="post" action="/generatePdf">
+                <input type="hidden" name="certificationId" value="${certificate.certificationId}"/>
                 <input type="hidden" name="firstName" value="${user.firstName}"/>
                 <input type="hidden" name="lastName" value="${user.lastName}"/>
                 <input type="hidden" name="courseName" value="${certificate.courseName}"/>
