@@ -11,76 +11,51 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Aes;
+import ua.com.vertex.logic.interfaces.EmailLogic;
+import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 import ua.com.vertex.utils.MailService;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.util.Optional;
-
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
+    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final String REGISTRATION_PAGE = "registration";
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     private static final String REGISTRATION_ERROR_PAGE = "registrationError";
-    private static final String NAME_USER_MODEL_FOR_REGISTRATION_PAGE = "userFormRegistration";
-    private static final String ENCRYPT_KEY = "VeRtEx AcAdeMy";
+    private static final String NAME_MODEL = "userFormRegistration";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
-    private UserLogic userLogic;
-
-    @Autowired
-    public RegistrationController(UserLogic userLogic, MailService mailService) {
-        this.userLogic = userLogic;
-        this.mailService = mailService;
-    }
-
+    private RegistrationUserLogic registrationUserLogic;
+    private EmailLogic emailLogic;
     private final MailService mailService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
         LOGGER.info("First request to " + REGISTRATION_PAGE);
-        return new ModelAndView(REGISTRATION_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, new UserFormRegistration());
+        return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 
     @PostMapping
-    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE)
+    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
                                                     UserFormRegistration userFormRegistration,
                                             BindingResult bindingResult, ModelAndView modelAndView) {
-        
-        isMatchPassword(userFormRegistration, bindingResult);
+
+        LOGGER.debug("Request to /processRegistration  ");
         try {
-            Optional<User> user = isRegisteredEmail(userFormRegistration.getEmail(), bindingResult);
+            registrationUserLogic.registerationUser(userFormRegistration, bindingResult);
             if (bindingResult.hasErrors()) {
-                LOGGER.warn("There are errors in filling in the form " + REGISTRATION_PAGE);
                 modelAndView.setViewName(REGISTRATION_PAGE);
-            } else if (user.isPresent()) {
-                modelAndView.addObject("userID", userLogic.registrationUserUpdate(new User(userFormRegistration)));
-                modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                sendEmail(userFormRegistration);
             } else {
-                modelAndView.addObject("userID", userLogic.registrationUserInsert(new User(userFormRegistration)));
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                sendEmail(userFormRegistration);
+                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
+                        "Confirmation of registration",
+                        "");
             }
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException | InvalidKeyException
-                | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
-            modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
-            LOGGER.warn("While encrypting email any errors" + userFormRegistration.getEmail(), e);
         } catch (DataAccessException e) {
             modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
             LOGGER.warn(e);
@@ -92,27 +67,11 @@ public class RegistrationController {
         return modelAndView;
     }
 
-    private void sendEmail(UserFormRegistration userFormRegistration) throws NoSuchAlgorithmException,
-            NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
-            BadPaddingException, UnsupportedEncodingException {
-        mailService.sendMail("vertex.academy.robot@gmail.com", userFormRegistration.getEmail(), "123",
-                "http://localhost:8080/activationUser?activeUser="
-                        + Aes.encrypt(userFormRegistration.getEmail(), ENCRYPT_KEY));
-    }
-
-    private void isMatchPassword(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
-        if (!userLogic.isMatchPassword(userFormRegistration)) {
-            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() + " were entered passwords do not match");
-            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
-        }
-    }
-
-    private Optional<User> isRegisteredEmail(String email, BindingResult bindingResult) throws DataAccessException {
-        Optional<User> user = userLogic.isRegisteredUser(email);
-        if (user.isPresent() && user.get().isActive()) {
-            LOGGER.debug("That email |" + email + "| is already registered");
-            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
-        }
-        return user;
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic,
+                                  EmailLogic emailLogic, MailService mailService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
     }
 }

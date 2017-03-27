@@ -27,7 +27,7 @@ public interface UserDaoInf {
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 
-    Optional<User> isRegisteredUser(String userEmail) throws DataAccessException;
+    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
 
     EnumMap<Role, Role> getAllRoles();
 
@@ -43,8 +43,8 @@ public interface UserDaoInf {
 
     List<User> searchUser(String userData) throws Exception;
 
-    int registrationUserInsert(User user) throws DataAccessException;
+    void registrationUserInsert(User user) throws DataAccessException;
 
-    int registrationUserUpdate(User user) throws DataAccessException;
+    void registrationUserUpdate(User user) throws DataAccessException;
 
 }

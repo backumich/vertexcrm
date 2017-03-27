@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -217,4 +218,11 @@ public class UserDaoTest {
     public void addUserForCreateCertificateReturnExc() throws Exception {
         userDao.addUserForCreateCertificate(user);
     }
+
+    @Test(expected = DataAccessException.class)
+    public void registrationUserInsertTryIsertEmptyUser() throws Exception {
+        User user = new User();
+        userDao.registrationUserInsert(user);
+    }
+
 }

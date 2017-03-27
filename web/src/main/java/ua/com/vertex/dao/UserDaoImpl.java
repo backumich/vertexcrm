@@ -194,11 +194,10 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<User> isRegisteredUser(String userEmail) throws DataAccessException {
+    public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
 
-        LOGGER.debug(String.format("Call - isRegisteredUser(%s) ;", userEmail));
+        LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
         String query = "SELECT email, is_active FROM Users WHERE email =:email";
-
         User user = null;
 
         try {
@@ -314,26 +313,23 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public int registrationUserInsert(User user) throws DataAccessException {
+    public void registrationUserInsert(User user) throws DataAccessException {
         LOGGER.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
                 "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(query, getRegistrationParameters(user), keyHolder);
-
-        return keyHolder.getKey().intValue();
+        jdbcTemplate.update(query, getRegistrationParameters(user));
     }
 
     @Override
-    public int registrationUserUpdate(User user) throws DataAccessException {
+    public void registrationUserUpdate(User user) throws DataAccessException {
         LOGGER.info("Update not active user .");
 
         String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
                 "phone =:phone, role_id =2 WHERE email =:email";
 
-        return jdbcTemplate.update(query, getRegistrationParameters(user));
+        jdbcTemplate.update(query, getRegistrationParameters(user));
     }
 
     private MapSqlParameterSource getRegistrationParameters(User user) {
