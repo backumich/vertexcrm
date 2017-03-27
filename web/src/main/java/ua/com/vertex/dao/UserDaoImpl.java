@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -193,17 +194,15 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<User> isRegisteredEmail(String userEmail) throws Exception {
+    public Optional<User> isRegisteredUser(String userEmail) throws DataAccessException {
 
-        LOGGER.debug(String.format("Call - isRegisteredEmail(%s) ;", userEmail));
-        String query = "SELECT email, is_active FROM Users u WHERE email=:userEmail";
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, userEmail);
+        LOGGER.debug(String.format("Call - isRegisteredUser(%s) ;", userEmail));
+        String query = "SELECT email, is_active FROM Users WHERE email =:email";
 
         User user = null;
 
         try {
-            user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperRegistrationCheck());
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail), new UserRowMapperRegistrationCheck());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
@@ -312,6 +311,39 @@ public class UserDaoImpl implements UserDaoInf {
                 .setFirstName(rs.getString(COLUMN_FIRST_NAME))
                 .setLastName(rs.getString(COLUMN_LAST_NAME))
                 .getInstance());
+    }
+
+    @Override
+    public int registrationUserInsert(User user) throws DataAccessException {
+        LOGGER.info("Adding a new user into database");
+
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
+                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, getRegistrationParameters(user), keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    public int registrationUserUpdate(User user) throws DataAccessException {
+        LOGGER.info("Update not active user .");
+
+        String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
+                "phone =:phone, role_id =2 WHERE email =:email";
+
+        return jdbcTemplate.update(query, getRegistrationParameters(user));
+    }
+
+    private MapSqlParameterSource getRegistrationParameters(User user) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue(COLUMN_USER_EMAIL, user.getEmail());
+        namedParameters.addValue(COLUMN_PASSWORD, user.getPassword());
+        namedParameters.addValue(COLUMN_FIRST_NAME, user.getFirstName());
+        namedParameters.addValue(COLUMN_LAST_NAME, user.getLastName());
+        namedParameters.addValue(COLUMN_PHONE, user.getPhone());
+        return namedParameters;
     }
 
     private static final class UserRowMapping implements RowMapper<User> {

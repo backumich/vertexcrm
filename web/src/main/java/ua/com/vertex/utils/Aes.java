@@ -38,7 +38,9 @@ public class Aes {
         return safe;
     }
 
-    public static String encrypt(String value, String password) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+    public static String encrypt(String value, String password) throws NoSuchAlgorithmException,
+            NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
+            BadPaddingException, UnsupportedEncodingException {
         byte[] encrypted = {};
         try {
             SecretKey key = new SecretKeySpec(safePassword(password).getBytes("UTF-8"), "Aes");

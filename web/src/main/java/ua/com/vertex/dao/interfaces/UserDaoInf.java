@@ -1,6 +1,7 @@
 package ua.com.vertex.dao.interfaces;
 
 
+import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
@@ -26,7 +27,7 @@ public interface UserDaoInf {
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 
-    Optional<User> isRegisteredEmail(String userEmail) throws Exception;
+    Optional<User> isRegisteredUser(String userEmail) throws DataAccessException;
 
     EnumMap<Role, Role> getAllRoles();
 
@@ -41,5 +42,9 @@ public interface UserDaoInf {
     int addUserForCreateCertificate(User user);
 
     List<User> searchUser(String userData) throws Exception;
+
+    int registrationUserInsert(User user) throws DataAccessException;
+
+    int registrationUserUpdate(User user) throws DataAccessException;
 
 }
