@@ -16,7 +16,6 @@ import ua.com.vertex.utils.AES;
 @Controller
 @RequestMapping(value = "/activationUser", method = RequestMethod.GET)
 public class ActivationUserController {
-
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
