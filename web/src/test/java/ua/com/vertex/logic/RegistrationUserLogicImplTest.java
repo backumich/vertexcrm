@@ -78,7 +78,7 @@ public class RegistrationUserLogicImplTest {
     }
 
     @Test
-    public void isRegisteredUserWhenEmailNotExistsButNotActive() throws Exception {
+    public void isRegisteredUserWhenEmailElredyExistsButNotActive() throws Exception {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(false).getInstance()));
         assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));
