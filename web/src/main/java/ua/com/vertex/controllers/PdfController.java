@@ -36,9 +36,12 @@ public class PdfController {
         try {
             pdfGenerator.generatePdf(pdfFileName, firstName, lastName, courseName, certificationDate, certificationId);
             pdfDownloader.downloadPdf(pdfFileName, response);
-            pdfFile.delete();
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
+        } finally {
+            if (pdfFile.exists()) {
+                pdfFile.delete();
+            }
         }
     }
 
