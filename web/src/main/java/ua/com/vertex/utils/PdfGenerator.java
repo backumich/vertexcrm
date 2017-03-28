@@ -28,8 +28,6 @@ public class PdfGenerator {
                             String certificationDate, int certificationId) {
 
         Document document = new Document();
-        String fullName = firstName + " " + lastName;
-        String date = formatter.format(LocalDate.parse(certificationDate));
 
         try (FileOutputStream outputStream = new FileOutputStream(pdfFileName)) {
 
@@ -38,14 +36,10 @@ public class PdfGenerator {
             document.setPageSize(dimensions);
 
             document.open();
-
             setCanvas(writer, dimensions);
-            setText(writer, fullName, BaseFont.TIMES_BOLDITALIC, 35, 560, 270);
-            setText(writer, courseName, BaseFont.TIMES_ROMAN, 32, 560, 185);
-            setText(writer, date, BaseFont.TIMES_BOLD, 16, 780, 116);
-            setText(writer, String.format("%05d", certificationId), BaseFont.TIMES_BOLD, 16, 310, 116);
-
+            setText(writer, firstName, lastName, courseName, certificationDate, certificationId);
             document.close();
+
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
         }
@@ -62,7 +56,25 @@ public class PdfGenerator {
         canvas.addImage(image);
     }
 
-    private void setText(PdfWriter writer, String parameter, String font, int fontSize, int shiftX, int shiftY)
+    private void setText(PdfWriter writer, String firstName, String lastName, String courseName,
+                         String certificationDate, int certificationId) throws IOException, DocumentException {
+
+        String fullName = firstName + " " + lastName;
+        String date = formatter.format(LocalDate.parse(certificationDate));
+
+        setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
+        setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
+        setTextRow(writer, fullName, BaseFont.TIMES_BOLDITALIC, 36, 560, 270);
+        setTextRow(writer, "has successfully completed the course", BaseFont.TIMES_ROMAN, 18, 560, 230);
+        setTextRow(writer, courseName, BaseFont.TIMES_BOLD, 32, 560, 185);
+        setTextRow(writer, "Certificate was issued by vertex-academy.com", BaseFont.TIMES_ROMAN, 18, 280, 140);
+        setTextRow(writer, "Director General: Piskokha M. A.", BaseFont.TIMES_ROMAN, 18, 760, 140);
+        setTextRow(writer, "Certificate id: ", BaseFont.TIMES_ROMAN, 18, 230, 115);
+        setTextRow(writer, String.format("%05d", certificationId), BaseFont.TIMES_ROMAN, 18, 310, 115);
+        setTextRow(writer, date, BaseFont.TIMES_ROMAN, 18, 780, 115);
+    }
+
+    private void setTextRow(PdfWriter writer, String parameter, String font, int fontSize, int shiftX, int shiftY)
             throws IOException, DocumentException {
 
         BaseFont baseFont = BaseFont.createFont(font, BaseFont.WINANSI, BaseFont.EMBEDDED);

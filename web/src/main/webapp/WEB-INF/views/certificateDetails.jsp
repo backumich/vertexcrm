@@ -150,7 +150,7 @@
                 <td>${certificate.courseName}</td>
             </tr>
             <tr>
-                <td>Programming Language:</td>
+                <td>Language:</td>
                 <td>${certificate.language}</td>
             </tr>
             <tr>
