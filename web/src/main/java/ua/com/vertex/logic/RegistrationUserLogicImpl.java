@@ -3,7 +3,6 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.User;
@@ -49,9 +48,12 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     }
 
     @Override
-    public void registerationUser(UserFormRegistration userFormRegistration,
-                                  BindingResult bindingResult) throws DataAccessException {
-        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registerationUser(%s) ;", userFormRegistration));
+    public boolean isRegisteredUser(UserFormRegistration userFormRegistration,
+                                    BindingResult bindingResult) throws Exception {
+
+        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
+
+        boolean result = false;
         checkPassword(userFormRegistration, bindingResult);
 
         if (!bindingResult.hasErrors()) {
@@ -59,10 +61,13 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
             checkEmailAlreadyExists(userFormRegistration.getEmail(), user, bindingResult);
             if (!bindingResult.hasErrors() && !user.isPresent()) {
                 userLogic.registrationUserInsert(new User(userFormRegistration));
+                result = true;
             } else if (!bindingResult.hasErrors() && user.isPresent()) {
                 userLogic.registrationUserUpdate(new User(userFormRegistration));
+                result = true;
             }
         }
+        return result;
     }
 
 

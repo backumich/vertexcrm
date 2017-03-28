@@ -15,7 +15,9 @@ import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 import ua.com.vertex.utils.MailService;
+
 import javax.validation.Valid;
+
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
@@ -23,10 +25,10 @@ import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 public class RegistrationController {
 
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
-    private static final String REGISTRATION_PAGE = "registration";
-    private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
-    private static final String REGISTRATION_ERROR_PAGE = "registrationError";
-    private static final String NAME_MODEL = "userFormRegistration";
+    static final String REGISTRATION_PAGE = "registration";
+    static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
+    static final String REGISTRATION_ERROR_PAGE = "registrationError";
+    static final String NAME_MODEL = "userFormRegistration";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -47,14 +49,18 @@ public class RegistrationController {
 
         LOGGER.debug("Request to /processRegistration  ");
         try {
-            registrationUserLogic.registerationUser(userFormRegistration, bindingResult);
             if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(REGISTRATION_PAGE);
             } else {
-                modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
-                        "Confirmation of registration",
-                        emailLogic.createRegistrationMessage(userFormRegistration));
+                if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
+                    modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
+                            "Confirmation of registration",
+                            emailLogic.createRegistrationMessage(userFormRegistration));
+                } else {
+                    modelAndView.setViewName(REGISTRATION_PAGE);
+                }
+
             }
         } catch (DataAccessException e) {
             modelAndView.setViewName(REGISTRATION_ERROR_PAGE);

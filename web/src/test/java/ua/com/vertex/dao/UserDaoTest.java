@@ -44,7 +44,7 @@ public class UserDaoTest {
     private static final int EXISTING_ID1 = 22;
     private static final int EXISTING_ID2 = 33;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
-    private static final String EXISTING_EMAIL = "22@test.com";
+    static final String EXISTING_EMAIL = "22@test.com";
     private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
     private static final String EXISTING_LAST_NAME = "LastName";
@@ -232,7 +232,7 @@ public class UserDaoTest {
     }
 
     @Test(expected = DataAccessException.class)
-    public void registrationUserInsertInsertEmptyUser() throws Exception {
+    public void registrationUserInsertEmptyUser() throws Exception {
         userDao.registrationUserInsert(new User());
     }
 
@@ -251,6 +251,7 @@ public class UserDaoTest {
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("33@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
+        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("33@test.com").get());
         userDao.registrationUserUpdate(userForUpdate);
         assertEquals(MSG,userForUpdate,userDao.getUserByEmail("33@test.com").get());
     }

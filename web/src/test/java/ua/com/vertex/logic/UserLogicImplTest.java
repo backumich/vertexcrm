@@ -2,31 +2,42 @@ package ua.com.vertex.logic;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.dao.DataAccessException;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UserLogicImplTest {
+
+    private final String MSG = "Maybe method was changed";
 
     @Mock
     private UserDaoInf dao;
 
     private UserLogic logic;
 
+    private User user;
+
     private static final String EMAIL = "33@test.com";
+    private static final String NAME = "test";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
     private static final int EXISTING_ID = 33;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         logic = new UserLogicImpl(dao);
+        user = new User.Builder().setUserId(EXISTING_ID).setEmail(EMAIL).setPassword(NAME).setFirstName(NAME)
+                .setLastName(NAME).setDiscount(0).getInstance();
     }
 
     @Test
@@ -55,14 +66,58 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getAllUserIdsCalledInUserDaoAndReturnNotNull() throws Exception {
+    public void getAllUserIdsInvokesDaoAndReturnNotNull() throws Exception {
         assertNotNull(logic.getAllUserIds());
-        verify(dao).getAllUserIds();
+        verify(dao, times(1)).getAllUserIds();
     }
 
     @Test
-    public void searchUserCalledInUserDaoAndReturnNotNull() throws Exception {
-        assertNotNull(logic.searchUser("test"));
-        verify(dao).searchUser("test");
+    public void searchUserInvokesDaoAndReturnNotNull() throws Exception {
+        assertNotNull(logic.searchUser(NAME));
+        verify(dao, times(1)).searchUser(NAME);
     }
+
+    @Test
+    public void userForRegistrationCheckInvokesDao() throws Exception {
+        logic.userForRegistrationCheck(EMAIL);
+        verify(dao, times(1)).userForRegistrationCheck(EMAIL);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void registrationUserInsertReturnNullPointerException() throws DataAccessException {
+        logic.registrationUserInsert(new User());
+    }
+
+    @Test
+    public void registrationUserInsertEncodePasswordAndInvokesDao() throws DataAccessException {
+        String passwordBedoreInsert = user.getPassword();
+        logic.registrationUserInsert(user);
+        verify(dao, times(1)).registrationUserInsert(user);
+        assertNotEquals(MSG, passwordBedoreInsert, user.getPassword());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void registrationUserUpdateReturnNullPointerException() throws DataAccessException {
+        logic.registrationUserUpdate(new User());
+    }
+
+    @Test
+    public void registrationUserUpdateEncodePasswordAndInvokesDao() throws DataAccessException {
+        String passwordBedoreInsert = user.getPassword();
+        logic.registrationUserUpdate(user);
+        verify(dao, times(1)).registrationUserUpdate(user);
+        assertNotEquals(MSG, passwordBedoreInsert, user.getPassword());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void encryptPasswordReturnNullPointerException() throws DataAccessException {
+        logic.encryptPassword(null);
+    }
+
+    @Test
+    public void encryptPasswordReturnEncodePassword() throws DataAccessException {
+        assertNotNull(logic.encryptPassword(NAME));
+        assertNotEquals(MSG, NAME, logic.encryptPassword(NAME));
+    }
+
 }
