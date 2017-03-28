@@ -26,7 +26,7 @@ public class PdfControllerTest {
     private PdfDownloader pdfDownloader;
 
     private PdfController pdfController;
-    private static final String PDF_FILE_NAME = "certificate.pdf";
+    private static final String PDF_FILE_NAME = "null_certificate.pdf";
 
     @Before
     public void setUp() {

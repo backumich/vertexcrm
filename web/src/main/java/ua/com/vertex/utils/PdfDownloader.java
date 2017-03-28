@@ -11,11 +11,11 @@ import java.nio.file.Paths;
 @Component
 public class PdfDownloader {
 
-    public int downloadPdf(String pdfFile, HttpServletResponse response) throws IOException {
+    public int downloadPdf(String pdfFileName, HttpServletResponse response) throws IOException {
 
-        File pdfToDownload = new File(pdfFile);
+        File pdfToDownload = new File(pdfFileName);
         response.setContentType("application/pdf");
-        response.addHeader("Content-Disposition", "attachment; filename=" + pdfFile);
+        response.addHeader("Content-Disposition", "attachment; filename=certificate.pdf");
         Files.copy(Paths.get(pdfToDownload.getPath()), response.getOutputStream());
         response.getOutputStream().flush();
 

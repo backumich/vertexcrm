@@ -24,14 +24,14 @@ public class PdfGenerator {
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
-    public void generatePdf(String pdfFile, String firstName, String lastName, String courseName,
+    public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
                             String certificationDate, int certificationId) {
 
         Document document = new Document();
         String fullName = firstName + " " + lastName;
         String date = formatter.format(LocalDate.parse(certificationDate));
 
-        try (FileOutputStream outputStream = new FileOutputStream(pdfFile)) {
+        try (FileOutputStream outputStream = new FileOutputStream(pdfFileName)) {
 
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
             Rectangle dimensions = new Rectangle(1120, 530);

@@ -12,7 +12,9 @@ import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @Controller
 @RequestMapping(value = "/generatePdf")
 public class PdfController {
@@ -22,15 +24,19 @@ public class PdfController {
     private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
-    private static final String PDF_FILE = "certificate.pdf";
 
     @PostMapping
     public void generatePdf(@RequestParam String firstName, @RequestParam String lastName,
                             @RequestParam String courseName, @RequestParam String certificationDate,
                             @RequestParam int certificationId, HttpServletResponse response) {
+
+        String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
+        File pdfFile = new File(pdfFileName);
+
         try {
-            pdfGenerator.generatePdf(PDF_FILE, firstName, lastName, courseName, certificationDate, certificationId);
-            pdfDownloader.downloadPdf(PDF_FILE, response);
+            pdfGenerator.generatePdf(pdfFileName, firstName, lastName, courseName, certificationDate, certificationId);
+            pdfDownloader.downloadPdf(pdfFileName, response);
+            pdfFile.delete();
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
         }
