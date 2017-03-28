@@ -21,10 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
-            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/getCertificate", "/processCertificateDetails",
-            "/userPhoto", "/403", "/error", "/activationUser"};
+            "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
+            "/403", "/error", "/activationUser", "/getCertificate", "/getCertificate/*"};
     private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData"};
-
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
