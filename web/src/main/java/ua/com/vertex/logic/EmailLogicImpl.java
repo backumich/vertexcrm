@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.controllers.UserController;
 import ua.com.vertex.logic.interfaces.EmailLogic;
-import ua.com.vertex.utils.AES;
+import ua.com.vertex.utils.Aes;
 
 @Configuration
 @PropertySource("classpath:emailMessages.properties")
@@ -35,7 +35,7 @@ class EmailLogicImpl implements EmailLogic {
 
         String stringEmailAES = "";
         try {
-            stringEmailAES = AES.encrypt(user.getEmail(), ENCRYPT_KEY);
+            stringEmailAES = Aes.encrypt(user.getEmail(), ENCRYPT_KEY);
         } catch (Exception e) {
             LOGGER.warn("While encrypting email any errors" + user.getEmail());
         }
