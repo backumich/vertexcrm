@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.dao.UserDaoImpl;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
@@ -21,7 +21,7 @@ public class LoggingLogicImpl implements LoggingLogic {
 
     private final LogInfo logInfo;
     private final UserLogic userLogic;
-    private final UserDaoImpl userDao;
+    private final UserDaoInf userDao;
 
     private static final Logger LOGGER = LogManager.getLogger(LoggingLogicImpl.class);
 
@@ -88,7 +88,7 @@ public class LoggingLogicImpl implements LoggingLogic {
         return view;
     }
 
-    public LoggingLogicImpl(LogInfo logInfo, UserLogic userLogic, UserDaoImpl userDao) {
+    public LoggingLogicImpl(LogInfo logInfo, UserLogic userLogic, UserDaoInf userDao) {
         this.logInfo = logInfo;
         this.userLogic = userLogic;
         this.userDao = userDao;

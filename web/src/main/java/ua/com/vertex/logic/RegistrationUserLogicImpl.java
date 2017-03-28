@@ -23,11 +23,6 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     public RegistrationUserLogicImpl() {
     }
 
-    @Autowired
-    public RegistrationUserLogicImpl(UserDaoRealizationInf userDaoRealization) {
-        this.userDaoRealization = userDaoRealization;
-    }
-
     @Override
     public int registrationUser(User user) throws DataAccessException {
         user.setPassword(encryptPassword(user.getPassword()));
@@ -61,5 +56,10 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     @Override
     public Boolean checkEmailAlreadyExists(String email) {
         return userDaoRealization.isRegisteredEmail(email);
+    }
+
+    @Autowired
+    public RegistrationUserLogicImpl(UserDaoRealizationInf userDaoRealization) {
+        this.userDaoRealization = userDaoRealization;
     }
 }

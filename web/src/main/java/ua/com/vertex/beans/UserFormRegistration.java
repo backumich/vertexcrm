@@ -102,13 +102,12 @@ public class UserFormRegistration {
 
         UserFormRegistration that = (UserFormRegistration) o;
 
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (verifyPassword != null ? !verifyPassword.equals(that.verifyPassword) : that.verifyPassword != null)
-            return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        return phone != null ? phone.equals(that.phone) : that.phone == null;
+        return (email != null ? email.equals(that.email) : that.email == null)
+                && (password != null ? password.equals(that.password) : that.password == null)
+                && (verifyPassword != null ? verifyPassword.equals(that.verifyPassword) : that.verifyPassword == null)
+                && (firstName != null ? firstName.equals(that.firstName) : that.firstName == null)
+                && (lastName != null ? lastName.equals(that.lastName) : that.lastName == null)
+                && (phone != null ? phone.equals(that.phone) : that.phone == null);
     }
 
     @Override

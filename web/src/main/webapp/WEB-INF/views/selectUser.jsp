@@ -1,6 +1,8 @@
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
+
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -8,17 +10,17 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
-    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
+    <link href="../../css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/slick.css">
+    <link rel="stylesheet" href="../../css/main.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
     <script async="" src="../../javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -37,19 +39,10 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -78,6 +71,7 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -105,18 +99,73 @@
         </div>
     </div>
 </div>
+<div class="page gray-page mh100">
+    <div class="container pt1_5" align="centr">
 
+        <c:if test="${empty users}">
+            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
+                       action="searchUser">
 
-<div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize180 silver">You are logged out</span><br><br><br>
+                <tr>
+                    <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                </tr>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                </tr>
+                </table>
+            </form:form>
+        </c:if>
+    </div>
+    <div>
+        <c:if test="${!empty users}">
+            <form:form method="post" commandName="userIdForCertificate"
+                       action="selectUser">
+                <table class="active" width="500">
+                    <tr>
+                        <th>Select user</th>
+                        <th>User Id</th>
+                        <th>User E-mail</th>
+                        <th>User first name</th>
+                        <th>User last name</th>
+                    </tr>
+                    <c:forEach items="${users}" var="user">
+                        <tr>
+                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
+                            </td>
+                            <td>${user.userId}</td>
+                            <td>${user.email}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                </tr>
+            </form:form>
 
+        </c:if>
+    </div>
 
-    <div class="href">
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+    <br>
+    <br>
+    <br>
+    <c:if test="${!empty msg}">
+        <h3><span class="errorText250">${msg}</span></h3>
+    </c:if>
+    <br>
+    <br>
+    <br>
+
+    <div class="hrefText">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
+    </div>
 </div>
 
-
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">

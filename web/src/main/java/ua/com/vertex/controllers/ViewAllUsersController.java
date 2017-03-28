@@ -22,11 +22,6 @@ public class ViewAllUsersController {
 
     private UserLogic userLogic;
 
-    @Autowired
-    public ViewAllUsersController(UserLogic userLogic) {
-        this.userLogic = userLogic;
-    }
-
     @GetMapping
     public ModelAndView viewAllUsers() {
         ModelAndView modelAndView = new ModelAndView();
@@ -47,5 +42,11 @@ public class ViewAllUsersController {
         }
         return modelAndView;
     }
+
+    @Autowired
+    public ViewAllUsersController(UserLogic userLogic) {
+        this.userLogic = userLogic;
+    }
+
 }
 

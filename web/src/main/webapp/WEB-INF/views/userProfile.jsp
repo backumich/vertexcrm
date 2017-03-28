@@ -128,47 +128,38 @@
             <td>${user.discount}</td>
         </tr>
         <tr>
+            <td>My certificates:</td>
+            <td><a href="<c:url value="/getCertificateByUserId?userId=${user.userId}"/>">Go to certificates page</a>
+            </td>
+        </tr>
+        <tr>
             <td>Photo:</td>
             <td>
-                <sf:form method="get" action="/userPhoto">
-                    <input type="hidden" name="userId" value="${user.userId}"/>
-                    <input type="hidden" name="previousPage" value="/logIn"/>
-                    <input class="black" type="submit" value="Show Photo">
-                </sf:form><br>
-            </td>
-            <td>
-                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                <sf:form method="get" action="/showImage" commandName="user">
                     <input type="hidden" name="userId" value="${user.userId}"/>
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
+                    <input type="hidden" name="pageToDisplay" value="imagePhoto"/>
                     <input type="hidden" name="imageType" value="photo"/>
-                    <input type="file" name="image" accept="image/jpeg, image/png"/>
-                    <input class="black" type="submit" value="Upload New Photo">
-                </sf:form>
+                    <input class="black" type="submit" value="Show Photo">
+                </sf:form><br>
             </td>
         </tr>
         <tr>
             <td>Passport scan:</td>
             <td>
-                <sf:form method="get" action="/passportScan">
-                    <input type="hidden" name="userId" value="${user.userId}"/>
-                    <input type="hidden" name="previousPage" value="/logIn"/>
-                    <input class="black" type="submit" value="Show Passport Scan">
-                </sf:form><br>
-            </td>
-            <td>
-                <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+                <sf:form method="get" action="/showImage" commandName="user">
                     <input type="hidden" name="userId" value="${user.userId}"/>
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
-                    <input type="hidden" name="imageType" value="passport_scan"/>
-                    <input type="file" name="image" accept="image/jpeg, image/png"/>
-                    <input class="black" type="submit" value="Upload New Passport Scan">
-                </sf:form>
+                    <input type="hidden" name="pageToDisplay" value="imagePassport"/>
+                    <input type="hidden" name="imageType" value="passportScan"/>
+                    <input class="black" type="submit" value="Show Passport Scan">
+                </sf:form><br>
             </td>
         </tr>
     </table>

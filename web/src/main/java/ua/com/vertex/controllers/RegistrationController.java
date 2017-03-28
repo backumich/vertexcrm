@@ -16,7 +16,6 @@ import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 import ua.com.vertex.utils.MailService;
-
 import javax.validation.Valid;
 
 @Controller
@@ -93,4 +92,3 @@ public class RegistrationController {
         }
     }
 }
-

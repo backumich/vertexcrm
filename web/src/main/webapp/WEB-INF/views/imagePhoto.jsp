@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -52,34 +53,6 @@
 
     .hrefText {
         font-size: 120%;
-    }
-
-    .formHeader {
-        font-size: 125%;
-        font-weight: bold;
-        color: #adadad;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .errorText140 {
-        font-size: 140%;
-        color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .up-padding {
-        padding-top: 100px;
     }
     </style>
 </head>
@@ -139,59 +112,44 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize180 silver">Log into the system</span><br><br><br>
 
-    <c:if test="${param.error != null}">
-        <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
     </c:if>
-
-    <c:if test="${param.logout != null}">
-        <p><span class="fontSize140 red">You have been logged out</span></p>
-    </c:if>
-
-    <form action="${pageContext.request.contextPath}/logIn" method="post">
-        <table>
-            <tr>
-                <td><span class="fontSize125 bold silver">E-mail:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="text" name="username"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="text" name="username" class="errorField"/></td>
-                </c:if>
-            </tr>
-            <tr>
-                <td><span class="fontSize125 bold silver">Password:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="password" name="password"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="password" name="password" class="errorField"/></td>
-                </c:if>
-            </tr>
-            <tr>
-                <td align="right" colspan="2">
-                    <label for="remember_me" class="fontSize125 bold silver">Remember me</label>
-                    <input id="remember_me" name="remember-me" type="checkbox"/>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
-            </tr>
-            <tr>
-                <td align="right" colspan="2"><input type="submit" value="Send" class="black"></td>
-            </tr>
-        </table>
-    </form>
 
     <br><br>
+
+    <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
+        <sf:hidden path="userId" value="${user.userId}"/>
+        <sf:hidden path="firstName" value="${user.firstName}"/>
+        <sf:hidden path="lastName" value="${user.lastName}"/>
+        <sf:hidden path="email" value="${user.email}"/>
+        <sf:hidden path="discount" value="${user.discount}"/>
+        <input type="hidden" name="imageType" value="photo"/>
+        <table>
+            <tr>
+                <td class="silver"><input type="file" name="image" accept="image/jpeg, image/png"/></td>
+            </tr>
+            <tr>
+                <td><input class="black" type="submit" value="Upload New Photo"></td>
+            </tr>
+        </table>
+    </sf:form>
+
+    <br><br>
+
+
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/logIn"/>">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
+
 </div>
 
 
+<div class="wrapper">
+
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">

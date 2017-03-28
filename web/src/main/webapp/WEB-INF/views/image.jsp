@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -112,20 +113,17 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-        <c:if test="${photo != null}">
-            <img src="data:image/jpeg;base64,${photo}" width="500px" height="auto" alt="no photo">
-        </c:if>
+    <c:if test="${photo != null}">
+        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
+    </c:if>
 
-        <c:if test="${passportScan != null}">
-            <img src="data:image/jpeg;base64,${passportScan}" width="800px" height="auto" alt="no passport scan">
-        </c:if>
+    <br><br>
 
-        <br><br>
 
     <div class="href">
-            <a href="<c:url value="${page}"/>">Back</a> |
-            <a href="<c:url value="/"/>">Home</a>
-        </div>
+        <a href="<c:url value="/certificateDetails"/>">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
+    </div>
 
 </div>
 

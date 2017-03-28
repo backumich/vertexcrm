@@ -7,9 +7,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -26,7 +30,7 @@ import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
 
 @Repository
-@SuppressWarnings("SqlDialectInspection")
+
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
@@ -37,22 +41,32 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String EMAIL = "email";
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
+    private static final String COLUMN_USER_ID = "user_id";
+    private static final String COLUMN_USER_EMAIL = "email";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_FIRST_NAME = "first_name";
+    private static final String COLUMN_LAST_NAME = "last_name";
+    private static final String COLUMN_PHONE = "phone";
+    private static final String COLUMN_PASSPORT_SCAN = "passport_scan";
+    private static final String COLUMN_PHOTO = "photo";
+    private static final String COLUMN_DISCOUNT = "discount";
+    private static final String COLUMN_ROLE_ID = "role_id";
 
     @Override
     public Optional<User> getUser(int userId) {
         String query = "SELECT user_id, email, password, first_name, " +
                 "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
 
-        LOGGER.debug(logInfo.getId() + "Retrieving user, id=" + userId);
-
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No user id=" + userId);
+            LOGGER.warn(logInfo.getId() + "No user id=" + userId);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
+        if (user != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -62,16 +76,16 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
                 "phone, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug(logInfo.getId() + "Retrieving user, email=" + email);
-
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No user email=" + email);
+            LOGGER.warn(logInfo.getId() + "No user email=" + email);
         }
 
-        LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
+        if (user != null) {
+            LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -80,18 +94,18 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> logIn(String email) {
         String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
 
-        LOGGER.debug("Retrieving user password, role, email=" + email);
-
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("No email=" + email);
+            LOGGER.warn("No email=" + email);
         }
 
-        LOGGER.debug("Retrieved user password, role, email=" + email);
+        if (user != null) {
+            LOGGER.debug("Retrieved user password, role, email=" + email);
+        }
 
         return Optional.ofNullable(user);
     }
@@ -114,8 +128,6 @@ public class UserDaoImpl implements UserDaoInf {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
 
-        LOGGER.debug(logInfo.getId() + "Saving image, user id=" + userId + ", " + imageType);
-
         if (PHOTO.equals(imageType)) {
             query = "UPDATE Users SET photo=:photo WHERE user_id=:userId";
             parameters.addValue(PHOTO, image);
@@ -125,7 +137,7 @@ public class UserDaoImpl implements UserDaoInf {
             parameters.addValue(PASSPORT_SCAN, image);
 
         } else {
-            throw new RuntimeException("Image not saved: wrong image type description");
+            throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
         }
 
         LOGGER.debug(logInfo.getId() + "image saved");
@@ -138,8 +150,6 @@ public class UserDaoImpl implements UserDaoInf {
         byte[] image;
         String query;
 
-        LOGGER.debug(logInfo.getId() + "Retrieving image, user id=" + userId + ", " + imageType);
-
         if (PHOTO.equals(imageType)) {
             query = "SELECT photo FROM Users WHERE user_id=:userId";
 
@@ -147,43 +157,14 @@ public class UserDaoImpl implements UserDaoInf {
             query = "SELECT passport_scan FROM Users WHERE user_id=:userId";
 
         } else {
-            throw new RuntimeException("Wrong image type description");
+            throw new RuntimeException("Wrong image type description: " + imageType);
         }
 
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
 
-        LOGGER.debug(logInfo.getId() + "image retrieved");
+        LOGGER.debug(logInfo.getId() + "Image of userId=" + userId + " retrieved");
 
         return Optional.ofNullable(image);
-    }
-
-    private static final class UserRowMapping implements RowMapper<User> {
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            LobHandler handler = new DefaultLobHandler();
-            return new User.Builder()
-                    .setUserId(resultSet.getInt("user_id"))
-                    .setEmail(resultSet.getString("email"))
-                    .setPassword(resultSet.getString("password"))
-                    .setFirstName(resultSet.getString("first_name"))
-                    .setLastName(resultSet.getString("last_name"))
-                    .setPassportScan(handler.getBlobAsBytes(resultSet, "passport_scan"))
-                    .setPhoto(handler.getBlobAsBytes(resultSet, "photo"))
-                    .setDiscount(resultSet.getInt("discount"))
-                    .setPhone(resultSet.getString("phone"))
-                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperLogIn implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString("email"))
-                    .setPassword(resultSet.getString("password"))
-                    .setRole(resultSet.getInt("role_id") == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
     }
 
     @Override
@@ -205,11 +186,11 @@ public class UserDaoImpl implements UserDaoInf {
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
-                setUserId(resultSet.getInt("user_id")).
-                setEmail(resultSet.getString("email")).
-                setFirstName(resultSet.getString("first_name")).
-                setLastName(resultSet.getString("last_name")).
-                setPhone(resultSet.getString("phone")).getInstance());
+                setUserId(resultSet.getInt(COLUMN_USER_ID)).
+                setEmail(resultSet.getString(COLUMN_USER_EMAIL)).
+                setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
+                setLastName(resultSet.getString(COLUMN_LAST_NAME)).
+                setPhone(resultSet.getString(COLUMN_PHONE)).getInstance());
     }
 
     @Override
@@ -261,6 +242,72 @@ public class UserDaoImpl implements UserDaoInf {
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("email", email);
         return jdbcTemplate.update(query, parameters);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public int addUserForCreateCertificate(User user) {
+        String query = "INSERT INTO Users (email, first_name, last_name) " +
+                "VALUES (:email, :first_name, :last_name)";
+
+        LOGGER.debug(String.format("Try add user -(%s) ;", user));
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromUser(user), keyHolder);
+
+        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
+        return keyHolder.getKey().intValue();
+    }
+
+    private MapSqlParameterSource addParametrToMapSqlParameterSourceFromUser(User user) {
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue(COLUMN_USER_EMAIL, user.getEmail());
+        source.addValue(COLUMN_FIRST_NAME, user.getFirstName());
+        source.addValue(COLUMN_LAST_NAME, user.getLastName());
+        return source;
+    }
+
+    @Override
+    public List<User> searchUser(String userData) throws Exception {
+
+        String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
+                "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
+
+        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
+        return jdbcTemplate.query(query, (rs, i) -> new User.Builder()
+                .setUserId(rs.getInt(COLUMN_USER_ID))
+                .setEmail(rs.getString(COLUMN_USER_EMAIL))
+                .setFirstName(rs.getString(COLUMN_FIRST_NAME))
+                .setLastName(rs.getString(COLUMN_LAST_NAME))
+                .getInstance());
+    }
+
+    private static final class UserRowMapping implements RowMapper<User> {
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            LobHandler handler = new DefaultLobHandler();
+            return new User.Builder()
+                    .setUserId(resultSet.getInt(COLUMN_USER_ID))
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                    .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                    .setPassportScan(handler.getBlobAsBytes(resultSet, COLUMN_PASSPORT_SCAN))
+                    .setPhoto(handler.getBlobAsBytes(resultSet, COLUMN_PHOTO))
+                    .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
+                    .setPhone(resultSet.getString(COLUMN_PHONE))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
+    private static final class UserRowMapperLogIn implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
     }
 
     @Autowired
