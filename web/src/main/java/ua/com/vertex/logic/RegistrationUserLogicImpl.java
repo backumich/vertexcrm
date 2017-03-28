@@ -28,43 +28,47 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
 
     @Override
-    public void checkPassword(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
+    public boolean isVerifyPassword(UserFormRegistration userFormRegistration) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkPassword(%s) ;", userFormRegistration));
-        if (!userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword())) {
-            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() + " were entered passwords do not match");
-            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
-        }
+        return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
     }
 
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Override
-    public void checkEmailAlreadyExists(String eMail, Optional<User> user, BindingResult bindingResult) {
+    public boolean isEmailAlreadyExists(Optional<User> user) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));
-        if (user.isPresent() && user.get().isActive()) {
-            LOGGER.warn("That email |" + eMail + "| is already registered");
-            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
-        }
+        return user.isPresent() && user.get().isActive();
     }
 
     @Override
     public boolean isRegisteredUser(UserFormRegistration userFormRegistration,
                                     BindingResult bindingResult) throws Exception {
-
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
 
         boolean result = false;
-        checkPassword(userFormRegistration, bindingResult);
-
-        if (!bindingResult.hasErrors()) {
+        if (!isVerifyPassword(userFormRegistration)) {
+            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() +
+                    " were entered passwords do not match");
+            bindingResult.rejectValue("verifyPassword", "error.verifyPassword",
+                    "Passwords do not match!");
+            result = false;
+        } else {
             Optional<User> user = userLogic.userForRegistrationCheck(userFormRegistration.getEmail());
-            checkEmailAlreadyExists(userFormRegistration.getEmail(), user, bindingResult);
-            if (!bindingResult.hasErrors() && !user.isPresent()) {
-                userLogic.registrationUserInsert(new User(userFormRegistration));
-                result = true;
-            } else if (!bindingResult.hasErrors() && user.isPresent()) {
-                userLogic.registrationUserUpdate(new User(userFormRegistration));
-                result = true;
+            if (isEmailAlreadyExists(user)) {
+                LOGGER.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
+                bindingResult.rejectValue("email", "error.email",
+                        "User with that email is already registered!");
+                result = false;
+            } else {
+                if (!bindingResult.hasErrors() && !user.isPresent()) {
+                    userLogic.registrationUserInsert(new User(userFormRegistration));
+                    result = true;
+                } else if (!bindingResult.hasErrors() && user.isPresent()) {
+                    userLogic.registrationUserUpdate(new User(userFormRegistration));
+                    result = true;
+                }
+
             }
         }
         return result;
