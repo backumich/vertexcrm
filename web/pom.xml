@@ -186,7 +186,7 @@
             <version>1.10</version>
         </dependency>
 
-        <!--DOC to PDF-->
+        <!--PDF-->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>

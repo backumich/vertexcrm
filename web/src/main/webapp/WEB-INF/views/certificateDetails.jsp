@@ -110,7 +110,7 @@
     <span class="fontSize180 silver">Certificate Details</span><br><br><br>
 
     <c:if test="${certificateLink == null}">
-        <span class="fontSize125 bold">Enter certificate ID:</span><br><br>
+        <span class="fontSize125 bold">Enter encrypted certificate ID:</span><br><br>
 
         <sf:form cssClass="black" method="post" action="getCertificate">
             <input type="text" name="certificateIdEncoded"/>
