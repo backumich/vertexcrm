@@ -12,8 +12,8 @@ import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 
 @Service
@@ -67,19 +67,21 @@ public class LoggingLogicImpl implements LoggingLogic {
     }
 
     private String requiredView() throws Exception {
-        String view;
+        String view = null;
 
-        List<String> authorities = new ArrayList<>();
-        SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                .forEach(e -> authorities.add(e.toString()));
+        Collection authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        Iterator iterator = authorities.iterator();
 
         if (authorities.size() == 1) {
-            if (ADMIN.equals(authorities.get(0))) {
-                view = ADMIN_PAGE;
-            } else if (USER.equals(authorities.get(0))) {
-                view = USER_PAGE;
-            } else {
-                throw new Exception(AUTHORITIES_ERROR);
+            while (iterator.hasNext()) {
+                String result = iterator.next().toString();
+                if (ADMIN.equals(result)) {
+                    view = ADMIN_PAGE;
+                } else if (USER.equals(result)) {
+                    view = USER_PAGE;
+                } else {
+                    throw new Exception(AUTHORITIES_ERROR);
+                }
             }
         } else {
             throw new Exception(AUTHORITIES_ERROR);
