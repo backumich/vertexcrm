@@ -24,17 +24,23 @@ import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 @RequestMapping(value = "/registration")
 public class RegistrationController {
 
-    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     static final String REGISTRATION_PAGE = "registration";
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
-
+    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
-
+    private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;
-    private final MailService mailService;
+
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic,
+                                  EmailLogic emailLogic, MailService mailService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
+    }
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
@@ -47,7 +53,7 @@ public class RegistrationController {
                                                     UserFormRegistration userFormRegistration,
                                             BindingResult bindingResult, ModelAndView modelAndView) {
 
-        LOGGER.debug("Request to /processRegistration  ");
+        LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
         try {
             if (bindingResult.hasErrors()) {
                 modelAndView.setViewName(REGISTRATION_PAGE);
@@ -60,7 +66,6 @@ public class RegistrationController {
                 } else {
                     modelAndView.setViewName(REGISTRATION_PAGE);
                 }
-
             }
         } catch (DataAccessException e) {
             modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
@@ -71,13 +76,5 @@ public class RegistrationController {
         }
 
         return modelAndView;
-    }
-
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic,
-                                  EmailLogic emailLogic, MailService mailService) {
-        this.registrationUserLogic = registrationUserLogic;
-        this.emailLogic = emailLogic;
-        this.mailService = mailService;
     }
 }

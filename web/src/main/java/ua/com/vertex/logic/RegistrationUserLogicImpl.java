@@ -20,19 +20,16 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
     private final UserLogic userLogic;
 
-
     @Autowired
     public RegistrationUserLogicImpl(UserLogic userLogic) {
         this.userLogic = userLogic;
     }
-
 
     @Override
     public boolean isVerifyPassword(UserFormRegistration userFormRegistration) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkPassword(%s) ;", userFormRegistration));
         return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
     }
-
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Override
@@ -68,12 +65,9 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
                     userLogic.registrationUserUpdate(new User(userFormRegistration));
                     result = true;
                 }
-
             }
         }
         return result;
     }
-
-
 }
 
