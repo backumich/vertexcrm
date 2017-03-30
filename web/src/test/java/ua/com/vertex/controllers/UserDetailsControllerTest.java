@@ -49,8 +49,6 @@ public class UserDetailsControllerTest {
     @Autowired
     private WebApplicationContext context;
 
-    //MockMvc mockMvc;
-
     @Mock
     private UserLogic logic;
 
@@ -72,7 +70,6 @@ public class UserDetailsControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         userDetailsController = new UserDetailsController(logic, certificateLogic);
-        //this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).dispatchOptions(true).build();
         user = new User.Builder().getInstance();
         optional = Optional.ofNullable(user);
     }
@@ -175,7 +172,6 @@ public class UserDetailsControllerTest {
 //                .andExpect(model().attributeExists("user"))
 //                .andExpect(model().attributeExists("allRoles"))
 //                .andExpect(model().attributeExists("certificates"));
-
 
 //        mockMvc.perform(post("/saveUserData"))
 //                .andExpect(status().isOk())
