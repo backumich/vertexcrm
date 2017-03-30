@@ -15,10 +15,10 @@ public class PdfDownloaderTest {
 
     private PdfDownloader pdfDownloader;
     private static final String PDF_FILE_NAME = "PdfDownloaderTest.pdf";
-    private File file = new File(PDF_FILE_NAME);
+    private final File file = new File(PDF_FILE_NAME);
 
     @Before
-    public void setUpClass() throws IOException {
+    public void setUp() throws IOException {
         if (!file.exists()) {
             file.createNewFile();
         }
@@ -26,7 +26,7 @@ public class PdfDownloaderTest {
     }
 
     @After
-    public void tearDownClass() {
+    public void tearDown() {
         if (file.exists()) {
             file.delete();
         }

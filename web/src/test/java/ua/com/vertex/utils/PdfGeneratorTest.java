@@ -28,8 +28,7 @@ public class PdfGeneratorTest {
     private LogInfo logInfo;
 
     private PdfGenerator pdfGenerator;
-    private File file = new File(PDF_FILE_NAME);
-
+    private final File file = new File(PDF_FILE_NAME);
     private static final String PDF_FILE_NAME = "PdfGeneratorTest.pdf";
 
     @Before

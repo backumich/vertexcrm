@@ -2,8 +2,9 @@ package ua.com.vertex.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PdfControllerTest {
 
     @Mock
@@ -30,7 +32,6 @@ public class PdfControllerTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         pdfController = new PdfController(pdfGenerator, pdfDownloader, logInfo);
     }
 
