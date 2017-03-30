@@ -3,6 +3,9 @@ package ua.com.vertex.utils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.File;
@@ -11,7 +14,11 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
+@RunWith(MockitoJUnitRunner.class)
 public class PdfDownloaderTest {
+
+    @Mock
+    private LogInfo logInfo;
 
     private PdfDownloader pdfDownloader;
     private static final String PDF_FILE_NAME = "PdfDownloaderTest.pdf";
@@ -22,7 +29,7 @@ public class PdfDownloaderTest {
         if (!file.exists()) {
             file.createNewFile();
         }
-        pdfDownloader = new PdfDownloader();
+        pdfDownloader = new PdfDownloader(logInfo);
     }
 
     @After

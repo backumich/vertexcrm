@@ -30,6 +30,7 @@ public class PdfController {
                             @RequestParam String courseName, @RequestParam String certificationDate,
                             @RequestParam int certificationId, HttpServletResponse response) {
 
+        LOGGER.debug(logInfo.getId() + "Generate pdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
         File pdfFile = new File(pdfFileName);
 

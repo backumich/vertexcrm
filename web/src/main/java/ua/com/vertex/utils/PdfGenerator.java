@@ -40,6 +40,8 @@ public class PdfGenerator {
             setText(writer, firstName, lastName, courseName, certificationDate, certificationId);
             document.close();
 
+            LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
+
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
         }
