@@ -161,8 +161,8 @@ public class UserDetailsControllerTest {
         MockMultipartFile passportScan = new MockMultipartFile("data", "fakePassportScan.png", "image/jpeg", "fakePassportScan".getBytes());
         MockMultipartFile photo = new MockMultipartFile("data", "fakePhoto.png", "image/jpeg", "fakePhoto".getBytes());
 
-        User user = new User();
-        user.setUserId(1);
+//        User user = new User();
+//        user.setUserId(1);
 //        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/saveUserData")
 //                .file(passportScan)
 //                .file(photo)
