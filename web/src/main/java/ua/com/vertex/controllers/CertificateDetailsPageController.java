@@ -42,7 +42,7 @@ public class CertificateDetailsPageController {
                 certLogic.setUserAndCertificate(certificateId, model);
                 LOGGER.debug(logInfo.getId() + "Passing certificate and user data to JSP");
             } catch (Exception e) {
-                LOGGER.warn(logInfo.getId(), e, e);
+                LOGGER.warn(logInfo.getId(), e);
                 view = ERROR;
             }
         }
@@ -63,7 +63,7 @@ public class CertificateDetailsPageController {
             try {
                 certLogic.setUserAndCertificate(certificateId, model);
             } catch (Exception e) {
-                LOGGER.warn(logInfo.getId(), e, e);
+                LOGGER.warn(logInfo.getId(), e);
                 view = ERROR;
             }
         }

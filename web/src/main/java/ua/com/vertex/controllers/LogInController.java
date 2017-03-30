@@ -33,7 +33,7 @@ public class LogInController {
                 view = loggingLogic.setUser(logInfo.getEmail(), model);
             }
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
 
@@ -47,7 +47,7 @@ public class LogInController {
         try {
             view = loggingLogic.setUser(logInfo.getEmail(), model);
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
 

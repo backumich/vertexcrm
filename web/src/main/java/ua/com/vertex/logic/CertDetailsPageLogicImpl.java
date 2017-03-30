@@ -46,7 +46,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
             certificateId = Integer.parseInt(Aes.decrypt(certificateIdEncoded, KEY));
             model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
         }
 
         return certificateId;

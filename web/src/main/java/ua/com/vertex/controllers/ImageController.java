@@ -39,7 +39,7 @@ public class ImageController {
             model.addAttribute(USER, user);
             LOGGER.debug(logInfo.getId() + "Passing image to JSP");
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
 
@@ -66,7 +66,7 @@ public class ImageController {
                 model.addAttribute(user);
             }
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
 
