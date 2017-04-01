@@ -5,11 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.Optional;
@@ -19,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = TestConfig.class)
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationUserLogicImplTest {
 
@@ -71,14 +68,14 @@ public class RegistrationUserLogicImplTest {
     }
 
     @Test
-    public void isRegisteredUserWhenEmailElredyExists() throws Exception {
+    public void isRegisteredUserEmailElredyExists() throws Exception {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(true).getInstance()));
         assertFalse(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationIncorrect, bindingResult));
     }
 
     @Test
-    public void isRegisteredUserWhenEmailElredyExistsButNotActive() throws Exception {
+    public void isRegisteredUserEmailElredyExistsButNotActive() throws Exception {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(false).getInstance()));
         assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));

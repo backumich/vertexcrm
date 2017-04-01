@@ -54,25 +54,22 @@ public class RegistrationController {
                                             BindingResult bindingResult, ModelAndView modelAndView) {
 
         LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
-        try {
-            if (bindingResult.hasErrors()) {
-                modelAndView.setViewName(REGISTRATION_PAGE);
-            } else {
+        modelAndView.setViewName(REGISTRATION_PAGE);
+        if (!bindingResult.hasErrors()) {
+            try {
                 if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
                     modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
                     mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
                             "Confirmation of registration",
                             emailLogic.createRegistrationMessage(userFormRegistration));
-                } else {
-                    modelAndView.setViewName(REGISTRATION_PAGE);
                 }
+            } catch (DataAccessException e) {
+                modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
+                LOGGER.warn(e);
+            } catch (Exception e) {
+                modelAndView.setViewName(ERROR);
+                LOGGER.warn(e);
             }
-        } catch (DataAccessException e) {
-            modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
-            LOGGER.warn(e);
-        } catch (Exception e) {
-            modelAndView.setViewName(ERROR);
-            LOGGER.warn(e);
         }
 
         return modelAndView;

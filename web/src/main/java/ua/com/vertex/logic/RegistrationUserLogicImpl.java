@@ -49,14 +49,12 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
                     " were entered passwords do not match");
             bindingResult.rejectValue("verifyPassword", "error.verifyPassword",
                     "Passwords do not match!");
-            result = false;
         } else {
             Optional<User> user = userLogic.userForRegistrationCheck(userFormRegistration.getEmail());
             if (isEmailAlreadyExists(user)) {
                 LOGGER.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
                 bindingResult.rejectValue("email", "error.email",
                         "User with that email is already registered!");
-                result = false;
             } else {
                 if (!bindingResult.hasErrors() && !user.isPresent()) {
                     userLogic.registrationUserInsert(new User(userFormRegistration));
