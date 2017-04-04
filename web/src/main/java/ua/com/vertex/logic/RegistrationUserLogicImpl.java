@@ -56,13 +56,13 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
                 bindingResult.rejectValue("email", "error.email",
                         "User with that email is already registered!");
             } else {
-                if (!bindingResult.hasErrors() && !user.isPresent()) {
-                    userLogic.registrationUserInsert(new User(userFormRegistration));
-                    result = true;
-                } else if (!bindingResult.hasErrors() && user.isPresent()) {
+                if (user.isPresent()) {
                     userLogic.registrationUserUpdate(new User(userFormRegistration));
-                    result = true;
+
+                } else {
+                    userLogic.registrationUserInsert(new User(userFormRegistration));
                 }
+                result = true;
             }
         }
         return result;

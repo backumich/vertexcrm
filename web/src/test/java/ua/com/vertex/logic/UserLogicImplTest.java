@@ -3,9 +3,11 @@ package ua.com.vertex.logic;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -23,6 +25,9 @@ public class UserLogicImplTest {
     @Mock
     private UserDaoInf dao;
 
+    @InjectMocks
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private UserLogic logic;
 
     private User user;
@@ -35,7 +40,7 @@ public class UserLogicImplTest {
 
     @Before
     public void setUp() {
-        logic = new UserLogicImpl(dao);
+        logic = new UserLogicImpl(dao, bCryptPasswordEncoder);
         user = new User.Builder().setUserId(EXISTING_ID).setEmail(EMAIL).setPassword(NAME).setFirstName(NAME)
                 .setLastName(NAME).setDiscount(0).getInstance();
     }
@@ -90,23 +95,24 @@ public class UserLogicImplTest {
 
     @Test
     public void registrationUserInsertEncodePasswordAndInvokesDao() throws DataAccessException {
-        String passwordBedoreInsert = user.getPassword();
+        String passwordBeforeInsert = user.getPassword();
         logic.registrationUserInsert(user);
         verify(dao, times(1)).registrationUserInsert(user);
-        assertNotEquals(MSG, passwordBedoreInsert, user.getPassword());
+        assertNotEquals(MSG, passwordBeforeInsert, user.getPassword());
     }
 
     @Test(expected = NullPointerException.class)
     public void registrationUserUpdateReturnNullPointerException() throws DataAccessException {
+
         logic.registrationUserUpdate(new User());
     }
 
     @Test
     public void registrationUserUpdateEncodePasswordAndInvokesDao() throws DataAccessException {
-        String passwordBedoreInsert = user.getPassword();
+        String passwordBeforeInsert = user.getPassword();
         logic.registrationUserUpdate(user);
         verify(dao, times(1)).registrationUserUpdate(user);
-        assertNotEquals(MSG, passwordBedoreInsert, user.getPassword());
+        assertNotEquals(MSG, passwordBeforeInsert, user.getPassword());
     }
 
     @Test(expected = NullPointerException.class)

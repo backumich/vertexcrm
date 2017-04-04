@@ -68,14 +68,14 @@ public class RegistrationUserLogicImplTest {
     }
 
     @Test
-    public void isRegisteredUserEmailElredyExists() throws Exception {
+    public void isRegisteredUserEmailAlreadyExists() throws Exception {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(true).getInstance()));
         assertFalse(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationIncorrect, bindingResult));
     }
 
     @Test
-    public void isRegisteredUserEmailElredyExistsButNotActive() throws Exception {
+    public void isRegisteredUserEmailAlreadyExistsButNotActive() throws Exception {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(false).getInstance()));
         assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));

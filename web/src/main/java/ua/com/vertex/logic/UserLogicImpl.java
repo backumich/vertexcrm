@@ -21,10 +21,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserLogicImpl implements UserLogic {
 
-    private static final int PASSWORD_STRENGTH = 10;
-
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     private final UserDaoInf userDao;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<String> getAllUserIds() {
@@ -106,12 +105,13 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public String encryptPassword(String password) {
         LOGGER.debug("Password encryption");
-        return new BCryptPasswordEncoder(PASSWORD_STRENGTH).encode(password);
+        return bCryptPasswordEncoder.encode(password);
     }
 
     @Autowired
-    public UserLogicImpl(UserDaoInf userDao) {
+    public UserLogicImpl(UserDaoInf userDao, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDao = userDao;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 }
