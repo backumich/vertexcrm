@@ -1,6 +1,6 @@
 package ua.com.vertex.controllers;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class ImageController {
     }
 
     private void encode(Model model, int userId, String imageType) {
-        String encoded = Base64.encode(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
+        String encoded = Base64.encodeBase64String(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
     }
 

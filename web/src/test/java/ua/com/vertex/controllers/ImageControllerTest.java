@@ -1,6 +1,6 @@
 package ua.com.vertex.controllers;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +55,7 @@ public class ImageControllerTest {
     @WithMockUser
     public void showImageAddsModelAttributePhoto() {
         controller.showImage(user, PAGE_TO_DISPLAY, PHOTO, model);
-        verify(model, times(1)).addAttribute(PHOTO, Base64.encode(PHOTO_RETRIEVED));
+        verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(PHOTO_RETRIEVED));
     }
 
     @Test
