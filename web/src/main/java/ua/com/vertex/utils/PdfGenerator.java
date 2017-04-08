@@ -23,9 +23,10 @@ public class PdfGenerator {
 
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
+    private static final int LENGTH = 24;
 
     public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
-                            String certificationDate, int certificationId) {
+                            String certificationDate, String certificationId) {
 
         Document document = new Document();
 
@@ -59,10 +60,11 @@ public class PdfGenerator {
     }
 
     private void setText(PdfWriter writer, String firstName, String lastName, String courseName,
-                         String certificationDate, int certificationId) throws IOException, DocumentException {
+                         String certificationDate, String certificationId) throws IOException, DocumentException {
 
         String fullName = firstName + " " + lastName;
         String date = formatter.format(LocalDate.parse(certificationDate));
+        certificationId = prepareCertificationId(certificationId);
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
@@ -71,8 +73,7 @@ public class PdfGenerator {
         setTextRow(writer, courseName, BaseFont.TIMES_BOLD, 32, 560, 185);
         setTextRow(writer, "Certificate was issued by vertex-academy.com", BaseFont.TIMES_ROMAN, 18, 280, 140);
         setTextRow(writer, "Director General: Piskokha M. A.", BaseFont.TIMES_ROMAN, 18, 760, 140);
-        setTextRow(writer, "Certificate id: ", BaseFont.TIMES_ROMAN, 18, 230, 115);
-        setTextRow(writer, String.format("%05d", certificationId), BaseFont.TIMES_ROMAN, 18, 310, 115);
+        setTextRow(writer, "Certificate id: " + certificationId, BaseFont.TIMES_ROMAN, 18, 280, 115);
         setTextRow(writer, date, BaseFont.TIMES_ROMAN, 18, 780, 115);
     }
 
@@ -88,6 +89,24 @@ public class PdfGenerator {
         cb.showTextAligned(Element.ALIGN_CENTER, parameter, shiftX, shiftY, 0);
         cb.endText();
         cb.restoreState();
+    }
+
+    private String prepareCertificationId(String certificationId) {
+        if (certificationId.length() != LENGTH) {
+            throw new IllegalArgumentException("ID length must be " + LENGTH + " symbols");
+        }
+
+        char[] chars = certificationId.toCharArray();
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 1; i <= LENGTH; i++) {
+            builder.append(chars[i - 1]);
+            if (i % 4 == 0) {
+                builder.append(" ");
+            }
+        }
+
+        return builder.toString().trim();
     }
 
     @Autowired

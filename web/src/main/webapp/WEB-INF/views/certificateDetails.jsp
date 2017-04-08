@@ -113,7 +113,7 @@
         <span class="fontSize125 bold">Enter encrypted certificate ID:</span><br><br>
 
         <sf:form cssClass="black" method="post" action="getCertificate">
-            <input type="text" name="certificateIdEncoded"/>
+            <input type="text" name="certificateIdEncoded" size="32"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
@@ -174,7 +174,7 @@
 
         <c:if test="${(user.email).equals(authenticated)}">
             <sf:form method="post" action="/generatePdf">
-                <input type="hidden" name="certificationId" value="${certificate.certificationId}"/>
+                <input type="hidden" name="certificationId" value="${certificate.encodedCertificationId}"/>
                 <input type="hidden" name="firstName" value="${user.firstName}"/>
                 <input type="hidden" name="lastName" value="${user.lastName}"/>
                 <input type="hidden" name="courseName" value="${certificate.courseName}"/>

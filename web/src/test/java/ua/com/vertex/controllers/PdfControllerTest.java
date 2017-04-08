@@ -41,7 +41,7 @@ public class PdfControllerTest {
         final String lastName = "";
         final String courseName = "";
         final String certificationDate = "";
-        final int certificationId = 0;
+        final String certificationId = "";
 
         MockHttpServletResponse response = new MockHttpServletResponse();
         pdfController.generatePdf(firstName, lastName, courseName, certificationDate, certificationId, response);

@@ -52,8 +52,8 @@ public class CertificateDetailsPageControllerTest {
 
     private static final int EXISTING_USER_ID = 22;
     private static final int EXISTING_CERT_ID = 222;
-    private static final String EXISTING_CERT_ID_ENC = "4fa70a1d04f2746b08248afa69df19e4";
-    private static final String NOT_EXISTING_CERT_ID_ENC = "00274718ec2443c64fa8b733f17bd1a9";
+    private static final String EXISTING_CERT_ID_ENC = "iQNPevRvEFBE6fypFaynIA==";
+    private static final String NOT_EXISTING_CERT_ID_ENC = "O+XEWkES8LEj5ghznW2S5g==";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String CERTIFICATE_LINK = "certificateLink";
     private static final String GET_CERTIFICATE = "getCertificate";

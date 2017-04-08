@@ -33,6 +33,7 @@ public class CertificateDetailsPageController {
 
         String view = CERTIFICATE_DETAILS;
 
+        certificateIdEncoded = certificateIdEncoded.replaceAll(" ", "");
         int certificateId = certLogic.decodeId(certificateIdEncoded, model);
         if (certificateId == WRONG_ID) {
             model.addAttribute(ERROR, "Invalid entered data");

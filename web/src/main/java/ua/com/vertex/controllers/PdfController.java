@@ -28,9 +28,9 @@ public class PdfController {
     @PostMapping
     public void generatePdf(@RequestParam String firstName, @RequestParam String lastName,
                             @RequestParam String courseName, @RequestParam String certificationDate,
-                            @RequestParam int certificationId, HttpServletResponse response) {
+                            @RequestParam String certificationId, HttpServletResponse response) {
 
-        LOGGER.debug(logInfo.getId() + "Generate pdf page accessed");
+        LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
         File pdfFile = new File(pdfFileName);
 

@@ -10,7 +10,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.Aes;
+import ua.com.vertex.utils.Encryptor;
 import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
@@ -20,7 +20,6 @@ import static ua.com.vertex.beans.User.EMPTY_USER;
 
 @Service
 public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
-
     private final CertificateDaoInf certificateDao;
     private final UserLogic userLogic;
     private final LogInfo logInfo;
@@ -32,7 +31,6 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     private static final String CERTIFICATE = "certificate";
     private static final String CERTIFICATE_LINK = "certificateLink";
     private static final String ERROR = "error";
-    private static final String KEY = "ArgentinaJamaica";
 
     @Override
     public Optional<Certificate> getCertificateDetails(int certificationId) {
@@ -43,7 +41,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
     public int decodeId(String certificateIdEncoded, Model model) {
         int certificateId = WRONG_ID;
         try {
-            certificateId = Integer.parseInt(Aes.decrypt(certificateIdEncoded, KEY));
+            certificateId = Integer.parseInt(Encryptor.decode(certificateIdEncoded));
             model.addAttribute(CERTIFICATE_LINK, certificateIdEncoded);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
@@ -57,6 +55,7 @@ public class CertDetailsPageLogicImpl implements CertDetailsPageLogic {
         LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificationId);
 
         Certificate certificate = getCertificateDetails(certificationId).orElse(EMPTY_CERTIFICATE);
+        certificate.setEncodedCertificationId(Encryptor.encode(String.valueOf(certificate.getCertificationId())));
         if (!EMPTY_CERTIFICATE.equals(certificate)) {
             model.addAttribute(CERTIFICATE, certificate);
             User user = userLogic.getUserById(certificate.getUserId()).orElse(EMPTY_USER);

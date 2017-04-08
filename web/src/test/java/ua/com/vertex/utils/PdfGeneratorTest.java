@@ -53,7 +53,7 @@ public class PdfGeneratorTest {
         final String lastName = "LastName";
         final String courseName = "Java Professional";
         final String certificationDate = "2016-12-01";
-        final int certificationId = 222;
+        final String certificationId = "id";
 
         pdfGenerator.generatePdf(PDF_FILE_NAME, firstName, lastName, courseName, certificationDate, certificationId);
         assertTrue(file.exists());
