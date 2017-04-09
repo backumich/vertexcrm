@@ -36,7 +36,8 @@ INSERT INTO Users (user_id, email, password, first_name, last_name, passport_sca
 VALUES ('22', '22@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
-VALUES ('33', '33@test.com', 'password', 'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
+VALUES ('33', '33@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+        NULL, NULL, '0', '38066 000 00 00', '1');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('44', '44@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
