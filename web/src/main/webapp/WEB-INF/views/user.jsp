@@ -100,7 +100,7 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5" align="center">
 
         <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
             <input type="submit" name="enter" value="Show certificate"/>

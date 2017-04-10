@@ -22,9 +22,11 @@ import java.util.Collection;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -87,6 +89,30 @@ public class AuthenticationTest {
         mockMvc.perform(formLogin("/logIn").user(INCORRECT).password(CORRECT_PASSWORD))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
+                .andExpect(unauthenticated());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void loginWithValidCsrf() throws Exception {
+        mockMvc.perform(post("/logIn")
+                .param("username", EXISTING_EMAIL)
+                .param("password", CORRECT_PASSWORD)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl("/loggedIn"))
+                .andExpect(authenticated());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void loginWithInvalidCsrf() throws Exception {
+        mockMvc.perform(post("/logIn")
+                .param("username", EXISTING_EMAIL)
+                .param("password", CORRECT_PASSWORD)
+                .with(csrf().useInvalidToken()))
+                .andExpect(status().isForbidden())
+                .andExpect(forwardedUrl("/403"))
                 .andExpect(unauthenticated());
     }
 
