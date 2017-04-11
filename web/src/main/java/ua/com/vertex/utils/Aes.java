@@ -76,4 +76,8 @@ public class Aes {
         }
         return toReturn;
     }
+
+    public static void main(String[] args) {
+        System.out.println(encrypt("987123", "encryptionKey"));
+    }
 }

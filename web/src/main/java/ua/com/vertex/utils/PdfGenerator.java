@@ -23,7 +23,7 @@ public class PdfGenerator {
 
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
-    private static final int LENGTH = 24;
+    private static final int LENGTH = 32;
 
     public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
                             String certificationDate, String certificationId) {
@@ -105,6 +105,8 @@ public class PdfGenerator {
                 builder.append(" ");
             }
         }
+
+        System.out.println(builder.toString());
 
         return builder.toString().trim();
     }

@@ -113,7 +113,7 @@
         <span class="fontSize125 bold">Enter encrypted certificate ID:</span><br><br>
 
         <sf:form cssClass="black" method="post" action="getCertificate">
-            <input type="text" name="certificateIdEncoded" size="32"/>
+            <input type="text" name="certificateIdEncoded" size="38"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
