@@ -16,7 +16,6 @@ import ua.com.vertex.utils.Aes;
 @Controller
 @RequestMapping(value = "/activationUser", method = RequestMethod.GET)
 public class ActivationUserController {
-
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
@@ -24,6 +23,11 @@ public class ActivationUserController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private UserLogic userLogic;
+
+    @Autowired
+    public ActivationUserController(UserLogic userLogic) {
+        this.userLogic = userLogic;
+    }
 
     @GetMapping
     public ModelAndView activateUser(@RequestParam("activeUser") String encodedEmail) {
@@ -33,6 +37,7 @@ public class ActivationUserController {
 
         try {
             email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
+            LOGGER.debug("Encrypted email " + encodedEmail);
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Your link is not correct");
             modelAndView.setViewName(ERROR_JSP);
@@ -42,20 +47,14 @@ public class ActivationUserController {
         try {
             if (userLogic.activateUser(email) != 1) {
                 modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
+                LOGGER.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
                 modelAndView.setViewName(ERROR_JSP);
             }
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Activate user failed", e);
         }
-
         return modelAndView;
     }
-
-    @Autowired
-    public ActivationUserController(UserLogic userLogic) {
-        this.userLogic = userLogic;
-    }
-
 }
 
