@@ -1,8 +1,10 @@
 package ua.com.vertex.dao.interfaces;
 
 
+import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.sql.SQLException;
 import java.util.EnumMap;
@@ -23,6 +25,14 @@ public interface UserDaoInf {
     List<Integer> getAllUserIds();
 
     List<User> getAllUsers() throws SQLException;
+
+    List<User> getAllUsers(DataNavigator dataNavigator) throws SQLException;
+
+    List<Course> getAllCourses(DataNavigator dataNavigator);
+
+    int getQuantityUsers() throws SQLException;
+
+    int getQuantityCourses() throws SQLException;
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 

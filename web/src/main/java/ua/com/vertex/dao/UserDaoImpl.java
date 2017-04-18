@@ -14,17 +14,17 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
@@ -182,7 +182,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getAllUsers() throws SQLException {
-        LOGGER.debug("Get a list of all users");
+        LOGGER.debug("Get all users list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
@@ -191,6 +191,63 @@ public class UserDaoImpl implements UserDaoInf {
                 setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
                 setLastName(resultSet.getString(COLUMN_LAST_NAME)).
                 setPhone(resultSet.getString(COLUMN_PHONE)).getInstance());
+    }
+
+    @Override
+    public List<User> getAllUsers(DataNavigator dataNavigator) throws SQLException {
+        List<User> users = new ArrayList<>();
+
+        LOGGER.debug("Get all user  list");
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
+        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
+
+        try {
+            users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("Get courses with a non-existent id ??????????????????");
+        }
+        return users;
+    }
+
+    @Override
+    public List<Course> getAllCourses(DataNavigator dataNavigator) {
+        List<Course> courses = new ArrayList<>();
+
+        LOGGER.debug("Get all courses list");
+
+        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
+                "FROM Courses c LIMIT :from, :offset";
+
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
+        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
+
+        try {
+            courses = jdbcTemplate.query(query, parameters, new CoursesRowMapping());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("Get user with a non-existent id ??????????????????");
+        }
+        return courses;
+    }
+
+    @Override
+    public int getQuantityUsers() throws SQLException {
+        LOGGER.debug("Get all users list");
+        String query = "SELECT count(*) FROM Users";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
+    }
+
+
+    @Override
+    public int getQuantityCourses() throws SQLException {
+        LOGGER.debug("Get all courses list");
+        String query = "SELECT count(*) FROM Courses";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
 
     @Override
@@ -296,6 +353,35 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPhone(resultSet.getString(COLUMN_PHONE))
                     .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
                     .getInstance();
+        }
+    }
+
+    private static final class UserPartDataRowMapping implements RowMapper<User> {
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            LobHandler handler = new DefaultLobHandler();
+            return new User.Builder()
+                    .setUserId(resultSet.getInt(COLUMN_USER_ID))
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                    .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                    .setPhone(resultSet.getString(COLUMN_PHONE))
+                    .getInstance();
+        }
+    }
+
+    private static final class CoursesRowMapping implements RowMapper<Course> {
+        public Course mapRow(ResultSet resultSet, int i) throws SQLException {
+            LobHandler handler = new DefaultLobHandler();
+            Course course = new Course();
+            course.setId(resultSet.getInt("id"));
+            course.setName(resultSet.getString("name"));
+            course.setStart(resultSet.getDate("start").toLocalDate());
+            course.setFinished(resultSet.getInt("finished") != 0);
+            course.setPrice(resultSet.getDouble("price"));
+            course.setTeacherName(resultSet.getString("teacher_name"));
+            course.setSchedule(resultSet.getString("schedule"));
+            course.setNotes(resultSet.getString("notes"));
+            return course;
         }
     }
 

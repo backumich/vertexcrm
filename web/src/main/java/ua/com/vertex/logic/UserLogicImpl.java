@@ -5,10 +5,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.sql.SQLException;
 import java.util.EnumMap;
@@ -49,8 +51,55 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
-        return userDao.getAllUsers();
+    public List<User> getUsersPerPages(DataNavigator dataNavigator) {
+        List<User> users = null;
+        if (dataNavigator.getCurrentNumberPage() == dataNavigator.getNextPage()) {
+            dataNavigator.setCurrentNumberPage(1);
+            dataNavigator.setNextPage(1);
+        } else {
+            dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+        }
+
+        try {
+            users = userDao.getAllUsers(dataNavigator);
+            int dataSize = userDao.getQuantityUsers();
+
+            dataNavigator.setDataSize(dataSize);
+            dataNavigator.setQuantityPages(dataSize / dataNavigator.getCurrentRowPerPage());
+            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
+                dataNavigator.setQuantityPages(dataNavigator.getQuantityPages() + 1);
+            }
+            dataNavigator.setLastPage(dataNavigator.getQuantityPages());
+        } catch (SQLException e) {
+            LOGGER.warn(e);
+        }
+        return users;
+    }
+
+    @Override
+    public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
+        List<Course> courses = null;
+        if (dataNavigator.getCurrentNumberPage() == dataNavigator.getNextPage()) {
+            dataNavigator.setCurrentNumberPage(1);
+            dataNavigator.setNextPage(1);
+        } else {
+            dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+        }
+
+        try {
+            courses = userDao.getAllCourses(dataNavigator);
+            int dataSize = userDao.getQuantityCourses();
+
+            dataNavigator.setDataSize(dataSize);
+            dataNavigator.setQuantityPages(dataSize / dataNavigator.getCurrentRowPerPage());
+            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
+                dataNavigator.setQuantityPages(dataNavigator.getQuantityPages() + 1);
+            }
+            dataNavigator.setLastPage(dataNavigator.getQuantityPages());
+        } catch (SQLException e) {
+            LOGGER.warn(e);
+        }
+        return courses;
     }
 
     @Override
