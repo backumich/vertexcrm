@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -20,17 +20,6 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
     <script async="" src="../../javascript/analytics.js"></script>
-    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
-    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
-    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -54,7 +43,6 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -114,50 +102,58 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <div>
-            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
-                <input type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+        <c:if test="${empty users}">
 
-        <div>
-            <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
-                <input type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div>
-            <span class="formHeaderText1">Create new payment:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="createPayment">
-                <input type="submit" name="createPayment" value="Create new payment"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div class="hrefText">
-            <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
-            </c:if>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
+        </c:if>
     </div>
+    <div>
+        <c:if test="${!empty users}">
+            <form:form method="post" commandName="userIdForPayment"
+                       action="selectUserForPayment">
+                <table class="active" width="500">
+                    <tr>
+                        <th>Select user</th>
+                        <th>User Id</th>
+                        <th>User E-mail</th>
+                        <th>User first name</th>
+                        <th>User last name</th>
+                    </tr>
+                    <c:forEach items="${users}" var="user">
+                        <tr>
+                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
+                            </td>
+                            <td>${user.userId}</td>
+                            <td>${user.email}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                </tr>
+            </form:form>
+
+        </c:if>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <c:if test="${!empty msg}">
+        <h3><span class="errorText250">${msg}</span></h3>
+    </c:if>
+    <br>
+    <br>
+    <br>
+
+    <div class="hrefText">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
+    </div>
+</div>
 
 </div>
 <div class="footer">

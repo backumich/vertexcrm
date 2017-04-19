@@ -8,12 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.logic.interfaces.AccountingLogic;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
@@ -26,12 +30,16 @@ public class AdminController {
 
     static final String ADMIN_JSP = "admin";
     static final String SELECT_USER_JSP = "selectUser";
+    static final String SELECT_COURSE_FOR_PAYMENT_JSP = "selectCourseForPayment";
+    static final String SELECT_USER_FOR_PAYMENT_JSP = "selectUserForPayment";
     static final String ADD_CERTIFICATE_AND_USER_JSP = "addCertificateAndUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String USER_ID = "userIdForCertificate";
+    static final String COURSE_ID = "courseIdForPayment";
     static final String MSG = "msg";
     static final String CERTIFICATE = "certificate";
     static final String USERS = "users";
+    static final String COURSES = "courses";
     static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     static final String LOG_CERTIFICATE_ADDED = "Certificate added. Certificate id = ";
     static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
@@ -39,11 +47,12 @@ public class AdminController {
     static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
     private final String USER_DATA = "userDataForSearch";
     private final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER = "Request to '/addCertificateAndCreateUser' ";
-    private final String LOG_REQ_SELECT_USER = "Request to '/selectUser' with user id = (%s). Redirect to ";
 
     private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
+    private final CourseLogic courseLogic;
+    private final AccountingLogic accountingLogic;
 
     @GetMapping(value = "/admin")
     public ModelAndView admin() {
@@ -53,7 +62,7 @@ public class AdminController {
 
     @PostMapping(value = "/addCertificateWithUserId")
     public ModelAndView addCertificateWithUserId() {
-        LOGGER.debug(LOG_REQ_SELECT_USER + SELECT_USER_JSP);
+        LOGGER.debug("Request to '/addCertificateWithUserId' . Redirect to " + SELECT_USER_JSP);
         return new ModelAndView(SELECT_USER_JSP);
     }
 
@@ -90,7 +99,7 @@ public class AdminController {
 
     @PostMapping(value = "/selectUser")
     public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
-        LOGGER.debug(String.format(LOG_REQ_SELECT_USER, userId) + SELECT_USER_JSP);
+        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
         return result;
@@ -161,10 +170,37 @@ public class AdminController {
         return returnPage;
     }
 
+    @PostMapping(value = "/createPayment")
+    public ModelAndView selectCourseForPayment() {
+        LOGGER.debug("Request to '/createPaymente' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
+        ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
+        try {
+            result.addObject(COURSES, courseLogic.activeCourses());
+        } catch (Exception e) {
+            LOGGER.warn(e);
+            result.setViewName(ERROR);
+        }
+        return result;
+    }
+
+    @PostMapping(value = "selectCourse")
+    public ModelAndView selectUserForPayment(@ModelAttribute(COURSE_ID) int courseId) {
+        ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
+        try {
+            result.addObject(accountingLogic.getCourseUsers(courseId));
+        } catch (Exception e) {
+            LOGGER.warn(e);
+            result.setViewName(ERROR);
+        }
+        return result;
+    }
+
     @Autowired
-    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic) {
+    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic, CourseLogic courseLogic, AccountingLogic accountingLogic) {
         this.certificateLogic = certificateLogic;
         this.userLogic = userLogic;
+        this.courseLogic = courseLogic;
+        this.accountingLogic = accountingLogic;
     }
 
 }

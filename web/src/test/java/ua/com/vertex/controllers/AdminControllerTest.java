@@ -13,7 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.logic.interfaces.AccountingLogic;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.time.LocalDate;
@@ -46,11 +48,17 @@ public class AdminControllerTest {
     private UserLogic userLogic;
 
     @Mock
+    private CourseLogic courseLogic;
+
+    @Mock
+    private AccountingLogic accountingLogic;
+
+    @Mock
     private BindingResult bindingResult;
 
     @Before
     public void setUp() throws Exception {
-        underTest = new AdminController(certificateLogic, userLogic);
+        underTest = new AdminController(certificateLogic, userLogic, courseLogic, accountingLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
