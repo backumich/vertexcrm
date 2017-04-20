@@ -187,7 +187,7 @@ public class AdminController {
     public ModelAndView selectUserForPayment(@ModelAttribute(COURSE_ID) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
         try {
-            result.addObject(accountingLogic.getCourseUsers(courseId));
+            result.addObject(USERS, accountingLogic.getCourseUsers(courseId));
         } catch (Exception e) {
             LOGGER.warn(e);
             result.setViewName(ERROR);
