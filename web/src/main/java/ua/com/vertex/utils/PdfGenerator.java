@@ -22,11 +22,11 @@ public class PdfGenerator {
     private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
-    private static final int LENGTH = 32;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.US);
+    private static final int LENGTH = 16;
 
     public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
-                            String certificationDate, String certificationId) {
+                            String certificationDate, String certificateUid) {
 
         Document document = new Document();
 
@@ -38,7 +38,7 @@ public class PdfGenerator {
 
             document.open();
             setCanvas(writer, dimensions);
-            setText(writer, firstName, lastName, courseName, certificationDate, certificationId);
+            setText(writer, firstName, lastName, courseName, certificationDate, certificateUid);
             document.close();
 
             LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
@@ -60,11 +60,11 @@ public class PdfGenerator {
     }
 
     private void setText(PdfWriter writer, String firstName, String lastName, String courseName,
-                         String certificationDate, String certificationId) throws IOException, DocumentException {
+                         String certificationDate, String certificateUid) throws IOException, DocumentException {
 
         String fullName = firstName + " " + lastName;
         String date = formatter.format(LocalDate.parse(certificationDate));
-        certificationId = prepareCertificationId(certificationId);
+        certificateUid = prepareCertificateUid(certificateUid);
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
@@ -72,9 +72,9 @@ public class PdfGenerator {
         setTextRow(writer, "has successfully completed the course", BaseFont.TIMES_ROMAN, 18, 560, 230);
         setTextRow(writer, courseName, BaseFont.TIMES_BOLD, 32, 560, 185);
         setTextRow(writer, "Certificate was issued by vertex-academy.com", BaseFont.TIMES_ROMAN, 18, 280, 140);
-        setTextRow(writer, "Director General: Piskokha M. A.", BaseFont.TIMES_ROMAN, 18, 760, 140);
-        setTextRow(writer, "Certificate id: " + certificationId, BaseFont.TIMES_ROMAN, 18, 280, 115);
-        setTextRow(writer, date, BaseFont.TIMES_ROMAN, 18, 780, 115);
+        setTextRow(writer, "Director General: Piskokha M. A.", BaseFont.TIMES_ROMAN, 18, 850, 140);
+        setTextRow(writer, "Certificate UID: " + certificateUid, BaseFont.TIMES_ROMAN, 18, 280, 115);
+        setTextRow(writer, date, BaseFont.TIMES_ROMAN, 18, 850, 115);
     }
 
     private void setTextRow(PdfWriter writer, String parameter, String font, int fontSize, int shiftX, int shiftY)
@@ -91,24 +91,24 @@ public class PdfGenerator {
         cb.restoreState();
     }
 
-    private String prepareCertificationId(String certificationId) {
-        if (certificationId.length() != LENGTH) {
+    private String prepareCertificateUid(String certificateUid) {
+        if (certificateUid.length() != LENGTH) {
             throw new IllegalArgumentException("ID length must be " + LENGTH + " symbols");
         }
 
-        char[] chars = certificationId.toCharArray();
+        char[] chars = certificateUid.toCharArray();
         StringBuilder builder = new StringBuilder();
 
         for (int i = 1; i <= LENGTH; i++) {
             builder.append(chars[i - 1]);
             if (i % 4 == 0) {
-                builder.append(" ");
+                builder.append("-");
             }
         }
 
         System.out.println(builder.toString());
 
-        return builder.toString().trim();
+        return builder.toString().substring(0, builder.length() - 1);
     }
 
     @Autowired

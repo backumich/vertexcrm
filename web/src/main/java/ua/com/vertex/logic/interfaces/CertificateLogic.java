@@ -1,5 +1,6 @@
 package ua.com.vertex.logic.interfaces;
 
+import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 
@@ -17,4 +18,8 @@ public interface CertificateLogic {
     int addCertificate(Certificate certificate) throws Exception;
 
     int addCertificateAndCreateUser(Certificate certificate, User user) throws Exception;
+
+    String generateCertificateUid();
+
+    void getUserAndCertificate(String certificateUid, Model model);
 }

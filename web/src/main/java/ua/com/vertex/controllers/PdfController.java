@@ -28,14 +28,14 @@ public class PdfController {
     @PostMapping
     public void generatePdf(@RequestParam String firstName, @RequestParam String lastName,
                             @RequestParam String courseName, @RequestParam String certificationDate,
-                            @RequestParam String certificationId, HttpServletResponse response) {
+                            @RequestParam String certificateUid, HttpServletResponse response) {
 
         LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
         File pdfFile = new File(pdfFileName);
 
         try {
-            pdfGenerator.generatePdf(pdfFileName, firstName, lastName, courseName, certificationDate, certificationId);
+            pdfGenerator.generatePdf(pdfFileName, firstName, lastName, courseName, certificationDate, certificateUid);
             pdfDownloader.downloadPdf(pdfFileName, response);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
