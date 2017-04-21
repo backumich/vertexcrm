@@ -15,10 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.AccountingLogic;
-import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.logic.interfaces.CourseLogic;
-import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.logic.interfaces.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,6 +33,7 @@ public class AdminController {
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String USER_ID = "userIdForCertificate";
     static final String COURSE_ID = "courseIdForPayment";
+    static final String USER_ID_FOR_PAYMENT = "userIdForCertificate";
     static final String MSG = "msg";
     static final String CERTIFICATE = "certificate";
     static final String USERS = "users";
@@ -45,14 +43,23 @@ public class AdminController {
     static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
     static final String LOG_USER_NOT_FOUND = "User not found, try again.";
     static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
+    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final String USER_DATA = "userDataForSearch";
     private final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER = "Request to '/addCertificateAndCreateUser' ";
-
-    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
     private final CourseLogic courseLogic;
     private final AccountingLogic accountingLogic;
+    private final Paymentlogic paymentlogic;
+
+    @Autowired
+    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic, CourseLogic courseLogic, AccountingLogic accountingLogic, Paymentlogic paymentlogic) {
+        this.certificateLogic = certificateLogic;
+        this.userLogic = userLogic;
+        this.courseLogic = courseLogic;
+        this.accountingLogic = accountingLogic;
+        this.paymentlogic = paymentlogic;
+    }
 
     @GetMapping(value = "/admin")
     public ModelAndView admin() {
@@ -183,7 +190,7 @@ public class AdminController {
         return result;
     }
 
-    @PostMapping(value = "selectCourse")
+    @PostMapping(value = "/selectCourse")
     public ModelAndView selectUserForPayment(@ModelAttribute(COURSE_ID) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
         try {
@@ -195,12 +202,16 @@ public class AdminController {
         return result;
     }
 
-    @Autowired
-    public AdminController(CertificateLogic certificateLogic, UserLogic userLogic, CourseLogic courseLogic, AccountingLogic accountingLogic) {
-        this.certificateLogic = certificateLogic;
-        this.userLogic = userLogic;
-        this.courseLogic = courseLogic;
-        this.accountingLogic = accountingLogic;
+    @PostMapping(value = "/selectUserForPayment")
+    public ModelAndView createPayment(@ModelAttribute(USER_ID_FOR_PAYMENT) int userIdForCertificate) {
+        ModelAndView result = new ModelAndView(ADMIN_JSP);
+        try {
+            paymentlogic.createNewPayment(userIdForCertificate);
+        } catch (Exception e) {
+            LOGGER.warn(e);
+            result.setViewName(ERROR);
+        }
+        return result;
     }
 
 }

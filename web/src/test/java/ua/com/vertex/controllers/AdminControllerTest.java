@@ -58,7 +58,7 @@ public class AdminControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        underTest = new AdminController(certificateLogic, userLogic, courseLogic, accountingLogic);
+        underTest = new AdminController(certificateLogic, userLogic, courseLogic, accountingLogic, paymentlogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
