@@ -14,8 +14,8 @@ public class CourseLogicImpl implements CourseLogic {
     private final CourseDaoInf courseDaoInf;
 
     @Override
-    public List<Course> activeCourses() {
-        return courseDaoInf.getAllActiveCourses();
+    public List<Course> getAllCoursesWithDept() {
+        return courseDaoInf.getAllCoursesWithDept();
     }
 
     @Autowired
