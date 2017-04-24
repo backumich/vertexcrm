@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AccountingDaoInf {
     List<User> getCourseUsers(int courseId);
+
+    int updateDeptByUserAndCourseId(int userId, int courseId, double amount);
 }
