@@ -1,5 +1,7 @@
 package ua.com.vertex.logic.interfaces;
 
+import ua.com.vertex.beans.Payment;
+
 public interface Paymentlogic {
-    int createNewPayment(int userId);
+    int createNewPaymentAndUpdateAccounting(int courseId, int userId, Payment payment);
 }
