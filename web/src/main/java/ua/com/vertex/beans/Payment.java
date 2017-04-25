@@ -10,7 +10,7 @@ public class Payment {
     private int paymentId;
     private int dealId;
 
-    @Digits(integer = 9, fraction = 2)
+    @Digits(integer = 19, fraction = 2)
     @NotNull
     private BigDecimal amount;
     private LocalDateTime paymentDate;
@@ -85,5 +85,37 @@ public class Payment {
                 ", amount=" + amount +
                 ", paymentDate=" + paymentDate +
                 '}';
+    }
+
+    public static class Builder {
+        private final Payment instance;
+
+        public Builder() {
+            instance = new Payment();
+        }
+
+        public Payment.Builder setPaymentId(int paymentId) {
+            instance.setPaymentId(paymentId);
+            return this;
+        }
+
+        public Payment.Builder setDealId(int dealId) {
+            instance.setDealId(dealId);
+            return this;
+        }
+
+        public Payment.Builder setAmount(BigDecimal amount) {
+            instance.setAmount(amount);
+            return this;
+        }
+
+        public Payment.Builder setPaymentDate(LocalDateTime paymentDate) {
+            instance.setPaymentDate(paymentDate);
+            return this;
+        }
+
+        public Payment getInstance() {
+            return instance;
+        }
     }
 }

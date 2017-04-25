@@ -226,6 +226,7 @@ public class AdminController {
             try {
                 int paymentId = paymentlogic.createNewPaymentAndUpdateAccounting(payment);
                 modelAndView.setViewName(ADMIN_JSP);
+                modelAndView.addObject(MSG, "Payment create successful!!!");
                 LOGGER.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
             } catch (Exception e) {
                 LOGGER.warn(e);

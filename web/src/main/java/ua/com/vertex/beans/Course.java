@@ -2,6 +2,7 @@ package ua.com.vertex.beans;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Course {
 
@@ -14,56 +15,39 @@ public class Course {
     public Course() {
     }
 
-    public static class Builder {
-        private final Course instance;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Course)) return false;
+        Course course = (Course) o;
+        return getId() == course.getId() &&
+                isFinished() == course.isFinished() &&
+                Objects.equals(getPrice(), course.getPrice()) &&
+                Objects.equals(getName(), course.getName()) &&
+                Objects.equals(getTeacherName(), course.getTeacherName()) &&
+                Objects.equals(getSchedule(), course.getSchedule()) &&
+                Objects.equals(getNotes(), course.getNotes()) &&
+                Objects.equals(getStart(), course.getStart());
+    }
 
-        public Builder() {
-            instance = new Course();
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPrice(), getName(), getTeacherName(), getSchedule(), getNotes(), getStart(),
+                isFinished());
+    }
 
-        public Builder setId(int courseId) {
-            instance.setId(courseId);
-            return this;
-        }
-
-        public Builder setName(String courseName) {
-            instance.setName(courseName);
-            return this;
-        }
-
-        public Builder setStart(LocalDateTime startDate) {
-            instance.setStart(startDate);
-            return this;
-        }
-
-        public Builder setFinished(boolean isFinished) {
-            instance.setFinished(isFinished);
-            return this;
-        }
-
-        public Builder setPrice(BigDecimal price) {
-            instance.setPrice(price);
-            return this;
-        }
-
-        public Builder setTeacherName(String teacherName) {
-            instance.setTeacherName(teacherName);
-            return this;
-        }
-
-        public Builder setShedule(String shedule) {
-            instance.setSchedule(shedule);
-            return this;
-        }
-
-        public Builder setNotes(String notes) {
-            instance.setNotes(notes);
-            return this;
-        }
-
-        public Course getInstance() {
-            return instance;
-        }
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", teacherName='" + teacherName + '\'' +
+                ", schedule='" + schedule + '\'' +
+                ", notes='" + notes + '\'' +
+                ", start=" + start +
+                ", finished=" + finished +
+                '}';
     }
 
     public int getId() {
@@ -128,6 +112,58 @@ public class Course {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public static class Builder {
+        private final Course instance;
+
+        public Builder() {
+            instance = new Course();
+        }
+
+        public Builder setId(int courseId) {
+            instance.setId(courseId);
+            return this;
+        }
+
+        public Builder setName(String courseName) {
+            instance.setName(courseName);
+            return this;
+        }
+
+        public Builder setStart(LocalDateTime startDate) {
+            instance.setStart(startDate);
+            return this;
+        }
+
+        public Builder setFinished(boolean isFinished) {
+            instance.setFinished(isFinished);
+            return this;
+        }
+
+        public Builder setPrice(BigDecimal price) {
+            instance.setPrice(price);
+            return this;
+        }
+
+        public Builder setTeacherName(String teacherName) {
+            instance.setTeacherName(teacherName);
+            return this;
+        }
+
+        public Builder setShedule(String shedule) {
+            instance.setSchedule(shedule);
+            return this;
+        }
+
+        public Builder setNotes(String notes) {
+            instance.setNotes(notes);
+            return this;
+        }
+
+        public Course getInstance() {
+            return instance;
+        }
     }
 
 }

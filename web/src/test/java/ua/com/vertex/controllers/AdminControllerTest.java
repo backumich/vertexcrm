@@ -10,17 +10,18 @@ import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.beans.CertificateWithUserForm;
-import ua.com.vertex.beans.User;
+import ua.com.vertex.beans.*;
 import ua.com.vertex.logic.interfaces.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.*;
@@ -36,7 +37,9 @@ public class AdminControllerTest {
     private Model model;
     private Certificate certificate;
     private User user;
+    private Course course;
     private CertificateWithUserForm certificateWithUserForm;
+    private PaymentForm paymentForm;
 
     @Mock
     private CertificateLogic certificateLogic;
@@ -64,6 +67,11 @@ public class AdminControllerTest {
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
         user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
+        course = new Course.Builder().setId(1).setName("JavaPro").setStart(LocalDateTime.of(2017, 4, 25, 12, 30)).setFinished(false).setPrice(BigDecimal.valueOf(4000))
+                .setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
+        paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
+                .setAmount(BigDecimal.valueOf(1000))
+                .setPaymentDate(LocalDateTime.of(2017, 4, 25, 12, 30)).getInstance());
         certificateWithUserForm = new CertificateWithUserForm();
         certificateWithUserForm.setCertificate(certificate);
         certificateWithUserForm.setUser(user);
@@ -220,4 +228,68 @@ public class AdminControllerTest {
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_INCORRECT_DATA));
     }
 
+    @Test
+    public void selectCourseForPaymentReturnCorrectViewWhenException() throws Exception {
+        when(courseLogic.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
+        assertEquals(MSG_INVALID_VIEW, underTest.selectCourseForPayment().getViewName(), ERROR);
+    }
+
+    @Test
+    public void selectCourseForPaymentReturnCorrectViewAndDataInModel() throws Exception {
+        when(courseLogic.getAllCoursesWithDept()).thenReturn(Collections.singletonList(course));
+        ModelAndView result = underTest.selectCourseForPayment();
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_COURSE_FOR_PAYMENT_JSP);
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES), Collections.singletonList(course));
+    }
+
+    @Test
+    public void selectUserForPaymentReturnCorrectViewWhenException() throws Exception {
+        when(accountingLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
+        assertEquals(MSG_INVALID_VIEW, underTest.selectUserForPayment(1).getViewName(), ERROR);
+    }
+
+    @Test
+    public void selectUserForPaymentReturnCorrectViewAndDataInModel() throws Exception {
+        when(accountingLogic.getCourseUsers(anyInt())).thenReturn(Collections.singletonList(user));
+        ModelAndView result = underTest.selectUserForPayment(1);
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_FOR_PAYMENT_JSP);
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(USERS), Collections.singletonList(user));
+    }
+
+    @Test
+    public void createPaymentReturnCorrectViewWhenBindingResultHasError() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        ModelAndView result = underTest.createPayment(paymentForm, bindingResult, new ModelAndView());
+
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_FOR_PAYMENT_JSP);
+
+        assertTrue(MSG_INVALID_DATA, result.getModel().containsKey(COURSE_ID_FOR_PAY));
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSE_ID_FOR_PAY), 1);
+
+        assertTrue(MSG_INVALID_DATA, result.getModel().containsKey(USER_ID_FOR_PAY));
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(USER_ID_FOR_PAY), 1);
+    }
+
+    @Test
+    public void createPaymentReturnCorrectViewWhenExceptiin() throws Exception {
+        when(paymentlogic.createNewPaymentAndUpdateAccounting(paymentForm))
+                .thenThrow(new DataIntegrityViolationException("Test"));
+        assertEquals(MSG_INVALID_VIEW, underTest.createPayment(paymentForm, bindingResult, new ModelAndView())
+                .getViewName(), ERROR);
+    }
+
+    @Test
+    public void createPaymentReturnCorrectViewAndDataInModel() throws Exception {
+        when(paymentlogic.createNewPaymentAndUpdateAccounting(paymentForm)).thenReturn(1);
+
+        ModelAndView result = underTest.createPayment(paymentForm, bindingResult, new ModelAndView());
+
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADMIN_JSP);
+
+        assertTrue(MSG_INVALID_DATA, result.getModel().containsKey(MSG));
+
+        assertEquals(MSG, result.getModel().get(MSG), "Payment create successful!!!");
+
+    }
 }
