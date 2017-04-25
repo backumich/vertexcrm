@@ -115,6 +115,7 @@
                         <th>Select course</th>
                         <th>Course name</th>
                         <th>Start</th>
+                        <th>Finished</th>
                         <th>Price</th>
                         <th>Teacher name</th>
                         <th>Notes</th>
@@ -126,6 +127,14 @@
                             </td>
                             <td>${course.name}</td>
                             <td>${course.start}</td>
+                            <td><c:choose>
+                                <c:when test="${course.finished}">
+                                    Yes
+                                </c:when>
+                                <c:otherwise>
+                                    No
+                                </c:otherwise>
+                            </c:choose></td>
                             <td>${course.price}</td>
                             <td>${course.teacherName}</td>
                             <td>${course.notes}</td>

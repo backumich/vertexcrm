@@ -13,10 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.CertificateWithUserForm;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.AccountingLogic;
-import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.logic.interfaces.CourseLogic;
-import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.logic.interfaces.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -52,6 +49,9 @@ public class AdminControllerTest {
 
     @Mock
     private AccountingLogic accountingLogic;
+
+    @Mock
+    private Paymentlogic paymentlogic;
 
     @Mock
     private BindingResult bindingResult;

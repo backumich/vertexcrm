@@ -1,29 +1,34 @@
 package ua.com.vertex.beans;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private int paytmensId;
+
+    private int paymentId;
     private int dealId;
-    private double amount;
+
+    @Digits(integer = 9, fraction = 2)
+    @NotNull
+    private BigDecimal amount;
     private LocalDateTime paymentDate;
 
     public Payment() {
     }
 
-    public Payment(int paytmensId, int dealId, double amount, LocalDateTime paymentDate) {
-        this.paytmensId = paytmensId;
-        this.dealId = dealId;
+    public Payment(BigDecimal amount, LocalDateTime paymentDate) {
         this.amount = amount;
         this.paymentDate = paymentDate;
     }
 
-    public int getPaytmensId() {
-        return paytmensId;
+    public int getPaymentId() {
+        return paymentId;
     }
 
-    public void setPaytmensId(int paytmensId) {
-        this.paytmensId = paytmensId;
+    public void setPaymentId(int paymentId) {
+        this.paymentId = paymentId;
     }
 
     public int getDealId() {
@@ -34,11 +39,11 @@ public class Payment {
         this.dealId = dealId;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -53,32 +58,29 @@ public class Payment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Payment)) return false;
 
         Payment payment = (Payment) o;
 
-        if (paytmensId != payment.paytmensId) return false;
-        if (dealId != payment.dealId) return false;
-        if (Double.compare(payment.amount, amount) != 0) return false;
-        return paymentDate != null ? paymentDate.equals(payment.paymentDate) : payment.paymentDate == null;
+        return getPaymentId() == payment.getPaymentId() && getDealId() == payment.getDealId() &&
+                (getAmount() != null ? getAmount().equals(payment.getAmount()) : payment.getAmount() == null) &&
+                (getPaymentDate() != null ? getPaymentDate().equals(payment.getPaymentDate()) : payment.getPaymentDate()
+                        == null);
     }
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = paytmensId;
-        result = 31 * result + dealId;
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (paymentDate != null ? paymentDate.hashCode() : 0);
+        int result = getPaymentId();
+        result = 31 * result + getDealId();
+        result = 31 * result + (getAmount() != null ? getAmount().hashCode() : 0);
+        result = 31 * result + (getPaymentDate() != null ? getPaymentDate().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Payment{" +
-                "paytmensId=" + paytmensId +
+                "paymentId=" + paymentId +
                 ", dealId=" + dealId +
                 ", amount=" + amount +
                 ", paymentDate=" + paymentDate +
