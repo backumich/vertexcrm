@@ -53,16 +53,16 @@ public class AdminController {
     private final UserLogic userLogic;
     private final CourseLogic courseLogic;
     private final AccountingLogic accountingLogic;
-    private final Paymentlogic paymentlogic;
+    private final PaymentLogic paymentLogic;
 
     @Autowired
     public AdminController(CertificateLogic certificateLogic, UserLogic userLogic, CourseLogic courseLogic,
-                           AccountingLogic accountingLogic, Paymentlogic paymentlogic) {
+                           AccountingLogic accountingLogic, PaymentLogic paymentLogic) {
         this.certificateLogic = certificateLogic;
         this.userLogic = userLogic;
         this.courseLogic = courseLogic;
         this.accountingLogic = accountingLogic;
-        this.paymentlogic = paymentlogic;
+        this.paymentLogic = paymentLogic;
     }
 
     @GetMapping(value = "/admin")
@@ -224,7 +224,7 @@ public class AdminController {
         modelAndView.setViewName(SELECT_USER_FOR_PAYMENT_JSP);
         if (!bindingResult.hasErrors()) {
             try {
-                int paymentId = paymentlogic.createNewPaymentAndUpdateAccounting(payment);
+                int paymentId = paymentLogic.createNewPaymentAndUpdateAccounting(payment);
                 modelAndView.setViewName(ADMIN_JSP);
                 modelAndView.addObject(MSG, "Payment create successful!!!");
                 LOGGER.debug(String.format("Payment create successful, payment id = (%s)", paymentId));

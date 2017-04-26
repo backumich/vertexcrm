@@ -22,8 +22,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.AdminController.*;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
@@ -54,21 +53,22 @@ public class AdminControllerTest {
     private AccountingLogic accountingLogic;
 
     @Mock
-    private Paymentlogic paymentlogic;
+    private PaymentLogic paymentLogic;
 
     @Mock
     private BindingResult bindingResult;
 
     @Before
     public void setUp() throws Exception {
-        underTest = new AdminController(certificateLogic, userLogic, courseLogic, accountingLogic, paymentlogic);
+        underTest = new AdminController(certificateLogic, userLogic, courseLogic, accountingLogic, paymentLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
         user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
-        course = new Course.Builder().setId(1).setName("JavaPro").setStart(LocalDateTime.of(2017, 4, 25, 12, 30)).setFinished(false).setPrice(BigDecimal.valueOf(4000))
-                .setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
+        course = new Course.Builder().setId(1).setName("JavaPro").
+                setStart(LocalDateTime.of(2017, 4, 25, 12, 30)).setFinished(false)
+                .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
         paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
                 .setAmount(BigDecimal.valueOf(1000))
                 .setPaymentDate(LocalDateTime.of(2017, 4, 25, 12, 30)).getInstance());
@@ -193,7 +193,9 @@ public class AdminControllerTest {
     @Test
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectView() throws Exception {
         when(certificateLogic.addCertificateAndCreateUser(certificate, user)).thenReturn(333);
+
         String returnPage = underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model);
+
         assertEquals(MSG_INVALID_VIEW, returnPage, ADMIN_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue(LOG_CERTIFICATE_ADDED + "333"));
@@ -204,6 +206,7 @@ public class AdminControllerTest {
             throws Exception {
         when(certificateLogic.addCertificateAndCreateUser(certificate
                 , user)).thenThrow(new DataIntegrityViolationException("Test"));
+
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
                 , ADD_CERTIFICATE_AND_USER_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
@@ -214,6 +217,7 @@ public class AdminControllerTest {
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
         when(certificateLogic.addCertificateAndCreateUser(certificate
                 , user)).thenThrow(new Exception("Test"));
+
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
                 , ERROR);
     }
@@ -222,6 +226,7 @@ public class AdminControllerTest {
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenBindigResultHasError()
             throws Exception {
         when(bindingResult.hasErrors()).thenReturn(true);
+
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
                 , ADD_CERTIFICATE_AND_USER_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
@@ -237,7 +242,10 @@ public class AdminControllerTest {
     @Test
     public void selectCourseForPaymentReturnCorrectViewAndDataInModel() throws Exception {
         when(courseLogic.getAllCoursesWithDept()).thenReturn(Collections.singletonList(course));
+
         ModelAndView result = underTest.selectCourseForPayment();
+        verify(courseLogic, times(1)).getAllCoursesWithDept();
+
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_COURSE_FOR_PAYMENT_JSP);
         assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES), Collections.singletonList(course));
     }
@@ -251,7 +259,10 @@ public class AdminControllerTest {
     @Test
     public void selectUserForPaymentReturnCorrectViewAndDataInModel() throws Exception {
         when(accountingLogic.getCourseUsers(anyInt())).thenReturn(Collections.singletonList(user));
+
         ModelAndView result = underTest.selectUserForPayment(1);
+        verify(accountingLogic, times(1)).getCourseUsers(1);
+
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_FOR_PAYMENT_JSP);
         assertEquals(MSG_INVALID_DATA, result.getModel().get(USERS), Collections.singletonList(user));
     }
@@ -272,8 +283,8 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void createPaymentReturnCorrectViewWhenExceptiin() throws Exception {
-        when(paymentlogic.createNewPaymentAndUpdateAccounting(paymentForm))
+    public void createPaymentReturnCorrectViewWhenException() throws Exception {
+        when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm))
                 .thenThrow(new DataIntegrityViolationException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.createPayment(paymentForm, bindingResult, new ModelAndView())
                 .getViewName(), ERROR);
@@ -281,14 +292,13 @@ public class AdminControllerTest {
 
     @Test
     public void createPaymentReturnCorrectViewAndDataInModel() throws Exception {
-        when(paymentlogic.createNewPaymentAndUpdateAccounting(paymentForm)).thenReturn(1);
+        when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm)).thenReturn(1);
 
         ModelAndView result = underTest.createPayment(paymentForm, bindingResult, new ModelAndView());
+        verify(paymentLogic, times(1)).createNewPaymentAndUpdateAccounting(paymentForm);
 
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADMIN_JSP);
-
         assertTrue(MSG_INVALID_DATA, result.getModel().containsKey(MSG));
-
         assertEquals(MSG, result.getModel().get(MSG), "Payment create successful!!!");
 
     }

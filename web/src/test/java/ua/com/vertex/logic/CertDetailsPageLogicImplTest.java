@@ -2,8 +2,9 @@ package ua.com.vertex.logic;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -12,6 +13,7 @@ import ua.com.vertex.utils.LogInfo;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CertDetailsPageLogicImplTest {
 
     @Mock
@@ -29,7 +31,6 @@ public class CertDetailsPageLogicImplTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         certLogic = new CertDetailsPageLogicImpl(dao, userLogic, logInfo);
     }
 

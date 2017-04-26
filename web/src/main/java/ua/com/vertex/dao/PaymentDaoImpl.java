@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,6 +15,8 @@ import ua.com.vertex.beans.Payment;
 import ua.com.vertex.dao.interfaces.PaymentDaoInf;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
@@ -22,15 +25,15 @@ import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
 public class PaymentDaoImpl implements PaymentDaoInf {
 
     private static final Logger LOGGER = LogManager.getLogger(PaymentDaoImpl.class);
-    private static final String AMOUNT = "amount";
-    private static final String PAYMENT_DATE = "paymentDate";
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-
-    @Autowired
-    public PaymentDaoImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    private static final String AMOUNT = "amount";
+    private static final String PAYMENT_DATE = "paymentDate";
+    private static final String PAYMENT_ID = "paymentId";
+    private static final String COLUMN_PAYMENT_ID = "payment_id";
+    private static final String COLUMN_DEAL_ID = "deal_id";
+    private static final String COLUMN_AMOUNT = "amount";
+    private static final String COLUMN_PAYMENT_DATE = "payment_date";
 
     @Override
     @Transactional
@@ -49,5 +52,34 @@ public class PaymentDaoImpl implements PaymentDaoInf {
 
         jdbcTemplate.update(query, source, keyHolder);
         return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    public Optional<Payment> getPaymentById(int paymentId) {
+        LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
+
+        String query = "SELECT payment_id, deal_id, amount, payment_date FROM Payments WHERE payment_id = :paymentId";
+
+        Payment result = null;
+
+        try {
+            result = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(PAYMENT_ID, paymentId), (resultSet, i) ->
+                    new Payment.Builder().setPaymentId(resultSet.getInt(COLUMN_PAYMENT_ID))
+                            .setDealId(resultSet.getInt(COLUMN_DEAL_ID))
+                            .setAmount(BigDecimal.valueOf(resultSet.getDouble(COLUMN_AMOUNT)))
+                            .setPaymentDate(resultSet.getTimestamp(COLUMN_PAYMENT_DATE).toLocalDateTime()).getInstance());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
+        }
+
+        if (result != null) {
+            LOGGER.debug(String.format("getPaymentById(%s) return - ", paymentId) + result);
+        }
+        return Optional.ofNullable(result);
+    }
+
+    @Autowired
+    public PaymentDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

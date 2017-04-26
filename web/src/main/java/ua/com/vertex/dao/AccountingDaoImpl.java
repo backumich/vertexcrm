@@ -28,11 +28,6 @@ public class AccountingDaoImpl implements AccountingDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
 
-    @Autowired
-    public AccountingDaoImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
-
     @Override
     public List<User> getCourseUsers(int courseId) {
 
@@ -62,4 +57,11 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
         jdbcTemplate.update(query, source);
     }
+
+    @Autowired
+    public AccountingDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
 }
+
+

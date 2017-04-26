@@ -18,9 +18,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -42,7 +40,8 @@ public class CertificateDaoTest {
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
-        //noinspection OptionalGetWithoutIsPresent
+
+        //noinspection ConstantConditions
         assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
@@ -66,7 +65,7 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void getAllCertificateByUserEmailReturnCorectData() throws Exception {
+    public void getAllCertificateByUserEmailReturnCorrectData() throws Exception {
         ArrayList<Certificate> certificates = new ArrayList<>();
         certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
                 .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
@@ -74,16 +73,16 @@ public class CertificateDaoTest {
         assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserEmail("email1"));
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)
     @WithMockUser
     public void getCertificateByIdReturnNull() throws Exception {
+        //noinspection ConstantConditions,ResultOfMethodCallIgnored
         certificateDao.getCertificateById(-1).get();
     }
 
     @Test
     @WithMockUser
-    public void getCertificateByIdReturnReturnCorectData() throws Exception {
+    public void getCertificateByIdReturnReturnCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
             assertEquals(MSG, new Certificate.Builder().setCertificationId(1).setUserId(1)
                     .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
@@ -92,7 +91,7 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void addCertificateReturnCorectCertificationId() throws Exception {
+    public void addCertificateReturnCorrectCertificationId() throws Exception {
         assertEquals("", certificateDao.addCertificate(new Certificate.Builder().setUserId(1)
                 .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
                 .setLanguage("Java").getInstance()), 501);

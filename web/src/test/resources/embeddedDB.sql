@@ -1,16 +1,16 @@
 CREATE TABLE Users
 (
-  user_id       INT(11)      NOT NULL AUTO_INCREMENT,
-  email         VARCHAR(255) NOT NULL,
+  user_id       INT(11)                NOT NULL AUTO_INCREMENT,
+  email         VARCHAR(255)           NOT NULL,
   password      VARCHAR(255),
-  first_name    VARCHAR(50)  NOT NULL,
-  last_name     VARCHAR(50)  NOT NULL,
+  first_name    VARCHAR(50)            NOT NULL,
+  last_name     VARCHAR(50)            NOT NULL,
   passport_scan BLOB,
   photo         BLOB,
   discount      INT,
   phone         VARCHAR(25),
   role_id       INT(11),
-  is_active tinyint(1) default '0' not null,
+  is_active     TINYINT(1) DEFAULT '0' NOT NULL,
   PRIMARY KEY (user_id)
 );
 
@@ -28,6 +28,25 @@ CREATE TABLE Roles
   role_id INT(11)     NOT NULL AUTO_INCREMENT,
   name    VARCHAR(50) NOT NULL,
   PRIMARY KEY (role_id)
+);
+
+CREATE TABLE Payments
+(
+  payment_id   INT(11) NOT NULL AUTO_INCREMENT,
+  deal_id      INT(11) NOT NULL,
+  amount       DOUBLE  NOT NULL,
+  payment_date TIMESTAMP,
+  PRIMARY KEY (payment_id)
+);
+
+CREATE TABLE Accounting
+(
+  deal_id      INT(11) NOT NULL AUTO_INCREMENT,
+  user_id      INT(11) NOT NULL,
+  course_id    INT(11) NOT NULL,
+  course_coast DOUBLE  NOT NULL,
+  dept         DOUBLE  NOT NULL,
+  PRIMARY KEY (deal_id)
 );
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone)
@@ -63,4 +82,6 @@ VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
 VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
+
+INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, dept) VALUES (1, 1, 1, 4000, 4000)
 

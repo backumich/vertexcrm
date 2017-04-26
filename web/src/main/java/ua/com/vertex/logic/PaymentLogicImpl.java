@@ -10,13 +10,13 @@ import ua.com.vertex.beans.Payment;
 import ua.com.vertex.beans.PaymentForm;
 import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 import ua.com.vertex.dao.interfaces.PaymentDaoInf;
-import ua.com.vertex.logic.interfaces.Paymentlogic;
+import ua.com.vertex.logic.interfaces.PaymentLogic;
 
 import java.time.LocalDateTime;
 
 
 @Service
-public class PaymentLogicImpl implements Paymentlogic {
+public class PaymentLogicImpl implements PaymentLogic {
 
     private static final Logger LOGGER = LogManager.getLogger(PaymentLogicImpl.class);
 
