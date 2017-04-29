@@ -11,4 +11,5 @@ public interface PaymentDaoInf {
 
     Optional<Payment> getPaymentById(int paymentId);
 
+    Optional<Payment> getPaymentByIdWithOutDate(int paymentId);
 }

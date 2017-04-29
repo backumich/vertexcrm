@@ -42,8 +42,8 @@ public class PaymentLogicImplTest {
     public void createNewPaymentAndUpdateAccountingCallPaymentAndAccountingDao() throws Exception {
         paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm);
 
-//        verify(paymentDaoInf, times(1)).createNewPayment(paymentForm.getCourseId(),
-//                paymentForm.getUserID(), paymentForm.getPayment());
+        verify(paymentDaoInf, times(1)).createNewPayment(paymentForm.getCourseId(),
+                paymentForm.getUserID(), paymentForm.getPayment());
         verify(accountingDaoInf, times(1)).updateUserDept(paymentForm.getCourseId(),
                 paymentForm.getUserID(), paymentForm.getPayment().getAmount().doubleValue());
     }

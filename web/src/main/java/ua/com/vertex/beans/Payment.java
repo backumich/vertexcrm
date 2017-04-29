@@ -18,9 +18,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(BigDecimal amount, LocalDateTime paymentDate) {
+    public Payment(BigDecimal amount) {
         this.amount = amount;
-        this.paymentDate = paymentDate;
     }
 
     public int getPaymentId() {

@@ -26,14 +26,11 @@ import static org.junit.Assert.*;
 @ActiveProfiles("test")
 public class CertificateDaoTest {
 
-    private final String MSG = "Maybe method was changed";
-
-
-    @Autowired
-    private CertificateDaoInf certificateDao;
-
     private static final int EXISTING_ID = 222;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+    private final String MSG = "Maybe method was changed";
+    @Autowired
+    private CertificateDaoInf certificateDao;
 
     @Test
     @WithMockUser
@@ -92,8 +89,13 @@ public class CertificateDaoTest {
 
     @Test
     public void addCertificateReturnCorrectCertificationId() throws Exception {
-        assertEquals("", certificateDao.addCertificate(new Certificate.Builder().setUserId(1)
+
+        Certificate certificate = new Certificate.Builder().setUserId(44)
                 .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage("Java").getInstance()), 501);
+                .setLanguage("Java").getInstance();
+        int result = certificateDao.addCertificate(certificate);
+        certificate.setCertificationId(result);
+        //noinspection ConstantConditions
+        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
     }
 }

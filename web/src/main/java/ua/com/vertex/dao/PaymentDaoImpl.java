@@ -25,28 +25,30 @@ import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
 public class PaymentDaoImpl implements PaymentDaoInf {
 
     private static final Logger LOGGER = LogManager.getLogger(PaymentDaoImpl.class);
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-
     private static final String AMOUNT = "amount";
-    private static final String PAYMENT_DATE = "paymentDate";
     private static final String PAYMENT_ID = "paymentId";
     private static final String COLUMN_PAYMENT_ID = "payment_id";
     private static final String COLUMN_DEAL_ID = "deal_id";
     private static final String COLUMN_AMOUNT = "amount";
     private static final String COLUMN_PAYMENT_DATE = "payment_date";
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public PaymentDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
 
     @Override
     @Transactional
     public int createNewPayment(int courseId, int userId, Payment payment) throws DataAccessException {
         LOGGER.debug(String.format("Try create new payment by courseId = (%s) and userId - (%s)", courseId, userId));
 
-        String query = "INSERT INTO Payments (deal_id, amount, payment_date) VALUES ((SELECT deal_id FROM accounting " +
-                "WHERE course_id = :courseId AND user_id = :userId) , :amount, :paymentDate)";
+        String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM accounting " +
+                "WHERE course_id = :courseId AND user_id = :userId) , :amount)";
 
         MapSqlParameterSource source = new MapSqlParameterSource(COURSE_ID, courseId);
         source.addValue(USER_ID, userId);
         source.addValue(AMOUNT, payment.getAmount().doubleValue());
-        source.addValue(PAYMENT_DATE, payment.getPaymentDate());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -78,8 +80,26 @@ public class PaymentDaoImpl implements PaymentDaoInf {
         return Optional.ofNullable(result);
     }
 
-    @Autowired
-    public PaymentDaoImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    @Override
+    public Optional<Payment> getPaymentByIdWithOutDate(int paymentId) {
+        LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
+
+        String query = "SELECT payment_id, deal_id, amount FROM Payments WHERE payment_id = :paymentId";
+
+        Payment result = null;
+
+        try {
+            result = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(PAYMENT_ID, paymentId), (resultSet, i) ->
+                    new Payment.Builder().setPaymentId(resultSet.getInt(COLUMN_PAYMENT_ID))
+                            .setDealId(resultSet.getInt(COLUMN_DEAL_ID))
+                            .setAmount(BigDecimal.valueOf(resultSet.getDouble(COLUMN_AMOUNT))).getInstance());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
+        }
+
+        if (result != null) {
+            LOGGER.debug(String.format("getPaymentById(%s) return - ", paymentId) + result);
+        }
+        return Optional.ofNullable(result);
     }
 }

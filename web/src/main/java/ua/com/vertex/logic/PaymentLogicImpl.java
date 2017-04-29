@@ -6,13 +6,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.vertex.beans.Payment;
 import ua.com.vertex.beans.PaymentForm;
 import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 import ua.com.vertex.dao.interfaces.PaymentDaoInf;
 import ua.com.vertex.logic.interfaces.PaymentLogic;
-
-import java.time.LocalDateTime;
 
 
 @Service
@@ -41,6 +38,6 @@ public class PaymentLogicImpl implements PaymentLogic {
         LOGGER.debug(String.format("Call - paymentDaoInf.createNewPayment((%s), (%s) , (%f)) ;",
                 payment.getCourseId(), payment.getUserID(), payment.getPayment().getAmount()));
         return paymentDaoInf.createNewPayment(payment.getCourseId(), payment.getUserID(),
-                new Payment(payment.getPayment().getAmount(), LocalDateTime.now()));
+                payment.getPayment());
     }
 }
