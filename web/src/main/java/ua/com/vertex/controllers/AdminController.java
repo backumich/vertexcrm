@@ -46,9 +46,11 @@ public class AdminController {
     static final String LOG_INCORRECT_DATA = "The data have not been validated!!!";
     static final String LOG_USER_NOT_FOUND = "User not found, try again.";
     static final String LOG_INVALID_USER_EMAIL = "A person with this e-mail already exists, try again.";
-    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
     private final String USER_DATA = "userDataForSearch";
     private final String LOG_REQ_ADD_CERTIFICATE_AND_CREATE_USER = "Request to '/addCertificateAndCreateUser' ";
+
+    private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
+
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
     private final CourseLogic courseLogic;
