@@ -14,7 +14,7 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -32,6 +32,6 @@ public class CourseDaoImplTest {
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
 
-        assertEquals("Maybe method was changed", courseDaoInf.getAllCoursesWithDept(), course);
+        assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
     }
 }

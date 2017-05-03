@@ -45,7 +45,7 @@ CREATE TABLE Accounting
   user_id      INT(11) NOT NULL,
   course_id    INT(11) NOT NULL,
   course_coast DOUBLE  NOT NULL,
-  dept         DOUBLE  NOT NULL,
+  debt         DOUBLE  NOT NULL,
   PRIMARY KEY (deal_id)
 );
 
@@ -96,7 +96,7 @@ VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
 INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
 VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 
-INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, dept) VALUES (1, 1, 1, 4000, 4000);
+INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (1, 1, 1, 4000, 4000);
 
 INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
 VALUES (1, 'JavaPro', '2017-02-01 10:10:10', 0, 4000, 'Test', 'Test');
