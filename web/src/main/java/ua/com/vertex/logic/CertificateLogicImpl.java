@@ -3,6 +3,7 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,16 +90,19 @@ public class CertificateLogicImpl implements CertificateLogic {
         Certificate certificate;
         try {
             certificate = certificateDaoInf.getCertificateByUid(certificateUid).orElse(EMPTY_CERTIFICATE);
+            if (!EMPTY_CERTIFICATE.equals(certificate)) {
+                model.addAttribute(CERTIFICATE, certificate);
+                User user = userDaoInf.getUser(certificate.getUserId()).orElse(EMPTY_USER);
+                model.addAttribute(USER, user);
+            } else {
+                model.addAttribute(ERROR, "No certificate with this ID");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            LOGGER.warn(logInfo.getId() + "Error retrieving certificate by UID=" + certificateUid +
+                    ". Database might be offline");
+            model.addAttribute(ERROR, "Database might be offline");
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId() + "Error retrieving certificate by UID=" + certificateUid);
-            certificate = EMPTY_CERTIFICATE;
-        }
-
-        if (!EMPTY_CERTIFICATE.equals(certificate)) {
-            model.addAttribute(CERTIFICATE, certificate);
-            User user = userDaoInf.getUser(certificate.getUserId()).orElse(EMPTY_USER);
-            model.addAttribute(USER, user);
-        } else {
             model.addAttribute(ERROR, "No certificate with this ID");
         }
     }
