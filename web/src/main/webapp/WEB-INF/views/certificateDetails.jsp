@@ -113,7 +113,7 @@
         <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
 
         <sf:form cssClass="black" method="post" action="getCertificate">
-            <input type="text" name="certificateUid" size="20"/>
+            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
@@ -125,10 +125,6 @@
 
     <c:if test="${error == null && certificate != null}">
         <table class="table fontSize140">
-            <tr>
-                <td>Certificate ID:</td>
-                <td>${String.format("%05d", certificate.certificationId)}</td>
-            </tr>
             <tr>
                 <td>Certificate UID:</td>
                 <td>${certificate.certificateUid}</td>

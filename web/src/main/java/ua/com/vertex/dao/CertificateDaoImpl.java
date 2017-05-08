@@ -60,7 +60,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         source.addValue(CERTIFICATION_DATE, Date.valueOf(certificate.getCertificationDate()));
         source.addValue(COURSE_NAME, certificate.getCourseName());
         source.addValue(LANGUAGE, certificate.getLanguage());
-        source.addValue(CERTIFICATE_UID, Long.parseLong(certificate.getCertificateUid()));
+        source.addValue(CERTIFICATE_UID, Long.parseLong(certificate.getCertificateUidWithoutDashes()));
         return source;
     }
 

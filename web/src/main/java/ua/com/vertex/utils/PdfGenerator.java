@@ -23,7 +23,6 @@ public class PdfGenerator {
 
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.US);
-    private static final int LENGTH = 16;
 
     public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
                             String certificationDate, String certificateUid) {
@@ -64,7 +63,6 @@ public class PdfGenerator {
 
         String fullName = firstName + " " + lastName;
         String date = formatter.format(LocalDate.parse(certificationDate));
-        certificateUid = prepareCertificateUid(certificateUid);
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
@@ -89,26 +87,6 @@ public class PdfGenerator {
         cb.showTextAligned(Element.ALIGN_CENTER, parameter, shiftX, shiftY, 0);
         cb.endText();
         cb.restoreState();
-    }
-
-    private String prepareCertificateUid(String certificateUid) {
-        if (certificateUid.length() != LENGTH) {
-            throw new IllegalArgumentException("ID length must be " + LENGTH + " symbols");
-        }
-
-        char[] chars = certificateUid.toCharArray();
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 1; i <= LENGTH; i++) {
-            builder.append(chars[i - 1]);
-            if (i % 4 == 0) {
-                builder.append("-");
-            }
-        }
-
-        System.out.println(builder.toString());
-
-        return builder.toString().substring(0, builder.length() - 1);
     }
 
     @Autowired

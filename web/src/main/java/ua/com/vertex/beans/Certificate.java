@@ -119,6 +119,20 @@ public class Certificate {
     }
 
     public String getCertificateUid() {
+        char[] symbols = certificateUid.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < symbols.length; i++) {
+            sb.append(symbols[i]);
+            if ((i + 1) % 4 == 0 && (i + 1) < symbols.length) {
+                sb.append("-");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String getCertificateUidWithoutDashes() {
         return certificateUid;
     }
 
