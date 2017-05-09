@@ -103,7 +103,7 @@
     <div class="container pt1_5" align="centr">
 
         <c:if test="${empty courses}">
-
+            <h3><span class="errorText250">Payment is not possible. All courses were paid.</span></h3>
         </c:if>
     </div>
     <div>
