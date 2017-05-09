@@ -13,10 +13,14 @@ public class DataNavigator {
     private int currentNumberPage = 1;
     private int nextPage = 1;
     private int lastPage = 1;
-    private int currentRowPerPage = 10;
+    private int currentRowPerPage = 25;
     private int quantityPages = 0;
     private int dataSize = 0;
-    private Map<Integer,Integer> countRowPerPage = new TreeMap<Integer,Integer>(){{ put(10, 10); put(25, 25); put(50, 50); put(100, 100);}};
+    private Map<Integer, Integer> countRowPerPage = new TreeMap<Integer, Integer>() {{
+        put(25, 25);
+        put(50, 50);
+        put(100, 100);
+    }};
 
     public DataNavigator() {
     }

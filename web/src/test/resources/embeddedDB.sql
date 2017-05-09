@@ -63,3 +63,18 @@ VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java');
 INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
 VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 
+CREATE TABLE courses (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  start timestamp NULL DEFAULT NULL,
+  finished tinyint(1) DEFAULT NULL,
+  price decimal(19, 2) DEFAULT NULL,
+  teacher_name varchar(255) DEFAULT NULL,
+  schedule varchar(255) DEFAULT NULL,
+  notes varchar(999) DEFAULT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO Courses VALUES
+  (1, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.00, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
+  (2, 'MEGA Java', '2017-02-01 00:00:00', 1, 0.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');

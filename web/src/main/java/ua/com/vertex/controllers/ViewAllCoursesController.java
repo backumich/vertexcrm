@@ -29,16 +29,16 @@ public class ViewAllCoursesController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             List<Course> courses = userLogic.getCoursesPerPages(dataNavigator);
-            modelAndView.addObject("viewAllUsers", dataNavigator);
+            modelAndView.addObject("viewAllCourses", dataNavigator);
             modelAndView.addObject("courses", courses);
             modelAndView.setViewName(PAGE_JSP);
-            LOGGER.debug("Received a list of all users and transferred to the model");
+            LOGGER.debug("Received a list of all courses and transferred to the model");
             String allCourses = "";
             for (Course course : courses) {
                 allCourses += course.getName() + "|";
             }
-            LOGGER.debug("Quantity users -" + courses.size());
-            LOGGER.debug("All users list -" + allCourses);
+            LOGGER.debug("Quantity courses -" + courses.size());
+            LOGGER.debug("All courses list -" + allCourses);
         } catch (Exception e) {
             LOGGER.warn(e);
             modelAndView.setViewName(ERROR_JSP);
@@ -52,15 +52,15 @@ public class ViewAllCoursesController {
         try {
             List<Course> courses = userLogic.getCoursesPerPages(dataNavigator);
             modelAndView.addObject("courses", courses);
-            modelAndView.addObject("viewAllUsers", dataNavigator);
+            modelAndView.addObject("viewAllCourses", dataNavigator);
             modelAndView.setViewName(PAGE_JSP);
-            LOGGER.debug("Received a list of all users and transferred to the model");
+            LOGGER.debug("Received a list of all courses and transferred to the model");
             String allCourses = "";
             for (Course course : courses) {
                 allCourses += course.getName() + "|";
             }
-            LOGGER.debug("Quantity users -" + courses.size());
-            LOGGER.debug("All users list -" + allCourses);
+            LOGGER.debug("Quantity courses -" + courses.size());
+            LOGGER.debug("All courses list -" + allCourses);
         } catch (Exception e) {
             LOGGER.warn(e);
             modelAndView.setViewName(ERROR_JSP);
@@ -70,7 +70,7 @@ public class ViewAllCoursesController {
 
     @ModelAttribute
     public DataNavigator createDataNavigator() {
-        return new DataNavigator("viewAllUsers");
+        return new DataNavigator("viewAllCourses");
     }
 
     @Autowired
