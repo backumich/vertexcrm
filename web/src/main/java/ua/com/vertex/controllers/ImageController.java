@@ -20,55 +20,35 @@ public class ImageController {
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
 
     private static final String USER_PROFILE = "userProfile";
-    private static final String PAGE = "page";
-    private static final String PREVIOUS_PAGE = "previousPage";
+    private static final String PAGE_TO_DISPLAY = "pageToDisplay";
     private static final String IMAGE = "image";
     private static final String IMAGE_TYPE = "imageType";
     private static final String ERROR = "error";
-    private static final String USER_ID = "userId";
     private static final String USER = "user";
     private static final String IMAGE_ERROR = "imageError";
-    private static final String PHOTO = "photo";
-    private static final String PASSPORT_SCAN = "passportScan";
 
-    @RequestMapping(value = "/userPhoto")
-    public String showUserPhoto(@RequestParam(PREVIOUS_PAGE) String previousPage,
-                                @RequestParam(USER_ID) int userId, Model model) {
+    @RequestMapping(value = "/showImage")
+    public String showImage(@ModelAttribute(USER) User user,
+                            @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
+                            @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
-        LOGGER.debug(logInfo.getId() + PHOTO + " page accessed");
-        String view = IMAGE;
+        LOGGER.debug(logInfo.getId() + pageToDisplay + " page accessed");
+        String view = pageToDisplay;
         try {
-            encode(model, userId, previousPage, PHOTO);
-            LOGGER.debug(logInfo.getId() + "Passing user photo to JSP");
+            encode(model, user.getUserId(), imageType);
+            model.addAttribute(USER, user);
+            LOGGER.debug(logInfo.getId() + "Passing image to JSP");
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 
         return view;
     }
 
-    @RequestMapping(value = "/passportScan")
-    public String showPassportScan(@RequestParam(PREVIOUS_PAGE) String previousPage,
-                                   @RequestParam(USER_ID) int userId, Model model) {
-
-        LOGGER.debug(logInfo.getId() + PASSPORT_SCAN + " page accessed");
-        String view = IMAGE;
-        try {
-            encode(model, userId, previousPage, PASSPORT_SCAN);
-            LOGGER.debug(logInfo.getId() + "Passing user passport scan to JSP");
-        } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
-            view = ERROR;
-        }
-
-        return view;
-    }
-
-    private void encode(Model model, int userId, String previousPage, String imageType) {
+    private void encode(Model model, int userId, String imageType) {
         String encoded = Base64.encode(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
-        model.addAttribute(PAGE, previousPage);
     }
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
@@ -86,7 +66,7 @@ public class ImageController {
                 model.addAttribute(user);
             }
         } catch (Exception e) {
-            LOGGER.debug(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e, e);
             view = ERROR;
         }
 

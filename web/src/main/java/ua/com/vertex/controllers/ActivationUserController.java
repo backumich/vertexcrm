@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.AES;
+import ua.com.vertex.utils.Aes;
 
 
 @Controller
 @RequestMapping(value = "/activationUser", method = RequestMethod.GET)
 public class ActivationUserController {
-
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
@@ -37,7 +36,8 @@ public class ActivationUserController {
         String email = "";
 
         try {
-            email = AES.decrypt(encodedEmail, DECRYPT_KEY);
+            email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
+            LOGGER.debug("Encrypted email " + encodedEmail);
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Your link is not correct");
             modelAndView.setViewName(ERROR_JSP);
@@ -47,13 +47,13 @@ public class ActivationUserController {
         try {
             if (userLogic.activateUser(email) != 1) {
                 modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
+                LOGGER.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
                 modelAndView.setViewName(ERROR_JSP);
             }
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
             LOGGER.debug("Activate user failed", e);
         }
-
         return modelAndView;
     }
 }

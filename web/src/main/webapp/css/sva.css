@@ -1,3 +1,7 @@
+.fontSize70 {
+    font-size: 70%;
+}
+
 .fontSize125 {
     font-size: 125%;
 }
@@ -46,6 +50,10 @@
 
 .up-padding {
     padding-top: 100px;
+}
+
+.buttonWidth {
+    width: 100px;
 }
 
 a:hover {

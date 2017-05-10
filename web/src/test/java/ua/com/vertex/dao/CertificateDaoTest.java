@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Certificate;
-import ua.com.vertex.context.MainTestContext;
+import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import java.time.LocalDate;
@@ -18,15 +18,18 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MainTestContext.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class CertificateDaoTest {
+
+    private final String MSG = "Maybe method was changed";
+
 
     @Autowired
     private CertificateDaoInf certificateDao;
@@ -39,6 +42,7 @@ public class CertificateDaoTest {
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
+        //noinspection OptionalGetWithoutIsPresent
         assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
@@ -51,30 +55,23 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void getAllCertificateByUserIdReturnNotNull() throws Exception {
-        List<Certificate> result = certificateDao.getAllCertificatesByUserId(-1);
-        assertNotNull("Maybe method was changed", result);
+    public void getAllCertificateByUserEmailReturnNotNull() throws Exception {
+        List<Certificate> result = certificateDao.getAllCertificatesByUserEmail("test");
+        assertNotNull(MSG, result);
     }
 
     @Test
-    public void getAllCertificateByUserIdReturnNotEmpty() throws Exception {
-        List<Certificate> result = certificateDao.getAllCertificatesByUserId(1);
-        assertFalse(result.isEmpty());
+    public void getAllCertificateByUserEmailReturnNotEmpty() throws Exception {
+        assertFalse(certificateDao.getAllCertificatesByUserEmail("22@test.com").isEmpty());
     }
 
     @Test
-    public void getAllCertificateByUserIdReturnCorectData() throws Exception {
+    public void getAllCertificateByUserEmailReturnCorectData() throws Exception {
         ArrayList<Certificate> certificates = new ArrayList<>();
-        certificates.add(new Certificate.Builder()
-                .setCertificationId(1)
-                .setUserId(0)
-                .setCertificationDate(LocalDate.parse("2016-12-01"))
-                .setCourseName("Java Professional")
-                .setLanguage(null)
-                .getInstance());
-
-        assertEquals("Maybe method was changed",
-                certificates, certificateDao.getAllCertificatesByUserId(1));
+        certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
+                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
+                .setLanguage(null).getInstance());
+        assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserEmail("email1"));
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -84,21 +81,20 @@ public class CertificateDaoTest {
         certificateDao.getCertificateById(-1).get();
     }
 
-
     @Test
     @WithMockUser
     public void getCertificateByIdReturnReturnCorectData() throws Exception {
-        Certificate result = new Certificate.Builder()
-                .setCertificationId(1)
-                .setUserId(1)
-                .setCertificationDate(LocalDate.parse("2016-12-01"))
-                .setCourseName("Java Professional")
-                .setLanguage("Java")
-                .getInstance();
-
         if (certificateDao.getCertificateById(1).isPresent()) {
-            assertEquals("Maybe method was changed",
-                    result, certificateDao.getCertificateById(1).get());
+            assertEquals(MSG, new Certificate.Builder().setCertificationId(1).setUserId(1)
+                    .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
+                    .setLanguage("Java").getInstance(), certificateDao.getCertificateById(1).get());
         }
+    }
+
+    @Test
+    public void addCertificateReturnCorectCertificationId() throws Exception {
+        assertEquals("", certificateDao.addCertificate(new Certificate.Builder().setUserId(1)
+                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
+                .setLanguage("Java").getInstance()), 501);
     }
 }

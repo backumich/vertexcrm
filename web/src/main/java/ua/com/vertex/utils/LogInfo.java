@@ -10,11 +10,13 @@ public class LogInfo {
 
     public String getId() {
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        String email;
+        String email = null;
         try {
             email = getEmail();
         } catch (ClassCastException e) {
             email = null;
+        } catch (NullPointerException e) {
+            sessionId = null;
         }
         return email == null ? String.format("[Session id: %s] ", sessionId)
                 : String.format("[Session id: %s Email: %s] ", sessionId, email);

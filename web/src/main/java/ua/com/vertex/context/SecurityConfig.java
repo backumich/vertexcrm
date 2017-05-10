@@ -20,10 +20,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
-    private final String[] permittedAllRequests = {"/css/**", "/javascript/**", "/", "/registration",
+    private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails",
             "/userPhoto", "/403", "/error", "/activationUser"};
-    private final String[] permittedAdminRequests = {"/viewAllUsers", "/userDetails", "/saveUserData"};
+    private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData", "/viewAllCourses"};
 
 
     @Bean
@@ -50,30 +50,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class);
 
         http.authorizeRequests()
-                .antMatchers(permittedAllRequests)
-                .permitAll()
-                .antMatchers(permittedAdminRequests).hasAuthority(ADMIN.name())
+                .antMatchers(UNAUTHENTICATED_REQUESTS).permitAll()
+                .antMatchers(ADMIN_REQUESTS).hasAuthority(ADMIN.name())
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/logIn")
                 .successForwardUrl("/loggedIn")
                 .failureHandler((request, response, e) -> {
                     if (e instanceof BadCredentialsException) {
-                        request.setAttribute("param", "error");
                         response.sendRedirect("/logIn?error");
                     } else {
                         response.sendRedirect("/error");
                     }
                 })
                 .permitAll()
+
                 .and()
                 .logout()
                 .logoutUrl("/logOut")
-                .logoutSuccessUrl("/loggedOut")
+                .logoutSuccessUrl("/")
+
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(VALIDITY_SECONDS)
+
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;

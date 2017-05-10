@@ -1,21 +1,35 @@
 package ua.com.vertex.beans;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Certificate {
+
+    private final String NAME_MSG = "This field must be longer than 1 and less than  256 characters";
+
+    public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
+
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
-
+    @Min(value = 1, message = "Entered value must be a positive integer!")
+    @Max(value = Integer.MAX_VALUE, message = "Invalid value!")
     private int userId;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull
     private LocalDate certificationDate;
+    @Size(min = 1, max = 256, message = NAME_MSG)
     private String courseName;
+    @Size(min = 1, max = 256, message = NAME_MSG)
     private String language;
+    private String encodedCertificationId;
 
-    public static final Certificate EMPTY_CERTIFICATE = new Builder().setCertificationId(-1).getInstance();
 
     public Certificate() {
     }
@@ -123,5 +137,13 @@ public class Certificate {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getEncodedCertificationId() {
+        return encodedCertificationId;
+    }
+
+    public void setEncodedCertificationId(String encodedCertificationId) {
+        this.encodedCertificationId = encodedCertificationId;
     }
 }

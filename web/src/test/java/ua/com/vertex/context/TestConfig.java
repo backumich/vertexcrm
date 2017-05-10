@@ -10,9 +10,9 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
-@Import(MainContext.class)
+@Import(RootConfig.class)
 @Profile("test")
-public class MainTestContext {
+public class TestConfig {
 
     @Bean
     public DataSource dataSource() {

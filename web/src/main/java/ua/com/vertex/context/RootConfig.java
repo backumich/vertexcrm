@@ -7,8 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.sql.DataSource;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
 @ComponentScan(basePackages = {"ua.com.vertex"},
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, value = EnableWebMvc.class)})
 public class RootConfig {
@@ -27,7 +31,7 @@ public class RootConfig {
         return BasicDataSourceFactory.createDataSource(getDbProperties());
     }
 
-    public Properties getDbProperties() throws IOException {
+    private Properties getDbProperties() throws IOException {
         final ClassPathResource classPathResource = new ClassPathResource(DB_PROPERTIES);
 
         final PropertiesFactoryBean factoryBean = new PropertiesFactoryBean();
@@ -54,5 +58,10 @@ public class RootConfig {
 
         mailSender.setJavaMailProperties(javaMailProperties);
         return mailSender;
+    }
+
+    @Bean
+    public PlatformTransactionManager txManager() throws Exception {
+        return new DataSourceTransactionManager(dataSource());
     }
 }

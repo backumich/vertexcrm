@@ -27,6 +27,7 @@ public class RegistrationController {
     private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     private static final String REGISTRATION_ERROR_PAGE = "registrationError";
     private static final String NAME_MODEL = "userFormRegistration";
+    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -43,7 +44,7 @@ public class RegistrationController {
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
-        LOGGER.info("First request to " + REGISTRATION_PAGE);
+        LOGGER.debug("First request to " + REGISTRATION_PAGE);
         return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 
@@ -54,7 +55,7 @@ public class RegistrationController {
         checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
 
         if (bindingResult.hasErrors()) {
-            LOGGER.info("There are errors in filling in the form " + REGISTRATION_PAGE);
+            LOGGER.debug("There are errors in filling in the form " + REGISTRATION_PAGE);
             modelAndView.setViewName(REGISTRATION_PAGE);
         } else {
             try {
@@ -64,9 +65,9 @@ public class RegistrationController {
 
                 try {
                     String bodyMessage = emailLogic.createRegistrationMessage(userFormRegistration);
-                    mailService.sendMail("vertex.academy.robot@gmail.com",
-                            userFormRegistration.getEmail(), "Confirmation of registration",
-                            bodyMessage);
+                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
+                            "Confirmation of registration", bodyMessage);
+                    LOGGER.debug("Send confirmation email " + userFormRegistration.getEmail());
                 } catch (Exception e) {
                     LOGGER.warn("While mail sending error occurred " + userFormRegistration.getEmail());
                 }
@@ -92,4 +93,3 @@ public class RegistrationController {
         }
     }
 }
-
