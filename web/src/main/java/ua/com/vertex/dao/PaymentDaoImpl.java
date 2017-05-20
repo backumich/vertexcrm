@@ -30,13 +30,8 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     private static final String COLUMN_PAYMENT_ID = "payment_id";
     private static final String COLUMN_DEAL_ID = "deal_id";
     private static final String COLUMN_AMOUNT = "amount";
-    private static final String COLUMN_PAYMENT_DATE = "payment_date";
-    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public PaymentDaoImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional
@@ -54,30 +49,6 @@ public class PaymentDaoImpl implements PaymentDaoInf {
 
         jdbcTemplate.update(query, source, keyHolder);
         return keyHolder.getKey().intValue();
-    }
-
-    @Override
-    public Optional<Payment> getPaymentById(int paymentId) {
-        LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
-
-        String query = "SELECT payment_id, deal_id, amount, payment_date FROM Payments WHERE payment_id = :paymentId";
-
-        Payment result = null;
-
-        try {
-            result = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(PAYMENT_ID, paymentId), (resultSet, i) ->
-                    new Payment.Builder().setPaymentId(resultSet.getInt(COLUMN_PAYMENT_ID))
-                            .setDealId(resultSet.getInt(COLUMN_DEAL_ID))
-                            .setAmount(BigDecimal.valueOf(resultSet.getDouble(COLUMN_AMOUNT)))
-                            .setPaymentDate(resultSet.getTimestamp(COLUMN_PAYMENT_DATE).toLocalDateTime()).getInstance());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
-        }
-
-        if (result != null) {
-            LOGGER.debug(String.format("getPaymentById(%s) return - ", paymentId) + result);
-        }
-        return Optional.ofNullable(result);
     }
 
     @Override
@@ -101,5 +72,10 @@ public class PaymentDaoImpl implements PaymentDaoInf {
             LOGGER.debug(String.format("getPaymentById(%s) return - ", paymentId) + result);
         }
         return Optional.ofNullable(result);
+    }
+
+    @Autowired
+    public PaymentDaoImpl(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

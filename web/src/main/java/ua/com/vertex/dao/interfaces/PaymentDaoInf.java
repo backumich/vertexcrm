@@ -8,8 +8,5 @@ import java.util.Optional;
 public interface PaymentDaoInf {
 
     int createNewPayment(int courseId, int userId, Payment payment);
-
-    Optional<Payment> getPaymentById(int paymentId);
-
     Optional<Payment> getPaymentByIdWithOutDate(int paymentId);
 }
