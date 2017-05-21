@@ -57,20 +57,13 @@ public class UserController {
             String eMail = logInfo.getEmail();
             LOGGER.debug(LOG_GET_EMAIL + eMail);
             List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(eMail);
-            result.forEach(e -> {
-                try {
-                    e.setEncodedCertificationId(Aes.encrypt(String.valueOf(e.getCertificationId()), KEY));
-                } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | UnsupportedEncodingException e1) {
-                    LOGGER.warn(e1);
-                }
-            });
+            result.forEach(e -> e.setEncodedCertificationId(Aes.encrypt(String.valueOf(e.getCertificationId()), KEY)));
 
             model.addAttribute(CERTIFICATES, result);
             model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
             view = USER_JSP;
         } catch (Exception e) {
-            LOGGER.warn(e);
             view = ERROR;
         }
 
