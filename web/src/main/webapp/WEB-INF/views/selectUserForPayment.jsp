@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -101,10 +102,8 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
-
         <c:if test="${empty users}">
-            <form:form method="post" commandName="paymentForm"
-                       action="selectUserForPayment">
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
                 <table class="active" width="500">
                     <tr>
                         <td><form:hidden path="courseId" value='${courseIdForPayment}'/></td>
@@ -114,7 +113,8 @@
                     </tr>
                     <tr>
                         <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount"/></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"
+                                        onchange= "this.value = this.value.replace(/,/g, '.')"/></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
@@ -127,8 +127,7 @@
     </div>
     <div>
         <c:if test="${!empty users}">
-            <form:form method="post" commandName="paymentForm"
-                       action="selectUserForPayment">
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
                 <table class="active" width="500">
                     <table class="active" width="500">
                         <tr>
@@ -157,7 +156,8 @@
                     </tr>
                     <tr>
                         <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount"/></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"
+                                        onchange= "this.value = this.value.replace(/,/g, '.')"  /></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
