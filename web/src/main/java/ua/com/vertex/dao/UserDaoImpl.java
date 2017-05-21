@@ -173,24 +173,13 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
                 "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
-
-        return Optional.ofNullable(jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId",
-                userID), (rs, i) -> {
-            User user = null;
-            if (rs.getRow() == 1) {
-                user = new User();
-                user.setUserId(rs.getInt(COLUMN_USER_ID));
-                user.setEmail(rs.getString(COLUMN_USER_EMAIL));
-                user.setFirstName(rs.getString(COLUMN_FIRST_NAME));
-                user.setLastName(rs.getString(COLUMN_LAST_NAME));
-                user.setPassportScan(rs.getBytes(COLUMN_PASSPORT_SCAN));
-                user.setPhoto(rs.getBytes(COLUMN_PHOTO));
-                user.setDiscount(rs.getInt(COLUMN_DISCOUNT));
-                user.setPhone(rs.getString(COLUMN_PHONE));
-                user.setRole(rs.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER);
-            }
-            return user;
-        }));
+        User user = null;
+        try {
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("Get user with a non-existent id " + userID);
+        }
+        return Optional.ofNullable(user);
     }
 
     @Override

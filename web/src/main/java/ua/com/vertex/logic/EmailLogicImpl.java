@@ -41,7 +41,11 @@ class EmailLogicImpl implements EmailLogic {
             LOGGER.warn("While encrypting email any errors" + user.getEmail());
         }
 
-        return header + user.getFirstName() + " " + user.getLastName() + "." + "\n" + body + "\n" + confirmationLink
-                + "http://localhost:8080/activationUser?activeUser=" + stringEmailAES + "\n" + footer;
+        String emailMessage = header + user.getFirstName() + " " + user.getLastName() + "." + "\n"
+                + body + "\n"
+                + confirmationLink + "http://localhost:8080/activationUser?activeUser=" + stringEmailAES + "\n"
+                + footer;
+
+        return emailMessage;
     }
 }

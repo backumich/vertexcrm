@@ -38,18 +38,17 @@ public class Aes {
         return safe;
     }
 
-    public static String encrypt(String value, String password) throws NoSuchAlgorithmException,
-            NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
-            BadPaddingException, UnsupportedEncodingException {
-        byte[] encrypted = {};
+    public static String encrypt(String value, String password) {
+        byte[] encrypted;
         try {
             SecretKey key = new SecretKeySpec(safePassword(password).getBytes("UTF-8"), "Aes");
             Cipher cipher = Cipher.getInstance("Aes/ECB/PKCS5Padding", "SunJCE");
             cipher.init(Cipher.ENCRYPT_MODE, key);
             encrypted = cipher.doFinal(value.getBytes("UTF-8"));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
         return hex(encrypted);
     }
 
@@ -67,7 +66,7 @@ public class Aes {
     }
 
     public static String decrypt(String value, String password) {
-        String toReturn = "";
+        String toReturn;
         try {
             byte[] encypted = fromHex(value);
             SecretKey key = new SecretKeySpec(safePassword(password).getBytes("UTF-8"), "Aes");
@@ -76,7 +75,7 @@ public class Aes {
             byte[] decrypted = cipher.doFinal(encypted);
             toReturn = new String(decrypted, "UTF-8");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return toReturn;
     }

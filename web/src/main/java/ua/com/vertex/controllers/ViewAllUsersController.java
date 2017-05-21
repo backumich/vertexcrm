@@ -14,7 +14,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/viewAllUsers")
-//@SessionAttributes("users")
 public class ViewAllUsersController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "viewAllUsers";
