@@ -56,7 +56,6 @@ public class CertificateDetailsPageControllerTest {
     private static final String EXISTING_CERT_UID_DASHES = "1492-7798-2879-3888";
     private static final String CERTIFICATE = "certificate";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
-    private static final String GET_CERTIFICATE = "getCertificate";
     private static final String USER = "user";
     private static final String ERROR = "error";
 
