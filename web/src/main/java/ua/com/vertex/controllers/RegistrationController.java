@@ -29,7 +29,7 @@ public class RegistrationController {
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
     private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;

@@ -19,13 +19,14 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
     static final String COURSE_ID = "courseId";
     static final String USER_ID = "userId";
-    private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USER_EMAIL = "email";
     private static final String COLUMN_FIRST_NAME = "first_name";
     private static final String COLUMN_LAST_NAME = "last_name";
     private static final String DEBT = "debt";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private static final Logger LOGGER = LogManager.getLogger(AccountingDaoImpl.class);
 
 
     @Override

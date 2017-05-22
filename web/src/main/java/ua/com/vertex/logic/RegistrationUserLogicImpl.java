@@ -16,7 +16,7 @@ import java.util.Optional;
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(RegistrationUserLogicImpl.class);
 
     private final UserLogic userLogic;
 

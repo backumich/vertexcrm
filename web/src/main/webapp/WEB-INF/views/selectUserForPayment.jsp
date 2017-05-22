@@ -113,8 +113,7 @@
                     </tr>
                     <tr>
                         <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"
-                                        onchange= "this.value = this.value.replace(/,/g, '.')"/></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"/></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
@@ -156,8 +155,7 @@
                     </tr>
                     <tr>
                         <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"
-                                        onchange= "this.value = this.value.replace(/,/g, '.')"  /></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount" /></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>

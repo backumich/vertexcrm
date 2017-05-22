@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public class CourseDaoImpl implements CourseDaoInf {
 
-    private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
+
     private static final String COLUMN_COURSE_ID = "id";
     private static final String COLUMN_COURSE_NAME = "name";
     private static final String COLUMN_COURSE_TEACHER_NAME = "teacher_name";
@@ -24,7 +24,9 @@ public class CourseDaoImpl implements CourseDaoInf {
     private static final String COLUMN_COURSE_FINISHED = "finished";
     private static final String COLUMN_COURSE_PRICE = "price";
     private static final String COLUMN_COURSE_NOTES = "notes";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
 
     @Autowired
     public CourseDaoImpl(DataSource dataSource) {
