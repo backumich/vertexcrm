@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.utils.LogInfo;
@@ -22,17 +22,17 @@ public class CertificateDetailsPageController {
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     static final String ERROR = "error";
 
-    @RequestMapping(value = "/certificateDetails")
+    @GetMapping(value = "/certificateDetails")
     public String showCertificateDetailsPage() {
         return CERTIFICATE_DETAILS;
     }
 
-    @RequestMapping(value = "/getCertificate")
+    @GetMapping(value = "/getCertificate")
     public String getCertificate(@RequestParam String certificateUid, Model model) {
         return process(certificateUid, model);
     }
 
-    @RequestMapping(value = "/getCertificate/{certificateUid}")
+    @GetMapping(value = "/getCertificate/{certificateUid}")
     public String getCertificateByCertificateUid(@PathVariable String certificateUid, Model model) {
         return process(certificateUid, model);
     }

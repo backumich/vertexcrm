@@ -112,7 +112,7 @@
     <c:if test="${certificate == null}">
         <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
 
-        <sf:form cssClass="black" method="post" action="getCertificate">
+        <sf:form cssClass="black" method="get" action="getCertificate">
             <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
             <input type="submit" value="Send">
         </sf:form>
