@@ -20,7 +20,7 @@ public class ActivationUserController {
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ActivationUserController.class);
 
     private UserLogic userLogic;
 

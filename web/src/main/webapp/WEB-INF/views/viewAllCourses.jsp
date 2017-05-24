@@ -48,13 +48,12 @@
         $('#perPage').change(function () {
             $('#submit').click();
         });
+
         $('a.page').click(function () {
             var id = $(this).attr('id');
             $('#nextPage').val(id);
             $('#submit').click();
-
         });
-
     });
 </script>
 <noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>

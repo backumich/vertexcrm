@@ -208,32 +208,31 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Get courses with a non-existent id ??????????????????");
+            LOGGER.debug("Something went wrong", e);
         }
         return users;
     }
 
-    @Override
-    public List<Course> getAllCourses(DataNavigator dataNavigator) {
-        List<Course> courses = new ArrayList<>();
-
-        LOGGER.debug("Get all courses list");
-
-        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
-                "FROM Courses c LIMIT :from, :offset";
-
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
-        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
-
-        try {
-            courses = jdbcTemplate.query(query, parameters, new CoursesRowMapping());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Get user with a non-existent id ??????????????????");
-        }
-        return courses;
-    }
+//    @Override
+//    public List<Course> getAllCourses(DataNavigator dataNavigator) {
+//        List<Course> courses = new ArrayList<>();
+//
+//        LOGGER.debug("Get all courses list");
+//
+//        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
+//                "FROM Courses c LIMIT :from, :offset";
+//
+//        MapSqlParameterSource parameters = new MapSqlParameterSource();
+//        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
+//        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
+//
+//        try {
+//            courses = jdbcTemplate.query(query, parameters, new CoursesRowMapping());
+//        } catch (EmptyResultDataAccessException e) {
+//            LOGGER.debug("Something went wrong", e);
+//        }
+//        return courses;
+//    }
 
     @Override
     public int getQuantityUsers() throws SQLException {
@@ -243,12 +242,12 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
 
-    @Override
-    public int getQuantityCourses() throws SQLException {
-        LOGGER.debug("Get all courses list");
-        String query = "SELECT count(*) FROM Courses";
-        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
-    }
+//    @Override
+//    public int getQuantityCourses() throws SQLException {
+//        LOGGER.debug("Get all courses list");
+//        String query = "SELECT count(*) FROM Courses";
+//        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
+//    }
 
     @Override
     public EnumMap<Role, Role> getAllRoles() {
@@ -369,21 +368,21 @@ public class UserDaoImpl implements UserDaoInf {
         }
     }
 
-    private static final class CoursesRowMapping implements RowMapper<Course> {
-        public Course mapRow(ResultSet resultSet, int i) throws SQLException {
-            LobHandler handler = new DefaultLobHandler();
-            Course course = new Course();
-            course.setId(resultSet.getInt("id"));
-            course.setName(resultSet.getString("name"));
-            course.setStart(resultSet.getDate("start").toLocalDate());
-            course.setFinished(resultSet.getInt("finished") != 0);
-            course.setPrice(resultSet.getDouble("price"));
-            course.setTeacherName(resultSet.getString("teacher_name"));
-            course.setSchedule(resultSet.getString("schedule"));
-            course.setNotes(resultSet.getString("notes"));
-            return course;
-        }
-    }
+//    private static final class CoursesRowMapping implements RowMapper<Course> {
+//        public Course mapRow(ResultSet resultSet, int i) throws SQLException {
+//            LobHandler handler = new DefaultLobHandler();
+//            Course course = new Course();
+//            course.setId(resultSet.getInt("id"));
+//            course.setName(resultSet.getString("name"));
+//            course.setStart(resultSet.getDate("start").toLocalDate());
+//            course.setFinished(resultSet.getInt("finished") != 0);
+//            course.setPrice(resultSet.getDouble("price"));
+//            course.setTeacherName(resultSet.getString("teacher_name"));
+//            course.setSchedule(resultSet.getString("schedule"));
+//            course.setNotes(resultSet.getString("notes"));
+//            return course;
+//        }
+//    }
 
     private static final class UserRowMapperLogIn implements RowMapper<User> {
         @Override

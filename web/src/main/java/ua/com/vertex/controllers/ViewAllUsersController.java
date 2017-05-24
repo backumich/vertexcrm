@@ -11,6 +11,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/viewAllUsers")
@@ -19,7 +20,7 @@ public class ViewAllUsersController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "viewAllUsers";
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViewAllUsersController.class);
 
     private UserLogic userLogic;
 
@@ -54,10 +55,12 @@ public class ViewAllUsersController {
             modelAndView.addObject("viewAllUsers", dataNavigator);
             modelAndView.setViewName(PAGE_JSP);
             LOGGER.debug("Received a list of all users and transferred to the model");
-            String allUsersEmail = "";
-            for (User user : users) {
-                allUsersEmail += user.getEmail() + "|";
-            }
+//            String allUsersEmail = "";
+//            for (User user : users) {
+//                allUsersEmail += user.getEmail() + "|";
+//            }
+            String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+
             LOGGER.debug("Quantity users -" + users.size());
             LOGGER.debug("All users list -" + allUsersEmail);
         } catch (Exception e) {
