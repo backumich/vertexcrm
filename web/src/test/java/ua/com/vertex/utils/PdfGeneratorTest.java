@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import ua.com.vertex.beans.PdfDataTransferObject;
 import ua.com.vertex.context.TestConfig;
 
 import java.io.File;
@@ -17,7 +18,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
@@ -55,7 +55,11 @@ public class PdfGeneratorTest {
         final String certificationDate = "2016-12-01";
         final String certificationId = "id";
 
-        pdfGenerator.generatePdf(PDF_FILE_NAME, firstName, lastName, courseName, certificationDate, certificationId);
+        PdfDataTransferObject dto = new PdfDataTransferObject(firstName, lastName, courseName,
+                certificationDate, certificationId);
+
+        pdfGenerator.generatePdf(PDF_FILE_NAME, dto);
         assertTrue(file.exists());
+        assertTrue(file.length() > 0);
     }
 }

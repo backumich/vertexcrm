@@ -4,9 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import ua.com.vertex.beans.PdfDataTransferObject;
 import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
@@ -14,7 +15,6 @@ import ua.com.vertex.utils.PdfGenerator;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 @Controller
 @RequestMapping(value = "/generatePdf")
 public class PdfController {
@@ -26,16 +26,15 @@ public class PdfController {
     private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
 
     @PostMapping
-    public void generatePdf(@RequestParam String firstName, @RequestParam String lastName,
-                            @RequestParam String courseName, @RequestParam String certificationDate,
-                            @RequestParam String certificateUid, HttpServletResponse response) {
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void generatePdf(@ModelAttribute PdfDataTransferObject dto, HttpServletResponse response) {
 
         LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
         File pdfFile = new File(pdfFileName);
 
         try {
-            pdfGenerator.generatePdf(pdfFileName, firstName, lastName, courseName, certificationDate, certificateUid);
+            pdfGenerator.generatePdf(pdfFileName, dto);
             pdfDownloader.downloadPdf(pdfFileName, response);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);

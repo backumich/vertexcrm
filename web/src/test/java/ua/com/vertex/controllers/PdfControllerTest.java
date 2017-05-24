@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
+import ua.com.vertex.beans.PdfDataTransferObject;
 import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
@@ -44,10 +45,11 @@ public class PdfControllerTest {
         final String certificationId = "";
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        pdfController.generatePdf(firstName, lastName, courseName, certificationDate, certificationId, response);
-
-        verify(pdfGenerator, times(1)).generatePdf(PDF_FILE_NAME, firstName, lastName, courseName, certificationDate,
+        PdfDataTransferObject dto = new PdfDataTransferObject(firstName, lastName, courseName, certificationDate,
                 certificationId);
+        pdfController.generatePdf(dto, response);
+
+        verify(pdfGenerator, times(1)).generatePdf(PDF_FILE_NAME, dto);
         verify(pdfDownloader, times(1)).downloadPdf(PDF_FILE_NAME, response);
     }
 }

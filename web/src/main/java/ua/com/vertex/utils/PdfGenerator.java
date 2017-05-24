@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import ua.com.vertex.beans.PdfDataTransferObject;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,8 +25,7 @@ public class PdfGenerator {
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.US);
 
-    public void generatePdf(String pdfFileName, String firstName, String lastName, String courseName,
-                            String certificationDate, String certificateUid) {
+    public void generatePdf(String pdfFileName, PdfDataTransferObject dto) {
 
         Document document = new Document();
 
@@ -37,7 +37,7 @@ public class PdfGenerator {
 
             document.open();
             setCanvas(writer, dimensions);
-            setText(writer, firstName, lastName, courseName, certificationDate, certificateUid);
+            setText(writer, dto);
             document.close();
 
             LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
@@ -58,20 +58,19 @@ public class PdfGenerator {
         canvas.addImage(image);
     }
 
-    private void setText(PdfWriter writer, String firstName, String lastName, String courseName,
-                         String certificationDate, String certificateUid) throws IOException, DocumentException {
+    private void setText(PdfWriter writer, PdfDataTransferObject dto) throws IOException, DocumentException {
 
-        String fullName = firstName + " " + lastName;
-        String date = formatter.format(LocalDate.parse(certificationDate));
+        String fullName = dto.getFirstName() + " " + dto.getLastName();
+        String date = formatter.format(LocalDate.parse(dto.getCertificationDate()));
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
         setTextRow(writer, fullName, BaseFont.TIMES_BOLDITALIC, 36, 560, 270);
         setTextRow(writer, "has successfully completed the course", BaseFont.TIMES_ROMAN, 18, 560, 230);
-        setTextRow(writer, courseName, BaseFont.TIMES_BOLD, 32, 560, 185);
+        setTextRow(writer, dto.getCourseName(), BaseFont.TIMES_BOLD, 32, 560, 185);
         setTextRow(writer, "Certificate was issued by vertex-academy.com", BaseFont.TIMES_ROMAN, 18, 280, 140);
         setTextRow(writer, "Director General: Piskokha M. A.", BaseFont.TIMES_ROMAN, 18, 850, 140);
-        setTextRow(writer, "Certificate UID: " + certificateUid, BaseFont.TIMES_ROMAN, 18, 280, 115);
+        setTextRow(writer, "Certificate UID: " + dto.getCertificateUid(), BaseFont.TIMES_ROMAN, 18, 280, 115);
         setTextRow(writer, date, BaseFont.TIMES_ROMAN, 18, 850, 115);
     }
 
