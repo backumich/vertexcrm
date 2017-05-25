@@ -1,10 +1,10 @@
 package ua.com.vertex.logic.interfaces;
 
-import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface CertificateLogic {
@@ -21,5 +21,5 @@ public interface CertificateLogic {
 
     String generateCertificateUid();
 
-    void getUserAndCertificate(String certificateUid, Model model);
+    Map<String, Object> getUserAndCertificate(String certificateUid);
 }

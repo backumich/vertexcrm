@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.ui.Model;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
@@ -32,9 +31,6 @@ public class CertificateLogicImplTest {
 
     @Mock
     private LogInfo logInfo;
-
-    @Mock
-    private Model model;
 
     @Before
     public void setUp() throws Exception {
@@ -93,7 +89,7 @@ public class CertificateLogicImplTest {
                 .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
         when(userDao.getUser(22)).thenReturn(Optional.of(new User()));
 
-        certificateLogic.getUserAndCertificate("1492779828793888", model);
+        certificateLogic.getUserAndCertificate("1492779828793888");
         verify(certificateDao, times(1)).getCertificateByUid("1492779828793888");
         verify(userDao, times(1)).getUser(22);
     }

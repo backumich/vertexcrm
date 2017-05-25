@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.utils.LogInfo;
 
+import java.util.Map;
+
 @Controller
 public class CertificateDetailsPageController {
 
@@ -42,12 +44,12 @@ public class CertificateDetailsPageController {
 
         certificateUid = certificateUid.replaceAll("-", "");
         try {
-            certLogic.getUserAndCertificate(certificateUid, model);
+            Map<String, Object> attributes = certLogic.getUserAndCertificate(certificateUid);
+            attributes.keySet().forEach(attribute -> model.addAttribute(attribute, attributes.get(attribute)));
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
-
         return view;
     }
 
