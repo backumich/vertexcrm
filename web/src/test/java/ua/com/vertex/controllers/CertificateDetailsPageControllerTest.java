@@ -22,6 +22,8 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.utils.LogInfo;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
@@ -30,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@SuppressWarnings("Duplicates")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
@@ -47,6 +50,7 @@ public class CertificateDetailsPageControllerTest {
 
     private Certificate certificate;
     private User user;
+    private Map<String, Object> attributes;
 
     private CertificateDetailsPageController controller;
 
@@ -71,6 +75,7 @@ public class CertificateDetailsPageControllerTest {
                 .setLanguage("Java")
                 .setCertificateUid(EXISTING_CERT_UID)
                 .getInstance();
+
         user = new User.Builder()
                 .setUserId(EXISTING_USER_ID)
                 .setEmail("22@test.com")
@@ -83,6 +88,8 @@ public class CertificateDetailsPageControllerTest {
                 .setPhone("38066 000 00 00")
                 .setRole(Role.USER)
                 .getInstance();
+
+        attributes = new HashMap<>();
     }
 
     @Test
@@ -120,63 +127,57 @@ public class CertificateDetailsPageControllerTest {
     @WithAnonymousUser
     public void getCertificateAddsErrorAttributeAfterRequestingInvalidUid() {
         String view = controller.getCertificate("invalid data", model);
+        attributes.put(ERROR, "No certificate with this ID");
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(ERROR, "No certificate with this ID");
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 
     @Test
     @WithAnonymousUser
     public void getCertificateByCertificateUidAddsErrorAttributeAfterRequestingInvalidUid() {
         String view = controller.getCertificateByCertificateUid("invalid data", model);
+        attributes.put(ERROR, "No certificate with this ID");
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(ERROR, "No certificate with this ID");
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 
     @Test
     @WithAnonymousUser
     public void getCertificateAddsCertificateAttributesAfterRequestingValidUid() {
         String view = controller.getCertificate(EXISTING_CERT_UID, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(CERTIFICATE, certificate);
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 
     @Test
     @WithAnonymousUser
     public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUid() {
         String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(CERTIFICATE, certificate);
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 
     @Test
     @WithAnonymousUser
     public void getCertificateAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
         String view = controller.getCertificate(EXISTING_CERT_UID_DASHES, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(CERTIFICATE, certificate);
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 
     @Test
     @WithAnonymousUser
     public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
         String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID_DASHES, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
         assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(CERTIFICATE, certificate);
-    }
-
-    @Test
-    @WithAnonymousUser
-    public void getCertificatesAddsUserAttributeAfterRetrievingNotEmptyOptional() {
-        String view = controller.getCertificate(EXISTING_CERT_UID, model);
-        assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(USER, user);
-    }
-
-    @Test
-    @WithAnonymousUser
-    public void getCertificatesByCertificateUidAddsUserAttributeAfterRetrievingNotEmptyOptional() {
-        String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID, model);
-        assertEquals(CERTIFICATE_DETAILS, view);
-        verify(model, times(1)).addAttribute(USER, user);
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 }

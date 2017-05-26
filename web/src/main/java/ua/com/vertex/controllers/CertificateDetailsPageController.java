@@ -45,7 +45,7 @@ public class CertificateDetailsPageController {
         certificateUid = certificateUid.replaceAll("-", "");
         try {
             Map<String, Object> attributes = certLogic.getUserAndCertificate(certificateUid);
-            attributes.keySet().forEach(attribute -> model.addAttribute(attribute, attributes.get(attribute)));
+            model.addAllAttributes(attributes);
         } catch (Exception e) {
             LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
