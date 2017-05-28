@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface CourseLogic {
     List<Course> getAllCoursesWithDept();
+
+    int updateCourseExceptPrice(Course course);
+
 }

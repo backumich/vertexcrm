@@ -101,3 +101,6 @@ INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES 
 INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
 VALUES (1, 'JavaPro', '2017-02-01 10:10:10', 0, 4000, 'Test', 'Test');
 
+INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
+VALUES (2, 'JavaStart', '2017-02-01 10:10:10', 0, 8000, 'Before update', 'Before update');
+

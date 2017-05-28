@@ -22,6 +22,12 @@ public class CourseLogicImpl implements CourseLogic {
         return courseDaoInf.getAllCoursesWithDept();
     }
 
+    @Override
+    public int updateCourseExceptPrice(Course course) {
+        LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)",course));
+        return courseDaoInf.updateCourseExceptPrice(course);
+    }
+
     @Autowired
     public CourseLogicImpl(CourseDaoInf courseDaoInf) {
         this.courseDaoInf = courseDaoInf;
