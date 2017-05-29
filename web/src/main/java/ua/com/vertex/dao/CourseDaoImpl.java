@@ -48,6 +48,25 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
+    public List<Course> searchCourseByNameAndStatus(Course course) throws DataAccessException {
+        LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
+
+        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
+                "FROM Courses c WHERE name LIKE  '%" + course.getName() + "%' AND finished=:finished";
+
+        return jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_FINISHED, course.isFinished()),
+                (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
+                        .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                        .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
+                        .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
+                        .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                        .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
+                        .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                        .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
+
+    }
+
+    @Override
     public int updateCourseExceptPrice(Course course) throws DataAccessException {
         LOGGER.debug(String.format("Try update course except price by id -(%s)", course.getId()));
 
@@ -68,7 +87,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
 
     @Override
-    public Optional<Course> getCourseById(int courseId) {
+    public Optional<Course> getCourseById(int courseId) throws DataAccessException {
         LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +

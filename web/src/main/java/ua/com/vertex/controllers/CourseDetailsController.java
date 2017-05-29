@@ -42,7 +42,7 @@ public class CourseDetailsController {
     @PostMapping(value = "/searchCourse")
     public String searchCourse(@Validated @ModelAttribute(COURSE_DATA) Course course, BindingResult bindingResult,
                                Model model) {
-        LOGGER.debug(String.format("Search user by name - (%s) and finished - ", course.getName(), course.isFinished()));
+        LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
 
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
