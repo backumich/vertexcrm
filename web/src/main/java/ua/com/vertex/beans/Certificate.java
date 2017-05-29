@@ -18,18 +18,22 @@ public class Certificate {
     @Min(value = 1)
     @Max(value = Integer.MAX_VALUE)
     private int certificationId;
+
+    private String certificateUid;
+
     @Min(value = 1, message = "Entered value must be a positive integer!")
     @Max(value = Integer.MAX_VALUE, message = "Invalid value!")
     private int userId;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate certificationDate;
+
     @Size(min = 1, max = 256, message = NAME_MSG)
     private String courseName;
+
     @Size(min = 1, max = 256, message = NAME_MSG)
     private String language;
-    private String encodedCertificationId;
-
 
     public Certificate() {
     }
@@ -43,6 +47,11 @@ public class Certificate {
 
         public Builder setCertificationId(int id) {
             instance.setCertificationId(id);
+            return this;
+        }
+
+        public Builder setCertificateUid(String uid) {
+            instance.setCertificateUid(uid);
             return this;
         }
 
@@ -75,28 +84,30 @@ public class Certificate {
     public String toString() {
         return String.format(
                 "Certification ID: %05d%n" +
+                        "UID: %s%n" +
                         "User ID: %05d%n" +
                         "Certification Date: %s%n" +
                         "Course Name: %s%n" +
                         "Language: %s%n",
-                certificationId, userId, certificationDate, courseName, language);
+                certificationId, certificateUid, userId, certificationDate, courseName, language);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Certificate certificate2 = (Certificate) o;
-        return certificationId == certificate2.certificationId &&
-                userId == certificate2.userId &&
-                Objects.equals(certificationDate, certificate2.certificationDate) &&
-                Objects.equals(courseName, certificate2.courseName) &&
-                Objects.equals(language, certificate2.language);
+        Certificate that = (Certificate) o;
+        return certificationId == that.certificationId &&
+                userId == that.userId &&
+                Objects.equals(certificateUid, that.certificateUid) &&
+                Objects.equals(certificationDate, that.certificationDate) &&
+                Objects.equals(courseName, that.courseName) &&
+                Objects.equals(language, that.language);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(certificationId, userId, certificationDate, courseName, language);
+        return Objects.hash(certificationId, certificateUid, userId, certificationDate, courseName, language);
     }
 
     public int getCertificationId() {
@@ -105,6 +116,28 @@ public class Certificate {
 
     public void setCertificationId(int certificationId) {
         this.certificationId = certificationId;
+    }
+
+    public String getCertificateUid() {
+        char[] symbols = certificateUid.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < symbols.length; i++) {
+            sb.append(symbols[i]);
+            if ((i + 1) % 4 == 0 && (i + 1) < symbols.length) {
+                sb.append("-");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public String getCertificateUidWithoutDashes() {
+        return certificateUid;
+    }
+
+    public void setCertificateUid(String certificateUid) {
+        this.certificateUid = certificateUid;
     }
 
     public int getUserId() {
@@ -137,13 +170,5 @@ public class Certificate {
 
     public void setLanguage(String language) {
         this.language = language;
-    }
-
-    public String getEncodedCertificationId() {
-        return encodedCertificationId;
-    }
-
-    public void setEncodedCertificationId(String encodedCertificationId) {
-        this.encodedCertificationId = encodedCertificationId;
     }
 }

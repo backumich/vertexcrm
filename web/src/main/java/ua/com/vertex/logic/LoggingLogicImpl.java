@@ -12,8 +12,7 @@ import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -27,7 +26,6 @@ public class LoggingLogicImpl implements LoggingLogic {
 
     private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
     private static final String ADMIN = Role.ADMIN.name();
-    private static final String USER = Role.USER.name();
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
     private static final String ERROR = "error";
@@ -67,22 +65,14 @@ public class LoggingLogicImpl implements LoggingLogic {
     }
 
     private String requiredView() throws Exception {
-        String view;
+        String view = USER_PAGE;
+        Collection authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        List<String> authorities = new ArrayList<>();
-        SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                .forEach(e -> authorities.add(e.toString()));
-
-        if (authorities.size() == 1) {
-            if (ADMIN.equals(authorities.get(0))) {
-                view = ADMIN_PAGE;
-            } else if (USER.equals(authorities.get(0))) {
-                view = USER_PAGE;
-            } else {
-                throw new Exception(AUTHORITIES_ERROR);
-            }
-        } else {
+        if (authorities.size() != 1) {
             throw new Exception(AUTHORITIES_ERROR);
+        }
+        if (ADMIN.equals(authorities.iterator().next().toString())) {
+            view = ADMIN_PAGE;
         }
 
         return view;

@@ -19,6 +19,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static ua.com.vertex.beans.Certificate.Builder;
+import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -26,11 +28,13 @@ import static org.junit.Assert.*;
 @ActiveProfiles("test")
 public class CertificateDaoTest {
 
-    private static final int EXISTING_ID = 222;
-    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     private final String MSG = "Maybe method was changed";
+
     @Autowired
     private CertificateDaoInf certificateDao;
+
+    private static final int EXISTING_ID = 222;
+    private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
     @WithMockUser
@@ -62,11 +66,16 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void getAllCertificateByUserEmailReturnCorrectData() throws Exception {
+    public void getAllCertificateByUserEmailReturnsCorrectData() throws Exception {
         ArrayList<Certificate> certificates = new ArrayList<>();
-        certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
-                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage(null).getInstance());
+        certificates.add(new Builder()
+                .setCertificationId(1)
+                .setCertificateUid("1492779828793891")
+                .setUserId(0)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage(null)
+                .getInstance());
         assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserEmail("email1"));
     }
 
@@ -79,11 +88,16 @@ public class CertificateDaoTest {
 
     @Test
     @WithMockUser
-    public void getCertificateByIdReturnReturnCorrectData() throws Exception {
+    public void getCertificateByIdReturnReturnsCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
-            assertEquals(MSG, new Certificate.Builder().setCertificationId(1).setUserId(1)
-                    .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                    .setLanguage("Java").getInstance(), certificateDao.getCertificateById(1).get());
+            assertEquals(MSG, new Builder()
+                    .setCertificationId(1)
+                    .setCertificateUid("1492779828793891")
+                    .setUserId(1)
+                    .setCertificationDate(LocalDate.parse("2016-12-01"))
+                    .setCourseName("Java Professional")
+                    .setLanguage("Java")
+                    .getInstance(), certificateDao.getCertificateById(1).get());
         }
     }
 
@@ -97,5 +111,32 @@ public class CertificateDaoTest {
         certificate.setCertificationId(result);
         //noinspection ConstantConditions
         assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
+    public void addCertificateReturnsCorrectCertificationId() throws Exception {
+        assertEquals("", certificateDao.addCertificate(new Builder()
+                .setUserId(1)
+                .setCertificateUid("1492779828793891")
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage("Java")
+                .getInstance()), 501);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByUidReturnsCertificate() {
+        assertEquals(new Builder()
+                .setCertificationId(222)
+                .setCertificateUid("1492779828793888")
+                .setUserId(22)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage("Java")
+                .getInstance(), certificateDao.getCertificateByUid("1492779828793888").orElse(EMPTY_CERTIFICATE));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByNonExistingUidReturnsEmptyOptional() {
+        assertEquals(EMPTY_CERTIFICATE, certificateDao.getCertificateByUid("0").orElse(EMPTY_CERTIFICATE));
     }
 }

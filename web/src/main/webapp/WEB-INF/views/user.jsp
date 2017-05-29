@@ -100,7 +100,7 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5" align="center">
 
         <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
             <input type="submit" name="enter" value="Show certificate"/>
@@ -109,9 +109,10 @@
             <h1>You do not have certificates!!!</h1>
         </c:if>
         <c:if test="${!empty certificates}">
-            <table class="active" width="500">
+            <table class="active" width="600">
                 <tr>
                     <th>Certification Id</th>
+                    <th>Certificate UID</th>
                     <th>Certification Date</th>
                     <th>Course Name</th>
                     <th>Details</th>
@@ -120,11 +121,11 @@
                 <c:forEach items="${certificates}" var="certificate">
                     <tr>
                         <td>${certificate.certificationId}</td>
+                        <td>${certificate.certificateUid}</td>
                         <td>${certificate.certificationDate}</td>
                         <td>${certificate.courseName}</td>
                         <td>
-                            <a href="<c:url value="/getCertificate/${certificate.encodedCertificationId}"/>">
-                                Details</a>
+                            <a href="<c:url value="/getCertificate/${certificate.certificateUid}"/>">Details</a>
                         </td>
                     </tr>
                 </c:forEach>
