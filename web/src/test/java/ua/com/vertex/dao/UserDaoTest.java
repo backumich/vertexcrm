@@ -204,6 +204,7 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void addUserForCreateCertificateReturnCorrectData() throws Exception {
         User userForTest = new User.Builder().setEmail("email33").setFirstName("Test")

@@ -76,21 +76,4 @@ public class Aes {
         }
         return toReturn;
     }
-
-//    public static void main(String[] args) {
-//        String text = "222";
-//        String password = "ArgentinaJamaica";
-//        try {
-//            System.out.println("text is " + text);
-//            System.out.println("password is " + password);
-//            String cripted = Aes.encrypt(text, password);
-//            System.out.println("cripted is " + cripted);
-//            String decripted = Aes.decrypt(cripted, password);
-//            System.out.println("decripted is " + decripted);
-//        } catch (Throwable t) {
-//            t.printStackTrace();
-//        }
-//    }
-
 }
-
