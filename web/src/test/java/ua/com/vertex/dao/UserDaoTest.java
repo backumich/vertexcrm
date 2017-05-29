@@ -239,7 +239,7 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void registrationUserInsertCorrectInsert() throws Exception {
         User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
@@ -251,7 +251,7 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("33@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
