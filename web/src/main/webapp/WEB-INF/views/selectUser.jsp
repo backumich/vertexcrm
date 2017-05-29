@@ -105,13 +105,13 @@
         <c:if test="${empty users}">
             <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
                        action="searchUser">
-
-                <tr>
-                    <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
-                </tr>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
-                </tr>
+                <table>
+                    <tr>
+                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                    </tr>
                 </table>
             </form:form>
         </c:if>

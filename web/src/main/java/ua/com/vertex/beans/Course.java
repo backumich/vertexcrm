@@ -1,5 +1,7 @@
 package ua.com.vertex.beans;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,7 +10,10 @@ public class Course {
 
     private int id;
     private BigDecimal price;
-    private String name, teacherName, schedule, notes;
+
+    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
+    private String name;
+    private String teacherName, schedule, notes;
     private LocalDateTime start;
     private boolean finished;
 

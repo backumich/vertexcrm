@@ -1,7 +1,8 @@
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page session="false" %>
+
+<!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -14,7 +15,6 @@
     <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/slick.css">
     <link rel="stylesheet" href="../../css/main.css">
-    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -33,14 +33,16 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
+
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -69,6 +71,7 @@
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
+        //noinspection JSValidateTypes
         if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
@@ -96,54 +99,52 @@
         </div>
     </div>
 </div>
-
-
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+    <div class="container pt1_5" align="centr">
 
-        <main class="content">
-            <div class="registration">
-                <div id="registration-form">
-                    <div class="reg-form">
-                        <span class="fontSize200 silver">Welcome to Vertex CRM</span>
-                        <br><br><br>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <c:if test="${empty courses}">
+            <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
+                       action="searchCourse">
+                <table>
+                    <tr>
+                        <td><form:label path="name" size="100">Course name:</form:label></td>
+                        <td><form:input path="name" placeholder="Course name:" type="text"/></td>
+                        <td><form:errors path="name"/></td>
+                    </tr>
+                    <tr>
+                        <td><form:label path="finished">Course is finished?   </form:label></td>
+                        <td><form:checkbox path="finished" /></td>
+                        <td><form:errors path="finished"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center"><input type="submit" value="Search course"/></td>
+                    </tr>
+                </table>
+            </form:form>
+        </c:if>
+    </div>
+    <div>
+        <c:if test="${!empty users}">
 
-        <sec:authorize access="hasAuthority('ADMIN')">
-            <sec:authentication property="principal.username" var="admin"/>
-        </sec:authorize>
-        <sec:authorize access="hasAuthority('USER')">
-            <sec:authentication property="principal.username" var="user"/>
-        </sec:authorize>
 
-        <div class="href">
-            <c:if test="${user == null && admin == null}">
-                <a href="<c:url value="/registration"/>">Register</a> |
-                <a href="<c:url value="/logIn"/>">Log in</a><br><br>
-                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
-            </c:if>
+        </c:if>
+    </div>
 
-            <c:if test="${user != null || admin != null}">
-                <a href="<c:url value="/logIn"/>">User page</a> |
-                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
-                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
-            </c:if>
+    <br>
+    <br>
+    <br>
+    <c:if test="${!empty msg}">
+        <h3><span class="errorText250">${msg}</span></h3>
+    </c:if>
+    <br>
+    <br>
+    <br>
 
-            <br><br>
-            <c:if test="${admin != null}">
-                <a href="<c:url value="/admin"/>">Admin page</a> |
-                <a href="<c:url value="/viewAllUsers"/>">View all users</a>
-                <a href="<c:url value="/searchCourseJsp"/>">Course info</a>
-            </c:if>
-        </div>
+    <div class="hrefText">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
 </div>
-
-
-<div class="wrapper">
 
 </div>
 <div class="footer">

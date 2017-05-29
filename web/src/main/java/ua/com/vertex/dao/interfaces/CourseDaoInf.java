@@ -9,6 +9,8 @@ public interface CourseDaoInf {
 
     List<Course> getAllCoursesWithDept();
 
+    List<Course> searchCourseByNameAndStatus(Course course);
+
     int updateCourseExceptPrice(Course course);
 
     Optional<Course> getCourseById(int courseId);

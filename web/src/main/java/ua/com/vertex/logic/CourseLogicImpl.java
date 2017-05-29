@@ -23,6 +23,12 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
+    public List<Course> searchCourseByNameAndStatus(Course course) {
+        LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)",course));
+        return courseDaoInf.searchCourseByNameAndStatus(course);
+    }
+
+    @Override
     public int updateCourseExceptPrice(Course course) {
         LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)",course));
         return courseDaoInf.updateCourseExceptPrice(course);

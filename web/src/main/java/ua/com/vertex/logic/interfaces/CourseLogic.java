@@ -8,6 +8,8 @@ import java.util.List;
 public interface CourseLogic {
     List<Course> getAllCoursesWithDept();
 
+    List<Course> searchCourseByNameAndStatus(Course course);
+
     int updateCourseExceptPrice(Course course);
 
 }
