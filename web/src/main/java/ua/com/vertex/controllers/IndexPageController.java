@@ -23,7 +23,7 @@ public class IndexPageController {
         try {
             LOGGER.debug(logInfo.getId() + INDEX + " page accessed");
         } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e, e);
+            LOGGER.warn(logInfo.getId(), e);
             view = ERROR;
         }
 

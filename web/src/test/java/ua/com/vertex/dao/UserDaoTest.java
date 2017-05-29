@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -42,7 +43,7 @@ public class UserDaoTest {
     private UserDaoInf userDao;
 
     private static final int EXISTING_ID1 = 22;
-    private static final int EXISTING_ID2 = 33;
+    private static final int EXISTING_ID2 = 34;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     static final String EXISTING_EMAIL = "22@test.com";
     private static final String EXISTING_PASSWORD = "111111";
@@ -200,12 +201,12 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.size(), 5);
         assertEquals(MSG, users.get(1), user);
 
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void addUserForCreateCertificateReturnCorrectData() throws Exception {
         User userForTest = new User.Builder().setEmail("email33").setFirstName("Test")
@@ -237,6 +238,7 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithAnonymousUser
     public void registrationUserInsertCorrectInsert() throws Exception {
         User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
@@ -248,12 +250,13 @@ public class UserDaoTest {
     }
 
     @Test
+    @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
-        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("33@test.com").setPassword("test")
+        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
-        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("33@test.com").get());
+        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").get());
         userDao.registrationUserUpdate(userForUpdate);
-        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("33@test.com").get());
+        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
     }
 
 }
