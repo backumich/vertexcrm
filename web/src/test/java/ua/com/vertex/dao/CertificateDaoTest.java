@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -102,23 +103,21 @@ public class CertificateDaoTest {
     }
 
     @Test
+    @WithMockUser
     public void addCertificateReturnCorrectCertificationId() throws Exception {
 
-        Certificate certificate = new Certificate.Builder().setUserId(44)
-                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage("Java").getInstance();
-        int result = certificateDao.addCertificate(certificate);
-        certificate.setCertificationId(result);
-        //noinspection ConstantConditions
-        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
-    public void addCertificateReturnsCorrectCertificationId() throws Exception {
-        assertEquals("", certificateDao.addCertificate(new Builder()
-                .setUserId(1)
+        Certificate certificate = new Certificate.Builder()
+                .setUserId(44)
                 .setCertificateUid("1492779828793891")
                 .setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
-                .getInstance()), 501);
+                .getInstance();
+        int result = certificateDao.addCertificate(certificate);
+        certificate.setCertificationId(result);
+
+        //noinspection ConstantConditions
+        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
     }
 
     @Test
