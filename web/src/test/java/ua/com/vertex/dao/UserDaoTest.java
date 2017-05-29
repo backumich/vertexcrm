@@ -43,7 +43,7 @@ public class UserDaoTest {
     private UserDaoInf userDao;
 
     private static final int EXISTING_ID1 = 22;
-    private static final int EXISTING_ID2 = 33;
+    private static final int EXISTING_ID2 = 34;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     static final String EXISTING_EMAIL = "22@test.com";
     private static final String EXISTING_PASSWORD = "111111";
@@ -201,7 +201,6 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.size(), 5);
         assertEquals(MSG, users.get(1), user);
 
     }
@@ -253,11 +252,11 @@ public class UserDaoTest {
     @Test
     @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
-        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("33@test.com").setPassword("test")
+        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
-        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("33@test.com").get());
+        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").get());
         userDao.registrationUserUpdate(userForUpdate);
-        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("33@test.com").get());
+        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
     }
 
 }

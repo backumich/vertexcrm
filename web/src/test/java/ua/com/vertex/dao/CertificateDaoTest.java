@@ -38,7 +38,7 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
@@ -81,14 +81,14 @@ public class CertificateDaoTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnNull() throws Exception {
         //noinspection ConstantConditions,ResultOfMethodCallIgnored
         certificateDao.getCertificateById(-1).get();
     }
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnReturnsCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
             assertEquals(MSG, new Builder()
@@ -103,7 +103,7 @@ public class CertificateDaoTest {
     }
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void addCertificateReturnCorrectCertificationId() throws Exception {
 
         Certificate certificate = new Certificate.Builder()

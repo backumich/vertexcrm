@@ -74,6 +74,10 @@ VALUES ('33', '33@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmK
         NULL, NULL, '0', '38066 000 00 00', '1');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('34', '34@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+        NULL, NULL, '0', '38066 000 00 00', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('44', '44@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
         'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
 
