@@ -9,6 +9,7 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
@@ -32,6 +33,12 @@ public class CourseLogicImpl implements CourseLogic {
     public int updateCourseExceptPrice(Course course) {
         LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)",course));
         return courseDaoInf.updateCourseExceptPrice(course);
+    }
+
+    @Override
+    public Optional<Course> getCourseById(int courseId) {
+        LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)",courseId));
+        return courseDaoInf.getCourseById(courseId);
     }
 
     @Autowired
