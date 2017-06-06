@@ -48,13 +48,14 @@ public class CourseDetailsController {
                 course.getName(), course.isFinished()));
 
         String result = SEARCH_COURSE_JSP;
+
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
-            model.addAttribute("courses", courses);
-            model.addAttribute((courses.isEmpty()) ? (MSG) : ("courses"), ((courses.isEmpty())
-                    ? (String.format("Course with name - (%s) not found. Please check the data and try it again.",
-                    course.getName())) : (courses)));
-
+            if (courses.isEmpty()) {
+                model.addAttribute(MSG, "Course with name - (%s) not found. Please check the data and try it again.");
+            } else {
+                model.addAttribute("courses", courses);
+            }
         } catch (DataAccessException e) {
             LOGGER.warn(e);
             model.addAttribute(MSG,"Problems with the server, try again later.");
