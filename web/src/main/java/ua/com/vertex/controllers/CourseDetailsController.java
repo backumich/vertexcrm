@@ -30,6 +30,7 @@ public class CourseDetailsController {
     private static final String SEARCH_COURSE_JSP = "searchCourse";
     private static final String COURSE_DATA = "courseForInfo";
     private static final String COURSE = "course";
+    private static final String COURSE_ID = "courseId";
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
 
@@ -52,7 +53,7 @@ public class CourseDetailsController {
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
             if (courses.isEmpty()) {
-                model.addAttribute(MSG, "Course with name - (%s) not found. Please check the data and try it again.");
+                model.addAttribute(MSG, "Course with name - '"+course.getName() +"' not found. Please check the data and try it again.");
             } else {
                 model.addAttribute("courses", courses);
             }
@@ -68,7 +69,7 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/courseDetails")
-    public ModelAndView courseDetails(@RequestParam ("courseId") int courseId) {
+    public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
        ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);

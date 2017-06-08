@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
@@ -73,7 +74,7 @@ public class CreateCertificateAndAddToUser {
     }
 
     @PostMapping(value = "/selectUser")
-    public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
+    public ModelAndView selectUser(@RequestParam(USER_ID) int userId) {
         LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);

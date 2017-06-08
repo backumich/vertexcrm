@@ -12,6 +12,7 @@ import ua.com.vertex.logic.interfaces.CourseLogic;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 
@@ -29,7 +30,7 @@ public class CourseLogicImplTest {
     public void setUp() {
         courseLogic = new CourseLogicImpl(courseDaoInf);
         course = new Course.Builder().setId(1).setName("test").setFinished(false).setPrice(new BigDecimal(10000)).
-                setStart(LocalDateTime.of(2017, 5,28,12,12)).setNotes("test").
+                setStart(LocalDateTime.of(2017, 5, 28, 12, 12)).setNotes("test").
                 setNotes("test").getInstance();
     }
 
@@ -41,9 +42,10 @@ public class CourseLogicImplTest {
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void updateCourseExceptPriceVerifyCourseDaoAndReturnException() throws Exception{
+    public void updateCourseExceptPriceVerifyCourseDaoAndReturnException() throws Exception {
         when(courseDaoInf.updateCourseExceptPrice(course)).thenThrow(new DataIntegrityViolationException("Test"));
         courseDaoInf.updateCourseExceptPrice(course);
         verify(courseDaoInf, times(1)).updateCourseExceptPrice(course);
     }
+
 }

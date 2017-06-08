@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -10,16 +11,17 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -43,6 +45,8 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -99,82 +103,73 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
 
-        <c:if test="${empty courses}">
-            <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
-                       action="searchCourse">
-                <table>
-                    <tr>
-                        <td><form:label path="name" size="100">Course name:</form:label></td>
-                        <td><form:input path="name" placeholder="Course name:" type="text"/></td>
-                        <td><form:errors path="name"/></td>
-                    </tr>
-                    <tr>
-                        <td><form:label path="finished">Course is finished? </form:label></td>
-                        <td><form:checkbox path="finished"/></td>
-                        <td><form:errors path="finished"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search course"/></td>
-                    </tr>
-                </table>
-            </form:form>
-        </c:if>
-    </div>
-    <div>
-        <c:if test="${!empty courses}">
-            <form:form method="post" commandName="courseId" action="courseDetails">
-                <table class="active" width="500">
-                    <tr>
-                        <th>Select course</th>
-                        <th>Course Id</th>
-                        <th>Course name</th>
-                        <th>Course start date</th>
-                        <th>Course is finished</th>
-                        <th>Course price</th>
-                        <th>Course teacher</th>
-                    </tr>
-                    <c:forEach items="${courses}" var="course">
-                        <tr>
-                            <td><input type="radio" name="courseId" checked="checked" value=${course.id}>
-                            </td>
-                            <td>${course.name}</td>
-                            <td>${course.start}</td>
-                            <td>${course.finished}</td>
-                            <td>${course.price}</td>
-                            <td>${course.teacherName}</td>
-                            <td>${course.schedule}</td>
-                            <td>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select course"/></td>
-                </tr>
-            </form:form>
-        </c:if>
-    </div>
 
-    <br>
-    <br>
-    <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
+<div align="center" class="page gray-page mh100 up-padding">
+
+    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
+
+    <c:if test="${certificate == null}">
+        <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
+
+        <sf:form cssClass="black" method="get" action="getCertificate">
+            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
+            <input type="submit" value="Send">
+        </sf:form>
     </c:if>
-    <br>
-    <br>
-    <br>
+    <br><br>
 
-    <div class="hrefText">
+    <c:if test="${error != null}">
+        <h3><span class="fontSize140 red">${error}</span></h3>
+    </c:if>
+
+    <c:if test="${error == null && certificate != null}">
+        <table class="table fontSize140">
+            <tr>
+                <td>Certificate UID:</td>
+                <td>${certificate.certificateUid}</td>
+            </tr>
+            <tr>
+                <td>Certificate Holder First Name:</td>
+                <td><span class="red">
+                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
+                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certificate Holder Last Name:</td>
+                <td><span class="red">
+                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
+                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
+            </tr>
+            <tr>
+                <td>Certification Date:</td>
+                <td>${certificate.certificationDate}</td>
+            </tr>
+            <tr>
+                <td>Course Name:</td>
+                <td>${certificate.courseName}</td>
+            </tr>
+            <tr>
+                <td>Language:</td>
+                <td>${certificate.language}</td>
+            </tr>
+            <tr>
+                <td>Certificate Link:</td>
+                <td class="fontSize70">localhost:8080/getCertificate/${certificate.certificateUid}</td>
+            </tr>
+        </table>
+        <br>
+
+
+
+    <br>
+    <div class="href">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/" />">Home</a>
     </div>
 </div>
 
-</div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -229,11 +224,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>
