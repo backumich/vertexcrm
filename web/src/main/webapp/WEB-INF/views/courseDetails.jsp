@@ -106,73 +106,80 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-<form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
-    <span class="fontSize180 silver">Certificate Details</span><br><br><br>
-    <table class="table fontSize140">
-        <tr>
-            <td>Course Id</td>
-            <td><form:label path="id">${course.id}</form:label>
-                <form:hidden path="id"></form:hidden></td>
-        </tr>
-        <tr>
-            <td>Course name:</td>
-            <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
-                            path="name"/>
-            <td><form:errors path="name"/></td>
-        </tr>
-        <tr>
-            <td>Start date:</td>
-            <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
-                            path="start"/>
-            <td><form:errors path="start"/></td>
-        </tr>
-        <tr>
-            <td>Prise:</td>
-            <td><form:label path="price">${course.price}</form:label>
-                <form:hidden path="price"></form:hidden></td>
-        </tr>
-        <tr>
-            <td>Teacher name:</td>
-            <td><form:input id="teacherName" class="buttonText" type="text" size="40" value="${course.teacherName}"
-                            path="teacherName"/>
-            <td><form:errors path="teacherName"/></td>
-        </tr>
-        <tr>
-            <td>Schedule:</td>
-            <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
-                            path="schedule"/>
-            <td><form:errors path="schedule"/></td>
-        </tr>
-        <tr>
-            <td>Schedule:</td>
-            <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
-                            path="notes"/>
-            <td><form:errors path="notes"/></td>
-        </tr>
+    <div>
+        <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
+        <span class="fontSize180 silver">Course details</span><br><br><br>
+        <table class="table fontSize140">
+            <tr>
+                <td>Course id:</td>
+                <td><form:label path="id">${course.id}</form:label>
+                    <form:hidden path="id"></form:hidden></td>
+            </tr>
+            <tr>
+                <td>Course name:</td>
+                <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
+                                path="name"/>
+                <td><form:errors path="name"/></td>
+            </tr>
+            <tr>
+                <td>Start date:</td>
+                <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
+                                path="start"/>
+                <td><form:errors path="start"/></td>
+            </tr>
+            <tr>
+                <td>Prise:</td>
+                <td><form:label path="price">${course.price}</form:label>
+                    <form:hidden path="price"></form:hidden></td>
+            </tr>
+            <tr>
+                <td>Teacher name:</td>
+                <td><form:input id="teacherName" class="buttonText" type="text" size="40" value="${course.teacherName}"
+                                path="teacherName"/>
+                <td><form:errors path="teacherName"/></td>
+            </tr>
+            <tr>
+                <td>Schedule:</td>
+                <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
+                                path="schedule"/>
+                <td><form:errors path="schedule"/></td>
+            </tr>
+            <tr>
+                <td>Notes:</td>
+                <td><form:input id="notes" class="buttonText" type="text" size="40" value="${course.notes}"
+                                path="notes"/>
+                <td><form:errors path="notes"/></td>
+            </tr>
 
-        <tr>
-            <td colspan="5" align="center"><input type="submit" value="Update course"/></td>
-        </tr>
-</form:form>
-        <%--<tr>--%>
-            <%--<td>Is finished</td>--%>
-            <%--<td><c:choose>--%>
-                <%--<c:when test="${course.finished}">Yes</c:when>--%>
-                <%--<c:otherwise>No</c:otherwise>--%>
-            <%--</c:choose></td>--%>
-        <%--</tr>--%>
-
-    <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
-    </c:if>
-    <br>
-    <div class="href">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+            <tr>
+                <td></td>
+                <td colspan="5" align="right"><input type="submit" value="Update course"/></td>
+            </tr>
+            </form:form>
+        </table>
+    </div>
+    <div>
+        <br>
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+        <br>
+    </div>
+    <div>
+        <div class="href">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 
+<%--<tr>--%>
+<%--<td>Is finished</td>--%>
+<%--<td><c:choose>--%>
+<%--<c:when test="${course.finished}">Yes</c:when>--%>
+<%--<c:otherwise>No</c:otherwise>--%>
+<%--</c:choose></td>--%>
+<%--</tr>--%>
 
 <div class="footer">
     <div class="container">
