@@ -53,13 +53,13 @@ public class CourseDetailsController {
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
             if (courses.isEmpty()) {
-                model.addAttribute(MSG, "Course with name - '"+course.getName() +"' not found. Please check the data and try it again.");
+                model.addAttribute(MSG, "Course with name - '" + course.getName() + "' not found. Please check the data and try it again.");
             } else {
                 model.addAttribute("courses", courses);
             }
         } catch (DataAccessException e) {
             LOGGER.warn(e);
-            model.addAttribute(MSG,"Problems with the server, try again later.");
+            model.addAttribute(MSG, "Problems with the server, try again later.");
         } catch (Exception e) {
             LOGGER.warn(e);
             result = ERROR;
@@ -72,14 +72,14 @@ public class CourseDetailsController {
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
-       ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
+        ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         try {
-            Optional <Course> course =  courseLogic.getCourseById(courseId);
-            if (course.isPresent()){
-                result.addObject(COURSE,course.get());
-            }else {
-                 throw new Exception();
+            Optional<Course> course = courseLogic.getCourseById(courseId);
+            if (course.isPresent()) {
+                result.addObject(COURSE, course.get());
+            } else {
+                throw new Exception();
             }
         } catch (Exception e) {
             LOGGER.warn(e);
@@ -90,10 +90,20 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/updateCourse")
-    public String updateCourse (@Valid@ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model){
-        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - ", course.getId(),course));
-
+    public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
+        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - ", course.getId(), course));
         String result = COURSE_DETAILS_JSP;
+        if (!bindingResult.hasErrors()) {
+            try {
+                courseLogic.updateCourseExceptPrice(course);
+            } catch (DataAccessException e) {
+                LOGGER.warn(e);
+                model.addAttribute(MSG, "Problems with the server, try again later.");
+            } catch (Exception e) {
+                LOGGER.warn(e);
+                result = ERROR;
+            }
+        }
         return result;
     }
 

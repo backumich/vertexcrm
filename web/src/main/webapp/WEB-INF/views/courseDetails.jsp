@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page session="false" %>
 <!DOCTYPE html>
@@ -106,62 +106,66 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-
+<form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
     <span class="fontSize180 silver">Certificate Details</span><br><br><br>
+    <table class="table fontSize140">
+        <tr>
+            <td>Course Id</td>
+            <td><form:label path="id">${course.id}</form:label>
+                <form:hidden path="id"></form:hidden></td>
+        </tr>
+        <tr>
+            <td>Course name:</td>
+            <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
+                            path="name"/>
+            <td><form:errors path="name"/></td>
+        </tr>
+        <tr>
+            <td>Start date:</td>
+            <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
+                            path="start"/>
+            <td><form:errors path="start"/></td>
+        </tr>
+        <tr>
+            <td>Prise:</td>
+            <td><form:label path="price">${course.price}</form:label>
+                <form:hidden path="price"></form:hidden></td>
+        </tr>
+        <tr>
+            <td>Teacher name:</td>
+            <td><form:input id="teacherName" class="buttonText" type="text" size="40" value="${course.teacherName}"
+                            path="teacherName"/>
+            <td><form:errors path="teacherName"/></td>
+        </tr>
+        <tr>
+            <td>Schedule:</td>
+            <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
+                            path="schedule"/>
+            <td><form:errors path="schedule"/></td>
+        </tr>
+        <tr>
+            <td>Schedule:</td>
+            <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
+                            path="notes"/>
+            <td><form:errors path="notes"/></td>
+        </tr>
 
-    <c:if test="${certificate == null}">
-        <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
+        <tr>
+            <td colspan="5" align="center"><input type="submit" value="Update course"/></td>
+        </tr>
+</form:form>
+        <%--<tr>--%>
+            <%--<td>Is finished</td>--%>
+            <%--<td><c:choose>--%>
+                <%--<c:when test="${course.finished}">Yes</c:when>--%>
+                <%--<c:otherwise>No</c:otherwise>--%>
+            <%--</c:choose></td>--%>
+        <%--</tr>--%>
 
-        <sf:form cssClass="black" method="get" action="getCertificate">
-            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
-            <input type="submit" value="Send">
-        </sf:form>
+    <br>
+    <c:if test="${!empty msg}">
+        <h3><span class="errorText250">${msg}</span></h3>
     </c:if>
-    <br><br>
-
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
-    </c:if>
-
-    <c:if test="${error == null && certificate != null}">
-        <table class="table fontSize140">
-            <tr>
-                <td>Certificate UID:</td>
-                <td>${certificate.certificateUid}</td>
-            </tr>
-            <tr>
-                <td>Certificate Holder First Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.firstName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.firstName != null}">${user.firstName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certificate Holder Last Name:</td>
-                <td><span class="red">
-                            <c:if test="${user.lastName == null}">No holder assigned</c:if></span>
-                    <c:if test="${user.lastName != null}">${user.lastName}</c:if></td>
-            </tr>
-            <tr>
-                <td>Certification Date:</td>
-                <td>${certificate.certificationDate}</td>
-            </tr>
-            <tr>
-                <td>Course Name:</td>
-                <td>${certificate.courseName}</td>
-            </tr>
-            <tr>
-                <td>Language:</td>
-                <td>${certificate.language}</td>
-            </tr>
-            <tr>
-                <td>Certificate Link:</td>
-                <td class="fontSize70">localhost:8080/getCertificate/${certificate.certificateUid}</td>
-            </tr>
-        </table>
-        <br>
-
-
-
     <br>
     <div class="href">
         <a href="javascript:history.back();">Back</a> |

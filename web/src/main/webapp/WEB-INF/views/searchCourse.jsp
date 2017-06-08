@@ -129,12 +129,12 @@
                 <table class="active" width="500">
                     <tr>
                         <th>Select course</th>
-                        <th>Course Id</th>
                         <th>Course name</th>
                         <th>Course start date</th>
                         <th>Course is finished</th>
                         <th>Course price</th>
                         <th>Course teacher</th>
+                        <th>Course schedule</th>
                     </tr>
                     <c:forEach items="${courses}" var="course">
                         <tr>
