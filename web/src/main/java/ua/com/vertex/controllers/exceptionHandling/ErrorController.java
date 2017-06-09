@@ -1,4 +1,4 @@
-package ua.com.vertex.exceptionHandling;
+package ua.com.vertex.controllers.exceptionHandling;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
