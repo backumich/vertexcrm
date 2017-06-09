@@ -14,7 +14,9 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.util.List;
+
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
@@ -51,7 +53,7 @@ public class CreateCertificateAndAddToUser {
         if (userData.isEmpty()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             result = SELECT_USER_JSP;
-            LOGGER.info(String.format("Call - userLogic.searchUser(%s);", userData) + "The data have not been validated!!!");
+            LOGGER.debug(String.format("Call - userLogic.searchUser(%s); The data have not been validated!!!", userData));
         } else {
             try {
                 List<User> users = userLogic.searchUser(userData);
@@ -74,7 +76,8 @@ public class CreateCertificateAndAddToUser {
 
     @PostMapping(value = "/selectUser")
     public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
-        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
+        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to (%s) ",
+                userId,SELECT_USER_JSP));
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
         return result;
@@ -96,7 +99,7 @@ public class CreateCertificateAndAddToUser {
                 int result = certificateLogic.addCertificate(certificate);
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
-                LOGGER.info("Certificate added. Certificate id = " + result);
+                LOGGER.debug("Certificate added. Certificate id = " + result);
             } catch (Exception e) {
                 returnPage = ERROR;
                 LOGGER.warn(e);
