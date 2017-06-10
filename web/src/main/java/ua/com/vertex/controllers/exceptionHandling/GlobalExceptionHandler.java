@@ -8,7 +8,6 @@ import ua.com.vertex.utils.LogInfo;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private static final String ERROR = "error";
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
 
