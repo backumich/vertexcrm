@@ -8,6 +8,7 @@ import ua.com.vertex.beans.User;
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserDaoInf {
@@ -46,5 +47,7 @@ public interface UserDaoInf {
     void registrationUserInsert(User user) throws DataAccessException;
 
     void registrationUserUpdate(User user) throws DataAccessException;
+
+    List<User> getTeachers () throws DataAccessException;
 
 }

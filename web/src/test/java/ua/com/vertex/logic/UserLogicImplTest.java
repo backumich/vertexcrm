@@ -12,10 +12,15 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserLogicImplTest {
@@ -124,6 +129,15 @@ public class UserLogicImplTest {
     public void encryptPasswordReturnEncodePassword() throws DataAccessException {
         assertNotNull(logic.encryptPassword(NAME));
         assertNotEquals(MSG, NAME, logic.encryptPassword(NAME));
+    }
+
+    @Test
+    public void getTeachersReturnCorrectData() throws Exception {
+        List<User> teachers = new ArrayList<>();
+        teachers.add(user);
+        when(dao.getTeachers()).thenReturn(teachers);
+        assertEquals(logic.getTeachers().get(EMAIL),String.format("%s %s \'%s\'",NAME,NAME,EMAIL));
+
     }
 
 }

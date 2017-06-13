@@ -15,6 +15,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -100,6 +101,14 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug(String.format("Call - userDao.registrationUserUpdate(%s) ;", user));
         user.setPassword(encryptPassword(user.getPassword()));
         userDao.registrationUserUpdate(user);
+    }
+
+    @Override
+    public Map<String, String> getTeachers() throws DataAccessException {
+        LOGGER.debug("Call - userDao.getTeachers()");
+
+        return userDao.getTeachers().stream().collect(Collectors.toMap(User::getEmail,
+                x -> x.getFirstName() + " " + x.getLastName() + " \'" + x.getEmail() + "\'"));
     }
 
     @Override

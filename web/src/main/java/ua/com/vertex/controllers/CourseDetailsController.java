@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -31,10 +33,12 @@ public class CourseDetailsController {
     private static final String COURSE_DATA = "courseForInfo";
     private static final String COURSE = "course";
     private static final String COURSE_ID = "courseId";
+    private static final String TEACHERS = "teachers";
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
 
     private final CourseLogic courseLogic;
+    private final UserLogic userLogic;
 
     @GetMapping(value = "/searchCourseJsp")
     public ModelAndView searchCourseJsp() {
@@ -78,6 +82,7 @@ public class CourseDetailsController {
             Optional<Course> course = courseLogic.getCourseById(courseId);
             if (course.isPresent()) {
                 result.addObject(COURSE, course.get());
+                result.addObject(TEACHERS,userLogic.getTeachers());
             } else {
                 throw new Exception();
             }
@@ -90,8 +95,9 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/updateCourse")
-    public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
-        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - ", course.getId(), course));
+    public String updateCourse(@Valid @ModelAttribute(COURSE) Course course,
+                               @ModelAttribute(TEACHERS)Map<String, String> teachers, BindingResult bindingResult, Model model) {
+        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = COURSE_DETAILS_JSP;
         if (!bindingResult.hasErrors()) {
             try {
@@ -103,12 +109,15 @@ public class CourseDetailsController {
                 LOGGER.warn(e);
                 result = ERROR;
             }
+        }else {
+            model.addAttribute(model.addAttribute(TEACHERS,teachers));
         }
         return result;
     }
 
     @Autowired
-    public CourseDetailsController(CourseLogic courseLogic) {
+    public CourseDetailsController(CourseLogic courseLogic, UserLogic userLogic) {
         this.courseLogic = courseLogic;
+        this.userLogic = userLogic;
     }
 }

@@ -23,9 +23,7 @@ import ua.com.vertex.utils.LogInfo;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
@@ -319,6 +317,19 @@ public class UserDaoImpl implements UserDaoInf {
                 "phone =:phone, role_id =2 WHERE email =:email";
 
         jdbcTemplate.update(query, getRegistrationParameters(user));
+    }
+
+    @Override
+    public List<User> getTeachers() throws DataAccessException {
+        LOGGER.debug("Trying to pull out all users with the role is a teacher.");
+
+        String query = "SELECT email, first_name,last_name FROM users WHERE role_id = 1";
+
+        return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
+                .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                .setLastName(COLUMN_LAST_NAME)
+                .getInstance());
     }
 
     private MapSqlParameterSource getRegistrationParameters(User user) {

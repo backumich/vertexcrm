@@ -7,6 +7,7 @@ import ua.com.vertex.beans.User;
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserLogic {
@@ -40,4 +41,7 @@ public interface UserLogic {
     void registrationUserInsert(User user) throws DataAccessException;
 
     void registrationUserUpdate(User user) throws DataAccessException;
+
+    Map<String, String> getTeachers () throws DataAccessException;
+
 }

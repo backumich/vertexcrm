@@ -134,9 +134,11 @@
             </tr>
             <tr>
                 <td>Teacher name:</td>
-                <td><form:input id="teacherName" class="buttonText" type="text" size="40" value="${course.teacherName}"
-                                path="teacherName"/>
-                <td><form:errors path="teacherName"/></td>
+                <td><form:select path="teacherName">
+                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:options items="${teachers}"/>
+                    </form:select>
+                
             </tr>
             <tr>
                 <td>Schedule:</td>
