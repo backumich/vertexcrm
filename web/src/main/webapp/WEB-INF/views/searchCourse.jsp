@@ -112,6 +112,9 @@
                         <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
+                        <td><form:hidden path="start" value="2011-12-03T19:20:30" /></td>
+                    </tr>
+                    <tr>
                         <td><form:label path="finished">Course is finished? </form:label></td>
                         <td><form:checkbox path="finished"/></td>
                         <td><form:errors path="finished"/></td>

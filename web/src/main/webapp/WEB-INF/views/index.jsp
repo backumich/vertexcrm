@@ -135,8 +135,7 @@
             <br><br>
             <c:if test="${admin != null}">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
-                <a href="<c:url value="/viewAllUsers"/>">View all users</a>|
-                <a href="<c:url value="/searchCourseJsp"/>">Course info</a>
+                <a href="<c:url value="/viewAllUsers"/>">View all users</a>
             </c:if>
         </div>
     </div>

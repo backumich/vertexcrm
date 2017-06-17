@@ -19,9 +19,9 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
@@ -40,7 +40,7 @@ public class CourseDetailsController {
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
 
-    @GetMapping(value = "/searchCourseJsp")
+    @PostMapping(value = "/searchCourseJsp")
     public ModelAndView searchCourseJsp() {
         LOGGER.debug("Show search page for courses");
         return new ModelAndView(SEARCH_COURSE_JSP, COURSE_DATA, new Course());
@@ -82,7 +82,7 @@ public class CourseDetailsController {
             Optional<Course> course = courseLogic.getCourseById(courseId);
             if (course.isPresent()) {
                 result.addObject(COURSE, course.get());
-                result.addObject(TEACHERS,userLogic.getTeachers());
+                result.addObject(TEACHERS, userLogic.getTeachers());
             } else {
                 throw new Exception();
             }
@@ -95,13 +95,13 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/updateCourse")
-    public String updateCourse(@Valid @ModelAttribute(COURSE) Course course,
-                               @ModelAttribute(TEACHERS)Map<String, String> teachers, BindingResult bindingResult, Model model) {
+    public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
-        String result = COURSE_DETAILS_JSP;
+        String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             try {
                 courseLogic.updateCourseExceptPrice(course);
+                model.addAttribute(MSG,"Course updated!!!");
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
                 model.addAttribute(MSG, "Problems with the server, try again later.");
@@ -109,8 +109,9 @@ public class CourseDetailsController {
                 LOGGER.warn(e);
                 result = ERROR;
             }
-        }else {
-            model.addAttribute(model.addAttribute(TEACHERS,teachers));
+        } else {
+            result = COURSE_DETAILS_JSP;
+            model.addAttribute(model.addAttribute(TEACHERS, userLogic.getTeachers()));
         }
         return result;
     }

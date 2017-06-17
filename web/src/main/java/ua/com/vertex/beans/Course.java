@@ -1,5 +1,8 @@
 package ua.com.vertex.beans;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,6 +16,9 @@ public class Course {
     @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String name;
     private String teacherName, schedule, notes;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @NotNull
     private LocalDateTime start;
     private boolean finished;
 
