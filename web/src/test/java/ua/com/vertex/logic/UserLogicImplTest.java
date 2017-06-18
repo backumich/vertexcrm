@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -137,7 +138,12 @@ public class UserLogicImplTest {
         teachers.add(user);
         when(dao.getTeachers()).thenReturn(teachers);
         assertEquals(logic.getTeachers().get(EMAIL),String.format("%s %s \'%s\'",NAME,NAME,EMAIL));
+    }
 
+    @Test(expected = DataIntegrityViolationException.class)
+    public void getTeachersReturnException() throws Exception {
+         when(dao.getTeachers()).thenThrow(new DataIntegrityViolationException("test"));
+         logic.getTeachers();
     }
 
 }
