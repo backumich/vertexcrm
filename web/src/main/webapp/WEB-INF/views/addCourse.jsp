@@ -106,41 +106,51 @@
             <form:form action="addCourse" method="post" commandName="course">
                 <table border="0">
                     <tr>
-                        <td colspan="2" align="center"><h2>Registration new user</h2></td>
+                        <td colspan="2" align="center"><h2>Add new Course</h2></td>
+                    </tr>
+                    <%--<tr>--%>
+                        <%--<td>ID:</td>--%>
+                        <%--<td><form:input class="buttonText" placeholder="id" path="id"/></td>--%>
+                        <%--<td><form:errors path="id"/></td>--%>
+                    <%--</tr>--%>
+                    <tr>
+                        <td>Course name:</td>
+                        <td><form:input class="buttonText" placeholder="name" path="name"/></td>
+                        <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
-                        <td>E-mail:</td>
-                        <td><form:input class="buttonText" placeholder="E-mail" path="email"/></td>
-                        <td><form:errors path="email"/></td>
+                        <td>Start:</td>
+                        <td><form:input class="buttonText" placeholder="start"
+                                           path="start"/></td>
+                        <td><form:errors path="start"/></td>
                     </tr>
                     <tr>
-                        <td>Password:</td>
-                        <td><form:password class="buttonText" placeholder="Password" path="password"/></td>
-                        <td><form:errors path="password"/></td>
+                        <td>Finished:</td>
+                        <td><form:checkbox  class="buttonText" placeholder="finished" path="finished"/></td>
+                        <td><form:errors path="finished"/></td>
                     </tr>
                     <tr>
-                        <td>Repeat password:</td>
-                        <td><form:password class="buttonText" placeholder="Confirm password"
-                                           path="verifyPassword"/></td>
-                        <td><form:errors path="verifyPassword"/></td>
+                        <td>Price:</td>
+                        <td><form:input class="buttonText" placeholder="price" path="price"/></td>
+                        <td><form:errors path="price"/></td>
                     </tr>
                     <tr>
-                        <td>First name:</td>
-                        <td><form:input class="buttonText" placeholder="First name" path="firstName"/></td>
-                        <td><form:errors path="firstName"/></td>
+                        <td>Teacher:</td>
+                        <td><form:input class="buttonText" placeholder="teacherName" path="teacherName"/></td>
+                        <td><form:errors path="teacherName"/></td>
                     </tr>
                     <tr>
-                        <td>Last name:</td>
-                        <td><form:input class="buttonText" placeholder="Last name" path="lastName"/></td>
-                        <td><form:errors path="lastName"/></td>
+                        <td>Schedule:</td>
+                        <td><form:input class="buttonText" placeholder="schedule" path="schedule"/></td>
+                        <td><form:errors path="schedule"/></td>
                     </tr>
                     <tr>
-                        <td>Phone:</td>
-                        <td><form:input class="buttonText" placeholder="Phone" path="phone"/></td>
-                        <td><form:errors path="phone"/></td>
+                        <td>Notes:</td>
+                        <td><form:input class="buttonText" placeholder="notes" path="notes"/></td>
+                        <td><form:errors path="notes"/></td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center"><input class="buttonText" type="submit" value="Register"/></td>
+                        <td colspan="2" align="center"><input class="buttonText" type="submit" value="Add course"/></td>
                     </tr>
                 </table>
             </form:form>

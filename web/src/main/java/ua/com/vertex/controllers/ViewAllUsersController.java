@@ -33,10 +33,9 @@ public class ViewAllUsersController {
             modelAndView.addObject("users", users);
             modelAndView.setViewName(PAGE_JSP);
             LOGGER.debug("Received a list of all users and transferred to the model");
-            String allUsersEmail = "";
-            for (User user : users) {
-                allUsersEmail += user.getEmail() + "|";
-            }
+
+            String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+
             LOGGER.debug("Quantity users -" + users.size());
             LOGGER.debug("All users list -" + allUsersEmail);
         } catch (Exception e) {

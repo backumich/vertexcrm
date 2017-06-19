@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
@@ -70,6 +72,36 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "SELECT count(*) FROM Courses";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
+
+    @Override
+    public int addCourse(Course course) throws SQLException {
+
+        //public int registrationUser(User user) throws DataAccessException {
+        LOGGER.info("Adding a new course into database");
+
+//        String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
+//                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
+        String query = "INSERT INTO courses(name, start, finished, price, teacher_name, schedule, notes) " +
+                "VALUES (:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, getCourseParameters(course), keyHolder);
+
+        Number id = keyHolder.getKey();
+        return id.intValue();
+    }
+
+    private MapSqlParameterSource getCourseParameters(Course course) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("name", course.getName());
+        namedParameters.addValue("start", course.getStart());
+        namedParameters.addValue("finished", course.getFinished());
+        namedParameters.addValue("price", course.getPrice());
+        namedParameters.addValue("teacher_name", course.getTeacherName());
+        namedParameters.addValue("schedule", course.getSchedule());
+        namedParameters.addValue("notes", course.getNotes());
+        return namedParameters;
+    }
+
 
     @Autowired
     public CourseDaoImpl(DataSource dataSource, LogInfo logInfo) {

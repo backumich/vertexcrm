@@ -1,17 +1,40 @@
 package ua.com.vertex.beans;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Course {
+    private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
+    private final String COURSE_TEACHER_NAME_MSG = "Teacher's name must be longer than 2 and less than 256 characters";
+    private final String SCHEDULE_MSG = "The schedule must be up to 256 characters long";
+    private final String NOTES_MSG = "The schedule must be up to 256 characters long";
+
     private int id;
+
+    @Size(min = 5, max = 256, message = COURSE_NAME_MSG)
     private String name;
+
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @NotNull
     private LocalDate start;
+
     private boolean finished;
+
+    @DecimalMin("0.00")
+    @DecimalMax("999999999.99")
     private double price;
+
+    @Size(min = 2, max = 256, message = COURSE_TEACHER_NAME_MSG)
     private String teacherName;
+
+    @Size(max = 256, message = SCHEDULE_MSG)
     private String schedule;
+
+    @Size(max = 256, message = NOTES_MSG)
     private String notes;
 
     public Course() {
@@ -52,7 +75,7 @@ public class Course {
         this.start = start;
     }
 
-    public boolean isFinished() {
+    public boolean getFinished() {
         return finished;
     }
 

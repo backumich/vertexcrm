@@ -73,5 +73,30 @@ public class ViewAllCoursesControllerTest {
 
     @Test
     public void reloadTest() throws Exception {
+        MockMvc mockMvc = standaloneSetup(new ViewAllCoursesController(logic))
+                .setSingleView(new InternalResourceView("viewAllCourses"))
+                .build();
+        mockMvc.perform(post("/viewAllCourses"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("viewAllCourses"))
+                .andExpect(forwardedUrl("viewAllCourses"))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().attribute("courses", hasSize(2)))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(1))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(2))))))
+
+                .andExpect(model().attributeExists("viewAllCourses"))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("currentNamePage", is("viewAllCourses"))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("currentNumberPage", is(1))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("nextPage", is(1))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("lastPage", is(1))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("currentRowPerPage", is(25))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("quantityPages", is(1))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("dataSize", is(2))))
+                .andExpect(model().attribute("viewAllCourses", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
+                    put(25, 25);
+                    put(50, 50);
+                    put(100, 100);
+                }}))));
     }
 }

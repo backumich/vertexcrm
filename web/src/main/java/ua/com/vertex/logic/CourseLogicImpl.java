@@ -43,6 +43,11 @@ public class CourseLogicImpl implements CourseLogic {
         return courses;
     }
 
+    @Override
+    public int addCourse(Course course) throws Exception {
+        return courseDao.addCourse(course);
+    }
+
     @Autowired
     public CourseLogicImpl(CourseDaoInf courseDao) {
         this.courseDao = courseDao;

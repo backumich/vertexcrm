@@ -55,10 +55,6 @@ public class ViewAllCoursesController {
             modelAndView.addObject("viewAllCourses", dataNavigator);
             modelAndView.setViewName(PAGE_JSP);
             LOGGER.debug("Received a list of all courses and transferred to the model");
-//            String allCourses = "";
-//            for (Course course : courses) {
-//                allCourses += course.getName() + "|";
-//            }
 
             String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
             LOGGER.debug("Quantity courses -" + courses.size());
