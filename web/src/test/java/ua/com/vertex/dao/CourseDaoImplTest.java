@@ -8,6 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -41,6 +42,7 @@ public class CourseDaoImplTest {
     }
 
     @Test
+    @Transactional(rollbackFor = Exception.class)
     public void createCourseCorrectInsert() throws Exception {
         Course course = new Course.Builder().setName("TestCourseSearch").setFinished(false)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
@@ -50,6 +52,7 @@ public class CourseDaoImplTest {
         course.setId(courseId);
 
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+        throw new Exception("test");
     }
 
     @Test
