@@ -54,7 +54,7 @@ public class CourseDaoImplTest {
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
         List<Course> courses = courseDaoInf.getAllCoursesWithDept();
         assertFalse(MSG, courses.isEmpty());
-        courses.forEach(course1 -> assertTrue(course1.getPrice().intValue()>0));
+        courses.forEach(course1 -> assertTrue(course1.getPrice().intValue() > 0));
     }
 
     @Test

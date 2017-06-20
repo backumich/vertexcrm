@@ -23,6 +23,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
+import static ua.com.vertex.controllers.CourseDetailsController.SEARCH_COURSE_JSP;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
@@ -61,7 +62,7 @@ public class CreateCertificateAndAddToUserTest {
     @Test
     public void addCertificateWithUserIdReturnCorrectView() throws Exception {
         ModelAndView result = underTest.addCertificateWithUserId();
-        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_JSP);
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SEARCH_COURSE_JSP);
     }
 
     @Test

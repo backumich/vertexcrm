@@ -29,8 +29,8 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 public class CourseDetailsController {
 
     private static final String COURSE_DETAILS_JSP = "courseDetails";
-    private static final String SEARCH_COURSE_JSP = "searchCourse";
-    private static final String COURSE_DATA = "courseForInfo";
+    static final String SEARCH_COURSE_JSP = "searchCourse";
+    static final String COURSE_DATA = "courseForInfo";
     private static final String COURSE = "course";
     private static final String COURSE_ID = "courseId";
     private static final String TEACHERS = "teachers";
