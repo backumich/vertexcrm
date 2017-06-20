@@ -24,6 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
             "/403", "/error", "/activationUser", "/getCertificate", "/getCertificate/*", "/showImage"};
     private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData"};
+    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
@@ -61,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     if (e instanceof BadCredentialsException) {
                         response.sendRedirect("/logIn?error");
                     } else {
-                        response.sendRedirect("/error");
+                        throw new RuntimeException(UNKNOWN_ERROR);
                     }
                 })
                 .permitAll()
