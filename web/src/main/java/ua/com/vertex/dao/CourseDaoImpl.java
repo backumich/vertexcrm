@@ -75,12 +75,8 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public int addCourse(Course course) throws SQLException {
-
-        //public int registrationUser(User user) throws DataAccessException {
         LOGGER.info("Adding a new course into database");
 
-//        String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
-//                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
         String query = "INSERT INTO courses(name, start, finished, price, teacher_name, schedule, notes) " +
                 "VALUES (:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
         KeyHolder keyHolder = new GeneratedKeyHolder();

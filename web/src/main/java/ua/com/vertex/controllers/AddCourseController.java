@@ -52,7 +52,6 @@ public class AddCourseController {
                 course.setId(courseLogic.addCourse(course));
                 LOGGER.debug("Added a new course into DB" + course);
                 modelAndView.setViewName("redirect:" + ALL_COURSE_PAGE_JSP);
-                //return new ModelAndView("redirect:" + ALL_COURSE_PAGE_JSP);
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR_JSP);
                 LOGGER.warn("Could not save data to database", e);
