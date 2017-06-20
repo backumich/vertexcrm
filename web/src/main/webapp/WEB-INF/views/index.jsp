@@ -133,10 +133,10 @@
             </c:if>
 
             <br><br>
-            <%--<c:if test="${admin != null}">--%>
+            <c:if test="${admin != null}">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a>
-            <%--</c:if>--%>
+            </c:if>
         </div>
     </div>
 </div>
