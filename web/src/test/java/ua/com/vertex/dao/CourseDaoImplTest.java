@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,6 +41,18 @@ public class CourseDaoImplTest {
     }
 
     @Test
+    public void createCourseCorrectInsert() throws Exception {
+        Course course = new Course.Builder().setName("TestCourseSearch").setFinished(false)
+                .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
+                .setPrice(BigDecimal.valueOf(8000)).setTeacherName("Test").setNotes("Test").getInstance();
+
+        int courseId = courseDaoInf.createCourse(course);
+        course.setId(courseId);
+
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+    }
+
+    @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
 
         List<Course> courses = courseDaoInf.getAllCoursesWithDept();
@@ -50,22 +61,23 @@ public class CourseDaoImplTest {
         assertEquals(MSG, course, courses.get(index));
     }
 
+
     @Test
     public void updateCourseExceptPriceCorrectUpdate() throws Exception {
 
-        Course courseForUpdate = new Course.Builder().setId(2).setName("JavaStart").setFinished(true)
+        Course courseForUpdate = new Course.Builder().setId(2).setName("JavaStart").setFinished(false)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setPrice(BigDecimal.valueOf(8000)).setTeacherName("After update").setNotes("After update").getInstance();
 
         courseDaoInf.updateCourseExceptPrice(courseForUpdate);
 
-        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).get());
+        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
 
     }
 
     @Test
-    public void getCourseByIdReturnCorrectData() throws Exception {
-
-        assertEquals(MSG,courseDaoInf.getCourseById(course.getId()).get(),course);
+    public void getCourseById() throws Exception {
+        assertEquals(MSG, courseDaoInf.getCourseById(course.getId()).orElse(new Course()), course);
     }
+
 }

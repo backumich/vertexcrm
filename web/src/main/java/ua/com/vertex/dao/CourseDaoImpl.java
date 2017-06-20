@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +31,31 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
+
+    private MapSqlParameterSource addParamsToMapSqlParameterSourceFromCourse(Course course) {
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue(COLUMN_COURSE_NAME, course.getName());
+        source.addValue(COLUMN_COURSE_START, course.getStart());
+        source.addValue(COLUMN_COURSE_FINISHED, course.isFinished());
+        source.addValue(COLUMN_COURSE_PRICE, course.getPrice());
+        source.addValue(COLUMN_COURSE_TEACHER_NAME, course.getTeacherName());
+        source.addValue(COLUMN_COURSE_SCHEDULE, course.getSchedule());
+        source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
+        return source;
+    }
+
+    @Override
+    public int createCourse(Course course) {
+        LOGGER.debug(String.format("Try insert course -(%s)", course));
+        String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
+                "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(query, addParamsToMapSqlParameterSourceFromCourse(course), keyHolder);
+
+        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
+        return keyHolder.getKey().intValue();
+    }
 
     @Override
     public List<Course> getAllCoursesWithDept() throws DataAccessException {
@@ -65,7 +90,6 @@ public class CourseDaoImpl implements CourseDaoInf {
                         .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
                         .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
                         .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
-
     }
 
     @Override
@@ -86,7 +110,6 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         return jdbcTemplate.update(query, source);
     }
-
 
     @Override
     public Optional<Course> getCourseById(int courseId) throws DataAccessException {
