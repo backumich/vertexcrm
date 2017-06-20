@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,11 +56,10 @@ public class CourseDetailsController {
 
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
-            if (courses.isEmpty()) {
-                model.addAttribute(MSG, "Course with name - '" + course.getName() + "' not found. Please check the data and try it again.");
-            } else {
-                model.addAttribute("courses", courses);
-            }
+            model.addAttribute("courses", courses);
+
+        } catch (EmptyResultDataAccessException e) {
+            model.addAttribute(MSG, "Course with name - '" + course.getName() + "' not found. Please check the data and try it again.");
         } catch (DataAccessException e) {
             LOGGER.warn(e);
             model.addAttribute(MSG, "Problems with the server, try again later.");
@@ -100,7 +100,7 @@ public class CourseDetailsController {
         if (!bindingResult.hasErrors()) {
             try {
                 courseLogic.updateCourseExceptPrice(course);
-                model.addAttribute(MSG,"Course updated!!!");
+                model.addAttribute(MSG, "Course updated!!!");
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
                 model.addAttribute(MSG, "Problems with the server, try again later.");

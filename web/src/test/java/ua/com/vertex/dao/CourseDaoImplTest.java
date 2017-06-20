@@ -18,12 +18,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+@Transactional
 public class CourseDaoImplTest {
 
     private final String MSG = "Maybe method was changed";
@@ -35,52 +37,49 @@ public class CourseDaoImplTest {
 
     @Before
     public void setUp() throws Exception {
-        course = new Course.Builder().setId(1).setName("JavaPro").setFinished(false)
+        course = new Course.Builder().setId(3).setName("JavaPro").setFinished(false)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
 
     }
 
     @Test
-    @Transactional(rollbackFor = Exception.class)
     public void createCourseCorrectInsert() throws Exception {
-        Course course = new Course.Builder().setName("TestCourseSearch").setFinished(false)
-                .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
-                .setPrice(BigDecimal.valueOf(8000)).setTeacherName("Test").setNotes("Test").getInstance();
-
         int courseId = courseDaoInf.createCourse(course);
         course.setId(courseId);
-
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
-        throw new Exception("test");
     }
 
     @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
-
         List<Course> courses = courseDaoInf.getAllCoursesWithDept();
-        assertTrue(MSG, courses.contains(course));
-        int index = courses.indexOf(course);
-        assertEquals(MSG, course, courses.get(index));
+        assertFalse(MSG, courses.isEmpty());
+        courses.forEach(course1 -> assertTrue(course1.getPrice().intValue()>0));
     }
 
+    @Test
+    public void searchCourseByNameAndStatusReturnCorrectData() throws Exception {
+        Course courseForSearch = new Course.Builder().setName("java").setFinished(false).getInstance();
+        List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch);
+        courses.forEach(course1 -> assertTrue(course1.getName().contains(courseForSearch.getName())
+                && course1.isFinished()));
+    }
 
     @Test
     public void updateCourseExceptPriceCorrectUpdate() throws Exception {
-
-        Course courseForUpdate = new Course.Builder().setId(2).setName("JavaStart").setFinished(false)
+        Course courseForUpdate = new Course.Builder().setId(1).setName("JavaStart").setFinished(true)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setPrice(BigDecimal.valueOf(8000)).setTeacherName("After update").setNotes("After update").getInstance();
 
         courseDaoInf.updateCourseExceptPrice(courseForUpdate);
-
         assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
 
     }
 
     @Test
     public void getCourseById() throws Exception {
-        assertEquals(MSG, courseDaoInf.getCourseById(course.getId()).orElse(new Course()), course);
+        int courseId = courseDaoInf.createCourse(course);
+        course.setId(courseId);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }
-
 }

@@ -259,4 +259,12 @@ public class UserDaoTest {
         assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
     }
 
+    @Test
+    public void getTeachersReturnCorrectData() throws Exception{
+        List<User> teachers = userDao.getTeachers();
+        for ( User teacher: teachers){
+            System.out.println(teacher);
+        }
+        teachers.forEach(teacher1 -> assertTrue(teacher1.getRole().equals(Role.ADMIN)));
+    }
 }

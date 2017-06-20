@@ -45,7 +45,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public int createCourse(Course course) {
+    public int createCourse(Course course) throws DataAccessException {
         LOGGER.debug(String.format("Try insert course -(%s)", course));
         String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
                 "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
@@ -81,7 +81,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
                 "FROM Courses c WHERE name LIKE  '%" + course.getName() + "%' AND finished=:finished";
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_FINISHED, course.isFinished()),
+        return jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_FINISHED, course.isFinished() ? 1 : 0),
                 (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
                         .setName(resultSet.getString(COLUMN_COURSE_NAME))
                         .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
