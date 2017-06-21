@@ -9,10 +9,10 @@ import java.util.Optional;
 public interface CourseLogic {
     List<Course> getAllCoursesWithDept();
 
-    List<Course> searchCourseByNameAndStatus(Course course);
+    List<Course> searchCourseByNameAndStatus(Course course) throws Exception;
 
     int updateCourseExceptPrice(Course course);
 
-    Optional<Course> getCourseById(int courseId);
+    Optional<Course> getCourseById(int courseId) throws Exception;
 
 }

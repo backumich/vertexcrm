@@ -11,19 +11,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.*;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.CourseDetailsController.SEARCH_COURSE_JSP;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
@@ -62,7 +62,7 @@ public class CreateCertificateAndAddToUserTest {
     @Test
     public void addCertificateWithUserIdReturnCorrectView() throws Exception {
         ModelAndView result = underTest.addCertificateWithUserId();
-        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SEARCH_COURSE_JSP);
+        assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_JSP);
     }
 
     @Test

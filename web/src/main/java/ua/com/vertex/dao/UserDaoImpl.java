@@ -23,7 +23,9 @@ import ua.com.vertex.utils.LogInfo;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Optional;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
@@ -175,7 +177,7 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Get user with a non-existent id " + userID);
+            LOGGER.warn("Get user with a non-existent id " + userID);
         }
         return Optional.ofNullable(user);
     }

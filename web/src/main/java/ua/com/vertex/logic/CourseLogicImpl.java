@@ -24,7 +24,7 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<Course> searchCourseByNameAndStatus(Course course) {
+    public List<Course> searchCourseByNameAndStatus(Course course) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)",course));
         return courseDaoInf.searchCourseByNameAndStatus(course);
     }
@@ -36,7 +36,7 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public Optional<Course> getCourseById(int courseId) {
+    public Optional<Course> getCourseById(int courseId) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)",courseId));
         return courseDaoInf.getCourseById(courseId);
     }

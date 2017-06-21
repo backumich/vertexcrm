@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,12 +27,14 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 @Controller
 public class CourseDetailsController {
 
-    private static final String COURSE_DETAILS_JSP = "courseDetails";
+    static final String COURSE_DETAILS_JSP = "courseDetails";
     static final String SEARCH_COURSE_JSP = "searchCourse";
     static final String COURSE_DATA = "courseForInfo";
-    private static final String COURSE = "course";
+    static final String COURSE = "course";
+    static final String COURSES = "courses";
     private static final String COURSE_ID = "courseId";
-    private static final String TEACHERS = "teachers";
+    static final String TEACHERS = "teachers";
+    static final String LOGGER_SERVER_EXCEPTION = "Problems with the server, try again later.";
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
 
@@ -56,13 +57,15 @@ public class CourseDetailsController {
 
         try {
             List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
-            model.addAttribute("courses", courses);
-
-        } catch (EmptyResultDataAccessException e) {
-            model.addAttribute(MSG, "Course with name - '" + course.getName() + "' not found. Please check the data and try it again.");
+            if (courses.isEmpty()) {
+                model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
+                        "Please check the data and try it again.", course.getName()));
+            } else {
+                model.addAttribute("courses", courses);
+            }
         } catch (DataAccessException e) {
             LOGGER.warn(e);
-            model.addAttribute(MSG, "Problems with the server, try again later.");
+            model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
         } catch (Exception e) {
             LOGGER.warn(e);
             result = ERROR;
@@ -103,7 +106,7 @@ public class CourseDetailsController {
                 model.addAttribute(MSG, "Course updated!!!");
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
-                model.addAttribute(MSG, "Problems with the server, try again later.");
+                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
             } catch (Exception e) {
                 LOGGER.warn(e);
                 result = ERROR;

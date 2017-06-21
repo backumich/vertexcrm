@@ -17,9 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -59,10 +57,16 @@ public class CourseDaoImplTest {
 
     @Test
     public void searchCourseByNameAndStatusReturnCorrectData() throws Exception {
-        Course courseForSearch = new Course.Builder().setName("java").setFinished(false).getInstance();
+        Course courseForSearch = new Course.Builder().setName("java").setFinished(true).getInstance();
         List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch);
-        courses.forEach(course1 -> assertTrue(course1.getName().contains(courseForSearch.getName())
-                && course1.isFinished()));
+        courses.forEach(course -> assertTrue(course.getName().contains(courseForSearch.getName())
+                && course.isFinished()));
+    }
+
+    @Test
+    public void searchCourseByNameAndStatusReturnEmptyList() throws Exception {
+        Course courseForSearch = new Course.Builder().setName("wwwwwwwwwwww").setFinished(false).getInstance();
+        assertTrue(courseDaoInf.searchCourseByNameAndStatus(courseForSearch).isEmpty());
     }
 
     @Test
@@ -77,9 +81,14 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    public void getCourseById() throws Exception {
+    public void getCourseByIdReturnCorrectData() throws Exception {
         int courseId = courseDaoInf.createCourse(course);
         course.setId(courseId);
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+    }
+
+    @Test
+    public void getCourseByIdReturnEmptyOptional() throws Exception {
+        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
     }
 }

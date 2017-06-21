@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -32,7 +33,13 @@ public class CourseDaoImpl implements CourseDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
 
-    private MapSqlParameterSource addParamsToMapSqlParameterSourceFromCourse(Course course) {
+    @Override
+    public int createCourse(Course course) throws DataAccessException {
+        LOGGER.debug(String.format("Try insert course -(%s)", course));
+        String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
+                "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(COLUMN_COURSE_NAME, course.getName());
         source.addValue(COLUMN_COURSE_START, course.getStart());
@@ -41,18 +48,8 @@ public class CourseDaoImpl implements CourseDaoInf {
         source.addValue(COLUMN_COURSE_TEACHER_NAME, course.getTeacherName());
         source.addValue(COLUMN_COURSE_SCHEDULE, course.getSchedule());
         source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
-        return source;
-    }
 
-    @Override
-    public int createCourse(Course course) throws DataAccessException {
-        LOGGER.debug(String.format("Try insert course -(%s)", course));
-        String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
-                "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(query, addParamsToMapSqlParameterSourceFromCourse(course), keyHolder);
-
+        jdbcTemplate.update(query, source, keyHolder);
         LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
     }
@@ -60,7 +57,6 @@ public class CourseDaoImpl implements CourseDaoInf {
     @Override
     public List<Course> getAllCoursesWithDept() throws DataAccessException {
         LOGGER.debug("Try select all courses where user has dept.");
-
         String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.notes FROM Courses c " +
                 "INNER JOIN Accounting a ON  a.course_id = c.id WHERE a.debt > 0";
 
@@ -77,7 +73,6 @@ public class CourseDaoImpl implements CourseDaoInf {
     @Override
     public List<Course> searchCourseByNameAndStatus(Course course) throws DataAccessException {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
-
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
                 "FROM Courses c WHERE name LIKE  '%" + course.getName() + "%' AND finished=:finished";
 
@@ -95,7 +90,6 @@ public class CourseDaoImpl implements CourseDaoInf {
     @Override
     public int updateCourseExceptPrice(Course course) throws DataAccessException {
         LOGGER.debug(String.format("Try update course except price by id -(%s)", course.getId()));
-
         String query = "UPDATE Courses SET name=:name, start=:start, finished=:finished, teacher_name=:teacher_name," +
                 "schedule=:schedule, notes=:notes WHERE id=:id";
 
@@ -117,16 +111,20 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
-
-        Course course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(COLUMN_COURSE_ID, courseId),
-                (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
-                        .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                        .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
-                        .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
-                        .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                        .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
-                        .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
-                        .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
+        Course course = null;
+        try {
+            course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(COLUMN_COURSE_ID, courseId),
+                    (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
+                            .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                            .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
+                            .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
+                            .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                            .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
+                            .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                            .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
+        }
 
         return Optional.ofNullable(course);
     }

@@ -69,7 +69,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
         }
 
         if (result != null) {
-            LOGGER.debug(String.format("getPaymentById(%s) return - ", paymentId) + result);
+            LOGGER.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
         }
         return Optional.ofNullable(result);
     }
