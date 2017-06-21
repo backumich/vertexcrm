@@ -18,7 +18,7 @@ public class CourseLogicImpl implements CourseLogic {
     private static final Logger LOGGER = LogManager.getLogger(CourseLogicImpl.class);
 
     @Override
-    public List<Course> getAllCoursesWithDept() {
+    public List<Course> getAllCoursesWithDept() throws Exception {
         LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
         return courseDaoInf.getAllCoursesWithDept();
     }
@@ -30,7 +30,7 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public int updateCourseExceptPrice(Course course) {
+    public int updateCourseExceptPrice(Course course) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)",course));
         return courseDaoInf.updateCourseExceptPrice(course);
     }

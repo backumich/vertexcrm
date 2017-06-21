@@ -102,11 +102,12 @@ public class CourseDetailsController {
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             try {
-                courseLogic.updateCourseExceptPrice(course);
-                model.addAttribute(MSG, "Course updated!!!");
+                model.addAttribute(MSG, String.format("Course with id - (%s) updated!!!",
+                        courseLogic.updateCourseExceptPrice(course)));
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
                 model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
+                result = SEARCH_COURSE_JSP;
             } catch (Exception e) {
                 LOGGER.warn(e);
                 result = ERROR;

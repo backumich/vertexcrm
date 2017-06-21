@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
+import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CourseDetailsController.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
@@ -41,8 +43,8 @@ public class CourseDetailsControllerTest {
     @Mock
     private UserLogic userLogic;
 
-//    @Mock
-//    private BindingResult bindingResult;
+    @Mock
+    private BindingResult bindingResult;
 
     @Before
     public void setUp() throws Exception {
@@ -123,11 +125,7 @@ public class CourseDetailsControllerTest {
     @Test
     public void courseDetailsReturnCorrectView() throws Exception {
         when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
-        when(userLogic.getTeachers()).thenReturn(new HashMap<String, String>() {
-            {
-                put("test@test.com", "test test 'test@test.com'");
-            }
-        });
+        when(userLogic.getTeachers()).thenReturn(new HashMap<>());
 
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName()
                 , COURSE_DETAILS_JSP);
@@ -180,5 +178,68 @@ public class CourseDetailsControllerTest {
         assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
         assertFalse(MSG_INVALID_DATA, result.containsAttribute(TEACHERS));
         assertFalse(MSG_INVALID_DATA, result.containsAttribute(MSG));
+    }
+
+    @Test
+    public void updateCourseReturnCorrectView() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenReturn(1);
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model), ADMIN_JSP);
+    }
+
+    @Test
+    public void updateCourseHasCorrectDataInModel() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenReturn(1);
+        courseDetailsController.updateCourse(new Course(), bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertEquals(MSG_INVALID_VIEW, model.asMap().get(MSG), "Course with id - (1) updated!!!");
+    }
+
+    @Test
+    public void updateCourseReturnCorrectViewWhenBindingResultHasError() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenReturn(1);
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
+                COURSE_DETAILS_JSP);
+    }
+
+    @Test
+    public void updateCourseHasCorrectDataInModelWhenBindingResultHasError() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(true);
+        HashMap<String, String> teachers = new HashMap<String, String>() {
+            {
+                put("test@test.com", "test test 'test@test.com'");
+            }
+        };
+        when(userLogic.getTeachers()).thenReturn(teachers);
+        courseDetailsController.updateCourse(new Course(), bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(TEACHERS));
+        assertEquals(MSG_INVALID_DATA, model.asMap().get(TEACHERS), teachers);
+    }
+
+    @Test
+    public void updateCourseReturnCorrectViewWhenDataAcesException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
+                SEARCH_COURSE_JSP);
+    }
+
+    @Test
+    public void updateCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
+        courseDetailsController.updateCourse(new Course(), bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
+    }
+
+    @Test
+    public void updateCourseReturnCorrectViewWhenException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new Exception("test"));
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
+                ERROR);
     }
 }
