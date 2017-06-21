@@ -18,7 +18,6 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -81,13 +80,8 @@ public class CourseDetailsController {
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         try {
-            Optional<Course> course = courseLogic.getCourseById(courseId);
-            if (course.isPresent()) {
-                result.addObject(COURSE, course.get());
-                result.addObject(TEACHERS, userLogic.getTeachers());
-            } else {
-                throw new Exception();
-            }
+            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((Exception::new)));
+            result.addObject(TEACHERS, userLogic.getTeachers());
         } catch (Exception e) {
             LOGGER.warn(e);
             result.setViewName(ERROR);
