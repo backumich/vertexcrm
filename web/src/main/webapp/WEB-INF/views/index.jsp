@@ -126,15 +126,16 @@
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <c:if test="${user != null || admin != null}">
+            <c:if test="${user != null}">
                 <a href="<c:url value="/logIn"/>">User page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <br><br>
             <c:if test="${admin != null}">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a>
             </c:if>
         </div>

@@ -1,5 +1,6 @@
 package ua.com.vertex.context;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,7 +19,7 @@ import static ua.com.vertex.beans.Role.ADMIN;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final int ENCRYPTION_STRENGTH = 10;
+    private BCryptPasswordEncoder passwordEncoder;
     private static final int VALIDITY_SECONDS = 604800;
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
@@ -31,15 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SpringDataUserDetailsService();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(ENCRYPTION_STRENGTH);
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -79,5 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }
