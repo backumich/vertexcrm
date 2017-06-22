@@ -325,7 +325,7 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getTeachers() throws DataAccessException {
         LOGGER.debug("Trying to pull out all users with the role is a teacher.");
 
-        String query = "SELECT email, first_name,last_name, role_id FROM users WHERE role_id = 1";
+        String query = "SELECT email, first_name,last_name, role_id FROM Users WHERE role_id = 1";
 
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
                 .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
