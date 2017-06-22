@@ -26,7 +26,6 @@ import java.util.Properties;
 public class RootConfig {
 
     private static final String DB_PROPERTIES = "db.properties";
-    private static final int PASSWORD_STRENGTH = 10;
 
     @Bean
     public DataSource dataSource() throws Exception {
@@ -65,10 +64,5 @@ public class RootConfig {
     @Bean
     public PlatformTransactionManager txManager() throws Exception {
         return new DataSourceTransactionManager(dataSource());
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
-        return new BCryptPasswordEncoder(PASSWORD_STRENGTH);
     }
 }
