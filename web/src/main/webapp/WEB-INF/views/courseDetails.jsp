@@ -1,7 +1,8 @@
-<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -10,16 +11,17 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -43,6 +45,8 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -99,73 +103,86 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
 
-        <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
-                       action="searchUser">
-                <table>
-                    <tr>
-                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
-                    </tr>
-                </table>
+
+<div align="center" class="page gray-page mh100 up-padding">
+    <div>
+        <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
+        <span class="fontSize180 silver">Course details</span><br><br><br>
+        <table class="table fontSize140">
+            <tr>
+                <td>Course id:</td>
+                <td><form:label path="id">${course.id}</form:label>
+                    <form:hidden path="id"></form:hidden></td>
+            </tr>
+            <tr>
+                <td>Course name:</td>
+                <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
+                                path="name"/>
+                <td><form:errors path="name"/></td>
+            </tr>
+            <tr>
+                <td>Start date:</td>
+                <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
+                                path="start"/>
+                <td><form:errors path="start"/></td>
+            </tr>
+            <tr>
+                <td>Prise:</td>
+                <td><form:label path="price">${course.price}</form:label>
+                    <form:hidden path="price"></form:hidden></td>
+            </tr>
+            <tr>
+                <td>Teacher name:</td>
+                <td><form:select path="teacherName">
+                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:options items="${teachers}"/>
+                    </form:select>
+                
+            </tr>
+            <tr>
+                <td>Schedule:</td>
+                <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
+                                path="schedule"/>
+                <td><form:errors path="schedule"/></td>
+            </tr>
+            <tr>
+                <td>Notes:</td>
+                <td><form:input id="notes" class="buttonText" type="text" size="40" value="${course.notes}"
+                                path="notes"/>
+                <td><form:errors path="notes"/></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td colspan="5" align="right"><input type="submit" value="Update course"/></td>
+            </tr>
             </form:form>
-        </c:if>
+        </table>
     </div>
     <div>
-        <c:if test="${!empty users}">
-            <form:form method="post" commandName="userIdForCertificate"
-                       action="selectUser">
-                <table class="active" width="500">
-                    <tr>
-                        <th>Select user</th>
-                        <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
-                    </tr>
-                    <c:forEach items="${users}" var="user">
-                        <tr>
-                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
-                            </td>
-                            <td>${user.userId}</td>
-                            <td>${user.email}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.lastName}</td>
-                            <td>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
-                </tr>
-            </form:form>
-
+        <br>
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
         </c:if>
+        <br>
     </div>
-
-    <br>
-    <br>
-    <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
-    </c:if>
-    <br>
-    <br>
-    <br>
-
-    <div class="hrefText">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+    <div>
+        <div class="href">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 
-</div>
+<%--<tr>--%>
+<%--<td>Is finished</td>--%>
+<%--<td><c:choose>--%>
+<%--<c:when test="${course.finished}">Yes</c:when>--%>
+<%--<c:otherwise>No</c:otherwise>--%>
+<%--</c:choose></td>--%>
+<%--</tr>--%>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -220,11 +237,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>

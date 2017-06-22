@@ -1,11 +1,13 @@
 package ua.com.vertex.logic.interfaces;
 
+import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
 import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserLogic {
@@ -31,5 +33,15 @@ public interface UserLogic {
     int activateUser(String email);
 
     List<User> searchUser(String userData) throws Exception;
+
+    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+
+    String encryptPassword(String password);
+
+    void registrationUserInsert(User user) throws DataAccessException;
+
+    void registrationUserUpdate(User user) throws DataAccessException;
+
+    Map<String, String> getTeachers () throws DataAccessException;
 
 }

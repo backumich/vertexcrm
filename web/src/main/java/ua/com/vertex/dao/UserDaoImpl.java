@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -51,6 +52,7 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
     private static final String COLUMN_ROLE_ID = "role_id";
+    private static final String COLUMN_IS_ACTIVE = "is_active";
 
     @Override
     public Optional<User> getUser(int userId) {
@@ -175,7 +177,25 @@ public class UserDaoImpl implements UserDaoInf {
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Get user with a non-existent id " + userID);
+            LOGGER.warn("Get user with a non-existent id " + userID);
+        }
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
+
+        LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
+        String query = "SELECT email, is_active FROM Users WHERE email =:email";
+        User user = null;
+
+        try {
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail), new UserRowMapperRegistrationCheck());
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.debug("isRegisteredEmail(%s) return empty user");
+        }
+        if (user != null) {
+            LOGGER.warn(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         }
         return Optional.ofNullable(user);
     }
@@ -281,6 +301,50 @@ public class UserDaoImpl implements UserDaoInf {
                 .getInstance());
     }
 
+    @Override
+    public void registrationUserInsert(User user) throws DataAccessException {
+        LOGGER.info("Adding a new user into database");
+
+        String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
+                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
+
+        jdbcTemplate.update(query, getRegistrationParameters(user));
+    }
+
+    @Override
+    public void registrationUserUpdate(User user) throws DataAccessException {
+        LOGGER.info("Update not active user .");
+
+        String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
+                "phone =:phone, role_id =2 WHERE email =:email";
+
+        jdbcTemplate.update(query, getRegistrationParameters(user));
+    }
+
+    @Override
+    public List<User> getTeachers() throws DataAccessException {
+        LOGGER.debug("Trying to pull out all users with the role is a teacher.");
+
+        String query = "SELECT email, first_name,last_name, role_id FROM users WHERE role_id = 1";
+
+        return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
+                .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                .getInstance());
+    }
+
+    private MapSqlParameterSource getRegistrationParameters(User user) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue(COLUMN_USER_EMAIL, user.getEmail());
+        namedParameters.addValue(COLUMN_PASSWORD, user.getPassword());
+        namedParameters.addValue(COLUMN_FIRST_NAME, user.getFirstName());
+        namedParameters.addValue(COLUMN_LAST_NAME, user.getLastName());
+        namedParameters.addValue(COLUMN_PHONE, user.getPhone());
+        return namedParameters;
+    }
+
     private static final class UserRowMapping implements RowMapper<User> {
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             LobHandler handler = new DefaultLobHandler();
@@ -306,6 +370,16 @@ public class UserDaoImpl implements UserDaoInf {
                     .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                     .setPassword(resultSet.getString(COLUMN_PASSWORD))
                     .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
+    private static final class UserRowMapperRegistrationCheck implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
                     .getInstance();
         }
     }

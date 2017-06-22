@@ -102,50 +102,62 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
-                       action="searchUser">
+        <c:if test="${empty courses}">
+            <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
+                       action="searchCourse">
                 <table>
                     <tr>
-                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                        <td><form:label path="name" size="100">Course name:</form:label></td>
+                        <td><form:input path="name" placeholder="Course name:" type="text"/></td>
+                        <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                        <td><form:hidden path="start" value="2011-12-03T19:20:30" /></td>
+                    </tr>
+                    <tr>
+                        <td><form:label path="finished">Course is finished? </form:label></td>
+                        <td><form:checkbox path="finished"/></td>
+                        <td><form:errors path="finished"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="center"><input type="submit" value="Search course"/></td>
                     </tr>
                 </table>
             </form:form>
         </c:if>
     </div>
     <div>
-        <c:if test="${!empty users}">
-            <form:form method="post" commandName="userIdForCertificate"
-                       action="selectUser">
+        <c:if test="${!empty courses}">
+            <form:form method="post" commandName="courseId" action="courseDetails">
                 <table class="active" width="500">
                     <tr>
-                        <th>Select user</th>
-                        <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
+                        <th>Select course</th>
+                        <th>Course name</th>
+                        <th>Course start date</th>
+                        <th>Course is finished</th>
+                        <th>Course price</th>
+                        <th>Course teacher</th>
+                        <th>Course schedule</th>
                     </tr>
-                    <c:forEach items="${users}" var="user">
+                    <c:forEach items="${courses}" var="course">
                         <tr>
-                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
+                            <td><input type="radio" name="courseId" checked="checked" value=${course.id}>
                             </td>
-                            <td>${user.userId}</td>
-                            <td>${user.email}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.lastName}</td>
+                            <td>${course.name}</td>
+                            <td>${course.start}</td>
+                            <td>${course.finished}</td>
+                            <td>${course.price}</td>
+                            <td>${course.teacherName}</td>
+                            <td>${course.schedule}</td>
                             <td>
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                    <td colspan="5" align="center"><input type="submit" value="Select course"/></td>
                 </tr>
             </form:form>
-
         </c:if>
     </div>
 

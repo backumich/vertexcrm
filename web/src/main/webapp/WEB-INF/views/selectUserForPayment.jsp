@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -101,48 +102,66 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
-
         <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
-                       action="searchUser">
-                <table>
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
+                <table class="active" width="500">
                     <tr>
-                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                        <td><form:hidden path="courseId" value='${courseIdForPayment}'/></td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                        <td><form:hidden path="userID" value='${userIdForPayment}'/></td>
+                    </tr>
+                    <tr>
+                        <td><form:label path="payment.amount">Enter amount:</form:label></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"/></td>
+                        <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
+                <br>
+                <tr>
+                    <td colspan="5" align="center"><input type="submit" value="Pay"/></td>
+                </tr>
             </form:form>
         </c:if>
     </div>
     <div>
         <c:if test="${!empty users}">
-            <form:form method="post" commandName="userIdForCertificate"
-                       action="selectUser">
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
                 <table class="active" width="500">
-                    <tr>
-                        <th>Select user</th>
-                        <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
-                    </tr>
-                    <c:forEach items="${users}" var="user">
+                    <table class="active" width="500">
                         <tr>
-                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
-                            </td>
-                            <td>${user.userId}</td>
-                            <td>${user.email}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.lastName}</td>
-                            <td>
-                            </td>
+                            <th>Select user</th>
+                            <th>User Id</th>
+                            <th>User E-mail</th>
+                            <th>User first name</th>
+                            <th>User last name</th>
                         </tr>
-                    </c:forEach>
+                        <c:forEach items="${users}" var="user">
+                            <tr>
+                                <td><form:radiobutton path="userID" checked="checked" value='${user.userId}'/></td>
+                                <td>${user.userId}</td>
+                                <td>${user.email}</td>
+                                <td>${user.firstName}</td>
+                                <td>${user.lastName}</td>
+                                <td>
+                                </td>
+
+                            </tr>
+                        </c:forEach>
+                    </table>
+
+                    <tr>
+                        <td><form:hidden path="courseId" value='${courseIdForPayment}'/></td>
+                    </tr>
+                    <tr>
+                        <td><form:label path="payment.amount">Enter amount:</form:label></td>
+                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount" /></td>
+                        <td><form:errors path="payment.amount"/></td>
+                    </tr>
                 </table>
+                <br>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                    <td colspan="5" align="center"><input type="submit" value="Pay"/></td>
                 </tr>
             </form:form>
 

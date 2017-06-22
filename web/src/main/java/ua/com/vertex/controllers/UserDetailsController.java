@@ -24,7 +24,7 @@ public class UserDetailsController {
     private UserLogic userLogic;
     private CertificateLogic certificateLogic;
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserDetailsController.class);
 
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {

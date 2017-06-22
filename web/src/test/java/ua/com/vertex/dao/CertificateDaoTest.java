@@ -38,11 +38,12 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
-        //noinspection OptionalGetWithoutIsPresent
+
+        //noinspection ConstantConditions
         assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
@@ -79,15 +80,15 @@ public class CertificateDaoTest {
         assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserEmail("email1"));
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnNull() throws Exception {
+
         certificateDao.getCertificateById(-1).get();
     }
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnReturnsCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
             assertEquals(MSG, new Builder()
@@ -102,14 +103,20 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void addCertificateReturnsCorrectCertificationId() throws Exception {
-        assertEquals("", certificateDao.addCertificate(new Builder()
-                .setUserId(1)
+    @WithAnonymousUser
+    public void addCertificateReturnCorrectCertificationId() throws Exception {
+
+        Certificate certificate = new Certificate.Builder()
+                .setUserId(44)
                 .setCertificateUid("1492779828793891")
                 .setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
-                .getInstance()), 501);
+                .getInstance();
+        int result = certificateDao.addCertificate(certificate);
+        certificate.setCertificationId(result);
+
+        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).orElse(EMPTY_CERTIFICATE));
     }
 
     @Test

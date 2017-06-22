@@ -15,7 +15,7 @@ import ua.com.vertex.utils.Aes;
 class EmailLogicImpl implements EmailLogic {
     private static final String ENCRYPT_KEY = "VeRtEx AcAdeMy";
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(EmailLogicImpl.class);
 
     @Value("${registration.header}")
     private String header;
@@ -33,6 +33,7 @@ class EmailLogicImpl implements EmailLogic {
     @Override
     public String createRegistrationMessage(UserFormRegistration user) {
 
+        LOGGER.debug(String.format("Call - emailLogicImpl.createRegistrationMessage(%s) ;", user));
         String stringEmailAES = "";
         try {
             stringEmailAES = Aes.encrypt(user.getEmail(), ENCRYPT_KEY);

@@ -102,42 +102,42 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="centr">
 
-        <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
-                       action="searchUser">
-                <table>
-                    <tr>
-                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
-                    </tr>
-                </table>
-            </form:form>
+        <c:if test="${empty courses}">
+            <h3><span class="errorText250">Payment is not possible. All courses were paid.</span></h3>
         </c:if>
     </div>
     <div>
-        <c:if test="${!empty users}">
-            <form:form method="post" commandName="userIdForCertificate"
-                       action="selectUser">
-                <table class="active" width="500">
+        <c:if test="${!empty courses}">
+            <form:form method="post" commandName="courseIdForPayment"
+                       action="selectCourse">
+                <table class="active" width="1000">
                     <tr>
-                        <th>Select user</th>
-                        <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
+                        <th>Select course</th>
+                        <th>Course name</th>
+                        <th>Start</th>
+                        <th>Finished</th>
+                        <th>Price</th>
+                        <th>Teacher name</th>
+                        <th>Notes</th>
+
                     </tr>
-                    <c:forEach items="${users}" var="user">
+                    <c:forEach items="${courses}" var="course">
                         <tr>
-                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
+                            <td><input type="radio" name="courseIdForPayment" checked="checked" value=${course.id}>
                             </td>
-                            <td>${user.userId}</td>
-                            <td>${user.email}</td>
-                            <td>${user.firstName}</td>
-                            <td>${user.lastName}</td>
-                            <td>
-                            </td>
+                            <td>${course.name}</td>
+                            <td>${course.start}</td>
+                            <td><c:choose>
+                                <c:when test="${course.finished}">
+                                    Yes
+                                </c:when>
+                                <c:otherwise>
+                                    No
+                                </c:otherwise>
+                            </c:choose></td>
+                            <td>${course.price}</td>
+                            <td>${course.teacherName}</td>
+                            <td>${course.notes}</td>
                         </tr>
                     </c:forEach>
                 </table>
