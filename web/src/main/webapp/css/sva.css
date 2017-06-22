@@ -52,8 +52,16 @@
     padding-top: 100px;
 }
 
+.buttonPadding {
+    padding-top: 10px;
+}
+
 .buttonWidth {
     width: 100px;
+}
+
+.labelWidth {
+    width: 150px;
 }
 
 a:hover {
