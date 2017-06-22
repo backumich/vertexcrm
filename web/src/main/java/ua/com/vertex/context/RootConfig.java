@@ -65,4 +65,9 @@ public class RootConfig {
     public PlatformTransactionManager txManager() throws Exception {
         return new DataSourceTransactionManager(dataSource());
     }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
+        return new BCryptPasswordEncoder(Integer.valueOf(getDbProperties().getProperty("PASSWORD_STRENGTH")));
+    }
 }
