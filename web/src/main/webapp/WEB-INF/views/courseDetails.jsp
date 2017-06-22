@@ -128,7 +128,7 @@
                 <td><form:errors path="start"/></td>
             </tr>
             <tr>
-                <td>Prise:</td>
+                <td>Price:</td>
                 <td><form:label path="price">${course.price}</form:label>
                     <form:hidden path="price"></form:hidden></td>
             </tr>

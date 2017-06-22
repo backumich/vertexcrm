@@ -48,26 +48,29 @@ public class CourseDetailsController {
 
     @PostMapping(value = "/searchCourse")
     public String searchCourse(@Validated @ModelAttribute(COURSE_DATA) Course course,
-                               Model model) {
+                               BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
                 course.getName(), course.isFinished()));
-
         String result = SEARCH_COURSE_JSP;
 
-        try {
-            List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
-            if (courses.isEmpty()) {
-                model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
-                        "Please check the data and try it again.", course.getName()));
-            } else {
-                model.addAttribute("courses", courses);
+        if (!bindingResult.hasErrors()) {
+            try {
+                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
+                if (courses.isEmpty()) {
+                    model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
+                            "Please check the data and try it again.", course.getName()));
+                } else {
+                    model.addAttribute("courses", courses);
+                }
+            } catch (DataAccessException e) {
+                LOGGER.warn(e);
+                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
+            } catch (Exception e) {
+                LOGGER.warn(e);
+                result = ERROR;
             }
-        } catch (DataAccessException e) {
-            LOGGER.warn(e);
-            model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result = ERROR;
+        }else {
+            model.addAttribute(MSG, "Enter the correct data !!! ");
         }
 
         return result;
