@@ -14,7 +14,7 @@ import static ua.com.vertex.context.SecurityConfig.UNKNOWN_ERROR;
 public class ErrorController {
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
-    private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LogManager.getLogger(ErrorController.class);
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, Model model) {
