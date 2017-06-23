@@ -100,7 +100,7 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
+<div class="black">
     <div class="container pt1_5" align="centr">
         <c:if test="${empty users}">
             <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
@@ -119,7 +119,7 @@
                 </table>
                 <br>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Pay"/></td>
+                    <td colspan="5" align="center"><input class="black" type="submit" value="Pay"/></td>
                 </tr>
             </form:form>
         </c:if>
@@ -161,7 +161,7 @@
                 </table>
                 <br>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Pay"/></td>
+                    <td colspan="5" align="center"><input class="black" type="submit" value="Pay"/></td>
                 </tr>
             </form:form>
 

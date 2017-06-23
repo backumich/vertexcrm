@@ -110,7 +110,7 @@
                         <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
                     </tr>
                     <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search user"/></td>
+                        <td colspan="5" align="center"><input class="black" type="submit" value="Search user"/></td>
                     </tr>
                 </table>
             </form:form>

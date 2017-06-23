@@ -142,7 +142,7 @@
                     </c:forEach>
                 </table>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
+                    <td class="black" colspan="5" align="center"><input type="submit" value="Select user"/></td>
                 </tr>
             </form:form>
 

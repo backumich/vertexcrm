@@ -148,7 +148,7 @@
                     <td><form:errors path="user.lastName"/></td>
                 </tr>
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Add certificate"/></td>
+                    <td colspan="5" align="center"><input class="black" type="submit" value="Add certificate"/></td>
                 </tr>
             </table>
         </form:form>
