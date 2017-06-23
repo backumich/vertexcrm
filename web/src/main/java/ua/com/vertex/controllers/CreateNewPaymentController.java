@@ -29,7 +29,7 @@ public class CreateNewPaymentController {
     private static final Logger LOGGER = LogManager.getLogger(CreateNewPaymentController.class);
 
     private final CourseLogic courseLogic;
-    private final AccountingLogic accountingLogic;
+    private final UserLogic userLogic;
     private final PaymentLogic paymentLogic;
 
     static final String SELECT_COURSE_FOR_PAYMENT_JSP = "selectCourseForPayment";
@@ -56,7 +56,7 @@ public class CreateNewPaymentController {
     public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
         try {
-            result.addObject(USERS, accountingLogic.getCourseUsers(courseId));
+            result.addObject(USERS, userLogic.getCourseUsers(courseId));
             result.addObject(COURSE_ID_FOR_PAY, courseId);
             result.addObject(PAYMENT, new PaymentForm());
         } catch (Exception e) {
@@ -101,9 +101,9 @@ public class CreateNewPaymentController {
     }
 
     @Autowired
-    public CreateNewPaymentController(CourseLogic courseLogic, AccountingLogic accountingLogic, PaymentLogic paymentLogic) {
+    public CreateNewPaymentController(CourseLogic courseLogic, UserLogic userLogic, PaymentLogic paymentLogic) {
         this.courseLogic = courseLogic;
-        this.accountingLogic = accountingLogic;
+        this.userLogic = userLogic;
         this.paymentLogic = paymentLogic;
     }
 }

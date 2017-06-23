@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.controllers.UserController;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -31,7 +30,6 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
         return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
     }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Override
     public boolean isEmailAlreadyExists(Optional<User> user) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));

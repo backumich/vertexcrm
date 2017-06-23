@@ -40,4 +40,6 @@ public interface UserLogic {
     void registrationUserInsert(User user) throws DataAccessException;
 
     void registrationUserUpdate(User user) throws DataAccessException;
+
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
 }

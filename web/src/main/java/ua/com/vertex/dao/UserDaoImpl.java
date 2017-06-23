@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
+import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 
 @Repository
 
@@ -100,7 +101,11 @@ public class UserDaoImpl implements UserDaoInf {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
+            user = jdbcTemplate.queryForObject(query, parameters, ((resultSet, i) -> new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance()));
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn("No email=" + email);
         }
@@ -190,13 +195,15 @@ public class UserDaoImpl implements UserDaoInf {
         User user = null;
 
         try {
-            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail), new UserRowMapperRegistrationCheck());
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
+                    ((resultSet, i) -> new User.Builder()
+                            .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                            .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
+                            .getInstance()));
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
-        if (user != null) {
-            LOGGER.warn(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
-        }
+        LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user == null ? "empty user" : user));
         return Optional.ofNullable(user);
     }
 
@@ -306,7 +313,7 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
-                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
+                "VALUES (:email, :password, :first_name, :last_name, :phone, :role_id)";
 
         jdbcTemplate.update(query, getRegistrationParameters(user));
     }
@@ -316,7 +323,7 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.info("Update not active user .");
 
         String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
-                "phone =:phone, role_id =2 WHERE email =:email";
+                "phone =:phone, role_id =:role_id WHERE email =:email";
 
         jdbcTemplate.update(query, getRegistrationParameters(user));
     }
@@ -328,7 +335,21 @@ public class UserDaoImpl implements UserDaoInf {
         namedParameters.addValue(COLUMN_FIRST_NAME, user.getFirstName());
         namedParameters.addValue(COLUMN_LAST_NAME, user.getLastName());
         namedParameters.addValue(COLUMN_PHONE, user.getPhone());
+        namedParameters.addValue(COLUMN_ROLE_ID, user.getRole().equals(ADMIN) ? 1 : user.getRole().equals(USER) ? 2 : 3);
         return namedParameters;
+    }
+
+    @Override
+    public List<User> getCourseUsers(int courseId) {
+        LOGGER.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name FROM Users u" +
+                "  INNER JOIN Accounting a ON u.user_id = a.user_id WHERE course_id = :courseId";
+        return jdbcTemplate.query(query, new MapSqlParameterSource(COURSE_ID, courseId),
+                (resultSet, i) -> new User.Builder().setUserId(resultSet.getInt(COLUMN_USER_ID)).
+                        setEmail(resultSet.getString(COLUMN_USER_EMAIL)).
+                        setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
+                        setLastName(resultSet.getString(COLUMN_LAST_NAME)).getInstance());
     }
 
     private static final class UserRowMapping implements RowMapper<User> {
@@ -345,27 +366,6 @@ public class UserDaoImpl implements UserDaoInf {
                     .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
                     .setPhone(resultSet.getString(COLUMN_PHONE))
                     .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperLogIn implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
-                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
-                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperRegistrationCheck implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
-                    .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
                     .getInstance();
         }
     }

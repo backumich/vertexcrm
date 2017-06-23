@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserLogicImplTest {
@@ -124,6 +126,13 @@ public class UserLogicImplTest {
     public void encryptPasswordReturnEncodePassword() throws DataAccessException {
         assertNotNull(logic.encryptPassword(NAME));
         assertNotEquals(MSG, NAME, logic.encryptPassword(NAME));
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void getCourseUsersVerifyAccountingDaoAndReturnException() throws Exception {
+        when(logic.getCourseUsers(1)).thenThrow(new DataIntegrityViolationException("Test"));
+        logic.getCourseUsers(1);
+        verify(dao, times(1)).getCourseUsers(1);
     }
 
 }

@@ -23,7 +23,6 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CreateCertificateAndAddToUser {
-
     static final String SELECT_USER_JSP = "selectUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String USER_ID = "userIdForCertificate";
@@ -32,10 +31,8 @@ public class CreateCertificateAndAddToUser {
     private final String USER_DATA = "userDataForSearch";
 
     private static final Logger LOGGER = LogManager.getLogger(CreateCertificateAndAddToUser.class);
-
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
-
 
     @PostMapping(value = "/addCertificateWithUserId")
     public ModelAndView addCertificateWithUserId() {
@@ -45,15 +42,14 @@ public class CreateCertificateAndAddToUser {
 
     @PostMapping(value = "/searchUser")
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
-
         LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
-
         String result;
 
         if (userData.isEmpty()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             result = SELECT_USER_JSP;
-            LOGGER.debug(String.format("Call - userLogic.searchUser(%s); The data have not been validated!!!", userData));
+            LOGGER.debug(String.format("Call - userLogic.searchUser(%s); The data have not been validated!!!",
+                    userData));
         } else {
             try {
                 List<User> users = userLogic.searchUser(userData);
@@ -69,7 +65,6 @@ public class CreateCertificateAndAddToUser {
                 LOGGER.warn(e);
             }
         }
-
         LOGGER.debug("Request to '/selectUser' redirect to page - " + result);
         return result;
     }
@@ -77,7 +72,7 @@ public class CreateCertificateAndAddToUser {
     @PostMapping(value = "/selectUser")
     public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
         LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to (%s) ",
-                userId,SELECT_USER_JSP));
+                userId, SELECT_USER_JSP));
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
         return result;
@@ -86,7 +81,6 @@ public class CreateCertificateAndAddToUser {
     @PostMapping(value = "/checkCertificateWithUserId")
     public String checkCertificateWithUserId(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                              BindingResult bindingResult, Model model) {
-
         String returnPage;
         LOGGER.debug("Request to '/addCertificateWithUserId' ");
 
@@ -105,7 +99,6 @@ public class CreateCertificateAndAddToUser {
                 LOGGER.warn(e);
             }
         }
-
         LOGGER.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
         return returnPage;
     }
@@ -114,6 +107,5 @@ public class CreateCertificateAndAddToUser {
     public CreateCertificateAndAddToUser(CertificateLogic certificateLogic, UserLogic userLogic) {
         this.certificateLogic = certificateLogic;
         this.userLogic = userLogic;
-
     }
 }
