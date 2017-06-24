@@ -10,6 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Accounting;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.dao.interfaces.AccountingDaoImplForTest;
 import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 
 import static org.junit.Assert.assertEquals;

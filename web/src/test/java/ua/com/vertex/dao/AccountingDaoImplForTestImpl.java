@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Accounting;
+import ua.com.vertex.dao.interfaces.AccountingDaoImplForTest;
 
 import javax.sql.DataSource;
 import java.util.Optional;
@@ -18,12 +20,13 @@ import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
 
 @Repository
-class AccountingDaoImplForTest {
+@Profile("test")
+class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final Logger LOGGER = LogManager.getLogger(AccountingDaoImplForTest.class);
 
-    int createAccounting(Accounting accounting) throws DataAccessException {
+    public int createAccounting(Accounting accounting) throws DataAccessException {
         LOGGER.debug(String.format("Try insert accounting  = (%s)", accounting));
         String query = "INSERT INTO  Accounting (user_id, course_id, course_coast, debt) " +
                 "VALUES (:user_id, :course_id, :course_coast, :debt) ";
@@ -40,7 +43,7 @@ class AccountingDaoImplForTest {
     }
 
     @SuppressWarnings("SameParameterValue")
-    Optional<Accounting> getAccountingByCourseIdAndUserId( int courseId, int userId) throws DataAccessException {
+    public Optional<Accounting> getAccountingByCourseIdAndUserId( int courseId, int userId) throws DataAccessException {
         LOGGER.debug(String.format("Try select accounting by course id = (%s) and user id = (%s)", courseId, userId));
         String query = "SELECT deal_id, user_id, course_id, course_coast,debt FROM Accounting " +
                 "WHERE course_id = :courseId AND user_id = :userId";
@@ -64,7 +67,7 @@ class AccountingDaoImplForTest {
     }
 
     @Autowired
-    AccountingDaoImplForTest(DataSource dataSource) {
+    AccountingDaoImplForTestImpl(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }
