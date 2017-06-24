@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page session="false" %>
 <!DOCTYPE html>
@@ -106,72 +106,127 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <div>
-        <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
-            <span class="fontSize180 silver">Course details</span><br><br><br>
-            <table class="table fontSize140">
-                <tr>
-                    <td>Course id:</td>
-                    <td><form:label path="id">${course.id}</form:label>
-                        <form:hidden path="id"></form:hidden></td>
-                </tr>
-                <tr>
-                    <td>Course name:</td>
-                    <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
-                                    path="name"/>
-                    <td><form:errors path="name"/></td>
-                </tr>
-                <tr>
-                    <td>Start date:</td>
-                    <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
-                                    path="start"/>
-                    <td><form:errors path="start"/></td>
-                </tr>
-                <tr>
-                    <td>Price:</td>
-                    <td><form:label path="price">${course.price}</form:label>
-                        <form:hidden path="price"></form:hidden></td>
-                </tr>
-                <tr>
-                    <td>Teacher name:</td>
-                    <td>
-                        <form:select path="teacherName">
-                            <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${teachers}"/>
-                        </form:select>
-                </tr>
-                <tr>
-                    <td>Schedule:</td>
-                    <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
-                                    path="schedule"/>
-                    <td><form:errors path="schedule"/></td>
-                </tr>
-                <tr>
-                    <td>Notes:</td>
-                    <td><form:input id="notes" class="buttonText" type="text" size="40" value="${course.notes}"
-                                    path="notes"/>
-                    <td><form:errors path="notes"/></td>
-                </tr>
-            </table>
-            <span class="black fontSize140 buttonPaddingTop"><input type="submit" value="Update course"/></span>
-        </form:form><br><br>
 
-        <span class="fontSize180">Manage users of this course:</span>
-        <form:form action="showCourseAndUsers" method="post" commandName="course">
-            <input type="hidden" name="id" value="${course.id}"/>
+    <div class="fontSize180">Assigned users:</div>
+    <br>
+    <table class="tableSpacing">
+        <tr class="fontSize125 tableHeader">
+            <td class="labelWidth150">Email</td>
+            <td class="labelWidth150">First Name</td>
+            <td class="labelWidth150">Last Name</td>
+            <td class="labelWidth150">Phone</td>
+            <td class="labelWidth150">Remove from course</td>
+        </tr>
+        <tr></tr>
+        <c:forEach items="${assignedUsers}" var="assignedUser">
+            <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dto">
+                <tr>
+                    <input type="hidden" name="courseId" value="${dto.courseId}">
+                    <input type="hidden" name="email" value="${assignedUser.email}">
+                    <td>${assignedUser.email}</td>
+                    <td>${assignedUser.firstName}</td>
+                    <td>${assignedUser.lastName}</td>
+                    <td>${assignedUser.phone}</td>
+                    <td><input type="submit" value="Remove" class="black"/></td>
+                </tr>
+            </sf:form>
+        </c:forEach>
+    </table>
+    <br><br><br>
+
+    <div class="fontSize180">Search for a user to assign (by name or email):</div>
+    <br>
+    <sf:form action="searchUsersToAssign" method="post" commandName="dto">
+        <input type="hidden" name="courseId" value="${dto.courseId}">
+        <table>
+            <tr>
+                <td><label for="searchParam" class="fontSize125 labelWidth300">
+                    Enter first name/last name/email:</label></td>
+                <td><input type="text" name="searchParam" id="searchParam" maxlength="255"
+                           class="labelWidth200 black"/></td>
+            </tr>
+            <tr>
+                <td><span class="fontSize125">Select type of search:</span></td>
+                <td>
+                    <label class="black">
+                        <select name="typeOfSearch">
+                            <option selected value="first_name">By first name</option>
+                            <option value="last_name">By last name</option>
+                            <option value="email">By email</option>
+                        </select>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="buttonPaddingTop fontSize125"><input type="submit" value="Search" class="black"></td>
+            </tr>
+        </table>
+    </sf:form>
+
+    <c:if test="${!empty search}">
+        <br>
+        <sf:form action="clearSearchResults" method="get" commandName="dto">
+            <input type="hidden" name="courseId" value="${dto.courseId}">
             <table>
                 <tr>
-                    <td class="black fontSize140 buttonPaddingTop"><input type="submit" value="Show users"/></td>
+                    <td class="buttonPaddingTop fontSize125">
+                        <input type="submit" value="Clear search results" class="black"></td>
                 </tr>
             </table>
-        </form:form>
-    </div>
+        </sf:form>
+    </c:if>
     <br><br>
 
+    <c:if test="${!empty freeUsers and !empty search}">
+        <div class="fontSize180">Search results:</div>
+        <br>
+        <table class="tableSpacing">
+            <tr class="fontSize125 tableHeader">
+                <td class="labelWidth150">Email</td>
+                <td class="labelWidth150">First Name</td>
+                <td class="labelWidth150">Last Name</td>
+                <td class="labelWidth150">Phone</td>
+                <td class="labelWidth150">Assign to course</td>
+            </tr>
+            <tr></tr>
+            <c:forEach items="${freeUsers}" var="freeUser">
+                <sf:form action="assignUser" method="post" commandName="dto">
+                    <tr>
+                        <input type="hidden" name="typeOfSearch" value="${dto.typeOfSearch}">
+                        <input type="hidden" name="searchParam" value="${dto.searchParam}">
+                        <input type="hidden" name="courseId" value="${dto.courseId}">
+                        <input type="hidden" name="email" value="${freeUser.email}">
+                        <input type="hidden" name="firstName" value="${freeUser.firstName}">
+                        <input type="hidden" name="lastName" value="${freeUser.lastName}">
+                        <input type="hidden" name="phone" value="${freeUser.phone}">
+                        <td>${freeUser.email}</td>
+                        <td>${freeUser.firstName}</td>
+                        <td>${freeUser.lastName}</td>
+                        <td>${freeUser.phone}</td>
+                        <td><input type="submit" value="Assign" class="black"/></td>
+                    </tr>
+                </sf:form>
+            </c:forEach>
+        </table>
+    </c:if>
+    <c:if test="${empty freeUsers and !empty search}">
+        <div class="fontSize180">Search results:</div>
+        <br>
+        <span class="fontSize140">No users found</span>
+    </c:if><br><br><br>
+
+    <sf:form action="courseDetails" method="post">
+        <input type="hidden" name="courseId" value="${dto.courseId}"/>
+        <input type="submit" value="Back to course details" class="black fontSize125"/>
+    </sf:form>
+
+    <br><br><br>
     <div class="href">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/" />">Home</a>
     </div>
+    <br><br>
 </div>
 
 <div class="footer">

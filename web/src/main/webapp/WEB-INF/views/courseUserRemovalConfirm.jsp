@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page session="false" %>
 <!DOCTYPE html>
@@ -106,73 +106,33 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <div>
-        <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
-            <span class="fontSize180 silver">Course details</span><br><br><br>
-            <table class="table fontSize140">
-                <tr>
-                    <td>Course id:</td>
-                    <td><form:label path="id">${course.id}</form:label>
-                        <form:hidden path="id"></form:hidden></td>
-                </tr>
-                <tr>
-                    <td>Course name:</td>
-                    <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
-                                    path="name"/>
-                    <td><form:errors path="name"/></td>
-                </tr>
-                <tr>
-                    <td>Start date:</td>
-                    <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
-                                    path="start"/>
-                    <td><form:errors path="start"/></td>
-                </tr>
-                <tr>
-                    <td>Price:</td>
-                    <td><form:label path="price">${course.price}</form:label>
-                        <form:hidden path="price"></form:hidden></td>
-                </tr>
-                <tr>
-                    <td>Teacher name:</td>
-                    <td>
-                        <form:select path="teacherName">
-                            <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${teachers}"/>
-                        </form:select>
-                </tr>
-                <tr>
-                    <td>Schedule:</td>
-                    <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
-                                    path="schedule"/>
-                    <td><form:errors path="schedule"/></td>
-                </tr>
-                <tr>
-                    <td>Notes:</td>
-                    <td><form:input id="notes" class="buttonText" type="text" size="40" value="${course.notes}"
-                                    path="notes"/>
-                    <td><form:errors path="notes"/></td>
-                </tr>
-            </table>
-            <span class="black fontSize140 buttonPaddingTop"><input type="submit" value="Update course"/></span>
-        </form:form><br><br>
 
-        <span class="fontSize180">Manage users of this course:</span>
-        <form:form action="showCourseAndUsers" method="post" commandName="course">
-            <input type="hidden" name="id" value="${course.id}"/>
-            <table>
-                <tr>
-                    <td class="black fontSize140 buttonPaddingTop"><input type="submit" value="Show users"/></td>
-                </tr>
-            </table>
-        </form:form>
-    </div>
+    <span class="fontSize180">Confirm removal?</span><br><br><br>
+    <table>
+        <tr>
+            <td>
+                <sf:form action="removeUserFromCourse" method="post" commandName="dto">
+                    <input type="hidden" name="courseId" value="${dto.courseId}">
+                    <input type="hidden" name="email" value="${dto.email}">
+                    <input type="submit" value="Yes" class="buttonWidth black"/>
+                </sf:form>
+            </td>
+            <td>
+                <sf:form action="showCourseAndUsers" method="get" commandName="dto">
+                    <input type="hidden" name="id" value="${dto.courseId}">
+                    <input type="submit" value="No" class="buttonWidth black"/>
+                </sf:form>
+            </td>
+        </tr>
+    </table>
+
     <br><br>
-
     <div class="href">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/" />">Home</a>
     </div>
 </div>
+
 
 <div class="footer">
     <div class="container">

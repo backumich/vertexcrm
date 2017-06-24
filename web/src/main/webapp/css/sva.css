@@ -34,6 +34,11 @@
     font-weight: bold;
 }
 
+.tableHeader {
+    font-weight: bold;
+    color: #9acfea;
+}
+
 .href {
     font-size: 120%;
 }
@@ -52,16 +57,28 @@
     padding-top: 100px;
 }
 
-.buttonPadding {
+.buttonPaddingTop {
     padding-top: 10px;
+}
+
+.tableSpacing {
+    border-spacing: 5px;
 }
 
 .buttonWidth {
     width: 100px;
 }
 
-.labelWidth {
+.labelWidth150 {
     width: 150px;
+}
+
+.labelWidth200 {
+    width: 200px;
+}
+
+.labelWidth300 {
+    width: 300px;
 }
 
 a:hover {
@@ -71,4 +88,5 @@ a:hover {
 .errorMessage {
     padding-top: 30px;
     padding-bottom: 30px;
+    color: red;
 }
