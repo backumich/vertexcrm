@@ -1,10 +1,12 @@
 package ua.com.vertex.beans;
 
 import org.hibernate.validator.constraints.Email;
+import ua.com.vertex.validators.interfaces.PasswordVerification;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@PasswordVerification(message = "ASDGAGAGAGsdgsdg")
 public class UserFormRegistration {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
