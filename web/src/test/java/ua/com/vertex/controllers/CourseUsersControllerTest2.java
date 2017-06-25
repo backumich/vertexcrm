@@ -18,6 +18,7 @@ import ua.com.vertex.beans.CourseUserDTO;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.utils.LogInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,9 @@ public class CourseUsersControllerTest2 {
     private CourseLogic courseLogic;
 
     @Mock
+    private LogInfo logInfo;
+
+    @Mock
     private Model model;
 
     private CourseUsersController controller;
@@ -45,7 +49,6 @@ public class CourseUsersControllerTest2 {
     private User user3;
     private CourseUserDTO dto;
     private List<User> assignedUsers;
-    private List<User> freeUsers;
 
     private static final String ASSIGNED_USERS = "assignedUsers";
     private static final String FREE_USERS = "freeUsers";
@@ -56,7 +59,7 @@ public class CourseUsersControllerTest2 {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new CourseUsersController(courseLogic);
+        controller = new CourseUsersController(courseLogic, logInfo);
         user1 = new User.Builder()
                 .setEmail("user1@email.com")
                 .setFirstName("Name1")
@@ -111,7 +114,7 @@ public class CourseUsersControllerTest2 {
         dto.setFirstName(user3.getFirstName());
         dto.setLastName(user3.getLastName());
         dto.setPhone(user3.getPhone());
-        dto.setTypeOfSearch("first_name");
+        dto.setSearchType("first_name");
         assignedUsers = Arrays.asList(user1, user2, user3);
 
         String view = controller.assignUserToCourse(dto, model);
@@ -125,7 +128,7 @@ public class CourseUsersControllerTest2 {
     @WithAnonymousUser
     public void searchForUsersToAssignFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
-        dto.setTypeOfSearch("first_name");
+        dto.setSearchType("first_name");
         dto.setSearchParam("");
         User u1, u2, u3, u4, u5, u6;
         u1 = new User.Builder().setEmail("email1").setFirstName("FirstName").setLastName("LastName")
@@ -142,7 +145,7 @@ public class CourseUsersControllerTest2 {
                 .setPhone("38066 000 00 00").getInstance();
 
         assignedUsers = Arrays.asList(user1, user2);
-        freeUsers = Arrays.asList(u1, u2, u3, u4, u5, u6);
+        List<User> freeUsers = Arrays.asList(u1, u2, u3, u4, u5, u6);
 
         String view = controller.searchForUsersToAssign(dto, model);
         verify(model, times(1)).addAttribute(ASSIGNED_USERS, assignedUsers);

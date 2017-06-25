@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.utils.LogInfo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,6 +29,9 @@ public class CourseUsersControllerTest1 {
     @Mock
     private CourseLogic courseLogic;
 
+    @Mock
+    private LogInfo logInfo;
+
     private CourseUsersController controller;
 
     private static final String COURSE_USERS = "courseUsers";
@@ -36,7 +40,7 @@ public class CourseUsersControllerTest1 {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new CourseUsersController(courseLogic);
+        controller = new CourseUsersController(courseLogic, logInfo);
     }
 
     @Test

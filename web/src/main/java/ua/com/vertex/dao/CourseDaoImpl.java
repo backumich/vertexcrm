@@ -197,7 +197,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         List<User> users;
         String query = "";
-        switch (dto.getTypeOfSearch()) {
+        switch (dto.getSearchType()) {
             case "first_name":
                 query = "SELECT u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.first_name LIKE '%" + dto.getSearchParam() + "%' AND " +

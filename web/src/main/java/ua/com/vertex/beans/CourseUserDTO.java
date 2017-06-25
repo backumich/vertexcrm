@@ -8,7 +8,7 @@ public class CourseUserDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private String typeOfSearch;
+    private String searchType;
     private String searchParam;
 
     public int getCourseId() {
@@ -51,12 +51,12 @@ public class CourseUserDTO {
         this.phone = phone;
     }
 
-    public String getTypeOfSearch() {
-        return typeOfSearch;
+    public String getSearchType() {
+        return searchType;
     }
 
-    public void setTypeOfSearch(String typeOfSearch) {
-        this.typeOfSearch = typeOfSearch;
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
     }
 
     public String getSearchParam() {
@@ -77,18 +77,18 @@ public class CourseUserDTO {
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(phone, that.phone) &&
-                Objects.equals(typeOfSearch, that.typeOfSearch) &&
+                Objects.equals(searchType, that.searchType) &&
                 Objects.equals(searchParam, that.searchParam);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, email, firstName, lastName, phone, typeOfSearch, searchParam);
+        return Objects.hash(courseId, email, firstName, lastName, phone, searchType, searchParam);
     }
 
     @Override
     public String toString() {
         return String.format("%d %s %s %s %s %s %s",
-                courseId, email, firstName, lastName, phone, typeOfSearch, searchParam);
+                courseId, email, firstName, lastName, phone, searchType, searchParam);
     }
 }

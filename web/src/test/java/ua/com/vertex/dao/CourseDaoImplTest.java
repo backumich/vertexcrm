@@ -157,7 +157,7 @@ public class CourseDaoImplTest {
     public void searchUsersByFirstNameFullMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String fullMatchingName = "FirstName";
-        dto.setTypeOfSearch("first_name");
+        dto.setSearchType("first_name");
         dto.setSearchParam(fullMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -169,7 +169,7 @@ public class CourseDaoImplTest {
     public void searchUsersByFirstNamePartialMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String partialMatchingName = "F";
-        dto.setTypeOfSearch("first_name");
+        dto.setSearchType("first_name");
         dto.setSearchParam(partialMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -181,7 +181,7 @@ public class CourseDaoImplTest {
     public void searchUsersByFirstNameNonMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String nonMatchingName = "notExistingFirstName";
-        dto.setTypeOfSearch("first_name");
+        dto.setSearchType("first_name");
         dto.setSearchParam(nonMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -193,7 +193,7 @@ public class CourseDaoImplTest {
     public void searchUsersByLastNameFullMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String fullMatchingName = "LastName";
-        dto.setTypeOfSearch("last_name");
+        dto.setSearchType("last_name");
         dto.setSearchParam(fullMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -205,7 +205,7 @@ public class CourseDaoImplTest {
     public void searchUsersByLastNamePartialMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String partialMatchingName = "L";
-        dto.setTypeOfSearch("last_name");
+        dto.setSearchType("last_name");
         dto.setSearchParam(partialMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -217,7 +217,7 @@ public class CourseDaoImplTest {
     public void searchUsersByLastNameNonMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String nonMatchingName = "notExistingLastName";
-        dto.setTypeOfSearch("last_name");
+        dto.setSearchType("last_name");
         dto.setSearchParam(nonMatchingName);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -229,7 +229,7 @@ public class CourseDaoImplTest {
     public void searchUsersByEmailFullMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String fullMatchingEmail = "22@test.com";
-        dto.setTypeOfSearch("email");
+        dto.setSearchType("email");
         dto.setSearchParam(fullMatchingEmail);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -241,7 +241,7 @@ public class CourseDaoImplTest {
     public void searchUsersByEmailPartialMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String partialMatchingEmail = "@";
-        dto.setTypeOfSearch("email");
+        dto.setSearchType("email");
         dto.setSearchParam(partialMatchingEmail);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);
@@ -253,7 +253,7 @@ public class CourseDaoImplTest {
     public void searchUsersByEmailNonMatch() {
         CourseUserDTO dto = new CourseUserDTO();
         String nonMatchingEmail = "notExistingEmail";
-        dto.setTypeOfSearch("email");
+        dto.setSearchType("email");
         dto.setSearchParam(nonMatchingEmail);
 
         List<User> users = courseDaoInf.searchForUsersToAssign(dto);

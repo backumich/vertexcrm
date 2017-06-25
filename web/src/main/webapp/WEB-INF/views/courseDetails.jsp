@@ -157,7 +157,7 @@
         </form:form><br><br>
 
         <span class="fontSize180">Manage users of this course:</span>
-        <form:form action="showCourseAndUsers" method="post" commandName="course">
+        <form:form action="showCourseAndUsers" method="get" commandName="course">
             <input type="hidden" name="id" value="${course.id}"/>
             <table>
                 <tr>

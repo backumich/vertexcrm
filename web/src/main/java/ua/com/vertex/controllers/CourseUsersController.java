@@ -1,22 +1,26 @@
 package ua.com.vertex.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.CourseUserDTO;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.utils.LogInfo;
 
 import java.util.List;
 
 @Controller
 public class CourseUsersController {
     private final CourseLogic courseLogic;
+    private final LogInfo logInfo;
+    private static final Logger LOGGER = LogManager.getLogger(CourseUsersController.class);
 
     private static final String COURSE_USERS = "courseUsers";
     private static final String ASSIGNED_USERS = "assignedUsers";
@@ -25,8 +29,10 @@ public class CourseUsersController {
     private static final String SEARCH = "search";
     private static final String DTO = "dto";
 
-    @RequestMapping(value = "/showCourseAndUsers")
+    @GetMapping(value = "/showCourseAndUsers")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {
+
+        LOGGER.debug(logInfo.getId() + "Show users assigned to course id=" + course.getId());
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
         CourseUserDTO dto = new CourseUserDTO();
@@ -42,6 +48,9 @@ public class CourseUsersController {
     @PostMapping(value = "/removeUserFromCourse")
     public String removeUserFromAssigned(@ModelAttribute CourseUserDTO dto, Model model) {
 
+        LOGGER.debug(logInfo.getId() + String.format("Remove user=%s from course id=%d",
+                dto.getEmail(), dto.getCourseId()));
+
         courseLogic.removeUserFromCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -52,6 +61,9 @@ public class CourseUsersController {
 
     @PostMapping(value = "/assignUser")
     public String assignUserToCourse(@ModelAttribute CourseUserDTO dto, Model model) {
+
+        LOGGER.debug(logInfo.getId() + String.format("Assign user=%s to course id=%d",
+                dto.getEmail(), dto.getCourseId()));
 
         courseLogic.assignUserToCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -68,6 +80,9 @@ public class CourseUsersController {
     @GetMapping(value = "/searchForUsersToAssign")
     public String searchForUsersToAssign(@ModelAttribute CourseUserDTO dto, Model model) {
 
+        LOGGER.debug(logInfo.getId() + String.format("Search for users that can be assigned to course id=%d" +
+                "by searchType=%s and searchParam=%s", dto.getCourseId(), dto.getSearchType(), dto.getSearchParam()));
+
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
         List<User> freeUsers = courseLogic.searchForUsersToAssign(dto);
 
@@ -82,6 +97,8 @@ public class CourseUsersController {
     @GetMapping(value = "/clearSearchResults")
     public String clearSearchResults(@ModelAttribute CourseUserDTO dto, Model model) {
 
+        LOGGER.debug(logInfo + "Clear free users search results");
+
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(DTO, dto);
@@ -92,6 +109,9 @@ public class CourseUsersController {
     @PostMapping(value = "/confirmUserRemovalFromCourse")
     public String confirmUserRemovalFromCourse(@ModelAttribute CourseUserDTO dto, Model model) {
 
+        LOGGER.debug(logInfo.getId() + String.format("Confirm removing user=%s from course id=%d",
+                dto.getEmail(), dto.getCourseId()));
+
         model.addAttribute(new Course());
         model.addAttribute(DTO, dto);
 
@@ -99,7 +119,8 @@ public class CourseUsersController {
     }
 
     @Autowired
-    public CourseUsersController(CourseLogic courseLogic) {
+    public CourseUsersController(CourseLogic courseLogic, LogInfo logInfo) {
         this.courseLogic = courseLogic;
+        this.logInfo = logInfo;
     }
 }

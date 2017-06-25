@@ -149,7 +149,7 @@
                 <td><span class="fontSize125">Select type of search:</span></td>
                 <td>
                     <label class="black">
-                        <select name="typeOfSearch">
+                        <select name="searchType">
                             <option selected value="first_name">By first name</option>
                             <option value="last_name">By last name</option>
                             <option value="email">By email</option>
@@ -193,7 +193,7 @@
             <c:forEach items="${freeUsers}" var="freeUser">
                 <sf:form action="assignUser" method="post" commandName="dto">
                     <tr>
-                        <input type="hidden" name="typeOfSearch" value="${dto.typeOfSearch}">
+                        <input type="hidden" name="searchType" value="${dto.searchType}">
                         <input type="hidden" name="searchParam" value="${dto.searchParam}">
                         <input type="hidden" name="courseId" value="${dto.courseId}">
                         <input type="hidden" name="email" value="${freeUser.email}">
