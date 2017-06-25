@@ -59,8 +59,8 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<User> searchUsersToAssign(CourseUserDTO dto) {
-        return courseDaoInf.searchUsersToAssign(dto);
+    public List<User> searchForUsersToAssign(CourseUserDTO dto) {
+        return courseDaoInf.searchForUsersToAssign(dto);
     }
 
     @Autowired

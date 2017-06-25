@@ -136,7 +136,7 @@
 
     <div class="fontSize180">Search for a user to assign (by name or email):</div>
     <br>
-    <sf:form action="searchUsersToAssign" method="post" commandName="dto">
+    <sf:form action="searchForUsersToAssign" method="get" commandName="dto">
         <input type="hidden" name="courseId" value="${dto.courseId}">
         <table>
             <tr>

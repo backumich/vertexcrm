@@ -63,8 +63,19 @@ CREATE TABLE Courses
   PRIMARY KEY (id)
 );
 
+CREATE TABLE Course_users
+(
+  id         INT(11)      NOT NULL AUTO_INCREMENT,
+  course_id  INT(11)      NOT NULL,
+  email      VARCHAR(255) NOT NULL,
+  first_name VARCHAR(255) NOT NULL,
+  last_name  VARCHAR(255) NOT NULL,
+  phone      VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
-VALUES ('1', 'email1', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00','1');
+VALUES ('1', 'email1', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '1');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('22', '22@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
@@ -80,6 +91,9 @@ VALUES ('34', '34@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmK
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('44', '44@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
         'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
+VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('222', '22', '2016-12-1', 'Java Professional', 'Java', '1492779828793888');
@@ -99,10 +113,16 @@ VALUES ('2', '2', '2016-12-1', 'Java Professional', 'Java', '1492779828793892');
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('3', '2', '2016-12-1', 'Java Professional', 'Java', '1492779828793893');
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
-VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
-
 INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (1, 1, 1, 4000, 4000);
 
 INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
 VALUES (1, 'JavaStart', '2017-02-01 10:10:10', 0, 8000, 'Before update', 'Before update');
+
+INSERT INTO Course_users (course_id, email, first_name, last_name, phone)
+VALUES (1, 'user1@email.com', 'Name1', 'Surname1', '+38050 111 1111');
+
+INSERT INTO Course_users (course_id, email, first_name, last_name, phone)
+VALUES (1, 'user2@email.com', 'Name2', 'Surname2', '+38050 222 2222');
+
+INSERT INTO Course_users (course_id, email, first_name, last_name, phone)
+VALUES (2, 'user3@email.com', 'Name3', 'Surname3', '+38050 333 3333')

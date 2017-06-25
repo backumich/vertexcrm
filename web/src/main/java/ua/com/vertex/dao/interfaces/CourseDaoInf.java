@@ -25,6 +25,6 @@ public interface CourseDaoInf {
 
     void assignUserToCourse(CourseUserDTO dto);
 
-    List<User> searchUsersToAssign(CourseUserDTO dto);
+    List<User> searchForUsersToAssign(CourseUserDTO dto);
 
 }

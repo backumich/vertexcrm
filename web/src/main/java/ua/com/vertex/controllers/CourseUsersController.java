@@ -55,7 +55,7 @@ public class CourseUsersController {
 
         courseLogic.assignUserToCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
-        List<User> freeUsers = courseLogic.searchUsersToAssign(dto);
+        List<User> freeUsers = courseLogic.searchForUsersToAssign(dto);
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(FREE_USERS, freeUsers);
@@ -65,11 +65,11 @@ public class CourseUsersController {
         return COURSE_USERS;
     }
 
-    @PostMapping(value = "/searchUsersToAssign")
-    public String searchUsersToAssign(@ModelAttribute CourseUserDTO dto, Model model) {
+    @GetMapping(value = "/searchForUsersToAssign")
+    public String searchForUsersToAssign(@ModelAttribute CourseUserDTO dto, Model model) {
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
-        List<User> freeUsers = courseLogic.searchUsersToAssign(dto);
+        List<User> freeUsers = courseLogic.searchForUsersToAssign(dto);
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(FREE_USERS, freeUsers);

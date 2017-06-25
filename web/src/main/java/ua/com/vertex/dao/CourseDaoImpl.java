@@ -191,7 +191,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public List<User> searchUsersToAssign(CourseUserDTO dto) {
+    public List<User> searchForUsersToAssign(CourseUserDTO dto) {
         LOGGER.debug(String.format(logInfo.getId() + "Searching for users to assign to the course by search param=%s",
                 dto.getSearchParam()));
 
