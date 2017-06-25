@@ -113,7 +113,7 @@
             <tr>
                 <td>Course id:</td>
                 <td><form:label path="id">${course.id}</form:label>
-                    <form:hidden path="id"></form:hidden></td>
+                    <form:hidden path="id" value="${course.id}"></form:hidden></td>
             </tr>
             <tr>
                 <td>Course name:</td>
@@ -130,15 +130,16 @@
             <tr>
                 <td>Price:</td>
                 <td><form:label path="price">${course.price}</form:label>
-                    <form:hidden path="price"></form:hidden></td>
+                    <form:hidden path="price" value="${course.price}"></form:hidden></td>
             </tr>
             <tr>
                 <td>Teacher name:</td>
-                <td><form:select path="teacherName">
-                    <form:option value="NONE" label="--- Select ---"/>
-                    <form:options items="${teachers}"/>
+                <td>
+                    <form:select path="teacherName">
+                        <form:option value="NONE" label="--- Select ---"/>
+                        <form:options items="${teachers}"/>
                     </form:select>
-                
+
             </tr>
             <tr>
                 <td>Schedule:</td>
