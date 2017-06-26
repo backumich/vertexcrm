@@ -150,11 +150,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         users = jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_ID2, courseId), this::mapUser);
 
-        if (users.size() > 0) {
-            LOGGER.debug(logInfo.getId() + "Retrieved users with email=(" + userIdsToString(users) + ")");
-        } else {
-            LOGGER.debug(logInfo.getId() + "No users are assigned to the course");
-        }
+        LOGGER.debug(logInfo.getId() + "Retrieved users with email=(" + userIdsToString(users) + ")");
 
         return users;
     }
@@ -219,11 +215,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         users = jdbcTemplate.query(query, mapSqlParameterSource, this::mapUser);
 
-        if (users.size() > 0) {
-            LOGGER.debug(logInfo.getId() + "Retrieved users email=(" + userIdsToString(users) + ")");
-        } else {
-            LOGGER.debug(logInfo.getId() + "No users are available to be assigned to the course");
-        }
+        LOGGER.debug(logInfo.getId() + "Retrieved users email=(" + userIdsToString(users) + ")");
 
         return users;
     }
