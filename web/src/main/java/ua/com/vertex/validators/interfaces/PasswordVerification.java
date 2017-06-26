@@ -7,7 +7,7 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Constraint(validatedBy = PasswordVerificationValidator.class)
-@Target({ElementType.TYPE,ElementType.CONSTRUCTOR,ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PasswordVerification {
     String message() default "{Passwords do not match!}";

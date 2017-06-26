@@ -48,12 +48,6 @@ public class RegistrationUserLogicImplTest {
 
     }
 
-//    @Test
-//    public void isVerifyPassword() throws Exception {
-//        assertTrue(MSG, registrationUserLogic.isVerifyPassword(userFormRegistrationCorrect));
-//        assertFalse(MSG, registrationUserLogic.isVerifyPassword(userFormRegistrationIncorrect));
-//    }
-
     @Test
     public void isEmailAlreadyExists() throws Exception {
         assertTrue(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
@@ -61,11 +55,6 @@ public class RegistrationUserLogicImplTest {
         assertFalse(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(false).getInstance())));
     }
-
-//    @Test
-//    public void isRegisteredUserWhenNotVerifyPassword() throws Exception {
-//        assertFalse(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationIncorrect, bindingResult));
-//    }
 
     @Test
     public void isRegisteredUserEmailAlreadyExists() throws Exception {

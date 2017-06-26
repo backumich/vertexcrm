@@ -6,7 +6,7 @@ import ua.com.vertex.validators.interfaces.PasswordVerification;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@PasswordVerification(message = "ASDGAGAGAGsdgsdg")
+@PasswordVerification(message = "Password and password confirmation fields don't match!!!")
 public class UserFormRegistration {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
@@ -133,5 +133,48 @@ public class UserFormRegistration {
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        private final UserFormRegistration userFormRegistration;
+
+        public Builder() {
+            userFormRegistration = new UserFormRegistration();
+        }
+
+
+        public UserFormRegistration.Builder setEmail(String email) {
+            userFormRegistration.setEmail(email);
+            return this;
+        }
+
+        public UserFormRegistration.Builder setPassword(String password) {
+            userFormRegistration.setPassword(password);
+            return this;
+        }
+
+        public UserFormRegistration.Builder setVerifyPassword(String verifyPassword) {
+            userFormRegistration.setVerifyPassword(verifyPassword);
+            return this;
+        }
+
+        public UserFormRegistration.Builder setFirstName(String firstName) {
+            userFormRegistration.setFirstName(firstName);
+            return this;
+        }
+
+        public UserFormRegistration.Builder setLastName(String lastName) {
+            userFormRegistration.setLastName(lastName);
+            return this;
+        }
+
+        public UserFormRegistration.Builder setPhone(String phone) {
+            userFormRegistration.setPhone(phone);
+            return this;
+        }
+
+        public UserFormRegistration getInstance() {
+            return userFormRegistration;
+        }
     }
 }

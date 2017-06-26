@@ -19,12 +19,6 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
     private final UserLogic userLogic;
 
-//    @Override
-//    public boolean isVerifyPassword(UserFormRegistration userFormRegistration) {
-//        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkPassword(%s) ;", userFormRegistration));
-//        return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
-//    }
-
     @Override
     public boolean isEmailAlreadyExists(Optional<User> user) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));
