@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.util.TreeMap;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 public class ViewAllCoursesControllerTest {
     @Autowired
-    private UserLogic logic;
+    private CourseLogic logic;
 
     private MockMvc mockMvc;
 

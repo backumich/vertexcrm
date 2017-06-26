@@ -24,7 +24,7 @@ public interface UserLogic {
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
-    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
+//    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;
 

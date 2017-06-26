@@ -48,13 +48,12 @@
         $('#perPage').change(function () {
             $('#submit').click();
         });
+
         $('a.page').click(function () {
             var id = $(this).attr('id');
             $('#nextPage').val(id);
             $('#submit').click();
-
         });
-
     });
 </script>
 <noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
@@ -79,6 +78,13 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
+            <br/>
+            <br/>
+            <br/>
+            <a href="<c:url value="/addCourse"/>">Add course</a>
+            <br/>
+            <br/>
+            <br/>
             <c:if test="${dataNavigator.currentNumberPage!=1}">
                 <a id="1" class="page" style="cursor: pointer;"><<</a>
             </c:if>
@@ -101,7 +107,6 @@
             <c:if test="${dataNavigator.lastPage!=dataNavigator.currentNumberPage}">
                 <a id="${dataNavigator.lastPage}" class="page" style="cursor: pointer;">>></a>
             </c:if>
-            <br/>
             <br/>
             <br/>
             <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
