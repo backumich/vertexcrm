@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.dao.interfaces.AccountingDaoInf;
+
 import javax.sql.DataSource;
 
 @Repository
@@ -23,16 +24,16 @@ public class AccountingDaoImpl implements AccountingDaoInf {
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateUserDept(int courseId, int userId, double amount) {
-
-        LOGGER.debug(String.format("Try update user dept by course id = (%s) and user id = (%s), from db.Accounting",
-                courseId, userId));
+        LOGGER.debug(String.format("Call - accountingDaoInf.updateUserDept((%s), (%s) , (%f)) ;",
+                courseId, userId, amount));
 
         String query = "UPDATE Accounting SET debt = debt - :debt WHERE course_id = :courseId AND user_id = :userId";
-
         MapSqlParameterSource source = new MapSqlParameterSource(DEBT, amount);
         source.addValue(COURSE_ID, courseId);
         source.addValue(USER_ID, userId);
 
+        LOGGER.debug(String.format("Update user dept by course id = (%s), user id = (%s) and amount = (%s), " +
+                "from db.Accounting", courseId, userId,amount));
         jdbcTemplate.update(query, source);
     }
 
