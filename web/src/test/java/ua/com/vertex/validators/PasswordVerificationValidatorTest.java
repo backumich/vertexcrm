@@ -14,7 +14,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -26,13 +26,21 @@ public class PasswordVerificationValidatorTest {
     private Validator validator;
 
     @Test
-    public void isValid() throws Exception {
-        UserFormRegistration userFormRegistration = new UserFormRegistration.Builder().setEmail("Test@test.com").
-                setPassword("1111111").setVerifyPassword("2222222").setFirstName("test").setLastName("test").
-                setPhone("0999999999").getInstance();
+    public void isValidWhenPasswordEqualsVerifyPassword() throws Exception {
 
-        Set<ConstraintViolation<UserFormRegistration>> violations = validator.validate(userFormRegistration);
+        Set<ConstraintViolation<UserFormRegistration>> violations = validator.validate(new UserFormRegistration.Builder().setEmail("Test@test.com").
+                setPassword("1111111").setVerifyPassword("1111111").setFirstName("test").setLastName("test").
+                setPhone("0999999999").getInstance());
         assertTrue(violations.isEmpty());
     }
 
+    @Test
+    public void isValidWhenPasswordVerificationError() throws Exception {
+
+        Set<ConstraintViolation<UserFormRegistration>> violations = validator.validate(new UserFormRegistration.Builder().setEmail("Test@test.com").
+                setPassword("1111111").setVerifyPassword("2222222").setFirstName("test").setLastName("test").
+                setPhone("0999999999").getInstance());
+        assertFalse(violations.isEmpty());
+        assertEquals(1, violations.size());
+    }
 }
