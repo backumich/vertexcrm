@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.jdbc.support.lob.DefaultLobHandler;
-import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -45,14 +43,14 @@ public class CourseDaoImpl implements CourseDaoInf {
         try {
             courses = jdbcTemplate.query(query, parameters, new CourseDaoImpl.CoursesRowMapping());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Something went wrong", e);
+            LOGGER.warn("Something went wrong", e);
         }
         return courses;
     }
 
     private static final class CoursesRowMapping implements RowMapper<Course> {
         public Course mapRow(ResultSet resultSet, int i) throws SQLException {
-            LobHandler handler = new DefaultLobHandler();
+//            LobHandler handler = new DefaultLobHandler();
             Course course = new Course();
             course.setId(resultSet.getInt("id"));
             course.setName(resultSet.getString("name"));

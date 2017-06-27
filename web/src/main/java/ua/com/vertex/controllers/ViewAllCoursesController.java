@@ -33,10 +33,12 @@ public class ViewAllCoursesController {
             modelAndView.addObject("courses", courses);
             modelAndView.setViewName(PAGE_JSP);
             LOGGER.debug("Received a list of all courses and transferred to the model");
-            String allCourses = "";
-            for (Course course : courses) {
-                allCourses += course.getName() + "|";
-            }
+//            String allCourses = "";
+//            for (Course course : courses) {
+//                allCourses += course.getName() + "|";
+//            }
+
+            String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
             LOGGER.debug("Quantity courses -" + courses.size());
             LOGGER.debug("All courses list -" + allCourses);
         } catch (Exception e) {
