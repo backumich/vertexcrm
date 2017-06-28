@@ -100,28 +100,34 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
-
+    <div class="container pt1_5" align="center">
         <c:if test="${empty users}">
             <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
                        action="searchUser">
-                <table>
+                <span class="fontSize180 silver">Search user:</span><br><br><br>
+                <table class="active">
                     <tr>
-                        <td><input placeholder="User name" type="text" name="userDataForSearch"/></td>
+                        <td style="color: black"><input placeholder="User name" type="text" name="userDataForSearch"/>
+                        </td>
                     </tr>
+                </table>
+                <br>
+                <table class="active">
                     <tr>
-                        <td colspan="5" align="center"><input class="black" type="submit" value="Search user"/></td>
+                        <td colspan="5" style="color: black" align="center"><input class="black" type="submit"
+                                                                                   value="Search"/></td>
                     </tr>
                 </table>
             </form:form>
         </c:if>
     </div>
-    <div>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty users}">
             <form:form method="post" commandName="userIdForCertificate"
                        action="selectUser">
-                <table class="active" width="500">
-                    <tr>
+                <span class="fontSize180 silver">Select user:</span><br><br><br>
+                <table class="active" cols="5" width="500">
+                    <tr style="color: #2aabd2">
                         <th>Select user</th>
                         <th>User Id</th>
                         <th>User E-mail</th>
@@ -141,27 +147,28 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select user"/></td>
-                </tr>
+                <br>
+                <input type="submit" value="Select" style="color: black" align="center" width="50"/>
             </form:form>
-
         </c:if>
     </div>
 
     <br>
     <br>
     <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
-    </c:if>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+    </div>
     <br>
     <br>
     <br>
-
-    <div class="hrefText">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 

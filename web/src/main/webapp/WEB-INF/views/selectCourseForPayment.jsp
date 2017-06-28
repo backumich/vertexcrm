@@ -100,18 +100,18 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
-
+    <div class="container pt1_5" align="center">
         <c:if test="${empty courses}">
             <h3><span class="errorText250">Payment is not possible. All courses were paid.</span></h3>
         </c:if>
     </div>
-    <div>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty courses}">
             <form:form method="post" commandName="courseIdForPayment"
                        action="selectCourse">
-                <table class="active" width="1000">
-                    <tr>
+                <span class="fontSize180 silver">Select course :</span><br><br><br>
+                <table class="active" width="1000" cols="7">
+                    <tr style="color: #2aabd2">
                         <th>Select course</th>
                         <th>Course name</th>
                         <th>Start</th>
@@ -120,6 +120,9 @@
                         <th>Teacher name</th>
                         <th>Notes</th>
 
+                    </tr>
+                    <tr>
+                        <td></td>
                     </tr>
                     <c:forEach items="${courses}" var="course">
                         <tr>
@@ -141,31 +144,30 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <tr>
-                    <td class="black" colspan="5" align="center"><input type="submit" value="Select user"/></td>
-                </tr>
+                <br>
+                <input style="color: black" type="submit" value="Select"/>
             </form:form>
-
         </c:if>
     </div>
-
     <br>
     <br>
     <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
-    </c:if>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+    </div>
     <br>
     <br>
     <br>
-
-    <div class="hrefText">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 
-</div>
 <div class="footer">
     <div class="container">
         <div class="right">

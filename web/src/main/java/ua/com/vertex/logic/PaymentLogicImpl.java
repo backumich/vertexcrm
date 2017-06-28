@@ -14,17 +14,10 @@ import ua.com.vertex.logic.interfaces.PaymentLogic;
 
 @Service
 public class PaymentLogicImpl implements PaymentLogic {
-
     private static final Logger LOGGER = LogManager.getLogger(PaymentLogicImpl.class);
 
     private final PaymentDaoInf paymentDaoInf;
     private final AccountingDaoInf accountingDaoInf;
-
-    @Autowired
-    public PaymentLogicImpl(PaymentDaoInf paymentDaoInf, AccountingDaoInf accountingDaoInf) {
-        this.paymentDaoInf = paymentDaoInf;
-        this.accountingDaoInf = accountingDaoInf;
-    }
 
     @Override
     @Transactional
@@ -39,5 +32,11 @@ public class PaymentLogicImpl implements PaymentLogic {
                 payment.getCourseId(), payment.getUserID(), payment.getPayment().getAmount()));
         return paymentDaoInf.createNewPayment(payment.getCourseId(), payment.getUserID(),
                 payment.getPayment());
+    }
+
+    @Autowired
+    public PaymentLogicImpl(PaymentDaoInf paymentDaoInf, AccountingDaoInf accountingDaoInf) {
+        this.paymentDaoInf = paymentDaoInf;
+        this.accountingDaoInf = accountingDaoInf;
     }
 }

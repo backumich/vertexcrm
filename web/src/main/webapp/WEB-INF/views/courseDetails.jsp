@@ -106,83 +106,77 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <div>
+    <div class="container pt1_5" align="center">
         <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
-        <span class="fontSize180 silver">Course details</span><br><br><br>
-        <table class="table fontSize140">
-            <tr>
-                <td>Course id:</td>
-                <td><form:label path="id">${course.id}</form:label>
-                    <form:hidden path="id" value="${course.id}"></form:hidden></td>
-            </tr>
-            <tr>
-                <td>Course name:</td>
-                <td><form:input id="name" class="buttonText" type="text" size="40" value="${course.name}"
-                                path="name"/>
-                <td><form:errors path="name"/></td>
-            </tr>
-            <tr>
-                <td>Start date:</td>
-                <td><form:input id="start" class="buttonText" type="text" size="40" value="${course.start}"
-                                path="start"/>
-                <td><form:errors path="start"/></td>
-            </tr>
-            <tr>
-                <td>Price:</td>
-                <td><form:label path="price">${course.price}</form:label>
-                    <form:hidden path="price" value="${course.price}"></form:hidden></td>
-            </tr>
-            <tr>
-                <td>Teacher name:</td>
-                <td>
-                    <form:select path="teacherName">
-                        <form:option value="NONE" label="--- Select ---"/>
-                        <form:options items="${teachers}"/>
-                    </form:select>
-
-            </tr>
-            <tr>
-                <td>Schedule:</td>
-                <td><form:input id="schedule" class="buttonText" type="text" size="40" value="${course.schedule}"
-                                path="schedule"/>
-                <td><form:errors path="schedule"/></td>
-            </tr>
-            <tr>
-                <td>Notes:</td>
-                <td><form:input id="notes" class="buttonText" type="text" size="40" value="${course.notes}"
-                                path="notes"/>
-                <td><form:errors path="notes"/></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td colspan="5" align="right"><input type="submit" value="Update course"/></td>
-            </tr>
-            </form:form>
-        </table>
+            <span class="fontSize180 silver">Course details</span><br><br><br>
+            <table class="table fontSize140" cols="2" width="600">
+                <tr>
+                    <td width="150">Course id:</td>
+                    <td><form:label path="id">${course.id}</form:label>
+                        <form:hidden path="id" value="${course.id}"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td width="150">Course name:</td>
+                    <td width="450" style="color: black"><form:input id="name" class="buttonText" type="text" size="40"
+                                                         value="${course.name}"
+                                                         path="name"/>
+                    <td><form:errors path="name"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Start date:</td>
+                    <td  width="450" style="color: black"><form:input id="start" class="buttonText" type="text" size="40"
+                                                         value="${course.start}"
+                                                         path="start"/>
+                    <td><form:errors path="start"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Price:</td>
+                    <td width="450"><form:label path="price">${course.price}</form:label>
+                        <form:hidden path="price" value="${course.price}"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td width="150">Teacher name:</td>
+                    <td width="450" style="color: black">
+                        <form:select path="teacherName">
+                            <form:option value="NONE" label="--- Select ---"/>
+                            <form:options items="${teachers}"/>
+                        </form:select>
+                </tr>
+                <tr>
+                    <td width="150">Schedule:</td>
+                    <td width="450" style="color: black"><form:input id="schedule" class="buttonText" type="text" size="40"
+                                                         value="${course.schedule}"
+                                                         path="schedule"/>
+                    <td><form:errors path="schedule"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Notes:</td>
+                    <td width="450" style="color: black"><form:input  id="notes" class="buttonText" type="text" size="40"
+                                                         value="${course.notes}"
+                                                         path="notes"/>
+                    <td><form:errors path="notes"/></td>
+                </tr>
+                <tr style="color: black" align="center">
+                    <td></td>
+                    <td width="450" colspan="5"><input type="submit" value="Update course"/></td>
+                </tr>
+            </table>
+        </form:form>
     </div>
-    <div>
+    <div class="container pt1_5" align="center">
         <br>
         <c:if test="${!empty msg}">
             <h3><span class="errorText250">${msg}</span></h3>
         </c:if>
         <br>
     </div>
-    <div>
-        <div class="href">
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
 </div>
-
-<%--<tr>--%>
-<%--<td>Is finished</td>--%>
-<%--<td><c:choose>--%>
-<%--<c:when test="${course.finished}">Yes</c:when>--%>
-<%--<c:otherwise>No</c:otherwise>--%>
-<%--</c:choose></td>--%>
-<%--</tr>--%>
 
 <div class="footer">
     <div class="container">

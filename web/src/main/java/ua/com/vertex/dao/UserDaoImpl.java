@@ -272,13 +272,13 @@ public class UserDaoImpl implements UserDaoInf {
 
         LOGGER.debug(String.format("Try add user -(%s) ;", user));
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(query, addParametrToMapSqlParameterSourceFromUser(user), keyHolder);
+        jdbcTemplate.update(query, addParameterToMapSqlParameterSourceFromUser(user), keyHolder);
 
         LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
     }
 
-    private MapSqlParameterSource addParametrToMapSqlParameterSourceFromUser(User user) {
+    private MapSqlParameterSource addParameterToMapSqlParameterSourceFromUser(User user) {
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(COLUMN_USER_EMAIL, user.getEmail());
         source.addValue(COLUMN_FIRST_NAME, user.getFirstName());

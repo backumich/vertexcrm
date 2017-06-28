@@ -18,8 +18,6 @@ import ua.com.vertex.logic.interfaces.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
-
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
@@ -27,10 +25,7 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CreateNewPaymentController {
-
     private static final Logger LOGGER = LogManager.getLogger(CreateNewPaymentController.class);
-
-
     private final CourseLogic courseLogic;
     private final AccountingLogic accountingLogic;
     private final PaymentLogic paymentLogic;
@@ -41,11 +36,6 @@ public class CreateNewPaymentController {
     private static final String PAYMENT = "paymentForm";
     static final String USER_ID_FOR_PAY = "userIdForPayment";
     static final String COURSE_ID_FOR_PAY = "courseIdForPayment";
-
-
-
-
-
 
     @PostMapping(value = "/createPayment")
     public ModelAndView selectCourseForPayment() {

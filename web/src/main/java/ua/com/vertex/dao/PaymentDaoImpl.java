@@ -38,7 +38,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     public int createNewPayment(int courseId, int userId, Payment payment) throws DataAccessException {
         LOGGER.debug(String.format("Try create new payment by courseId = (%s) and userId - (%s)", courseId, userId));
 
-        String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM accounting " +
+        String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM Accounting " +
                 "WHERE course_id = :courseId AND user_id = :userId) , :amount)";
 
         MapSqlParameterSource source = new MapSqlParameterSource(COURSE_ID, courseId);

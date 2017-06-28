@@ -73,7 +73,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -101,74 +101,77 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5" align="center">
 
         <form:form cssClass="buttonText" method="post" commandName="certificateWithUserForm"
                    action="checkCertificateAndUser">
-
-
-            <table border="0" align="center" style="align-content: center">
+            <span class="fontSize180 silver">Add new certificate :</span><br><br><br>
+            <form:hidden path="certificate.certificationId" value="1"/>
+            <form:hidden path="certificate.userId" value="1"/>
+            <table class="active">
                 <tr>
-                    <td colspan="2" align="center"><h2>Add new certificate :</h2></td>
-                </tr>
-                <tr>
-                    <td><form:hidden path="certificate.certificationId" value="1"/></td>
-                </tr>
-                <tr>
-                    <td><form:hidden path="certificate.userId" value="1"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="certificate.certificationDate">Certification date :</form:label></td>
-                    <td><form:input placeholder="yyyy-MM-dd" type="date" path="certificate.certificationDate"/></td>
+                    <td width="150" align="left"><form:label path="certificate.certificationDate">Certification date :
+                    </form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="yyyy-MM-dd" type="date"
+                                                                     path="certificate.certificationDate"/></td>
                     <td><form:errors path="certificate.certificationDate"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="certificate.courseName">Course name:</form:label></td>
-                    <td><form:input placeholder="Course name:" type="text" path="certificate.courseName"/></td>
+                    <td width="150" align="left"><form:label
+                            path="certificate.courseName">Course name:</form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="Course name:" type="text"
+                                                                     path="certificate.courseName"/></td>
                     <td><form:errors path="certificate.courseName"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="certificate.language">Language:</form:label></td>
-                    <td><form:input placeholder="Language:" type="text" path="certificate.language"/></td>
+                    <td width="150" align="left"><form:label path="certificate.language">Language:</form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="Language:" type="text"
+                                                                     path="certificate.language"/></td>
                     <td><form:errors path="certificate.language"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="user.email">User E-mail:</form:label></td>
-                    <td><form:input placeholder="E-mail" type="text" path="user.email"/></td>
+                    <td width="150" align="left"><form:label path="user.email">User E-mail:</form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="E-mail" type="text"
+                                                                     path="user.email"/></td>
                     <td><form:errors path="user.email"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="user.firstName">User first name:</form:label></td>
-                    <td><form:input placeholder="First name" type="text" path="user.firstName"/></td>
+                    <td width="150" align="left"><form:label path="user.firstName">User first name:</form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="First name" type="text"
+                                                                     path="user.firstName"/></td>
                     <td><form:errors path="user.firstName"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="user.lastName">User first name:</form:label></td>
-                    <td><form:input placeholder="Last name" type="text" path="user.lastName"/></td>
+                    <td width="150" align="left"><form:label path="user.lastName">User first name:</form:label></td>
+                    <td style="color: black" width="150"><form:input placeholder="Last name" type="text"
+                                                                     path="user.lastName"/></td>
                     <td><form:errors path="user.lastName"/></td>
                 </tr>
-                <tr>
-                    <td colspan="5" align="center"><input class="black" type="submit" value="Add certificate"/></td>
-                </tr>
             </table>
+            <br>
+            <input style="color: black" type="submit" value="Add"/>
         </form:form>
-        <br>
-        <br>
+    </div>
 
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty msg}">
-            <h3><span class="errorText125">${msg}</span></h3>
+            <h3><span class="errorText250">${msg}</span></h3>
         </c:if>
-        <br>
-        <br>
-        <br>
-
-        <div class="hrefText">
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
-
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">

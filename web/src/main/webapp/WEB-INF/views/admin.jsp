@@ -112,7 +112,7 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5">
 
         <div>
             <span class="formHeaderText1">Add certificate with user id:</span><br><br>

@@ -100,87 +100,79 @@
         </div>
     </div>
 </div>
-<div class="black">
-    <div class="container pt1_5" align="centr">
+<div class="page gray-page mh100">
+    <div class="container pt1_5" align="center">
         <c:if test="${empty users}">
-            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
-                <table class="active" width="500">
-                    <tr>
-                        <td><form:hidden path="courseId" value='${courseIdForPayment}'/></td>
-                    </tr>
-                    <tr>
-                        <td><form:hidden path="userID" value='${userIdForPayment}'/></td>
-                    </tr>
-                    <tr>
-                        <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount"/></td>
-                        <td><form:errors path="payment.amount"/></td>
-                    </tr>
-                </table>
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment"
+                       id="payment">
+                <span class="fontSize180 silver">Enter amount :</span><br><br><br>
+                <form:hidden path="courseId" value='${courseIdForPayment}'/>
+                <form:hidden path="userID" value='${userIdForPayment}'/>
+                <form:input style="color: black" placeholder="0,0" path="payment.amount" name="amount" id="amount"/>
+                <form:errors path="payment.amount"/>
                 <br>
-                <tr>
-                    <td colspan="5" align="center"><input class="black" type="submit" value="Pay"/></td>
-                </tr>
+                <br>
+                <br>
+                <input style="color: black" type="submit" value="Pay">
             </form:form>
         </c:if>
     </div>
-    <div>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty users}">
-            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment" id="payment">
-                <table class="active" width="500">
-                    <table class="active" width="500">
-                        <tr>
-                            <th>Select user</th>
-                            <th>User Id</th>
-                            <th>User E-mail</th>
-                            <th>User first name</th>
-                            <th>User last name</th>
-                        </tr>
-                        <c:forEach items="${users}" var="user">
-                            <tr>
-                                <td><form:radiobutton path="userID" checked="checked" value='${user.userId}'/></td>
-                                <td>${user.userId}</td>
-                                <td>${user.email}</td>
-                                <td>${user.firstName}</td>
-                                <td>${user.lastName}</td>
-                                <td>
-                                </td>
-
-                            </tr>
-                        </c:forEach>
-                    </table>
-
-                    <tr>
-                        <td><form:hidden path="courseId" value='${courseIdForPayment}'/></td>
+            <form:form method="post" commandName="paymentForm" action="selectUserForPayment" name="payment"
+                       id="payment">
+                <span class="fontSize180 silver">Select user and enter amount :</span><br><br><br>
+                <table class="active" width="1000" cols="5">
+                    <tr style="color: #2aabd2">
+                        <th>Select user</th>
+                        <th>User Id</th>
+                        <th>User E-mail</th>
+                        <th>User first name</th>
+                        <th>User last name</th>
                     </tr>
+                    <c:forEach items="${users}" var="user">
+                        <tr>
+                            <td><form:radiobutton path="userID" checked="checked" value='${user.userId}'/></td>
+                            <td>${user.userId}</td>
+                            <td>${user.email}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <br>
+                <br>
+                <form:hidden path="courseId" value='${courseIdForPayment}'/>
+                <table class="active" width="1000">
                     <tr>
-                        <td><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td><form:input placeholder="0,0" path="payment.amount" name="amount" id="amount" /></td>
+                        <td width="120"><form:label path="payment.amount">Enter amount:</form:label></td>
+                        <td style="color: black" width="300"><form:input placeholder="0,0" path="payment.amount"
+                                                                         name="amount"
+                                                                         id="amount"/></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
                 <br>
-                <tr>
-                    <td colspan="5" align="center"><input class="black" type="submit" value="Pay"/></td>
-                </tr>
+                <input style="color: black" type="submit" value="Pay"/>
             </form:form>
-
         </c:if>
     </div>
-
     <br>
     <br>
     <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
-    </c:if>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+    </div>
     <br>
     <br>
     <br>
-
-    <div class="hrefText">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 
