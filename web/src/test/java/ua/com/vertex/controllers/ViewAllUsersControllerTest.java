@@ -37,10 +37,10 @@ public class ViewAllUsersControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Before
-    public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+//    @Before
+//    public void setUp() throws Exception {
+//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+//    }
 
     @Test
     public void viewAllUsersControllerReturnedViewTest() throws Exception {
