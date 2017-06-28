@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Course {
@@ -18,7 +20,8 @@ public class Course {
     @Size(min = 5, max = 256, message = COURSE_NAME_MSG)
     private String name;
 
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    //@DateTimeFormat(pattern = "dd.MM.yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate start;
 
@@ -26,7 +29,7 @@ public class Course {
 
     @DecimalMin("0.00")
     @DecimalMax("999999999.99")
-    private double price;
+    private BigDecimal price;
 
     @Size(min = 2, max = 256, message = COURSE_TEACHER_NAME_MSG)
     private String teacherName;
@@ -40,7 +43,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(int id, String name, LocalDate start, boolean finished, double price, String teacherName, String schedule, String notes) {
+    public Course(int id, String name, LocalDate start, boolean finished, BigDecimal price, String teacherName, String schedule, String notes) {
         this.id = id;
         this.name = name;
         this.start = start;
@@ -83,11 +86,11 @@ public class Course {
         this.finished = finished;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -122,9 +125,9 @@ public class Course {
         Course course = (Course) o;
         return id == course.id &&
                 finished == course.finished &&
-                Double.compare(course.price, price) == 0 &&
                 Objects.equals(name, course.name) &&
                 Objects.equals(start, course.start) &&
+                Objects.equals(price, course.price) &&
                 Objects.equals(teacherName, course.teacherName) &&
                 Objects.equals(schedule, course.schedule) &&
                 Objects.equals(notes, course.notes);
@@ -148,4 +151,57 @@ public class Course {
                 ", notes='" + notes + '\'' +
                 '}';
     }
+
+    public static class Builder {
+        private final Course instance;
+
+        public Builder() {
+            instance = new Course();
+        }
+
+        public Builder setId(int courseId) {
+            instance.setId(courseId);
+            return this;
+        }
+
+        public Builder setName(String courseName) {
+            instance.setName(courseName);
+            return this;
+        }
+
+        public Builder setStart(LocalDate startDate) {
+            instance.setStart(startDate);
+            return this;
+        }
+
+        public Builder setFinished(boolean isFinished) {
+            instance.setFinished(isFinished);
+            return this;
+        }
+
+        public Builder setPrice(BigDecimal price) {
+            instance.setPrice(price);
+            return this;
+        }
+
+        public Builder setTeacherName(String teacherName) {
+            instance.setTeacherName(teacherName);
+            return this;
+        }
+
+        public Builder setShedule(String shedule) {
+            instance.setSchedule(shedule);
+            return this;
+        }
+
+        public Builder setNotes(String notes) {
+            instance.setNotes(notes);
+            return this;
+        }
+
+        public Course getInstance() {
+            return instance;
+        }
+    }
+
 }

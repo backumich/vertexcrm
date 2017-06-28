@@ -61,7 +61,7 @@ public class AddCourseControllerTest {
     @Test
     public void addCourseTest() throws Exception {
         String name = "Test course name";
-        String start = "02.02.2017";
+        String start = "2001-01-01";
 
         MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
                 .setSingleView(new InternalResourceView("/viewAllCourses"))
