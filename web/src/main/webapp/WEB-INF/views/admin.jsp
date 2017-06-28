@@ -84,7 +84,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -150,22 +150,23 @@
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>
             </form:form>
         </div>
-        <br>
-        <br>
-        <br>
 
-        <div class="hrefText">
+        <br>
+        <br>
+        <br>
+        <div class="container pt1_5" align="center">
             <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
+                <h3><span class="errorText250">${msg}</span></h3>
             </c:if>
         </div>
         <br>
         <br>
         <br>
-
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+        <div class="container pt1_5" align="center">
+            <div class="hrefText" align="center">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
         </div>
     </div>
 
