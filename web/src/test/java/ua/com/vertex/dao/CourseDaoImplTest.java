@@ -77,7 +77,10 @@ public class CourseDaoImplTest {
         List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
         assertFalse(MSG, courses.isEmpty());
 
-        courses.forEach(course1 -> assertTrue(course1.getId() > 0));
+        courses.forEach(course1 -> {
+            assertTrue(course1.getId() > 0);
+            assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
+        });
     }
 
 }

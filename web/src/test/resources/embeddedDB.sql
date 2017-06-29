@@ -77,4 +77,4 @@ CREATE TABLE courses (
 
 INSERT INTO Courses VALUES
   (1, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.00, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
-  (2, 'MEGA Java', '2017-02-01 00:00:00', 1, 0.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');
+  (2, 'MEGA Java', '2017-02-01 00:00:00', 1, 100.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');
