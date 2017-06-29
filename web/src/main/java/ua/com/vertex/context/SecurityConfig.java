@@ -1,5 +1,6 @@
 package ua.com.vertex.context;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,27 +19,23 @@ import static ua.com.vertex.beans.Role.ADMIN;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final int ENCRYPTION_STRENGTH = 10;
+    private BCryptPasswordEncoder passwordEncoder;
     private static final int VALIDITY_SECONDS = 604800;
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
             "/403", "/error", "/activationUser", "/getCertificate", "/getCertificate/*", "/showImage"};
     private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData"};
+    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
         return new SpringDataUserDetailsService();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(ENCRYPTION_STRENGTH);
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder());
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -61,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     if (e instanceof BadCredentialsException) {
                         response.sendRedirect("/logIn?error");
                     } else {
-                        response.sendRedirect("/error");
+                        throw new RuntimeException(UNKNOWN_ERROR, e);
                     }
                 })
                 .permitAll()
@@ -78,5 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
+    }
+
+    @Autowired
+    public SecurityConfig(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }
