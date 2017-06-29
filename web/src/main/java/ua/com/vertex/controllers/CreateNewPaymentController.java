@@ -3,21 +3,15 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.PaymentForm;
 import ua.com.vertex.logic.interfaces.*;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
@@ -64,19 +58,6 @@ public class CreateNewPaymentController {
             result.setViewName(ERROR);
         }
         return result;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        DecimalFormat decimalFormat = new DecimalFormat();
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-
-        decimalFormat.setMaximumIntegerDigits(5);
-        decimalFormat.setMaximumFractionDigits(2);
-        binder.registerCustomEditor(BigDecimal.class, new CustomNumberEditor(
-                BigDecimal.class, decimalFormat, true));
     }
 
     @PostMapping(value = "/selectUserForPayment")

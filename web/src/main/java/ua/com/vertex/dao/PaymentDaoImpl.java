@@ -39,7 +39,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
         LOGGER.debug(String.format("Call - paymentDaoInf.createNewPayment((%s), (%s) , (%s)) ;",
                 courseId, userId, payment));
 
-        String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM accounting " +
+        String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM Accounting " +
                 "WHERE course_id = :courseId AND user_id = :userId) , :amount)";
         MapSqlParameterSource source = new MapSqlParameterSource(COURSE_ID, courseId);
         source.addValue(USER_ID, userId);

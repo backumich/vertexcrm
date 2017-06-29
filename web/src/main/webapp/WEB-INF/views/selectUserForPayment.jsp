@@ -141,9 +141,8 @@
                 <table class="active" width="1000">
                     <tr>
                         <td width="120"><form:label path="payment.amount">Enter amount:</form:label></td>
-                        <td style="color: black" width="300"><form:input placeholder="0,0" path="payment.amount"
-                                                                         name="amount"
-                                                                         id="amount"/></td>
+                        <td style="color: black" width="300"><form:input placeholder="0,0" name="amount" id="amount"
+                                path="payment.amount"/></td>
                         <td><form:errors path="payment.amount"/></td>
                     </tr>
                 </table>
