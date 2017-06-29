@@ -11,6 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.dao.interfaces.CourseDaoForTest;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 
 import java.math.BigDecimal;
@@ -31,6 +32,9 @@ public class CourseDaoImplTest {
     @Autowired
     private CourseDaoInf courseDaoInf;
 
+    @Autowired
+    private CourseDaoForTest courseDaoForTest;
+
     private Course course;
 
     @Before
@@ -39,13 +43,6 @@ public class CourseDaoImplTest {
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
 
-    }
-
-    @Test
-    public void createCourseCorrectInsert() throws Exception {
-        int courseId = courseDaoInf.createCourse(course);
-        course.setId(courseId);
-        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }
 
     @Test
@@ -82,7 +79,7 @@ public class CourseDaoImplTest {
 
     @Test
     public void getCourseByIdReturnCorrectData() throws Exception {
-        int courseId = courseDaoInf.createCourse(course);
+        int courseId = courseDaoForTest.createCourse(course);
         course.setId(courseId);
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }

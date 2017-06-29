@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface CourseDaoInf {
 
-    int createCourse(Course course);
-
     List<Course> getAllCoursesWithDept();
 
     List<Course> searchCourseByNameAndStatus(Course course);

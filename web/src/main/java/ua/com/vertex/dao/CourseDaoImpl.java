@@ -34,27 +34,6 @@ public class CourseDaoImpl implements CourseDaoInf {
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
 
     @Override
-    public int createCourse(Course course) throws DataAccessException {
-        LOGGER.debug(String.format("Try insert course -(%s)", course));
-        String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
-                "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource source = new MapSqlParameterSource();
-        source.addValue(COLUMN_COURSE_NAME, course.getName());
-        source.addValue(COLUMN_COURSE_START, course.getStart());
-        source.addValue(COLUMN_COURSE_FINISHED, course.isFinished());
-        source.addValue(COLUMN_COURSE_PRICE, course.getPrice());
-        source.addValue(COLUMN_COURSE_TEACHER_NAME, course.getTeacherName());
-        source.addValue(COLUMN_COURSE_SCHEDULE, course.getSchedule());
-        source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
-
-        jdbcTemplate.update(query, source, keyHolder);
-        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
-        return keyHolder.getKey().intValue();
-    }
-
-    @Override
     public List<Course> getAllCoursesWithDept() throws DataAccessException {
         LOGGER.debug("Try select all courses where user has dept.");
         String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.notes FROM Courses c " +
@@ -133,5 +112,4 @@ public class CourseDaoImpl implements CourseDaoInf {
     public CourseDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
-
 }
