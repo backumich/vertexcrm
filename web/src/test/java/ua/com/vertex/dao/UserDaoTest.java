@@ -5,8 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -41,9 +45,10 @@ public class UserDaoTest {
     private UserDaoInf userDao;
 
     private static final int EXISTING_ID1 = 22;
-    private static final int EXISTING_ID2 = 33;
+    private static final int EXISTING_ID2 = 34;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
-    private static final String EXISTING_EMAIL = "22@test.com";
+    static final String EXISTING_EMAIL = "22@test.com";
+    private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
     private static final String EXISTING_LAST_NAME = "LastName";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
@@ -198,7 +203,6 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.size(), 4);
         assertEquals(MSG, users.get(1), user);
 
     }
@@ -218,4 +222,56 @@ public class UserDaoTest {
     public void addUserForCreateCertificateReturnExc() throws Exception {
         userDao.addUserForCreateCertificate(user);
     }
+
+    @Test
+    public void userForRegistrationCheckReturnEmptyOptional() throws Exception {
+        assertFalse(MSG, userDao.userForRegistrationCheck("test@test.com").isPresent());
+    }
+
+    @Test
+    public void userForRegistrationCheckReturnCorrectData() throws Exception {
+        assertEquals(MSG, new User.Builder().setEmail(EXISTING_EMAIL).setIsActive(false).getInstance()
+                , userDao.userForRegistrationCheck(EXISTING_EMAIL).get());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void registrationUserInsertReturnNullPointerExceptionWhenEmptyUser() throws Exception {
+        userDao.registrationUserInsert(new User());
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void registrationUserInsertReturnDataAccessExceptionWhenEmptyUserHasRole() throws Exception {
+        userDao.registrationUserInsert(new User.Builder().setRole(Role.ADMIN).getInstance());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void registrationUserInsertCorrectInsert() throws Exception {
+        User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
+                setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
+                .setRole(Role.USER).getInstance();
+        userDao.registrationUserInsert(userForInsert);
+        User userForCheck = userDao.getUserByEmail("testInsert@Test.com").get();
+        userForInsert.setUserId(userForCheck.getUserId());
+        assertEquals(MSG, userForInsert, userForCheck);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void registrationUserCorrectUpdate() throws Exception {
+        User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
+                .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
+        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").get());
+        userDao.registrationUserUpdate(userForUpdate);
+        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
+    }
+
+    @Test
+    public void getCourseUsersReturnCorrectData() throws Exception {
+        assertEquals("Maybe method was changed", userDao.getCourseUsers(1).get(0),
+                new User.Builder().setUserId(1).setEmail("email1").setFirstName("FirstName")
+                        .setLastName("LastName").setDiscount(0).getInstance());
+
+    }
+
 }

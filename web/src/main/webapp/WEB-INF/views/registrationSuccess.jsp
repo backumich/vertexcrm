@@ -106,19 +106,25 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5">
+    <div class="container pt1_5" align="center">
 
         <div align="center">
             <table border="0">
                 <tr>
                     <td colspan="2" align="center"><h2>
                         Congratulation ${userFormRegistration.firstName} ${userFormRegistration.lastName},
-                        registration success</h2></td>
-
-                    Your secret session id - ${userID}
+                        registration success!!!</h2></td>
+                    <td colspan="2" align="center"><h2>
+                        An email has been sent to activate your account.</h2></td>
                 </tr>
             </table>
-
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
         </div>
 
     </div>

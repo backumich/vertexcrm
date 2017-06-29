@@ -18,7 +18,7 @@ public class ViewAllUsersController {
     private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "viewAllUsers";
 
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViewAllUsersController.class);
 
     private UserLogic userLogic;
 

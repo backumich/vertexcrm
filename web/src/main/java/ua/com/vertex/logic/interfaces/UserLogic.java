@@ -1,5 +1,6 @@
 package ua.com.vertex.logic.interfaces;
 
+import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
@@ -32,4 +33,13 @@ public interface UserLogic {
 
     List<User> searchUser(String userData) throws Exception;
 
+    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+
+    String encryptPassword(String password);
+
+    void registrationUserInsert(User user) throws DataAccessException;
+
+    void registrationUserUpdate(User user) throws DataAccessException;
+
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
 }

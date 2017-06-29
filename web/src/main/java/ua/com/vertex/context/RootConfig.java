@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -63,5 +64,10 @@ public class RootConfig {
     @Bean
     public PlatformTransactionManager txManager() throws Exception {
         return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
+        return new BCryptPasswordEncoder(Integer.valueOf(getDbProperties().getProperty("PASSWORD_STRENGTH")));
     }
 }

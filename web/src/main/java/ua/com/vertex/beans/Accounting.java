@@ -2,19 +2,17 @@ package ua.com.vertex.beans;
 
 
 public class Accounting {
-    private int dealId;
-    private int userId;
-    private int certificateId;
+    private int dealId, userId, courseId;
     private double courseCoast;
     private double debt;
 
     public Accounting() {
     }
 
-    public Accounting(int dealId, int userId, int certificateId, double courseCoast, double debt) {
+    public Accounting(int dealId, int userId, int courseId, double courseCoast, double debt) {
         this.dealId = dealId;
         this.userId = userId;
-        this.certificateId = certificateId;
+        this.courseId = courseId;
         this.courseCoast = courseCoast;
         this.debt = debt;
     }
@@ -35,12 +33,12 @@ public class Accounting {
         this.userId = userId;
     }
 
-    public int getCertificateId() {
-        return certificateId;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCertificateId(int certificateId) {
-        this.certificateId = certificateId;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public double getCourseCoast() {
@@ -66,11 +64,8 @@ public class Accounting {
 
         Accounting that = (Accounting) o;
 
-        if (dealId != that.dealId) return false;
-        if (userId != that.userId) return false;
-        if (certificateId != that.certificateId) return false;
-        if (Double.compare(that.courseCoast, courseCoast) != 0) return false;
-        return Double.compare(that.debt, debt) == 0;
+        return dealId == that.dealId && userId == that.userId && courseId == that.courseId &&
+                Double.compare(that.courseCoast, courseCoast) == 0 && Double.compare(that.debt, debt) == 0;
     }
 
     @Override
@@ -79,7 +74,7 @@ public class Accounting {
         long temp;
         result = dealId;
         result = 31 * result + userId;
-        result = 31 * result + certificateId;
+        result = 31 * result + courseId;
         temp = Double.doubleToLongBits(courseCoast);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(debt);
@@ -92,9 +87,46 @@ public class Accounting {
         return "Accounting{" +
                 "dealId=" + dealId +
                 ", userId=" + userId +
-                ", certificateId=" + certificateId +
+                ", courseId=" + courseId +
                 ", courseCoast=" + courseCoast +
                 ", debt=" + debt +
                 '}';
+    }
+
+    public static class Builder {
+        private final Accounting instance;
+
+        public Builder() {
+            instance = new Accounting();
+        }
+
+        public Builder setDealId(int dealId) {
+            instance.setDealId(dealId);
+            return this;
+        }
+
+        public Builder setUserId(int userId) {
+            instance.setUserId(userId);
+            return this;
+        }
+
+        public Builder setCourseId(int courseId) {
+            instance.setCourseId(courseId);
+            return this;
+        }
+
+        public Builder setCourseCoast(double courseCoast) {
+            instance.setCourseCoast(courseCoast);
+            return this;
+        }
+
+        public Builder setDept(double dept) {
+            instance.setDebt(dept);
+            return this;
+        }
+
+        public Accounting getInstance() {
+            return instance;
+        }
     }
 }
