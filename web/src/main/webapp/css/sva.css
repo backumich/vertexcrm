@@ -59,3 +59,14 @@
 a:hover {
     color: white;
 }
+
+.block {
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+.block img {
+    max-width: 100%;
+    max-height: 100%;
+}
