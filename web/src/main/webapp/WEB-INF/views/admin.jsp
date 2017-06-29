@@ -44,17 +44,13 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -73,7 +69,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -82,9 +77,8 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -112,12 +106,12 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5">
 
         <div>
             <span class="formHeaderText1">Add certificate with user id:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
-                <input type="submit" name="addCertificate" value="Add Certificate"/>
+                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
             </form:form>
         </div>
         <br>
@@ -127,7 +121,7 @@
         <div>
             <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
-                <input type="submit" name="addCertificate" value="Add Certificate"/>
+                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
             </form:form>
         </div>
         <br>
@@ -137,29 +131,30 @@
         <div>
             <span class="formHeaderText1">Create new payment:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="createPayment">
-                <input type="submit" name="createPayment" value="Create new payment"/>
+                <input class="black" type="submit" name="createPayment" value="Create new payment"/>
             </form:form>
         </div>
-        <br>
-        <br>
-        <br>
 
-        <div class="hrefText">
+        <br>
+        <br>
+        <br>
+        <div class="container pt1_5" align="center">
             <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
+                <h3><span class="errorText250">${msg}</span></h3>
             </c:if>
         </div>
         <br>
         <br>
         <br>
-
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+        <div class="container pt1_5" align="center">
+            <div class="hrefText" align="center">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
         </div>
     </div>
-
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
