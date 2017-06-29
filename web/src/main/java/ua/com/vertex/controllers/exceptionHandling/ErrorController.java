@@ -14,28 +14,27 @@ import static ua.com.vertex.context.SecurityConfig.UNKNOWN_ERROR;
 public class ErrorController {
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
-    private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
+    private static final String INTERNAL_SERVER_ERROR = "Internal server error";
+    private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
+    private static final Logger LOGGER = LogManager.getLogger(ErrorController.class);
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, Model model) {
         Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
-        String message;
 
         if (UNKNOWN_ERROR.equals(throwable.getMessage())) {
-            message = UNKNOWN_ERROR;
-            LOGGER.warn(message, throwable);
-            model.addAttribute(ERROR_MESSAGE, message);
+            LOGGER.warn(UNKNOWN_ERROR, throwable);
+            model.addAttribute(ERROR_MESSAGE, UNKNOWN_ERROR);
         } else {
-            message = "Internal server error";
-            LOGGER.warn(message, throwable);
-            model.addAttribute(ERROR_MESSAGE, message);
+            LOGGER.warn(INTERNAL_SERVER_ERROR, throwable);
+            model.addAttribute(ERROR_MESSAGE, INTERNAL_SERVER_ERROR);
         }
         return ERROR;
     }
 
     @RequestMapping(value = "/404")
     public String handle404(Model model) {
-        model.addAttribute(ERROR_MESSAGE, "404 — resource not found");
+        model.addAttribute(ERROR_MESSAGE, NOT_FOUND);
         return ERROR;
     }
 }
