@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "/viewAllCourses")
+//@RequestMapping(value = "/viewAllCourses")
 @SessionAttributes(value = "viewAllCourses")
 public class ViewAllCoursesController {
     private static final String ERROR_JSP = "error";
@@ -24,7 +24,8 @@ public class ViewAllCoursesController {
 
     private CourseLogic courseLogic;
 
-    @GetMapping
+//    @GetMapping
+    @RequestMapping(value = "/viewAllCourses")
     public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) {
         ModelAndView modelAndView = new ModelAndView();
         try {
@@ -33,28 +34,10 @@ public class ViewAllCoursesController {
             modelAndView.addObject("courses", courses);
             modelAndView.setViewName(PAGE_JSP);
             LOGGER.debug("Received a list of all courses and transferred to the model");
-            String allCourses = "";
-            for (Course course : courses) {
-                allCourses += course.getName() + "|";
-            }
-            LOGGER.debug("Quantity courses -" + courses.size());
-            LOGGER.debug("All courses list -" + allCourses);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            modelAndView.setViewName(ERROR_JSP);
-        }
-        return modelAndView;
-    }
-
-    @PostMapping
-    public ModelAndView reload(@ModelAttribute DataNavigator dataNavigator) {
-        ModelAndView modelAndView = new ModelAndView();
-        try {
-            List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
-            modelAndView.addObject("courses", courses);
-            modelAndView.addObject("viewAllCourses", dataNavigator);
-            modelAndView.setViewName(PAGE_JSP);
-            LOGGER.debug("Received a list of all courses and transferred to the model");
+//            String allCourses = "";
+//            for (Course course : courses) {
+//                allCourses += course.getName() + "|";
+//            }
 
             String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
             LOGGER.debug("Quantity courses -" + courses.size());
@@ -65,6 +48,26 @@ public class ViewAllCoursesController {
         }
         return modelAndView;
     }
+
+//    @PostMapping
+//    public ModelAndView reload(@ModelAttribute DataNavigator dataNavigator) {
+//        ModelAndView modelAndView = new ModelAndView();
+//        try {
+//            List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
+//            modelAndView.addObject("courses", courses);
+//            modelAndView.addObject("viewAllCourses", dataNavigator);
+//            modelAndView.setViewName(PAGE_JSP);
+//            LOGGER.debug("Received a list of all courses and transferred to the model");
+//
+//            String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
+//            LOGGER.debug("Quantity courses -" + courses.size());
+//            LOGGER.debug("All courses list -" + allCourses);
+//        } catch (Exception e) {
+//            LOGGER.warn(e);
+//            modelAndView.setViewName(ERROR_JSP);
+//        }
+//        return modelAndView;
+//    }
 
     @ModelAttribute
     public DataNavigator createDataNavigator() {

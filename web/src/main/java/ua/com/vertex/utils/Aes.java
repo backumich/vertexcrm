@@ -16,23 +16,23 @@ public class Aes {
     }
 
     private static String hex(byte[] bytes) {
-        String r = "";
+        StringBuilder r = new StringBuilder();
         for (byte aByte : bytes) {
-            r = r + pad2(Integer.toHexString(aByte + 128));
+            r.append(pad2(Integer.toHexString(aByte + 128)));
         }
-        return r;
+        return r.toString();
     }
 
     private static String safePassword(String unsafe) {
-        String safe = unsafe;
+        StringBuilder safe = new StringBuilder(unsafe);
         if (safe.length() > 16) {
-            safe = safe.substring(0, 16);
+            safe = new StringBuilder(safe.substring(0, 16));
         }
         int nn = safe.length();
         for (int i = nn - 1; i < 15; i++) {
-            safe = safe + "*";
+            safe.append("*");
         }
-        return safe;
+        return safe.toString();
     }
 
     public static String encrypt(String value, String password) {
