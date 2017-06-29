@@ -1,6 +1,5 @@
 package ua.com.vertex.logic.interfaces;
 
-import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
@@ -23,8 +22,6 @@ public interface UserLogic {
     Optional<byte[]> getImage(int userId, String imageType);
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
-
-//    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;
 

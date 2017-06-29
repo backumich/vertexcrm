@@ -96,19 +96,9 @@ public class CourseDaoImpl implements CourseDaoInf {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             parameters.addValue("id", courseId);
             course = jdbcTemplate.queryForObject(query, parameters, new CourseDaoImpl.CoursesRowMapping());
-//            course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(COLUMN_COURSE_ID, courseId),
-//                    (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
-//                            .setName(resultSet.getString(COLUMN_COURSE_NAME))
-//                            .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
-//                            .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
-//                            .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-//                            .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
-//                            .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
-//                            .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
         }
-
         return Optional.ofNullable(course);
     }
 

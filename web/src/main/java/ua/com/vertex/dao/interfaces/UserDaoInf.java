@@ -26,11 +26,7 @@ public interface UserDaoInf {
 
     List<User> getAllUsers(DataNavigator dataNavigator) throws SQLException;
 
-//    List<Course> getAllCourses(DataNavigator dataNavigator);
-
     int getQuantityUsers() throws SQLException;
-
-//    int getQuantityCourses() throws SQLException;
 
     Optional<User> getUserDetailsByID(int userID) throws SQLException;
 

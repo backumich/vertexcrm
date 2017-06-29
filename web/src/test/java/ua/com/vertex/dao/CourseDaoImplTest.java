@@ -13,12 +13,13 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -60,7 +61,23 @@ public class CourseDaoImplTest {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
-        assertNotEquals(MSG, courseDaoInf.getCourseById(2).orElse(new Course()), course);
+    }
+
+    @Test
+    public void addCourseIncorrectInsert() throws Exception {
+        int courseId = courseDaoInf.addCourse(course);
+        course.setId(courseId);
+        assertNotEquals(MSG, courseDaoInf.getCourseById(-1).orElse(new Course()), course);
+    }
+
+    @Test
+    public void getAllCourses() throws Exception {
+        DataNavigator dataNavigator = new DataNavigator();
+
+        List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
+        assertFalse(MSG, courses.isEmpty());
+
+        courses.forEach(course1 -> assertTrue(course1.getId() > 0));
     }
 
 }
