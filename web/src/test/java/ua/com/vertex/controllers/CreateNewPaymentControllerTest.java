@@ -14,6 +14,7 @@ import ua.com.vertex.logic.interfaces.PaymentLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -59,7 +60,7 @@ public class CreateNewPaymentControllerTest {
         user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
         course = new Course.Builder().setId(1).setName("JavaPro").
-                setStart(LocalDateTime.of(2017, 4, 25, 12, 30)).setFinished(false)
+                setStart(LocalDate.of(2017, 4, 25)).setFinished(false)
                 .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
         paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
                 .setAmount(BigDecimal.valueOf(1000))

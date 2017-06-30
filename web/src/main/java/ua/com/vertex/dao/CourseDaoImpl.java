@@ -25,6 +25,14 @@ import java.util.Optional;
 
 @Repository
 public class CourseDaoImpl implements CourseDaoInf {
+    private static final String COLUMN_COURSE_ID = "id";
+    private static final String COLUMN_COURSE_NAME = "name";
+    private static final String COLUMN_COURSE_TEACHER_NAME = "teacher_name";
+    private static final String COLUMN_COURSE_START = "start";
+    private static final String COLUMN_COURSE_FINISHED = "finished";
+    private static final String COLUMN_COURSE_PRICE = "price";
+    private static final String COLUMN_COURSE_NOTES = "notes";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
@@ -125,7 +133,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         return jdbcTemplate.query(query, (resultSet, i) -> new Course.Builder()
                 .setId(resultSet.getInt(COLUMN_COURSE_ID))
                 .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
+                .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
                 .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
                 .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
                 .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))

@@ -96,7 +96,7 @@ public class CourseDaoImplTest {
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
 
         Course course = new Course.Builder().setId(1).setName("JavaPro")
-                .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
+                .setStart(LocalDate.of(2017, 2, 1))
                 .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
 
         assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
