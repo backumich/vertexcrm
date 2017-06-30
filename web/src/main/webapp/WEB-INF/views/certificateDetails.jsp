@@ -113,7 +113,7 @@
         <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
 
         <sf:form cssClass="black" method="get" action="getCertificate">
-            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
+            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20" maxlength="19"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
@@ -155,7 +155,9 @@
             </tr>
             <tr>
                 <td>Certificate Link:</td>
-                <td class="fontSize70">localhost:8080/getCertificate/${certificate.certificateUid}</td>
+                <td class="fontSize70">
+                    <a href="<c:url value="/getCertificate/${certificate.certificateUid}"/>">
+                        localhost:8080/getCertificate/${certificate.certificateUid}</a></td>
             </tr>
         </table>
         <br>

@@ -3,7 +3,9 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -87,40 +89,42 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     @Override
     public Optional<Certificate> getCertificateById(int certificateId) {
+
+        LOGGER.debug(logInfo.getId() + "Retrieving certificate by certificate UID=" + certificateId);
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certificateId";
 
-        Certificate certificate = null;
+        Certificate certificate;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No certificate in DB, id=" + certificateId);
+            certificate = null;
         }
 
-        if (certificate != null) {
-            LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
-        }
+        LOGGER.debug(logInfo.getId() +
+                (certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
 
         return Optional.ofNullable(certificate);
     }
 
     @Override
     public Optional<Certificate> getCertificateByUid(String certificateUid) {
+
+        LOGGER.debug(logInfo.getId() + "Retrieving certificate by certificate UID=" + certificateUid);
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certificate_uid =:certificateUid";
 
-        Certificate certificate = null;
+        Certificate certificate;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_UID, certificateUid), new CertificateRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No certificate in DB, UID=" + certificateUid);
+        } catch (IncorrectResultSizeDataAccessException | DataIntegrityViolationException e) {
+            certificate = null;
         }
 
-        if (certificate != null) {
-            LOGGER.debug(logInfo.getId() + "Retrieved certificate UID=" + certificateUid);
-        }
+        LOGGER.debug(logInfo.getId() +
+                (certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=") + certificateUid);
 
         return Optional.ofNullable(certificate);
     }

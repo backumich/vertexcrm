@@ -1,7 +1,5 @@
 package ua.com.vertex.controllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.util.Map;
 
@@ -17,9 +14,6 @@ import java.util.Map;
 public class CertificateDetailsPageController {
 
     private final CertificateLogic certLogic;
-    private final LogInfo logInfo;
-
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDetailsPageController.class);
 
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     static final String ERROR = "error";
@@ -40,22 +34,15 @@ public class CertificateDetailsPageController {
     }
 
     private String process(String certificateUid, Model model) {
-        String view = CERTIFICATE_DETAILS;
-
         certificateUid = certificateUid.replaceAll("-", "");
-        try {
-            Map<String, Object> attributes = certLogic.getUserAndCertificate(certificateUid);
-            model.addAllAttributes(attributes);
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
-        }
-        return view;
+        Map<String, Object> attributes = certLogic.getUserAndCertificate(certificateUid);
+        model.addAllAttributes(attributes);
+
+        return CERTIFICATE_DETAILS;
     }
 
     @Autowired
-    public CertificateDetailsPageController(CertificateLogic certLogic, LogInfo logInfo) {
+    public CertificateDetailsPageController(CertificateLogic certLogic) {
         this.certLogic = certLogic;
-        this.logInfo = logInfo;
     }
 }

@@ -3,20 +3,18 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.utils.LogInfo;
 
 import java.util.*;
-
-import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
 
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
@@ -29,7 +27,6 @@ public class CertificateLogicImpl implements CertificateLogic {
 
     private static final String USER = "user";
     private static final String CERTIFICATE = "certificate";
-    private static final String ERROR = "error";
 
     @Autowired
     public CertificateLogicImpl(UserDaoInf userDaoInf, CertificateDaoInf certificateDaoInf, LogInfo logInfo) {
@@ -80,29 +77,15 @@ public class CertificateLogicImpl implements CertificateLogic {
     }
 
     @Override
-    public Map<String, Object>
-    getUserAndCertificate(String certificateUid) {
+    public Map<String, Object> getUserAndCertificate(String certificateUid) {
         LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificateUid);
 
-        Certificate certificate;
         Map<String, Object> attributes = new HashMap<>();
-        try {
-            certificate = certificateDaoInf.getCertificateByUid(certificateUid).orElse(new Certificate());
-            if (!EMPTY_CERTIFICATE.equals(certificate)) {
-                attributes.put(CERTIFICATE, certificate);
-                User user = userDaoInf.getUser(certificate.getUserId()).orElse(new User());
-                attributes.put(USER, user);
-            } else {
-                attributes.put(ERROR, "No certificate with this ID");
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            LOGGER.warn(logInfo.getId() + "Error retrieving certificate by UID=" + certificateUid +
-                    ". Database might be offline");
-            attributes.put(ERROR, "Database might be offline");
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId() + "Error retrieving certificate by UID=" + certificateUid);
-            attributes.put(ERROR, "No certificate with this ID");
-        }
+        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
+                .orElseThrow(NoCertificateException::new);
+        User user = userDaoInf.getUser(certificate.getUserId()).orElse(new User());
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
 
         return attributes;
     }
