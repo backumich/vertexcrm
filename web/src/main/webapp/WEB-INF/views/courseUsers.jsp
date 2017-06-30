@@ -111,18 +111,19 @@
     <br>
     <table class="tableSpacing">
         <tr class="fontSize125 tableHeader">
-            <td class="labelWidth150">Email</td>
+            <td class="labelWidth200">Email</td>
             <td class="labelWidth150">First Name</td>
             <td class="labelWidth150">Last Name</td>
             <td class="labelWidth150">Phone</td>
             <td class="labelWidth150">Remove from course</td>
         </tr>
         <tr></tr>
+        <tr></tr>
         <c:forEach items="${assignedUsers}" var="assignedUser">
             <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dto">
+                <input type="hidden" name="courseId" value="${dto.courseId}">
+                <input type="hidden" name="email" value="${assignedUser.email}">
                 <tr>
-                    <input type="hidden" name="courseId" value="${dto.courseId}">
-                    <input type="hidden" name="email" value="${assignedUser.email}">
                     <td>${assignedUser.email}</td>
                     <td>${assignedUser.firstName}</td>
                     <td>${assignedUser.lastName}</td>
@@ -141,9 +142,9 @@
         <table>
             <tr>
                 <td><label for="searchParam" class="fontSize125 labelWidth300">
-                    Enter first name/last name/email:</label></td>
+                    Enter first name, or last name, or email:</label></td>
                 <td><input type="text" name="searchParam" id="searchParam" maxlength="255"
-                           class="labelWidth200 black"/></td>
+                           placeholder="First name, or last name, or email" class="labelWidth200 black"/></td>
             </tr>
             <tr>
                 <td><span class="fontSize125">Select type of search:</span></td>
@@ -183,23 +184,24 @@
         <br>
         <table class="tableSpacing">
             <tr class="fontSize125 tableHeader">
-                <td class="labelWidth150">Email</td>
+                <td class="labelWidth200">Email</td>
                 <td class="labelWidth150">First Name</td>
                 <td class="labelWidth150">Last Name</td>
                 <td class="labelWidth150">Phone</td>
                 <td class="labelWidth150">Assign to course</td>
             </tr>
             <tr></tr>
+            <tr></tr>
             <c:forEach items="${freeUsers}" var="freeUser">
                 <sf:form action="assignUser" method="post" commandName="dto">
+                    <input type="hidden" name="searchType" value="${dto.searchType}">
+                    <input type="hidden" name="searchParam" value="${dto.searchParam}">
+                    <input type="hidden" name="courseId" value="${dto.courseId}">
+                    <input type="hidden" name="email" value="${freeUser.email}">
+                    <input type="hidden" name="firstName" value="${freeUser.firstName}">
+                    <input type="hidden" name="lastName" value="${freeUser.lastName}">
+                    <input type="hidden" name="phone" value="${freeUser.phone}">
                     <tr>
-                        <input type="hidden" name="searchType" value="${dto.searchType}">
-                        <input type="hidden" name="searchParam" value="${dto.searchParam}">
-                        <input type="hidden" name="courseId" value="${dto.courseId}">
-                        <input type="hidden" name="email" value="${freeUser.email}">
-                        <input type="hidden" name="firstName" value="${freeUser.firstName}">
-                        <input type="hidden" name="lastName" value="${freeUser.lastName}">
-                        <input type="hidden" name="phone" value="${freeUser.phone}">
                         <td>${freeUser.email}</td>
                         <td>${freeUser.firstName}</td>
                         <td>${freeUser.lastName}</td>
