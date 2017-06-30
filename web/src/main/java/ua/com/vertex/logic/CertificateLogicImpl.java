@@ -17,7 +17,6 @@ import ua.com.vertex.utils.LogInfo;
 import java.util.*;
 
 import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
-import static ua.com.vertex.beans.User.EMPTY_USER;
 
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
@@ -81,16 +80,17 @@ public class CertificateLogicImpl implements CertificateLogic {
     }
 
     @Override
-    public Map<String, Object> getUserAndCertificate(String certificateUid) {
+    public Map<String, Object>
+    getUserAndCertificate(String certificateUid) {
         LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificateUid);
 
         Certificate certificate;
         Map<String, Object> attributes = new HashMap<>();
         try {
-            certificate = certificateDaoInf.getCertificateByUid(certificateUid).orElse(EMPTY_CERTIFICATE);
+            certificate = certificateDaoInf.getCertificateByUid(certificateUid).orElse(new Certificate());
             if (!EMPTY_CERTIFICATE.equals(certificate)) {
                 attributes.put(CERTIFICATE, certificate);
-                User user = userDaoInf.getUser(certificate.getUserId()).orElse(EMPTY_USER);
+                User user = userDaoInf.getUser(certificate.getUserId()).orElse(new User());
                 attributes.put(USER, user);
             } else {
                 attributes.put(ERROR, "No certificate with this ID");
