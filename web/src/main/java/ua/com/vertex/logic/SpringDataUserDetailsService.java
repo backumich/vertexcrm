@@ -6,14 +6,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class SpringDataUserDetailsService implements UserDetailsService {
 
     private LoggingLogic loggingLogic;
