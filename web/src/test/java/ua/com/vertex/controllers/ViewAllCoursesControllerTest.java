@@ -50,8 +50,8 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(forwardedUrl("viewAllCourses"))
                 .andExpect(model().attributeExists("courses"))
                 //.andExpect(model().attribute("courses", hasSize(3)))
-                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(1))))))
-                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(3))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
                 .andExpect(model().attributeExists("viewAllCourses"))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentNamePage", is("viewAllCourses"))))
@@ -79,8 +79,8 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(forwardedUrl("viewAllCourses"))
                 .andExpect(model().attributeExists("courses"))
                 //.andExpect(model().attribute("courses", hasSize(3)))
-                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(1))))))
-                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(2))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
                 .andExpect(model().attributeExists("viewAllCourses"))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentNamePage", is("viewAllCourses"))))
