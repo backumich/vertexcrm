@@ -10,3 +10,5 @@ buildNumber.properties
 *.iml
 /.idea/
 /web/logs/
+*.gitignore
+pdfData

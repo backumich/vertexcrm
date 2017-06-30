@@ -12,7 +12,6 @@ import ua.com.vertex.logic.interfaces.LoggingLogic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
@@ -21,18 +20,14 @@ public class SpringDataUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = loggingLogic.logIn(username);
+        User user = loggingLogic.logIn(username)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
 
-        if (!userOptional.isPresent()) {
-            throw new UsernameNotFoundException(String.format("User %s not found", username));
-        } else {
-            User user = userOptional.get();
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
-            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                    authorities);
-        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                authorities);
     }
 
     @Autowired

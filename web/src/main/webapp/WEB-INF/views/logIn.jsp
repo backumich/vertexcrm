@@ -152,7 +152,7 @@
     <form action="${pageContext.request.contextPath}/logIn" method="post">
         <table>
             <tr>
-                <td><span class="fontSize125 bold silver">E-mail:</span></td>
+                <td class="labelWidth"><span class="fontSize125 bold silver">E-mail:</span></td>
                 <c:if test="${param.error == null}">
                     <td><input type="text" name="username"/></td>
                 </c:if>
@@ -161,7 +161,7 @@
                 </c:if>
             </tr>
             <tr>
-                <td><span class="fontSize125 bold silver">Password:</span></td>
+                <td class="labelWidth"><span class="fontSize125 bold silver">Password:</span></td>
                 <c:if test="${param.error == null}">
                     <td><input type="password" name="password"/></td>
                 </c:if>
@@ -170,16 +170,14 @@
                 </c:if>
             </tr>
             <tr>
-                <td align="right" colspan="2">
-                    <label for="remember_me" class="fontSize125 bold silver">Remember me</label>
-                    <input id="remember_me" name="remember-me" type="checkbox"/>
-                </td>
+                <td><label for="remember_me" class="fontSize125 bold silver">Remember me</label></td>
+                <td><input id="remember_me" name="remember-me" type="checkbox"/></td>
             </tr>
             <tr>
                 <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
             </tr>
             <tr>
-                <td align="right" colspan="2"><input type="submit" value="Send" class="black"></td>
+                <td class="buttonPadding"><input type="submit" value="Log in" class="black"></td>
             </tr>
         </table>
     </form>

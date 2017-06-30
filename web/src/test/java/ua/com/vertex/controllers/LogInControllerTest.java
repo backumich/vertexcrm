@@ -92,20 +92,6 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "NONE")
-    public void showLogInPageForLoggedInUserReturnsErrorPageIfWrongAuthorities() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn(EMAIL);
-        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
-
-        mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("error"))
-                .build();
-        mockMvc.perform(get("/logIn"))
-                .andExpect(view().name("error"));
-    }
-
-    @Test
     @WithMockUser(authorities = "USER")
     public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
 

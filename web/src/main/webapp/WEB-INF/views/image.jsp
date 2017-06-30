@@ -119,12 +119,10 @@
 
     <br><br>
 
-
     <div class="href">
-        <a href="<c:url value="/certificateDetails"/>">Back</a> |
+        <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
-
 </div>
 
 

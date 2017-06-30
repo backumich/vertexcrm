@@ -48,8 +48,15 @@ public class CourseLogicImpl implements CourseLogic {
         return courseDao.addCourse(course);
     }
 
+    @Override
+    public List<Course> getAllCoursesWithDept() {
+        LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
+        return courseDao.getAllCoursesWithDept();
+    }
+
     @Autowired
     public CourseLogicImpl(CourseDaoInf courseDao) {
         this.courseDao = courseDao;
     }
+
 }

@@ -17,9 +17,18 @@ import ua.com.vertex.utils.DataNavigator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import ua.com.vertex.beans.Course;
+import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.dao.interfaces.CourseDaoInf;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -83,4 +92,13 @@ public class CourseDaoImplTest {
         });
     }
 
+    @Test
+    public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
+
+        Course course = new Course.Builder().setId(1).setName("JavaPro")
+                .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
+                .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
+
+        assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
+    }
 }

@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static ua.com.vertex.beans.Certificate.Builder;
+import static ua.com.vertex.beans.Certificate.EMPTY_CERTIFICATE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -30,7 +31,6 @@ public class CertificateDaoTest {
 
     private final String MSG = "Maybe method was changed";
 
-
     @Autowired
     private CertificateDaoInf certificateDao;
 
@@ -38,11 +38,12 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
-        //noinspection OptionalGetWithoutIsPresent
+
+        //noinspection ConstantConditions
         assertEquals(EXISTING_ID, optional.get().getCertificationId());
     }
 
@@ -66,35 +67,75 @@ public class CertificateDaoTest {
     }
 
     @Test
-    public void getAllCertificateByUserEmailReturnCorectData() throws Exception {
+    public void getAllCertificateByUserEmailReturnsCorrectData() throws Exception {
         ArrayList<Certificate> certificates = new ArrayList<>();
-        certificates.add(new Certificate.Builder().setCertificationId(1).setUserId(0)
-                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage(null).getInstance());
+        certificates.add(new Builder()
+                .setCertificationId(1)
+                .setCertificateUid("1492779828793891")
+                .setUserId(0)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage(null)
+                .getInstance());
         assertEquals(MSG, certificates, certificateDao.getAllCertificatesByUserEmail("email1"));
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Test(expected = NoSuchElementException.class)
-    @WithMockUser
+    @WithAnonymousUser
     public void getCertificateByIdReturnNull() throws Exception {
+        //noinspection ConstantConditions,ResultOfMethodCallIgnored
         certificateDao.getCertificateById(-1).get();
     }
 
     @Test
-    @WithMockUser
-    public void getCertificateByIdReturnReturnCorectData() throws Exception {
+    @WithAnonymousUser
+    public void getCertificateByIdReturnReturnsCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
-            assertEquals(MSG, new Certificate.Builder().setCertificationId(1).setUserId(1)
-                    .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                    .setLanguage("Java").getInstance(), certificateDao.getCertificateById(1).get());
+            assertEquals(MSG, new Builder()
+                    .setCertificationId(1)
+                    .setCertificateUid("1492779828793891")
+                    .setUserId(1)
+                    .setCertificationDate(LocalDate.parse("2016-12-01"))
+                    .setCourseName("Java Professional")
+                    .setLanguage("Java")
+                    .getInstance(), certificateDao.getCertificateById(1).get());
         }
     }
 
     @Test
-    public void addCertificateReturnCorectCertificationId() throws Exception {
-        assertEquals("", certificateDao.addCertificate(new Certificate.Builder().setUserId(1)
-                .setCertificationDate(LocalDate.parse("2016-12-01")).setCourseName("Java Professional")
-                .setLanguage("Java").getInstance()), 501);
+    @WithAnonymousUser
+    public void addCertificateReturnCorrectCertificationId() throws Exception {
+
+        Certificate certificate = new Certificate.Builder()
+                .setUserId(44)
+                .setCertificateUid("1492779828793891")
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage("Java")
+                .getInstance();
+        int result = certificateDao.addCertificate(certificate);
+        certificate.setCertificationId(result);
+
+        //noinspection ConstantConditions
+        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByUidReturnsCertificate() {
+        assertEquals(new Builder()
+                .setCertificationId(222)
+                .setCertificateUid("1492779828793888")
+                .setUserId(22)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional")
+                .setLanguage("Java")
+                .getInstance(), certificateDao.getCertificateByUid("1492779828793888").orElse(EMPTY_CERTIFICATE));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByNonExistingUidReturnsEmptyOptional() {
+        assertEquals(EMPTY_CERTIFICATE, certificateDao.getCertificateByUid("0").orElse(EMPTY_CERTIFICATE));
     }
 }

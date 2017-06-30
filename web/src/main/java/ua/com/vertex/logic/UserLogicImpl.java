@@ -3,6 +3,8 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
@@ -21,6 +23,7 @@ public class UserLogicImpl implements UserLogic {
 
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     private final UserDaoInf userDao;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public List<String> getAllUserIds() {
@@ -100,9 +103,43 @@ public class UserLogicImpl implements UserLogic {
         return userDao.searchUser(userData);
     }
 
+    @Override
+    public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
+        LOGGER.debug(String.format("Call - userDao.userForRegistrationCheck(%s) ;", userEmail));
+        return userDao.userForRegistrationCheck(userEmail);
+    }
+
+    @Override
+    public void registrationUserInsert(User user) throws DataAccessException {
+        LOGGER.debug(String.format("Call - userDao.registrationUserInsert(%s) ;", user));
+        user.setPassword(encryptPassword(user.getPassword()));
+        userDao.registrationUserInsert(user);
+    }
+
+    @Override
+    public void registrationUserUpdate(User user) throws DataAccessException {
+        LOGGER.debug(String.format("Call - userDao.registrationUserUpdate(%s) ;", user));
+        user.setPassword(encryptPassword(user.getPassword()));
+        userDao.registrationUserUpdate(user);
+    }
+
+    @Override
+    public String encryptPassword(String password) {
+        LOGGER.debug("Password encryption");
+        return bCryptPasswordEncoder.encode(password);
+    }
+
     @Autowired
-    public UserLogicImpl(UserDaoInf userDao) {
+    public UserLogicImpl(UserDaoInf userDao, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDao = userDao;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Override
+    public List<User> getCourseUsers(int courseId) {
+
+        LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
+        return userDao.getCourseUsers(courseId);
     }
 
 }

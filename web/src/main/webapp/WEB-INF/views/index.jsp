@@ -112,29 +112,34 @@
             </div>
         </main>
 
-        <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
-            <sec:authentication property="principal.username" var="authenticated"/>
+        <sec:authorize access="hasAuthority('ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+        <sec:authorize access="hasAuthority('USER')">
+            <sec:authentication property="principal.username" var="user"/>
         </sec:authorize>
 
         <div class="href">
-            <c:if test="${authenticated == null}">
+            <c:if test="${user == null && admin == null}">
                 <a href="<c:url value="/registration"/>">Register</a> |
-                <a href="<c:url value="/logIn"/>">Log in</a>
+                <a href="<c:url value="/logIn"/>">Log in</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <c:if test="${authenticated != null}">
-                <a href="<c:url value="/logIn"/>">User profile</a> |
-                <a href="<c:url value="/logOut"/>">Log out</a>
+            <c:if test="${user != null}">
+                <a href="<c:url value="/logIn"/>">User page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <br><br>
-            <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a> |
-            <a href="<c:url value="/user"/>">View user.jsp</a> |
-            <a href="<c:url value="/viewAllUsers"/>">View all users</a>|
-            <a href="<c:url value="/viewAllCourses"/>">View all courses</a>|
-            <a href="<c:url value="/admin"/>">View admin.jsp</a>
+            <c:if test="${admin != null}">
+                <a href="<c:url value="/admin"/>">Admin page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
+                <a href="<c:url value="/viewAllUsers"/>">View all users</a>
+                <a href="<c:url value="/viewAllCourses"/>">View all courses</a>
+            </c:if>
         </div>
-
     </div>
 </div>
 

@@ -34,13 +34,10 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
@@ -62,7 +59,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -71,9 +67,8 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -101,14 +96,10 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
-
+    <div class="container pt1_5" align="center">
         <form:form cssClass="buttonText" method="post" commandName="certificate" action="checkCertificateWithUserId">
-
-            <table border="0" align="center" style="align-content: center">
-                <tr>
-                    <td colspan="2" align="center"><h2>Add new certificate :</h2></td>
-                </tr>
+            <span class="fontSize180 silver">Add new certificate :</span><br><br><br>
+            <table class="active">
                 <tr>
                     <td><form:hidden path="certificationId" value="1"/></td>
                 </tr>
@@ -116,42 +107,49 @@
                     <td><form:hidden path="userId" value="${userIdForCertificate}"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="certificationDate">Certification date :</form:label></td>
-                    <td><form:input placeholder="yyyy-MM-dd" type="date" path="certificationDate"/></td>
+                    <td width="150" align="left"><form:label path="certificationDate">Certification date :</form:label></td>
+                    <td style="color: black;"><form:input placeholder="yyyy-MM-dd" type="date" path="certificationDate"/></td>
                     <td><form:errors path="certificationDate"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="courseName">Course name:</form:label></td>
-                    <td><form:input placeholder="Course name:" path="courseName"/></td>
+                    <td width="150" align="left"><form:label path="courseName">Course name:</form:label></td>
+                    <td style="color: black;"><form:input placeholder="Course name:" path="courseName"/></td>
                     <td><form:errors path="courseName"/></td>
                 </tr>
                 <tr>
-                    <td><form:label path="language">Language:</form:label></td>
-                    <td><form:input placeholder="Language:" path="language"/></td>
+                    <td width="150" align="left"><form:label path="language">Language:</form:label></td>
+                    <td style="color: black;"><form:input placeholder="Language:" path="language"/></td>
                     <td><form:errors path="language"/></td>
                 </tr>
+            </table>
+            <br>
+            <table class="active">
                 <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Add certificate"/></td>
+                    <td></td>
+                    <td colspan="5" style="color: black" align="center"><input type="submit" value="Add"/></td>
                 </tr>
             </table>
         </form:form>
-        <br>
-        <br>
-
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty msg}">
-            <h3><span class="errorText125">${msg}</span></h3>
+            <h3><span class="errorText250">${msg}</span></h3>
         </c:if>
-        <br>
-        <br>
-        <br>
-
-        <div class="hrefText">
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
-
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">

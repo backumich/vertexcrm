@@ -9,4 +9,6 @@ public interface CourseLogic {
     List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
     int addCourse(Course course) throws Exception;
+
+    List<Course> getAllCoursesWithDept();
 }

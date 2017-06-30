@@ -1,4 +1,3 @@
-
 package ua.com.vertex.context;
 
 import org.springframework.context.annotation.Configuration;

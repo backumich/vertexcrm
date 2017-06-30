@@ -1,9 +1,12 @@
 package ua.com.vertex.utils;
 
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 public class Aes {
 
@@ -76,21 +79,4 @@ public class Aes {
         }
         return toReturn;
     }
-
-//    public static void main(String[] args) {
-//        String text = "222";
-//        String password = "ArgentinaJamaica";
-//        try {
-//            System.out.println("text is " + text);
-//            System.out.println("password is " + password);
-//            String cripted = Aes.encrypt(text, password);
-//            System.out.println("cripted is " + cripted);
-//            String decripted = Aes.decrypt(cripted, password);
-//            System.out.println("decripted is " + decripted);
-//        } catch (Throwable t) {
-//            t.printStackTrace();
-//        }
-//    }
-
 }
-
