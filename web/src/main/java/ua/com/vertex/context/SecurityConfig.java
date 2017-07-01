@@ -24,7 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] UNAUTHENTICATED_REQUESTS = {"/css/**", "/javascript/**", "/", "/registration",
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
             "/403", "/error", "/activationUser", "/getCertificate", "/getCertificate/*", "/showImage"};
-    private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData"};
+    private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData",
+            "/showCourseAndUsers", "/removeUserFromCourse", "/assignUser", "/searchForUsersToAssign",
+            "/clearSearchResults", "/confirmUserRemovalFromCourse"};
     public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be unavailable";
 
     @Bean
