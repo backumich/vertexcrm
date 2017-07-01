@@ -11,7 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDTO;
+import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.LogInfo;
@@ -156,7 +156,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public void removeUserFromCourse(CourseUserDTO dto) {
+    public void removeUserFromCourse(CourseUserDto dto) {
         LOGGER.debug(String.format(logInfo.getId() + "Removing the user email=%s from the course id=%d",
                 dto.getEmail(), dto.getCourseId()));
 
@@ -167,7 +167,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public void assignUserToCourse(CourseUserDTO dto) {
+    public void assignUserToCourse(CourseUserDto dto) {
         LOGGER.debug(String.format("Assigning the user email=%s to the course id=%d",
                 dto.getEmail(), dto.getCourseId()));
 
@@ -187,7 +187,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public List<User> searchForUsersToAssign(CourseUserDTO dto) {
+    public List<User> searchForUsersToAssign(CourseUserDto dto) {
         LOGGER.debug(String.format(logInfo.getId() + "Searching for users to assign to the course by search param=%s",
                 dto.getSearchParam()));
 

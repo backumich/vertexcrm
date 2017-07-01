@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDTO;
+import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -129,7 +129,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void removeUserFromCourse() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         dto.setEmail(user1.getEmail());
 
         assertThat(courseDaoInf.getUsersAssignedToCourse(1), hasItem(user1));
@@ -140,7 +140,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void assignUserToCourse() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         dto.setCourseId(1);
         dto.setEmail(user3.getEmail());
         dto.setFirstName(user3.getFirstName());
@@ -155,7 +155,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByFirstNameFullMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String fullMatchingName = "FirstName";
         dto.setSearchType("first_name");
         dto.setSearchParam(fullMatchingName);
@@ -167,7 +167,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByFirstNamePartialMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String partialMatchingName = "F";
         dto.setSearchType("first_name");
         dto.setSearchParam(partialMatchingName);
@@ -179,7 +179,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByFirstNameNonMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String nonMatchingName = "notExistingFirstName";
         dto.setSearchType("first_name");
         dto.setSearchParam(nonMatchingName);
@@ -191,7 +191,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByLastNameFullMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String fullMatchingName = "LastName";
         dto.setSearchType("last_name");
         dto.setSearchParam(fullMatchingName);
@@ -203,7 +203,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByLastNamePartialMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String partialMatchingName = "L";
         dto.setSearchType("last_name");
         dto.setSearchParam(partialMatchingName);
@@ -215,7 +215,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByLastNameNonMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String nonMatchingName = "notExistingLastName";
         dto.setSearchType("last_name");
         dto.setSearchParam(nonMatchingName);
@@ -227,7 +227,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByEmailFullMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String fullMatchingEmail = "22@test.com";
         dto.setSearchType("email");
         dto.setSearchParam(fullMatchingEmail);
@@ -239,7 +239,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByEmailPartialMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String partialMatchingEmail = "@";
         dto.setSearchType("email");
         dto.setSearchParam(partialMatchingEmail);
@@ -251,7 +251,7 @@ public class CourseDaoImplTest {
     @Test
     @WithAnonymousUser
     public void searchUsersByEmailNonMatch() {
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         String nonMatchingEmail = "notExistingEmail";
         dto.setSearchType("email");
         dto.setSearchParam(nonMatchingEmail);

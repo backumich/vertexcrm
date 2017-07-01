@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDTO;
+import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
@@ -47,7 +47,7 @@ public class CourseUsersControllerTest2 {
     private User user1;
     private User user2;
     private User user3;
-    private CourseUserDTO dto;
+    private CourseUserDto dto;
     private List<User> assignedUsers;
 
     private static final String ASSIGNED_USERS = "assignedUsers";
@@ -78,7 +78,7 @@ public class CourseUsersControllerTest2 {
                 .setLastName("Surname3")
                 .setPhone("+38050 333 3333")
                 .getInstance();
-        dto = new CourseUserDTO();
+        dto = new CourseUserDto();
     }
 
     @Test

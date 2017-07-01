@@ -2,7 +2,7 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class CourseUserDTO {
+public class CourseUserDto {
     private int courseId;
     private String email;
     private String firstName;
@@ -71,7 +71,7 @@ public class CourseUserDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CourseUserDTO that = (CourseUserDTO) o;
+        CourseUserDto that = (CourseUserDto) o;
         return courseId == that.courseId &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(firstName, that.firstName) &&

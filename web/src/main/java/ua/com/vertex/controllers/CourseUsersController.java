@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDTO;
+import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.LogInfo;
@@ -35,7 +35,7 @@ public class CourseUsersController {
         LOGGER.debug(logInfo.getId() + "Show users assigned to course id=" + course.getId());
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
-        CourseUserDTO dto = new CourseUserDTO();
+        CourseUserDto dto = new CourseUserDto();
         dto.setCourseId(course.getId());
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -46,7 +46,7 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/removeUserFromCourse")
-    public String removeUserFromAssigned(@ModelAttribute CourseUserDTO dto, Model model) {
+    public String removeUserFromAssigned(@ModelAttribute CourseUserDto dto, Model model) {
 
         LOGGER.debug(logInfo.getId() + String.format("Remove user=%s from course id=%d",
                 dto.getEmail(), dto.getCourseId()));
@@ -60,7 +60,7 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/assignUser")
-    public String assignUserToCourse(@ModelAttribute CourseUserDTO dto, Model model) {
+    public String assignUserToCourse(@ModelAttribute CourseUserDto dto, Model model) {
 
         LOGGER.debug(logInfo.getId() + String.format("Assign user=%s to course id=%d",
                 dto.getEmail(), dto.getCourseId()));
@@ -78,7 +78,7 @@ public class CourseUsersController {
     }
 
     @GetMapping(value = "/searchForUsersToAssign")
-    public String searchForUsersToAssign(@ModelAttribute CourseUserDTO dto, Model model) {
+    public String searchForUsersToAssign(@ModelAttribute CourseUserDto dto, Model model) {
 
         LOGGER.debug(logInfo.getId() + String.format("Search for users that can be assigned to course id=%d" +
                 "by searchType=%s and searchParam=%s", dto.getCourseId(), dto.getSearchType(), dto.getSearchParam()));
@@ -95,7 +95,7 @@ public class CourseUsersController {
     }
 
     @GetMapping(value = "/clearSearchResults")
-    public String clearSearchResults(@ModelAttribute CourseUserDTO dto, Model model) {
+    public String clearSearchResults(@ModelAttribute CourseUserDto dto, Model model) {
 
         LOGGER.debug(logInfo + "Clear free users search results");
 
@@ -107,7 +107,7 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/confirmUserRemovalFromCourse")
-    public String confirmUserRemovalFromCourse(@ModelAttribute CourseUserDTO dto, Model model) {
+    public String confirmUserRemovalFromCourse(@ModelAttribute CourseUserDto dto, Model model) {
 
         LOGGER.debug(logInfo.getId() + String.format("Confirm removing user=%s from course id=%d",
                 dto.getEmail(), dto.getCourseId()));

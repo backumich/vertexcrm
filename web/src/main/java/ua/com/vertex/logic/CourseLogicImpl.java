@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDTO;
+import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
@@ -49,17 +49,17 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public void removeUserFromCourse(CourseUserDTO dto) {
+    public void removeUserFromCourse(CourseUserDto dto) {
         courseDaoInf.removeUserFromCourse(dto);
     }
 
     @Override
-    public void assignUserToCourse(CourseUserDTO dto) {
+    public void assignUserToCourse(CourseUserDto dto) {
         courseDaoInf.assignUserToCourse(dto);
     }
 
     @Override
-    public List<User> searchForUsersToAssign(CourseUserDTO dto) {
+    public List<User> searchForUsersToAssign(CourseUserDto dto) {
         return courseDaoInf.searchForUsersToAssign(dto);
     }
 
