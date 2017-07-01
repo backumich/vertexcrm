@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.beans.PdfDataTransferObject;
 import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 
 @Controller
-@RequestMapping(value = "/generatePdf")
 public class PdfController {
 
     private final PdfGenerator pdfGenerator;
@@ -25,9 +23,10 @@ public class PdfController {
 
     private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
 
-    @PostMapping
+    @PostMapping(value = "/generatePdf")
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void generatePdf(@ModelAttribute PdfDataTransferObject dto, HttpServletResponse response) {
+    public void generatePdf(@ModelAttribute PdfDataTransferObject dto, HttpServletResponse response)
+            throws Exception {
 
         LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";
@@ -36,8 +35,6 @@ public class PdfController {
         try {
             pdfGenerator.generatePdf(pdfFileName, dto);
             pdfDownloader.downloadPdf(pdfFileName, response);
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
         } finally {
             if (pdfFile.exists()) {
                 pdfFile.delete();

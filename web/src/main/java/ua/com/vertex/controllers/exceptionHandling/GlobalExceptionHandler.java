@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.com.vertex.utils.LogInfo;
 
+import java.net.SocketTimeoutException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final String ERROR = "error";
+    private static final String ERROR_MESSAGE = "errorMessage";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
 
@@ -23,17 +26,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoCertificateException.class)
-    public String handleNoCertificateException(NoCertificateException e, Model model) {
+    public String handleNoCertificateException(Exception e, Model model) {
         LOGGER.warn(logInfo.getId(), e);
-        model.addAttribute(ERROR, "No certificate with this ID");
+        model.addAttribute(ERROR_MESSAGE, "No certificate with this ID");
         return CERTIFICATE_DETAILS;
     }
 
-    @ExceptionHandler(CannotGetJdbcConnectionException.class)
-    public String handleCannotGetJdbcConnectionException(CannotGetJdbcConnectionException e, Model model) {
+    @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class})
+    public String handleCannotGetJdbcConnectionException(Exception e, Model model) {
         LOGGER.warn(logInfo.getId(), e);
-        model.addAttribute(ERROR, "Database might temporarily be unavailable");
-        return CERTIFICATE_DETAILS;
+        model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
+        return ERROR;
     }
 
     public GlobalExceptionHandler(LogInfo logInfo) {

@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logIn", "/logOut", "/loggedOut", "/certificateDetails", "/processCertificateDetails", "/userPhoto",
             "/403", "/error", "/activationUser", "/getCertificate", "/getCertificate/*", "/showImage"};
     private static final String[] ADMIN_REQUESTS = {"/viewAllUsers", "/userDetails", "/saveUserData"};
-    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
+    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be unavailable";
 
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {

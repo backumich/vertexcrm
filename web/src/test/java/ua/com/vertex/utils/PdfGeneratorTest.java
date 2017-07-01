@@ -48,7 +48,7 @@ public class PdfGeneratorTest {
 
     @Test
     @WithMockUser
-    public void generatePdfCreatesFileOnDisk() {
+    public void generatePdfCreatesFileOnDisk() throws Exception {
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String courseName = "Java Professional";

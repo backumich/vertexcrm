@@ -119,11 +119,11 @@
     </c:if>
     <br><br>
 
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
+    <c:if test="${errorMessage != null}">
+        <h3><span class="fontSize140 red">${errorMessage}</span></h3>
     </c:if>
 
-    <c:if test="${error == null && certificate != null}">
+    <c:if test="${errorMessage == null && certificate != null}">
         <table class="table fontSize140">
             <tr>
                 <td>Certificate UID:</td>

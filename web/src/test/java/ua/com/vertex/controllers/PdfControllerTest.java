@@ -11,8 +11,6 @@ import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
 
-import java.io.IOException;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -37,7 +35,7 @@ public class PdfControllerTest {
     }
 
     @Test
-    public void generatePdfInvokesPdfGenerator() throws IOException {
+    public void generatePdfInvokesPdfGenerator() throws Exception {
         final String firstName = "";
         final String lastName = "";
         final String courseName = "";

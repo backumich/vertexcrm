@@ -23,9 +23,9 @@ public class PdfGenerator {
     private final LogInfo logInfo;
 
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.US);
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
-    public void generatePdf(String pdfFileName, PdfDataTransferObject dto) {
+    public void generatePdf(String pdfFileName, PdfDataTransferObject dto) throws Exception {
 
         Document document = new Document();
 
@@ -41,9 +41,6 @@ public class PdfGenerator {
             document.close();
 
             LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
-
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
         }
     }
 

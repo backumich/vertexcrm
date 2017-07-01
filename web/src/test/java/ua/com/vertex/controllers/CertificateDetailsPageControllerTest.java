@@ -48,6 +48,9 @@ public class CertificateDetailsPageControllerTest {
     @Mock
     private Model model;
 
+    @Mock
+    private LogInfo logInfo;
+
     private Certificate certificate;
     private User user;
     private Map<String, Object> attributes;
@@ -68,7 +71,7 @@ public class CertificateDetailsPageControllerTest {
         MockitoAnnotations.initMocks(this);
         controller = new CertificateDetailsPageController(certLogic);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new GlobalExceptionHandler(new LogInfo()))
+                .setControllerAdvice(new GlobalExceptionHandler(logInfo))
                 .build();
         certificate = new Certificate.Builder()
                 .setCertificationId(EXISTING_CERT_ID)
