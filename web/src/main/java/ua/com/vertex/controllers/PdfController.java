@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.com.vertex.beans.PdfDataTransferObject;
+import ua.com.vertex.beans.PdfDto;
 import ua.com.vertex.utils.LogInfo;
 import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
@@ -25,7 +25,7 @@ public class PdfController {
 
     @PostMapping(value = "/generatePdf")
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void generatePdf(@ModelAttribute PdfDataTransferObject dto, HttpServletResponse response)
+    public void generatePdf(@ModelAttribute PdfDto dto, HttpServletResponse response)
             throws Exception {
 
         LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");

@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ua.com.vertex.beans.PdfDataTransferObject;
+import ua.com.vertex.beans.PdfDto;
 import ua.com.vertex.context.TestConfig;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class PdfGeneratorTest {
         final String certificationDate = "2016-12-01";
         final String certificationId = "id";
 
-        PdfDataTransferObject dto = new PdfDataTransferObject(firstName, lastName, courseName,
+        PdfDto dto = new PdfDto(firstName, lastName, courseName,
                 certificationDate, certificationId);
 
         pdfGenerator.generatePdf(PDF_FILE_NAME, dto);

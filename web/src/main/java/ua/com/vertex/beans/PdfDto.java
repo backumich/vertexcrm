@@ -2,15 +2,15 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class PdfDataTransferObject {
+public class PdfDto {
     private String firstName;
     private String lastName;
     private String courseName;
     private String certificationDate;
     private String certificateUid;
 
-    public PdfDataTransferObject(String firstName, String lastName, String courseName, String certificationDate,
-                                 String certificateUid) {
+    public PdfDto(String firstName, String lastName, String courseName, String certificationDate,
+                  String certificateUid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.courseName = courseName;
@@ -18,7 +18,7 @@ public class PdfDataTransferObject {
         this.certificateUid = certificateUid;
     }
 
-    public PdfDataTransferObject() {
+    public PdfDto() {
     }
 
     public String getFirstName() {
@@ -65,7 +65,7 @@ public class PdfDataTransferObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PdfDataTransferObject that = (PdfDataTransferObject) o;
+        PdfDto that = (PdfDto) o;
         return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(courseName, that.courseName) &&

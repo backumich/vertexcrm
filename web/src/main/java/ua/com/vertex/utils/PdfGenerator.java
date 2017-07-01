@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import ua.com.vertex.beans.PdfDataTransferObject;
+import ua.com.vertex.beans.PdfDto;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class PdfGenerator {
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
-    public void generatePdf(String pdfFileName, PdfDataTransferObject dto) throws Exception {
+    public void generatePdf(String pdfFileName, PdfDto dto) throws Exception {
 
         Document document = new Document();
 
@@ -55,7 +55,7 @@ public class PdfGenerator {
         canvas.addImage(image);
     }
 
-    private void setText(PdfWriter writer, PdfDataTransferObject dto) throws IOException, DocumentException {
+    private void setText(PdfWriter writer, PdfDto dto) throws IOException, DocumentException {
 
         String fullName = dto.getFirstName() + " " + dto.getLastName();
         String date = formatter.format(LocalDate.parse(dto.getCertificationDate()));
