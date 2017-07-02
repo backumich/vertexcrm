@@ -106,7 +106,7 @@
             <br/>
             <br/>
             <form:form action="viewAllUsers" method="post" commandName="dataNavigator">
-                <form:select id="perPage" path="currentRowPerPage" items="${dataNavigator.countRowPerPage}"/>
+                <form:select id="perPage" class="buttonText" path="currentRowPerPage" items="${dataNavigator.countRowPerPage}"/>
 
                 <input id="currentNamePage" type="hidden" name="currentNamePage"
                        value="${dataNavigator.currentNamePage}">

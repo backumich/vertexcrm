@@ -115,12 +115,12 @@
                     <%--</tr>--%>
                     <tr>
                         <td>Course name:</td>
-                        <td><form:input class="buttonText" placeholder="name" path="name"/></td>
+                        <td><form:input class="buttonText" placeholder="Course name" path="name"/></td>
                         <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
                         <td>Start:</td>
-                        <td><form:input class="buttonText" placeholder="start"
+                        <td><form:input class="buttonText" placeholder="Start course"
                                            path="start"/></td>
                         <td><form:errors path="start"/></td>
                     </tr>
@@ -131,22 +131,22 @@
                     </tr>
                     <tr>
                         <td>Price:</td>
-                        <td><form:input class="buttonText" placeholder="price" path="price"/></td>
+                        <td><form:input class="buttonText" placeholder="Course price" path="price"/></td>
                         <td><form:errors path="price"/></td>
                     </tr>
                     <tr>
                         <td>Teacher:</td>
-                        <td><form:input class="buttonText" placeholder="teacherName" path="teacherName"/></td>
+                        <td><form:input class="buttonText" placeholder="Teacher name" path="teacherName"/></td>
                         <td><form:errors path="teacherName"/></td>
                     </tr>
                     <tr>
                         <td>Schedule:</td>
-                        <td><form:input class="buttonText" placeholder="schedule" path="schedule"/></td>
+                        <td><form:input class="buttonText" placeholder="Schedule" path="schedule"/></td>
                         <td><form:errors path="schedule"/></td>
                     </tr>
                     <tr>
                         <td>Notes:</td>
-                        <td><form:input class="buttonText" placeholder="notes" path="notes"/></td>
+                        <td><form:input class="buttonText" placeholder="Notes" path="notes"/></td>
                         <td><form:errors path="notes"/></td>
                     </tr>
                     <tr>
