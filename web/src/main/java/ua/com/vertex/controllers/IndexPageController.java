@@ -11,23 +11,14 @@ import ua.com.vertex.utils.LogInfo;
 public class IndexPageController {
 
     private final LogInfo logInfo;
-
     private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
 
-    private static final String ERROR = "error";
     private static final String INDEX = "index";
 
     @RequestMapping(value = "/")
     public String showIndexPage() {
-        String view = INDEX;
-        try {
-            LOGGER.debug(logInfo.getId() + INDEX + " page accessed");
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
-        }
-
-        return view;
+        LOGGER.debug(logInfo.getId() + INDEX + " page accessed");
+        return INDEX;
     }
 
     @Autowired
