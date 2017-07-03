@@ -34,11 +34,6 @@ public class ViewAllCoursesControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-//    @Before
-//    public void setUp() throws Exception {
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//    }
-
     @Test
     public void viewAllCoursesTest() throws Exception {
         MockMvc mockMvc = standaloneSetup(new ViewAllCoursesController(logic))
@@ -49,7 +44,6 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(view().name("viewAllCourses"))
                 .andExpect(forwardedUrl("viewAllCourses"))
                 .andExpect(model().attributeExists("courses"))
-                //.andExpect(model().attribute("courses", hasSize(3)))
                 .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
                 .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
@@ -60,7 +54,6 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(model().attribute("viewAllCourses", hasProperty("lastPage", is(1))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentRowPerPage", is(25))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("quantityPages", is(1))))
-                //.andExpect(model().attribute("viewAllCourses", hasProperty("dataSize", is(3))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
                     put(25, 25);
                     put(50, 50);
@@ -78,7 +71,6 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(view().name("viewAllCourses"))
                 .andExpect(forwardedUrl("viewAllCourses"))
                 .andExpect(model().attributeExists("courses"))
-                //.andExpect(model().attribute("courses", hasSize(3)))
                 .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
                 .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
@@ -89,7 +81,6 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(model().attribute("viewAllCourses", hasProperty("lastPage", is(1))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentRowPerPage", is(25))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("quantityPages", is(1))))
-                //.andExpect(model().attribute("viewAllCourses", hasProperty("dataSize", is(3))))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
                     put(25, 25);
                     put(50, 50);

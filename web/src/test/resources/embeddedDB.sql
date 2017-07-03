@@ -54,7 +54,7 @@ CREATE TABLE Courses
 (
   id           INT(11)      NOT NULL AUTO_INCREMENT,
   name         VARCHAR(255) NOT NULL,
-  start        TIMESTAMP,
+  start        DATETIME,
   finished     TINYINT,
   price        DECIMAL,
   teacher_name VARCHAR(255),
@@ -108,5 +108,5 @@ INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
 VALUES (1, 'JavaPro', '2017-02-01 10:10:10', 0, 4000, 'Test', 'Test');
 
 INSERT INTO Courses VALUES
-  (111, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.00, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
+  (111, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.99, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
   (222, 'MEGA Java', '2017-02-01 00:00:00', 1, 100.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');

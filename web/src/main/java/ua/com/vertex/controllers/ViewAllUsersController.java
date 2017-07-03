@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-//@RequestMapping(value = "/viewAllUsers")
 @SessionAttributes(value = "viewAllUsers")
 public class ViewAllUsersController {
     private static final String ERROR_JSP = "error";
@@ -26,7 +25,6 @@ public class ViewAllUsersController {
 
     private UserLogic userLogic;
 
-    //@GetMapping
     @RequestMapping(value = "/viewAllUsers")
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) {
         ModelAndView modelAndView = new ModelAndView();
@@ -47,30 +45,6 @@ public class ViewAllUsersController {
         }
         return modelAndView;
     }
-
-//    @PostMapping
-//    public ModelAndView reload(@ModelAttribute DataNavigator dataNavigator) {
-//        ModelAndView modelAndView = new ModelAndView();
-//        try {
-//            List<User> users = userLogic.getUsersPerPages(dataNavigator);
-//            modelAndView.addObject("users", users);
-//            modelAndView.addObject("viewAllUsers", dataNavigator);
-//            modelAndView.setViewName(PAGE_JSP);
-//            LOGGER.debug("Received a list of all users and transferred to the model");
-////            String allUsersEmail = "";
-////            for (User user : users) {
-////                allUsersEmail += user.getEmail() + "|";
-////            }
-//            String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
-//
-//            LOGGER.debug("Quantity users -" + users.size());
-//            LOGGER.debug("All users list -" + allUsersEmail);
-//        } catch (Exception e) {
-//            LOGGER.warn(e);
-//            modelAndView.setViewName(ERROR_JSP);
-//        }
-//        return modelAndView;
-//    }
 
     @ModelAttribute
     public DataNavigator createDataNavigator() {

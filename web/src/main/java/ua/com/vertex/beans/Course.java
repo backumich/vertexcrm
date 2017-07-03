@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Course {
     private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
     private final String COURSE_TEACHER_NAME_MSG = "Teacher's name must be longer than 2 and less than 256 characters";
-    private final String SCHEDULE_MSG = "The schedule must be up to 256 characters long";
+    private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
     private final String NOTES_MSG = "The schedule must be up to 256 characters long";
 
     private int id;
@@ -21,7 +21,6 @@ public class Course {
     @Size(min = 5, max = 256, message = COURSE_NAME_MSG)
     private String name;
 
-    //@DateTimeFormat(pattern = "dd.MM.yyyy")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate start;
@@ -30,12 +29,13 @@ public class Course {
 
     @DecimalMin("0.00")
     @DecimalMax("999999999.99")
+    @NotNull
     private BigDecimal price;
 
     @Size(min = 2, max = 256, message = COURSE_TEACHER_NAME_MSG)
     private String teacherName;
 
-    @Size(max = 256, message = SCHEDULE_MSG)
+    @Size(min = 2, max = 256, message = SCHEDULE_MSG)
     private String schedule;
 
     @Size(max = 256, message = NOTES_MSG)
@@ -204,5 +204,4 @@ public class Course {
             return instance;
         }
     }
-
 }

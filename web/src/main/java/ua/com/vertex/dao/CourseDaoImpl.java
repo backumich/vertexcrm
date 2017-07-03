@@ -84,7 +84,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     public int addCourse(Course course) throws SQLException {
         LOGGER.info("Adding a new course into database");
 
-        String query = "INSERT INTO courses(name, start, finished, price, teacher_name, schedule, notes) " +
+        String query = "INSERT INTO Courses(name, start, finished, price, teacher_name, schedule, notes) " +
                 "VALUES (:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, getCourseParameters(course), keyHolder);
@@ -109,7 +109,6 @@ public class CourseDaoImpl implements CourseDaoInf {
         }
         return Optional.ofNullable(course);
     }
-
 
     private MapSqlParameterSource getCourseParameters(Course course) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();

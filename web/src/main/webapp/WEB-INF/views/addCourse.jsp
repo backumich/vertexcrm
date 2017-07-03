@@ -108,11 +108,11 @@
                     <tr>
                         <td colspan="2" align="center"><h2>Add new Course</h2></td>
                     </tr>
-                    <%--<tr>--%>
+                        <%--<tr>--%>
                         <%--<td>ID:</td>--%>
                         <%--<td><form:input class="buttonText" placeholder="id" path="id"/></td>--%>
                         <%--<td><form:errors path="id"/></td>--%>
-                    <%--</tr>--%>
+                        <%--</tr>--%>
                     <tr>
                         <td>Course name:</td>
                         <td><form:input class="buttonText" placeholder="Course name" path="name"/></td>
@@ -120,13 +120,12 @@
                     </tr>
                     <tr>
                         <td>Start:</td>
-                        <td><form:input class="buttonText" placeholder="Start course"
-                                           path="start"/></td>
+                        <td><form:input class="buttonText" placeholder="YYYY-MM-DD" path="start"/></td>
                         <td><form:errors path="start"/></td>
                     </tr>
                     <tr>
                         <td>Finished:</td>
-                        <td><form:checkbox  class="buttonText" placeholder="finished" path="finished"/></td>
+                        <td><form:checkbox class="buttonText" placeholder="finished" path="finished"/></td>
                         <td><form:errors path="finished"/></td>
                     </tr>
                     <tr>

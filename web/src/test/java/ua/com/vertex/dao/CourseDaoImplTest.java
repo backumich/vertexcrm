@@ -21,14 +21,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -94,11 +98,31 @@ public class CourseDaoImplTest {
 
     @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
-
         Course course = new Course.Builder().setId(1).setName("JavaPro")
                 .setStart(LocalDate.of(2017, 2, 1))
                 .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
-
         assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
+    }
+
+    @Test
+    public void getCoursesById() throws Exception {
+        if (courseDaoInf.getCourseById(111).isPresent()) {
+            assertEquals(MSG, new Course.Builder()
+                    .setId(111)
+                    .setName("Super JAVA")
+                    .setStart(LocalDate.parse("2017-04-01"))
+                    .setFinished(false)
+                    .setPrice(BigDecimal.valueOf(999999.99))
+                    .setTeacherName("Yo Ho Ho")
+                    .setShedule("Sat, Sun")
+                    .setNotes("Welcome, we don't expect you (=")
+                    .getInstance(), courseDaoInf.getCourseById(111).get());
+        }
+    }
+
+    @Test
+    public void getQuantityCoursesReturnNotNull() throws Exception {
+        int result = courseDaoInf.getQuantityCourses();
+        assertNotNull(MSG, result);
     }
 }
