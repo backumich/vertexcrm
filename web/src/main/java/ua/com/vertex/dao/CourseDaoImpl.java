@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -51,31 +50,16 @@ public class CourseDaoImpl implements CourseDaoInf {
         parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
 
         try {
-            courses = jdbcTemplate.query(query, parameters, new CourseDaoImpl.CoursesRowMapping());
+            courses = jdbcTemplate.query(query, parameters, this::mapCourses);
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn("Something went wrong", e);
         }
         return courses;
     }
 
-    private static final class CoursesRowMapping implements RowMapper<Course> {
-        public Course mapRow(ResultSet resultSet, int i) throws SQLException {
-            Course course = new Course();
-            course.setId(resultSet.getInt("id"));
-            course.setName(resultSet.getString("name"));
-            course.setStart(resultSet.getDate("start").toLocalDate());
-            course.setFinished(resultSet.getInt("finished") != 0);
-            course.setPrice(resultSet.getBigDecimal("price"));
-            course.setTeacherName(resultSet.getString("teacher_name"));
-            course.setSchedule(resultSet.getString("schedule"));
-            course.setNotes(resultSet.getString("notes"));
-            return course;
-        }
-    }
-
     @Override
     public int getQuantityCourses() throws SQLException {
-        LOGGER.debug("Get all courses list");
+        LOGGER.debug("Get count courses");
         String query = "SELECT count(*) FROM Courses";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
@@ -103,11 +87,35 @@ public class CourseDaoImpl implements CourseDaoInf {
         try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             parameters.addValue("id", courseId);
-            course = jdbcTemplate.queryForObject(query, parameters, new CourseDaoImpl.CoursesRowMapping());
+            course = jdbcTemplate.queryForObject(query, parameters, this::mapCourses);
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
         }
         return Optional.ofNullable(course);
+    }
+
+    public Course mapCourses(ResultSet resultSet, int i) throws SQLException {
+        return new Course.Builder()
+                .setId(resultSet.getInt("id"))
+                .setName(resultSet.getString("name"))
+                .setStart(resultSet.getDate("start").toLocalDate())
+                .setFinished(resultSet.getInt("finished") != 0)
+                .setPrice(resultSet.getBigDecimal("price"))
+                .setTeacherName(resultSet.getString("teacher_name"))
+                .setSchedule(resultSet.getString("schedule"))
+                .setNotes(resultSet.getString("notes"))
+                .getInstance();
+
+//        Course course = new Course();
+//        course.setId(resultSet.getInt("id"));
+//        course.setName(resultSet.getString("name"));
+//        course.setStart(resultSet.getDate("start").toLocalDate());
+//        course.setFinished(resultSet.getInt("finished") != 0);
+//        course.setPrice(resultSet.getBigDecimal("price"));
+//        course.setTeacherName(resultSet.getString("teacher_name"));
+//        course.setSchedule(resultSet.getString("schedule"));
+//        course.setNotes(resultSet.getString("notes"));
+//        return course;
     }
 
     private MapSqlParameterSource getCourseParameters(Course course) {

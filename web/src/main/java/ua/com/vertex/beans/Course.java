@@ -18,7 +18,7 @@ public class Course {
 
     private int id;
 
-    @Size(min = 5, max = 256, message = COURSE_NAME_MSG)
+    @Size(min = 2, max = 256, message = COURSE_NAME_MSG)
     private String name;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -190,8 +190,8 @@ public class Course {
             return this;
         }
 
-        public Builder setShedule(String shedule) {
-            instance.setSchedule(shedule);
+        public Builder setSchedule(String Schedule) {
+            instance.setSchedule(Schedule);
             return this;
         }
 

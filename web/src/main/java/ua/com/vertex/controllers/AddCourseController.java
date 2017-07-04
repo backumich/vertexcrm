@@ -20,7 +20,7 @@ import javax.validation.Valid;
 public class AddCourseController {
 
     private static final String PAGE_JSP = "addCourse";
-    private static final String ALL_COURSE_PAGE_JSP = "/viewAllCourses";
+    private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewAllCourses";
     private static final String ERROR_JSP = "error";
     private static final String NAME_MODEL = "course";
 
@@ -36,7 +36,7 @@ public class AddCourseController {
 
     @GetMapping
     public ModelAndView viewAddCourseForm() {
-        LOGGER.debug("First request to " + PAGE_JSP);
+        LOGGER.debug("Get page -" + PAGE_JSP);
         return new ModelAndView(PAGE_JSP, NAME_MODEL, new Course());
     }
 
@@ -51,7 +51,7 @@ public class AddCourseController {
             try {
                 course.setId(courseLogic.addCourse(course));
                 LOGGER.debug("Added a new course into DB" + course);
-                modelAndView.setViewName("redirect:" + ALL_COURSE_PAGE_JSP);
+                modelAndView.setViewName(ALL_COURSE_PAGE_JSP);
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR_JSP);
                 LOGGER.warn("Could not save data to database", e);

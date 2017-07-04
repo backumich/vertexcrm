@@ -114,7 +114,7 @@ public class CourseDaoImplTest {
                     .setFinished(false)
                     .setPrice(BigDecimal.valueOf(999999.99))
                     .setTeacherName("Yo Ho Ho")
-                    .setShedule("Sat, Sun")
+                    .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
                     .getInstance(), courseDaoInf.getCourseById(111).get());
         }
