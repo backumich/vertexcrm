@@ -44,9 +44,7 @@ public class CourseUsersControllerTest2 {
     private Model model;
 
     private CourseUsersController controller;
-    private User user1;
-    private User user2;
-    private User user3;
+    private User user1, user2, user3, u1, u2, u3, u4, u5;
     private CourseUserDto dto;
     private List<User> assignedUsers;
 
@@ -60,24 +58,22 @@ public class CourseUsersControllerTest2 {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         controller = new CourseUsersController(courseLogic, logInfo);
-        user1 = new User.Builder()
-                .setEmail("user1@email.com")
-                .setFirstName("Name1")
-                .setLastName("Surname1")
-                .setPhone("+38050 111 1111")
-                .getInstance();
-        user2 = new User.Builder()
-                .setEmail("user2@email.com")
-                .setFirstName("Name2")
-                .setLastName("Surname2")
-                .setPhone("+38050 222 2222")
-                .getInstance();
-        user3 = new User.Builder()
-                .setEmail("user3@email.com")
-                .setFirstName("Name3")
-                .setLastName("Surname3")
-                .setPhone("+38050 333 3333")
-                .getInstance();
+        user1 = new User.Builder().setUserId(401).setEmail("user1@email.com")
+                .setFirstName("Name1").setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
+        user2 = new User.Builder().setUserId(402).setEmail("user2@email.com")
+                .setFirstName("Name2").setLastName("Surname2").setPhone("+38050 222 2222").getInstance();
+        user3 = new User.Builder().setUserId(403).setEmail("user3@email.com")
+                .setFirstName("Name3").setLastName("Surname3").setPhone("+38050 333 3333").getInstance();
+        u1 = new User.Builder().setUserId(1).setEmail("email1").setFirstName("FirstName").setLastName("LastName")
+                .setPhone("38066 000 00 00").getInstance();
+        u2 = new User.Builder().setUserId(22).setEmail("22@test.com").setFirstName("FirstName").setLastName("LastName")
+                .setPhone("38066 000 00 00").getInstance();
+        u3 = new User.Builder().setUserId(33).setEmail("33@test.com").setFirstName("FirstName").setLastName("LastName")
+                .setPhone("38066 000 00 00").getInstance();
+        u4 = new User.Builder().setUserId(34).setEmail("34@test.com").setFirstName("FirstName").setLastName("LastName")
+                .setPhone("38066 000 00 00").getInstance();
+        u5 = new User.Builder().setUserId(44).setEmail("44@test.com").setFirstName("FirstName").setLastName("LastName")
+                .setPhone("38066 000 00 00").getInstance();
         dto = new CourseUserDto();
     }
 
@@ -99,7 +95,7 @@ public class CourseUsersControllerTest2 {
     public void removeUserFromAssignedFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setEmail(user2.getEmail());
-        assignedUsers = Arrays.asList(user1);
+        assignedUsers = Arrays.asList(user1, user2);
 
         String view = controller.removeUserFromAssigned(dto, model);
         verify(model, times(1)).addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -110,6 +106,7 @@ public class CourseUsersControllerTest2 {
     @WithAnonymousUser
     public void assignUserToCourseFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
+        dto.setUserId(user3.getUserId());
         dto.setEmail(user3.getEmail());
         dto.setFirstName(user3.getFirstName());
         dto.setLastName(user3.getLastName());
@@ -126,30 +123,51 @@ public class CourseUsersControllerTest2 {
 
     @Test
     @WithAnonymousUser
-    public void searchForUsersToAssignFillsModelAttributes() {
+    public void searchForUsersByFirstNameToAssignFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setSearchType("first_name");
-        dto.setSearchParam("");
-        User u1, u2, u3, u4, u5, u6;
-        u1 = new User.Builder().setEmail("email1").setFirstName("FirstName").setLastName("LastName")
-                .setPhone("38066 000 00 00").getInstance();
-        u2 = new User.Builder().setEmail("emailTest").setFirstName("first_name").setLastName("last_name")
-                .setPhone("666666666").getInstance();
-        u3 = new User.Builder().setEmail("22@test.com").setFirstName("FirstName").setLastName("LastName")
-                .setPhone("38066 000 00 00").getInstance();
-        u4 = new User.Builder().setEmail("33@test.com").setFirstName("FirstName").setLastName("LastName")
-                .setPhone("38066 000 00 00").getInstance();
-        u5 = new User.Builder().setEmail("34@test.com").setFirstName("FirstName").setLastName("LastName")
-                .setPhone("38066 000 00 00").getInstance();
-        u6 = new User.Builder().setEmail("44@test.com").setFirstName("FirstName").setLastName("LastName")
-                .setPhone("38066 000 00 00").getInstance();
+        dto.setSearchParam("FirstName");
 
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(u1, u2, u3, u4, u5, u6);
+        List<User> freeUsers = Arrays.asList(u1, u2, u3, u4, u5);
 
         String view = controller.searchForUsersToAssign(dto, model);
         verify(model, times(1)).addAttribute(ASSIGNED_USERS, assignedUsers);
-        verify(model).addAttribute(FREE_USERS, freeUsers);
+        verify(model, times(1)).addAttribute(FREE_USERS, freeUsers);
+        verify(model, times(1)).addAttribute(DTO, dto);
+        verify(model, times(1)).addAttribute(SEARCH, true);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void searchForUsersByLastNameToAssignFillsModelAttributes() {
+        dto.setCourseId(COURSE_ID);
+        dto.setSearchType("last_name");
+        dto.setSearchParam("LastName");
+
+        assignedUsers = Arrays.asList(user1, user2);
+        List<User> freeUsers = Arrays.asList(u1, u2, u3, u4, u5);
+
+        String view = controller.searchForUsersToAssign(dto, model);
+        verify(model, times(1)).addAttribute(ASSIGNED_USERS, assignedUsers);
+        verify(model, times(1)).addAttribute(FREE_USERS, freeUsers);
+        verify(model, times(1)).addAttribute(DTO, dto);
+        verify(model, times(1)).addAttribute(SEARCH, true);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void searchForUsersByEmailToAssignFillsModelAttributes() {
+        dto.setCourseId(COURSE_ID);
+        dto.setSearchType("email");
+        dto.setSearchParam("44@test.com");
+
+        assignedUsers = Arrays.asList(user1, user2);
+        List<User> freeUsers = Arrays.asList(u5);
+
+        String view = controller.searchForUsersToAssign(dto, model);
+        verify(model, times(1)).addAttribute(ASSIGNED_USERS, assignedUsers);
+        verify(model, times(1)).addAttribute(FREE_USERS, freeUsers);
         verify(model, times(1)).addAttribute(DTO, dto);
         verify(model, times(1)).addAttribute(SEARCH, true);
     }

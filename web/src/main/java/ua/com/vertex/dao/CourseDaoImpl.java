@@ -35,6 +35,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     private static final String COLUMN_COURSE_SCHEDULE = "schedule";
     private static final String COLUMN_COURSE_NOTES = "notes";
     private static final String COLUMN_COURSE_ID2 = "courseId";
+    private static final String COLUMN_USER_ID = "userId";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_FIRST_NAME = "firstName";
     private static final String COLUMN_LAST_NAME = "lastName";
@@ -146,7 +147,8 @@ public class CourseDaoImpl implements CourseDaoInf {
         LOGGER.debug(String.format(logInfo.getId() + " Retrieving users assigned to the course (id=%d)", courseId));
 
         List<User> users;
-        String query = "SELECT email, first_name, last_name, phone FROM Course_users WHERE course_id=:courseId";
+        String query = "SELECT user_id, email, first_name, last_name, phone FROM Course_users " +
+                "WHERE course_id=:courseId";
 
         users = jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_ID2, courseId), this::mapUser);
 
@@ -157,25 +159,30 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public void removeUserFromCourse(CourseUserDto dto) {
-        LOGGER.debug(String.format(logInfo.getId() + "Removing the user email=%s from the course id=%d",
-                dto.getEmail(), dto.getCourseId()));
+        LOGGER.debug(String.format(logInfo.getId() + "Removing the user id=%d from the course id=%d",
+                dto.getUserId(), dto.getCourseId()));
 
-        String query = "DELETE FROM Course_users WHERE email=:email";
-        jdbcTemplate.update(query, new MapSqlParameterSource(COLUMN_EMAIL, dto.getEmail()));
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue(COLUMN_COURSE_ID2, dto.getCourseId());
+        mapSqlParameterSource.addValue(COLUMN_USER_ID, dto.getUserId());
+
+        String query = "DELETE FROM Course_users WHERE user_id=:userId AND course_id=:courseId";
+        jdbcTemplate.update(query, mapSqlParameterSource);
 
         LOGGER.debug(logInfo.getId() + "User was removed");
     }
 
     @Override
     public void assignUserToCourse(CourseUserDto dto) {
-        LOGGER.debug(String.format("Assigning the user email=%s to the course id=%d",
-                dto.getEmail(), dto.getCourseId()));
+        LOGGER.debug(String.format("Assigning the user id=%d to the course id=%d",
+                dto.getUserId(), dto.getCourseId()));
 
-        String query = "INSERT INTO Course_users (course_id, email, first_name, last_name, phone) " +
-                "VALUES (:courseId, :email, :firstName, :lastName, :phone)";
+        String query = "INSERT INTO Course_users (course_id, user_id, email, first_name, last_name, phone) " +
+                "VALUES (:courseId, :userId, :email, :firstName, :lastName, :phone)";
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue(COLUMN_COURSE_ID2, dto.getCourseId());
+        mapSqlParameterSource.addValue(COLUMN_USER_ID, dto.getUserId());
         mapSqlParameterSource.addValue(COLUMN_EMAIL, dto.getEmail());
         mapSqlParameterSource.addValue(COLUMN_FIRST_NAME, dto.getFirstName());
         mapSqlParameterSource.addValue(COLUMN_LAST_NAME, dto.getLastName());
@@ -195,17 +202,17 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "";
         switch (dto.getSearchType()) {
             case "first_name":
-                query = "SELECT u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.first_name LIKE '%" + dto.getSearchParam() + "%' AND " +
                         "(SELECT count(*) FROM Course_users c WHERE c.email=u.email AND c.course_id=:courseId) = 0";
                 break;
             case "last_name":
-                query = "SELECT u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.last_name LIKE '%" + dto.getSearchParam() + "%' AND " +
                         "(SELECT count(*) FROM Course_users c WHERE c.email=u.email AND c.course_id=:courseId) = 0";
                 break;
             case "email":
-                query = "SELECT u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.email LIKE '%" + dto.getSearchParam() + "%' AND " +
                         "(SELECT count(*) FROM Course_users c WHERE c.email=u.email AND c.course_id=:courseId) = 0";
         }
@@ -215,13 +222,14 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         users = jdbcTemplate.query(query, mapSqlParameterSource, this::mapUser);
 
-        LOGGER.debug(logInfo.getId() + "Retrieved users email=(" + userIdsToString(users) + ")");
+        LOGGER.debug(logInfo.getId() + "Retrieved users id=(" + userIdsToString(users) + ")");
 
         return users;
     }
 
     private User mapUser(ResultSet resultSet, int i) throws SQLException {
         return new User.Builder()
+                .setUserId(resultSet.getInt("user_id"))
                 .setEmail(resultSet.getString("email"))
                 .setFirstName(resultSet.getString("first_name"))
                 .setLastName(resultSet.getString("last_name"))
@@ -230,7 +238,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     private String userIdsToString(List<User> users) {
-        return users.stream().map(User::getEmail).collect(Collectors.joining(", "));
+        return users.stream().map(User::getUserId).map(String::valueOf).collect(Collectors.joining(", "));
     }
 
     @Autowired

@@ -122,7 +122,7 @@
         <c:forEach items="${assignedUsers}" var="assignedUser">
             <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dto">
                 <input type="hidden" name="courseId" value="${dto.courseId}">
-                <input type="hidden" name="email" value="${assignedUser.email}">
+                <input type="hidden" name="userId" value="${assignedUser.userId}">
                 <tr>
                     <td>${assignedUser.email}</td>
                     <td>${assignedUser.firstName}</td>
@@ -197,6 +197,7 @@
                     <input type="hidden" name="searchType" value="${dto.searchType}">
                     <input type="hidden" name="searchParam" value="${dto.searchParam}">
                     <input type="hidden" name="courseId" value="${dto.courseId}">
+                    <input type="hidden" name="userId" value="${freeUser.userId}">
                     <input type="hidden" name="email" value="${freeUser.email}">
                     <input type="hidden" name="firstName" value="${freeUser.firstName}">
                     <input type="hidden" name="lastName" value="${freeUser.lastName}">

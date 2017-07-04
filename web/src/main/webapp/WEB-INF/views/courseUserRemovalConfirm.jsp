@@ -113,7 +113,7 @@
             <td>
                 <sf:form action="removeUserFromCourse" method="post" commandName="dto">
                     <input type="hidden" name="courseId" value="${dto.courseId}">
-                    <input type="hidden" name="email" value="${dto.email}">
+                    <input type="hidden" name="userId" value="${dto.userId}">
                     <input type="submit" value="Yes" class="buttonWidth black"/>
                 </sf:form>
             </td>

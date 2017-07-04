@@ -46,12 +46,14 @@ public class CourseDaoImplTest {
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
                 .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
         user1 = new User.Builder()
+                .setUserId(401)
                 .setEmail("user1@email.com")
                 .setFirstName("Name1")
                 .setLastName("Surname1")
                 .setPhone("+38050 111 1111")
                 .getInstance();
         user3 = new User.Builder()
+                .setUserId(403)
                 .setEmail("user3@email.com")
                 .setFirstName("Name3")
                 .setLastName("Surname3")
@@ -130,7 +132,8 @@ public class CourseDaoImplTest {
     @WithAnonymousUser
     public void removeUserFromCourse() {
         CourseUserDto dto = new CourseUserDto();
-        dto.setEmail(user1.getEmail());
+        dto.setCourseId(1);
+        dto.setUserId(user1.getUserId());
 
         assertThat(courseDaoInf.getUsersAssignedToCourse(1), hasItem(user1));
         courseDaoInf.removeUserFromCourse(dto);
@@ -142,6 +145,7 @@ public class CourseDaoImplTest {
     public void assignUserToCourse() {
         CourseUserDto dto = new CourseUserDto();
         dto.setCourseId(1);
+        dto.setUserId(user3.getUserId());
         dto.setEmail(user3.getEmail());
         dto.setFirstName(user3.getFirstName());
         dto.setLastName(user3.getLastName());

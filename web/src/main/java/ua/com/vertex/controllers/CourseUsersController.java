@@ -48,8 +48,8 @@ public class CourseUsersController {
     @PostMapping(value = "/removeUserFromCourse")
     public String removeUserFromAssigned(@ModelAttribute CourseUserDto dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Remove user=%s from course id=%d",
-                dto.getEmail(), dto.getCourseId()));
+        LOGGER.debug(logInfo.getId() + String.format("Remove user=%d from course id=%d",
+                dto.getUserId(), dto.getCourseId()));
 
         courseLogic.removeUserFromCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -62,8 +62,8 @@ public class CourseUsersController {
     @PostMapping(value = "/assignUser")
     public String assignUserToCourse(@ModelAttribute CourseUserDto dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Assign user=%s to course id=%d",
-                dto.getEmail(), dto.getCourseId()));
+        LOGGER.debug(logInfo.getId() + String.format("Assign user=%d to course id=%d",
+                dto.getUserId(), dto.getCourseId()));
 
         courseLogic.assignUserToCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -109,8 +109,8 @@ public class CourseUsersController {
     @PostMapping(value = "/confirmUserRemovalFromCourse")
     public String confirmUserRemovalFromCourse(@ModelAttribute CourseUserDto dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Confirm removing user=%s from course id=%d",
-                dto.getEmail(), dto.getCourseId()));
+        LOGGER.debug(logInfo.getId() + String.format("Confirm removing user id=%d from course id=%d",
+                dto.getUserId(), dto.getCourseId()));
 
         model.addAttribute(new Course());
         model.addAttribute(DTO, dto);
