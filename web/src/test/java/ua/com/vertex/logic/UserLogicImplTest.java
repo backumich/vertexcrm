@@ -146,4 +146,11 @@ public class UserLogicImplTest {
          logic.getTeachers();
     }
 
+    @Test(expected = DataIntegrityViolationException.class)
+    public void getCourseUsersVerifyAccountingDaoAndReturnException() throws Exception {
+        when(logic.getCourseUsers(1)).thenThrow(new DataIntegrityViolationException("Test"));
+        logic.getCourseUsers(1);
+        verify(dao, times(1)).getCourseUsers(1);
+    }
+
 }

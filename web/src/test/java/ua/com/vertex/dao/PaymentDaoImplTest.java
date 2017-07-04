@@ -33,7 +33,7 @@ public class PaymentDaoImplTest {
         payment.setDealId(1);
         payment.setPaymentId(result);
 
-        //noinspection ConstantConditions
-        assertEquals("Maybe method was changed", payment, paymentDaoInf.getPaymentByIdWithOutDate(result).get());
+        assertEquals("Maybe method was changed", payment, paymentDaoInf.getPaymentByIdWithOutDate(result).
+                orElse(new Payment()));
     }
 }

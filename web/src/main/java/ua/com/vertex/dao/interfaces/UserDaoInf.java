@@ -2,6 +2,7 @@ package ua.com.vertex.dao.interfaces;
 
 
 import org.springframework.dao.DataAccessException;
+import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
@@ -49,5 +50,7 @@ public interface UserDaoInf {
     void registrationUserUpdate(User user) throws DataAccessException;
 
     List<User> getTeachers () throws DataAccessException;
+
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
 
 }

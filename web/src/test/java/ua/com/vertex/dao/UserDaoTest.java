@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -232,9 +234,14 @@ public class UserDaoTest {
                 , userDao.userForRegistrationCheck(EXISTING_EMAIL).get());
     }
 
-    @Test(expected = DataAccessException.class)
-    public void registrationUserInsertEmptyUser() throws Exception {
+    @Test(expected = NullPointerException.class)
+    public void registrationUserInsertReturnNullPointerExceptionWhenEmptyUser() throws Exception {
         userDao.registrationUserInsert(new User());
+    }
+
+    @Test(expected = DataAccessException.class)
+    public void registrationUserInsertReturnDataAccessExceptionWhenEmptyUserHasRole() throws Exception {
+        userDao.registrationUserInsert(new User.Builder().setRole(Role.ADMIN).getInstance());
     }
 
     @Test
@@ -265,4 +272,12 @@ public class UserDaoTest {
         assertFalse(MSG,teachers.isEmpty());
         teachers.forEach(teacher1 -> assertTrue(teacher1.getRole().equals(Role.ADMIN)));
     }
+    @Test
+    public void getCourseUsersReturnCorrectData() throws Exception {
+        assertEquals("Maybe method was changed", userDao.getCourseUsers(1).get(0),
+                new User.Builder().setUserId(1).setEmail("email1").setFirstName("FirstName")
+                        .setLastName("LastName").setDiscount(0).getInstance());
+
+    }
+
 }

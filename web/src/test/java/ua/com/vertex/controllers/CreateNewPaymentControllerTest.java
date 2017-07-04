@@ -9,12 +9,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.*;
-import ua.com.vertex.logic.interfaces.AccountingLogic;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.PaymentLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -42,7 +44,7 @@ public class CreateNewPaymentControllerTest {
     private CourseLogic courseLogic;
 
     @Mock
-    private AccountingLogic accountingLogic;
+    private UserLogic userLogic;
 
     @Mock
     private PaymentLogic paymentLogic;
@@ -52,7 +54,7 @@ public class CreateNewPaymentControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        underTest = new CreateNewPaymentController( courseLogic, accountingLogic, paymentLogic);
+        underTest = new CreateNewPaymentController(courseLogic, userLogic, paymentLogic);
 
         user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
@@ -84,16 +86,16 @@ public class CreateNewPaymentControllerTest {
 
     @Test
     public void selectUserForPaymentReturnCorrectViewWhenException() throws Exception {
-        when(accountingLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
+        when(userLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.selectUserForPayment(1).getViewName(), ERROR);
     }
 
     @Test
     public void selectUserForPaymentReturnCorrectViewAndDataInModel() throws Exception {
-        when(accountingLogic.getCourseUsers(anyInt())).thenReturn(Collections.singletonList(user));
+        when(userLogic.getCourseUsers(anyInt())).thenReturn(Collections.singletonList(user));
 
         ModelAndView result = underTest.selectUserForPayment(1);
-        verify(accountingLogic, times(1)).getCourseUsers(1);
+        verify(userLogic, times(1)).getCourseUsers(1);
 
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_USER_FOR_PAYMENT_JSP);
         assertEquals(MSG_INVALID_DATA, result.getModel().get(USERS), Collections.singletonList(user));

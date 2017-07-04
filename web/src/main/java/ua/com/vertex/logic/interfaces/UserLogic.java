@@ -44,4 +44,5 @@ public interface UserLogic {
 
     Map<String, String> getTeachers () throws DataAccessException;
 
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
 }

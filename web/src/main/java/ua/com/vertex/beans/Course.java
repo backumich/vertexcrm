@@ -22,9 +22,6 @@ public class Course {
     private LocalDateTime start;
     private boolean finished;
 
-    public Course() {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

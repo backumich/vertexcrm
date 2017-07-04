@@ -9,20 +9,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.util.List;
+
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CreateCertificateAndAddToUser {
-
     static final String SELECT_USER_JSP = "selectUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
     static final String USER_ID = "userIdForCertificate";
@@ -31,10 +31,8 @@ public class CreateCertificateAndAddToUser {
     private final String USER_DATA = "userDataForSearch";
 
     private static final Logger LOGGER = LogManager.getLogger(CreateCertificateAndAddToUser.class);
-
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
-
 
     @PostMapping(value = "/addCertificateWithUserId")
     public ModelAndView addCertificateWithUserId() {
@@ -44,15 +42,14 @@ public class CreateCertificateAndAddToUser {
 
     @PostMapping(value = "/searchUser")
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
-
         LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
-
         String result;
 
         if (userData.isEmpty()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             result = SELECT_USER_JSP;
-            LOGGER.info(String.format("Call - userLogic.searchUser(%s);", userData) + "The data have not been validated!!!");
+            LOGGER.debug(String.format("Call - userLogic.searchUser(%s); The data have not been validated!!!",
+                    userData));
         } else {
             try {
                 List<User> users = userLogic.searchUser(userData);
@@ -68,14 +65,14 @@ public class CreateCertificateAndAddToUser {
                 LOGGER.warn(e);
             }
         }
-
         LOGGER.debug("Request to '/selectUser' redirect to page - " + result);
         return result;
     }
 
     @PostMapping(value = "/selectUser")
-    public ModelAndView selectUser(@RequestParam(USER_ID) int userId) {
-        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
+    public ModelAndView selectUser(@ModelAttribute(USER_ID) int userId) {
+        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to (%s) ",
+                userId, SELECT_USER_JSP));
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
         return result;
@@ -84,7 +81,6 @@ public class CreateCertificateAndAddToUser {
     @PostMapping(value = "/checkCertificateWithUserId")
     public String checkCertificateWithUserId(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                              BindingResult bindingResult, Model model) {
-
         String returnPage;
         LOGGER.debug("Request to '/addCertificateWithUserId' ");
 
@@ -97,13 +93,12 @@ public class CreateCertificateAndAddToUser {
                 int result = certificateLogic.addCertificate(certificate);
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
-                LOGGER.info("Certificate added. Certificate id = " + result);
+                LOGGER.debug("Certificate added. Certificate id = " + result);
             } catch (Exception e) {
                 returnPage = ERROR;
                 LOGGER.warn(e);
             }
         }
-
         LOGGER.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
         return returnPage;
     }
@@ -112,6 +107,5 @@ public class CreateCertificateAndAddToUser {
     public CreateCertificateAndAddToUser(CertificateLogic certificateLogic, UserLogic userLogic) {
         this.certificateLogic = certificateLogic;
         this.userLogic = userLogic;
-
     }
 }

@@ -28,13 +28,6 @@ public class CertificateLogicImpl implements CertificateLogic {
     private static final String USER = "user";
     private static final String CERTIFICATE = "certificate";
 
-    @Autowired
-    public CertificateLogicImpl(UserDaoInf userDaoInf, CertificateDaoInf certificateDaoInf, LogInfo logInfo) {
-        this.userDaoInf = userDaoInf;
-        this.certificateDaoInf = certificateDaoInf;
-        this.logInfo = logInfo;
-    }
-
     public List<Certificate> getAllCertificatesByUserEmail(String eMail) {
         LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", eMail));
         return certificateDaoInf.getAllCertificatesByUserEmail(eMail);
@@ -88,5 +81,12 @@ public class CertificateLogicImpl implements CertificateLogic {
         attributes.put(USER, user);
 
         return attributes;
+    }
+
+    @Autowired
+    public CertificateLogicImpl(UserDaoInf userDaoInf, CertificateDaoInf certificateDaoInf, LogInfo logInfo) {
+        this.userDaoInf = userDaoInf;
+        this.certificateDaoInf = certificateDaoInf;
+        this.logInfo = logInfo;
     }
 }

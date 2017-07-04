@@ -3,22 +3,14 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.PaymentForm;
 import ua.com.vertex.logic.interfaces.*;
-
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -30,9 +22,8 @@ public class CreateNewPaymentController {
 
     private static final Logger LOGGER = LogManager.getLogger(CreateNewPaymentController.class);
 
-
     private final CourseLogic courseLogic;
-    private final AccountingLogic accountingLogic;
+    private final UserLogic userLogic;
     private final PaymentLogic paymentLogic;
 
     static final String SELECT_COURSE_FOR_PAYMENT_JSP = "selectCourseForPayment";
@@ -41,11 +32,6 @@ public class CreateNewPaymentController {
     private static final String PAYMENT = "paymentForm";
     static final String USER_ID_FOR_PAY = "userIdForPayment";
     static final String COURSE_ID_FOR_PAY = "courseIdForPayment";
-
-
-
-
-
 
     @PostMapping(value = "/createPayment")
     public ModelAndView selectCourseForPayment() {
@@ -64,7 +50,7 @@ public class CreateNewPaymentController {
     public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
         try {
-            result.addObject(USERS, accountingLogic.getCourseUsers(courseId));
+            result.addObject(USERS, userLogic.getCourseUsers(courseId));
             result.addObject(COURSE_ID_FOR_PAY, courseId);
             result.addObject(PAYMENT, new PaymentForm());
         } catch (Exception e) {
@@ -72,19 +58,6 @@ public class CreateNewPaymentController {
             result.setViewName(ERROR);
         }
         return result;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        DecimalFormat decimalFormat = new DecimalFormat();
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-
-        decimalFormat.setMaximumIntegerDigits(5);
-        decimalFormat.setMaximumFractionDigits(2);
-        binder.registerCustomEditor(BigDecimal.class, new CustomNumberEditor(
-                BigDecimal.class, decimalFormat, true));
     }
 
     @PostMapping(value = "/selectUserForPayment")
@@ -109,9 +82,9 @@ public class CreateNewPaymentController {
     }
 
     @Autowired
-    public CreateNewPaymentController(CourseLogic courseLogic, AccountingLogic accountingLogic, PaymentLogic paymentLogic) {
+    public CreateNewPaymentController(CourseLogic courseLogic, UserLogic userLogic, PaymentLogic paymentLogic) {
         this.courseLogic = courseLogic;
-        this.accountingLogic = accountingLogic;
+        this.userLogic = userLogic;
         this.paymentLogic = paymentLogic;
     }
 }

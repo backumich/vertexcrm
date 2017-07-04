@@ -123,4 +123,11 @@ public class UserLogicImpl implements UserLogic {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    @Override
+    public List<User> getCourseUsers(int courseId) {
+
+        LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
+        return userDao.getCourseUsers(courseId);
+    }
+
 }

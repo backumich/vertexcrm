@@ -34,14 +34,6 @@ public class RegistrationController {
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;
 
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic,
-                                  EmailLogic emailLogic, MailService mailService) {
-        this.registrationUserLogic = registrationUserLogic;
-        this.emailLogic = emailLogic;
-        this.mailService = mailService;
-    }
-
     @GetMapping
     public ModelAndView viewRegistrationForm() {
         LOGGER.info("First request to " + REGISTRATION_PAGE);
@@ -73,5 +65,13 @@ public class RegistrationController {
         }
 
         return modelAndView;
+    }
+
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic,
+                                  EmailLogic emailLogic, MailService mailService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
     }
 }
