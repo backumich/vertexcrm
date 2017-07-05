@@ -29,6 +29,7 @@ public class ViewAllUsersController {
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) {
         ModelAndView modelAndView = new ModelAndView();
         try {
+            dataNavigator = userLogic.updateDataNavigator(dataNavigator);
             List<User> users = userLogic.getUsersPerPages(dataNavigator);
             modelAndView.addObject("viewAllUsers", dataNavigator);
             modelAndView.addObject("users", users);

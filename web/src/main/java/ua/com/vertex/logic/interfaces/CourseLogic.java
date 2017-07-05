@@ -6,6 +6,8 @@ import ua.com.vertex.utils.DataNavigator;
 import java.util.List;
 
 public interface CourseLogic {
+    DataNavigator updateDataNavigator(DataNavigator dataNavigator);
+
     List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
     int addCourse(Course course) throws Exception;

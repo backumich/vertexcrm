@@ -105,17 +105,6 @@ public class CourseDaoImpl implements CourseDaoInf {
                 .setSchedule(resultSet.getString("schedule"))
                 .setNotes(resultSet.getString("notes"))
                 .getInstance();
-
-//        Course course = new Course();
-//        course.setId(resultSet.getInt("id"));
-//        course.setName(resultSet.getString("name"));
-//        course.setStart(resultSet.getDate("start").toLocalDate());
-//        course.setFinished(resultSet.getInt("finished") != 0);
-//        course.setPrice(resultSet.getBigDecimal("price"));
-//        course.setTeacherName(resultSet.getString("teacher_name"));
-//        course.setSchedule(resultSet.getString("schedule"));
-//        course.setNotes(resultSet.getString("notes"));
-//        return course;
     }
 
     private MapSqlParameterSource getCourseParameters(Course course) {

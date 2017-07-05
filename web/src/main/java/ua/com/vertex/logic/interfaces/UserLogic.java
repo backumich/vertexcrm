@@ -22,6 +22,8 @@ public interface UserLogic {
 
     Optional<byte[]> getImage(int userId, String imageType);
 
+    DataNavigator updateDataNavigator(DataNavigator dataNavigator);
+
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;

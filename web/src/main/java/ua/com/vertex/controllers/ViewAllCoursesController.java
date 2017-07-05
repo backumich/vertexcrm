@@ -29,6 +29,7 @@ public class ViewAllCoursesController {
     public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) {
         ModelAndView modelAndView = new ModelAndView();
         try {
+            dataNavigator = courseLogic.updateDataNavigator(dataNavigator);
             List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
             modelAndView.addObject("viewAllCourses", dataNavigator);
             modelAndView.addObject("courses", courses);
