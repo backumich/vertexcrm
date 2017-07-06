@@ -36,6 +36,7 @@ public class LoggingLogicImpl implements LoggingLogic {
         return toReturn;
     }
 
+    @Override
     public String setUser(String email, Model model) throws Exception {
         String view = requiredView();
         User user = userLogic.getUserByEmail(email)

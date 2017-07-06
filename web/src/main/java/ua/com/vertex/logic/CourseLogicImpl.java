@@ -9,6 +9,7 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -17,39 +18,30 @@ public class CourseLogicImpl implements CourseLogic {
     private final CourseDaoInf courseDao;
 
     @Override
-    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) {
+    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException {
         LOGGER.debug("Update dataNavigator");
-        if (dataNavigator.getCurrentNumberPage() == dataNavigator.getNextPage()) {
+        int dataSize = courseDao.getQuantityCourses();
+        int totalPages = (int) Math.ceil(dataSize / dataNavigator.getCurrentRowPerPage());
+
+        dataNavigator.setDataSize(dataSize);
+        if (totalPages == 0) {
             dataNavigator.setCurrentNumberPage(1);
             dataNavigator.setNextPage(1);
+            dataNavigator.setLastPage(1);
+            dataNavigator.setTotalPages(1);
         } else {
+            dataNavigator.setTotalPages(totalPages);
             dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+            dataNavigator.setLastPage(totalPages);
         }
-        try {
-            int dataSize = courseDao.getQuantityCourses();
-            dataNavigator.setDataSize(dataSize);
 
-            final int totalPages = dataSize / dataNavigator.getRowPerPage();
-            final int quantityPages = dataNavigator.getQuantityPages();
-
-            dataNavigator.setTotalPages(totalPages >= 0 ? quantityPages + 1 : totalPages);
-            dataNavigator.setLastPage(quantityPages);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
         return dataNavigator;
     }
 
     @Override
     public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get part data courses list (dataNavigator)");
-        List<Course> courses = null;
-        try {
-            courses = courseDao.getAllCourses(dataNavigator);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
-        return courses;
+        return courseDao.getAllCourses(dataNavigator);
     }
 
     @Override

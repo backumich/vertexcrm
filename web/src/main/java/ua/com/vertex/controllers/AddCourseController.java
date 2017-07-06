@@ -22,7 +22,7 @@ public class AddCourseController {
     private static final String PAGE_JSP = "addCourse";
     private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewAllCourses";
     private static final String ERROR_JSP = "error";
-    private static final String NAME_MODEL = "course";
+    private static final String COURSE = "course";
 
     private static final Logger LOGGER = LogManager.getLogger(AddCourseController.class);
 
@@ -37,12 +37,12 @@ public class AddCourseController {
     @GetMapping
     public ModelAndView viewAddCourseForm() {
         LOGGER.debug("Get page -" + PAGE_JSP);
-        return new ModelAndView(PAGE_JSP, NAME_MODEL, new Course());
+        return new ModelAndView(PAGE_JSP, COURSE, new Course());
     }
 
     @PostMapping
-    public ModelAndView addCourse(@Valid @ModelAttribute(NAME_MODEL)
-                                          Course course, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView addCourse(@Valid @ModelAttribute(COURSE) Course course,
+                                  BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
             LOGGER.debug("The user entered incorrect course data -" + course);

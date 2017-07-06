@@ -1,6 +1,7 @@
 package ua.com.vertex.controllers;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,6 +59,7 @@ public class AddCourseControllerTest {
     public void addCourseTest() throws Exception {
         String name = "Test course name";
         String start = "2001-01-01";
+        String price = "1";
 
         MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
                 .setSingleView(new InternalResourceView("/viewAllCourses"))
@@ -63,6 +68,7 @@ public class AddCourseControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", name)
                 .param("start", start)
+                .param("price", price)
                 .sessionAttr("course", new Course()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("redirect:/viewAllCourses"))

@@ -14,9 +14,11 @@ public class DataNavigator {
     private int nextPage = 1;
     private int lastPage = 1;
     private int currentRowPerPage = 25;
-    private int quantityPages = 0;
+    private int totalPages = 0;
     private int dataSize = 0;
     private Map<Integer, Integer> countRowPerPage = new TreeMap<Integer, Integer>() {{
+        put(3, 3);
+        put(9, 9);
         put(25, 25);
         put(50, 50);
         put(100, 100);
@@ -68,7 +70,7 @@ public class DataNavigator {
         this.lastPage = lastPage;
     }
 
-    public int getRowPerPage() {
+    public int getCurrentRowPerPage() {
         return currentRowPerPage;
     }
 
@@ -76,12 +78,12 @@ public class DataNavigator {
         this.currentRowPerPage = currentRowPerPage;
     }
 
-    public int getQuantityPages() {
-        return quantityPages;
+    public int getTotalPages() {
+        return totalPages;
     }
 
-    public void setTotalPages(int quantityPages) {
-        this.quantityPages = quantityPages;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 
     public int getDataSize() {
