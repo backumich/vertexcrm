@@ -68,7 +68,7 @@ public class DataNavigator {
         this.lastPage = lastPage;
     }
 
-    public int getCurrentRowPerPage() {
+    public int getRowPerPage() {
         return currentRowPerPage;
     }
 
@@ -80,7 +80,7 @@ public class DataNavigator {
         return quantityPages;
     }
 
-    public void setQuantityPages(int quantityPages) {
+    public void setTotalPages(int quantityPages) {
         this.quantityPages = quantityPages;
     }
 

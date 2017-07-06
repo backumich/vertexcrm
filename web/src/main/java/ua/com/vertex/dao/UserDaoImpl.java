@@ -231,8 +231,8 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
-        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
+        parameters.addValue("offset", dataNavigator.getRowPerPage());
 
         try {
             users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());

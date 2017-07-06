@@ -46,8 +46,8 @@ public class CourseDaoImpl implements CourseDaoInf {
                 "FROM Courses c LIMIT :from, :offset";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
-        parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
+        parameters.addValue("offset", dataNavigator.getRowPerPage());
 
         try {
             courses = jdbcTemplate.query(query, parameters, this::mapCourses);

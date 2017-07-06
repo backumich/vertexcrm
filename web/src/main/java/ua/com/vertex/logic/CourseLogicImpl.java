@@ -9,7 +9,6 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -29,11 +28,12 @@ public class CourseLogicImpl implements CourseLogic {
         try {
             int dataSize = courseDao.getQuantityCourses();
             dataNavigator.setDataSize(dataSize);
-            dataNavigator.setQuantityPages(dataSize / dataNavigator.getCurrentRowPerPage());
-            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
-                dataNavigator.setQuantityPages(dataNavigator.getQuantityPages() + 1);
-            }
-            dataNavigator.setLastPage(dataNavigator.getQuantityPages());
+
+            final int totalPages = dataSize / dataNavigator.getRowPerPage();
+            final int quantityPages = dataNavigator.getQuantityPages();
+
+            dataNavigator.setTotalPages(totalPages >= 0 ? quantityPages + 1 : totalPages);
+            dataNavigator.setLastPage(quantityPages);
         } catch (Exception e) {
             LOGGER.warn(e);
         }

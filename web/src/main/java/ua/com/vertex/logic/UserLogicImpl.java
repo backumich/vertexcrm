@@ -63,9 +63,9 @@ public class UserLogicImpl implements UserLogic {
         try {
             int dataSize = userDao.getQuantityUsers();
             dataNavigator.setDataSize(dataSize);
-            dataNavigator.setQuantityPages(dataSize / dataNavigator.getCurrentRowPerPage());
-            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
-                dataNavigator.setQuantityPages(dataNavigator.getQuantityPages() + 1);
+            dataNavigator.setTotalPages(dataSize / dataNavigator.getRowPerPage());
+            if (dataSize / dataNavigator.getRowPerPage() >= 0) {
+                dataNavigator.setTotalPages(dataNavigator.getQuantityPages() + 1);
             }
             dataNavigator.setLastPage(dataNavigator.getQuantityPages());
         } catch (Exception e) {
