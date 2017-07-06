@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class CourseDaoImpl implements CourseDaoInf {
@@ -38,7 +39,6 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public List<Course> getAllCourses(DataNavigator dataNavigator) {
-        List<Course> courses = new ArrayList<>();
 
         LOGGER.debug("Get all courses list");
 
@@ -49,11 +49,12 @@ public class CourseDaoImpl implements CourseDaoInf {
         parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getCurrentRowPerPage());
         parameters.addValue("offset", dataNavigator.getCurrentRowPerPage());
 
-        try {
-            courses = jdbcTemplate.query(query, parameters, this::mapCourses);
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Something went wrong", e);
-        }
+        List<Course> courses = jdbcTemplate.query(query, parameters, this::mapCourses);
+
+        String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
+        LOGGER.debug("Quantity courses -" + courses.size());
+        LOGGER.debug("All courses list -" + allCourses);
+
         return courses;
     }
 

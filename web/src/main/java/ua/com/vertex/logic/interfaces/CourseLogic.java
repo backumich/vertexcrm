@@ -3,10 +3,11 @@ package ua.com.vertex.logic.interfaces;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface CourseLogic {
-    DataNavigator updateDataNavigator(DataNavigator dataNavigator);
+    DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException;
 
     List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 

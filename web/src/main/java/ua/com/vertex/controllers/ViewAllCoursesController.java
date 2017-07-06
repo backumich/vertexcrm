@@ -12,6 +12,7 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,23 +27,17 @@ public class ViewAllCoursesController {
     private CourseLogic courseLogic;
 
     @RequestMapping(value = "/viewAllCourses")
-    public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) {
+    public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
-        try {
-            dataNavigator = courseLogic.updateDataNavigator(dataNavigator);
-            List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
-            modelAndView.addObject("viewAllCourses", dataNavigator);
-            modelAndView.addObject("courses", courses);
-            modelAndView.setViewName(PAGE_JSP);
-            LOGGER.debug("Received a list of all courses and transferred to the model");
 
-            String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
-            LOGGER.debug("Quantity courses -" + courses.size());
-            LOGGER.debug("All courses list -" + allCourses);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            modelAndView.setViewName(ERROR_JSP);
-        }
+        dataNavigator = courseLogic.updateDataNavigator(dataNavigator);
+        List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
+
+        modelAndView.addObject("viewAllCourses", dataNavigator);
+        modelAndView.addObject("courses", courses);
+        modelAndView.setViewName(PAGE_JSP);
+        LOGGER.debug("Received a list of all courses and transferred to the model");
+
         return modelAndView;
     }
 

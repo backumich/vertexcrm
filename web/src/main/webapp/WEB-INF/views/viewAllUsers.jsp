@@ -87,7 +87,7 @@
                 <a id="${dataNavigator.currentNumberPage-1}" class="page" style="cursor: pointer;">Prev</a>
             </c:if>
 
-            <c:forEach begin="1" end="${dataNavigator.quantityPages}" var="val">
+            <c:forEach begin="1" end="${dataNavigator.totalPages}" var="val">
                 <c:if test="${val==dataNavigator.currentNumberPage}">
                     <a style="color: #ffffff" id="${val}" class="page" style="cursor: pointer;">${val}</a>
                 </c:if>
@@ -116,7 +116,7 @@
                 <input id="lastPage" type="hidden" name="lastPage" value="${dataNavigator.lastPage}">
                 <input id="currentRowPerPage" type="hidden" name="currentRowPerPage"
                        value="${dataNavigator.currentRowPerPage}">
-                <input id="quantityPages" type="hidden" name="quantityPages" value="${dataNavigator.quantityPages}">
+                <input id="totalPages" type="hidden" name="totalPages" value="${dataNavigator.totalPages}">
                 <input id="dataSize" type="hidden" name="dataSize" value="${dataNavigator.dataSize}">
 
                 <input value="Submit" id="submit" class="buttonText" type="submit" style="display:none;"/>

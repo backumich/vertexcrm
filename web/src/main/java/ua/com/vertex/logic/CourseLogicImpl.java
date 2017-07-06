@@ -18,38 +18,30 @@ public class CourseLogicImpl implements CourseLogic {
     private final CourseDaoInf courseDao;
 
     @Override
-    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) {
+    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException {
         LOGGER.debug("Update dataNavigator");
-        if (dataNavigator.getCurrentNumberPage() == dataNavigator.getNextPage()) {
+        int dataSize = courseDao.getQuantityCourses();
+        int totalPages = (int) Math.ceil(dataSize / dataNavigator.getCurrentRowPerPage());
+
+        dataNavigator.setDataSize(dataSize);
+        if (totalPages == 0) {
             dataNavigator.setCurrentNumberPage(1);
             dataNavigator.setNextPage(1);
+            dataNavigator.setLastPage(1);
+            dataNavigator.setTotalPages(1);
         } else {
+            dataNavigator.setTotalPages(totalPages);
             dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+            dataNavigator.setLastPage(totalPages);
         }
-        try {
-            int dataSize = courseDao.getQuantityCourses();
-            dataNavigator.setDataSize(dataSize);
-            dataNavigator.setQuantityPages(dataSize / dataNavigator.getCurrentRowPerPage());
-            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
-                dataNavigator.setQuantityPages(dataNavigator.getQuantityPages() + 1);
-            }
-            dataNavigator.setLastPage(dataNavigator.getQuantityPages());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
+
         return dataNavigator;
     }
 
     @Override
     public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get part data courses list (dataNavigator)");
-        List<Course> courses = null;
-        try {
-            courses = courseDao.getAllCourses(dataNavigator);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
-        return courses;
+        return courseDao.getAllCourses(dataNavigator);
     }
 
     @Override
