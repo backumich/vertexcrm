@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
@@ -210,7 +211,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUser() throws SQLException {
         LOGGER.debug("Get all users list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
@@ -223,10 +224,9 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<User> getAllUsers(DataNavigator dataNavigator) throws SQLException {
-        List<User> users = new ArrayList<>();
+    public List<User> getUsersPerPages(DataNavigator dataNavigator) {
 
-        LOGGER.debug("Get all user  list");
+        LOGGER.debug("Get all user list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
 
@@ -234,11 +234,12 @@ public class UserDaoImpl implements UserDaoInf {
         parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
         parameters.addValue("offset", dataNavigator.getRowPerPage());
 
-        try {
-            users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("Something went wrong", e);
-        }
+        List<User> users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
+
+        String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+        LOGGER.debug("Quantity users -" + users.size());
+        LOGGER.debug("All users list -" + allUsersEmail);
+
         return users;
     }
 

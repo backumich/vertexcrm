@@ -20,11 +20,12 @@ public class CourseLogicImpl implements CourseLogic {
     @Override
     public DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException {
         LOGGER.debug("Update dataNavigator");
+
         int dataSize = courseDao.getQuantityCourses();
-        int totalPages = (int) Math.ceil(dataSize / dataNavigator.getCurrentRowPerPage());
+        int totalPages = (int) Math.ceil((double) dataSize / dataNavigator.getRowPerPage());
 
         dataNavigator.setDataSize(dataSize);
-        if (totalPages == 0) {
+        if (totalPages == 0 || totalPages < dataNavigator.getCurrentNumberPage()) {
             dataNavigator.setCurrentNumberPage(1);
             dataNavigator.setNextPage(1);
             dataNavigator.setLastPage(1);

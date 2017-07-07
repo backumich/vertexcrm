@@ -24,9 +24,9 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds();
 
-    List<User> getAllUsers() throws SQLException;
+    List<User> getAllUser() throws SQLException;
 
-    List<User> getAllUsers(DataNavigator dataNavigator) throws SQLException;
+    List<User> getUsersPerPages(DataNavigator dataNavigator);
 
     int getQuantityUsers() throws SQLException;
 

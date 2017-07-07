@@ -22,7 +22,7 @@ public interface UserLogic {
 
     Optional<byte[]> getImage(int userId, String imageType);
 
-    DataNavigator updateDataNavigator(DataNavigator dataNavigator);
+    DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException;
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 

@@ -52,25 +52,24 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) {
+    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException {
         LOGGER.debug("Update dataNavigator");
-        if (dataNavigator.getCurrentNumberPage() == dataNavigator.getNextPage()) {
+
+        int dataSize = userDao.getQuantityUsers();
+        int totalPages = (int) Math.ceil((double) dataSize / dataNavigator.getRowPerPage());
+
+        dataNavigator.setDataSize(dataSize);
+        if (totalPages == 0 || totalPages < dataNavigator.getCurrentNumberPage()) {
             dataNavigator.setCurrentNumberPage(1);
             dataNavigator.setNextPage(1);
+            dataNavigator.setLastPage(1);
+            dataNavigator.setTotalPages(1);
         } else {
+            dataNavigator.setTotalPages(totalPages);
             dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+            dataNavigator.setLastPage(totalPages);
         }
-        try {
-            int dataSize = userDao.getQuantityUsers();
-            dataNavigator.setDataSize(dataSize);
-            dataNavigator.setTotalPages(dataSize / dataNavigator.getCurrentRowPerPage());
-            if (dataSize / dataNavigator.getCurrentRowPerPage() >= 0) {
-                dataNavigator.setTotalPages(dataNavigator.getTotalPages() + 1);
-            }
-            dataNavigator.setLastPage(dataNavigator.getTotalPages());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
+
         return dataNavigator;
     }
 
@@ -78,13 +77,8 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get part data users list (dataNavigator)");
-        List<User> users = null;
-        try {
-            users = userDao.getAllUsers(dataNavigator);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-        }
-        return users;
+
+        return userDao.getUsersPerPages(dataNavigator);
     }
 
     @Override

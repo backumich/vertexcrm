@@ -12,6 +12,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,24 +27,17 @@ public class ViewAllUsersController {
     private UserLogic userLogic;
 
     @RequestMapping(value = "/viewAllUsers")
-    public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) {
+    public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
-        try {
-            dataNavigator = userLogic.updateDataNavigator(dataNavigator);
-            List<User> users = userLogic.getUsersPerPages(dataNavigator);
-            modelAndView.addObject("viewAllUsers", dataNavigator);
-            modelAndView.addObject("users", users);
-            modelAndView.setViewName(PAGE_JSP);
-            LOGGER.debug("Received a list of all users and transferred to the model");
 
-            String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+        dataNavigator = userLogic.updateDataNavigator(dataNavigator);
+        List<User> users = userLogic.getUsersPerPages(dataNavigator);
 
-            LOGGER.debug("Quantity users -" + users.size());
-            LOGGER.debug("All users list -" + allUsersEmail);
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            modelAndView.setViewName(ERROR_JSP);
-        }
+        modelAndView.addObject("viewAllUsers", dataNavigator);
+        modelAndView.addObject("users", users);
+        modelAndView.setViewName(PAGE_JSP);
+        LOGGER.debug("Received a list of all users and transferred to the model");
+
         return modelAndView;
     }
 

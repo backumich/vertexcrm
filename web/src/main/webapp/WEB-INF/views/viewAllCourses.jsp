@@ -110,7 +110,7 @@
             <br/>
             <br/>
             <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
-                <form:select id="perPage" class="buttonText" path="currentRowPerPage" items="${dataNavigator.countRowPerPage}"/>
+                <form:select id="perPage" class="buttonText" path="rowPerPage" items="${dataNavigator.countRowPerPage}"/>
 
                 <input id="currentNamePage" type="hidden" name="currentNamePage"
                        value="${dataNavigator.currentNamePage}">
@@ -118,8 +118,8 @@
                        value="${dataNavigator.currentNumberPage}">
                 <input id="nextPage" type="hidden" name="nextPage" value="${dataNavigator.nextPage}">
                 <input id="lastPage" type="hidden" name="lastPage" value="${dataNavigator.lastPage}">
-                <input id="currentRowPerPage" type="hidden" name="currentRowPerPage"
-                       value="${dataNavigator.currentRowPerPage}">
+                <input id="rowPerPage" type="hidden" name="rowPerPage"
+                       value="${dataNavigator.rowPerPage}">
                 <input id="totalPages" type="hidden" name="totalPages" value="${dataNavigator.totalPages}">
                 <input id="dataSize" type="hidden" name="dataSize" value="${dataNavigator.dataSize}">
 
