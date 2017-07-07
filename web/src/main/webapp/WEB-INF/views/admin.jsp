@@ -134,6 +134,16 @@
                 <input class="black" type="submit" name="createPayment" value="Create new payment"/>
             </form:form>
         </div>
+        <br>
+        <br>
+        <br>
+
+        <div>
+            <span class="formHeaderText1">Course info:</span><br><br>
+            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
+                <input class="black" type="submit" name="courseInfo" value="Course info"/>
+            </form:form>
+        </div>
 
         <br>
         <br>
