@@ -81,7 +81,7 @@
     <div class="container pt1_5">
         <div align="center">
             <c:if test="${dataNavigator.currentNumberPage!=1}">
-                <a id="1" class="page" style="cursor: pointer;"><<</a>
+                <a id="1" class="page" style="cursor: pointer;">&lt;&lt;</a>
             </c:if>
             <c:if test="${dataNavigator.currentNumberPage>1}">
                 <a id="${dataNavigator.currentNumberPage-1}" class="page" style="cursor: pointer;">Prev</a>
@@ -100,7 +100,7 @@
                 <a id="${dataNavigator.currentNumberPage+1}" class="page" style="cursor: pointer;">Next</a>
             </c:if>
             <c:if test="${dataNavigator.lastPage!=dataNavigator.currentNumberPage}">
-                <a id="${dataNavigator.lastPage}" class="page" style="cursor: pointer;">>></a>
+                <a id="${dataNavigator.lastPage}" class="page" style="cursor: pointer;">&gt;&gt;</a>
             </c:if>
             <br/>
             <br/>

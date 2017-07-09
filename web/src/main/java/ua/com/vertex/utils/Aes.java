@@ -1,12 +1,9 @@
 package ua.com.vertex.utils;
 
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 public class Aes {
 
@@ -19,11 +16,11 @@ public class Aes {
     }
 
     private static String hex(byte[] bytes) {
-        StringBuilder r = new StringBuilder();
+        StringBuilder result = new StringBuilder();
         for (byte aByte : bytes) {
-            r.append(pad2(Integer.toHexString(aByte + 128)));
+            result.append(pad2(Integer.toHexString(aByte + 128)));
         }
-        return r.toString();
+        return result.toString();
     }
 
     private static String safePassword(String unsafe) {
