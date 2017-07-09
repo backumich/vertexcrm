@@ -52,27 +52,9 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException {
-        LOGGER.debug("Update dataNavigator");
-
-        int dataSize = userDao.getQuantityUsers();
-        int totalPages = (int) Math.ceil((double) dataSize / dataNavigator.getRowPerPage());
-
-        dataNavigator.setDataSize(dataSize);
-        if (totalPages == 0 || totalPages < dataNavigator.getCurrentNumberPage()) {
-            dataNavigator.setCurrentNumberPage(1);
-            dataNavigator.setNextPage(1);
-            dataNavigator.setLastPage(1);
-            dataNavigator.setTotalPages(1);
-        } else {
-            dataNavigator.setTotalPages(totalPages);
-            dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
-            dataNavigator.setLastPage(totalPages);
-        }
-
-        return dataNavigator;
+    public int getQuantityUsers() throws SQLException {
+        return userDao.getQuantityUsers();
     }
-
 
     @Override
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
@@ -145,5 +127,4 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
         return userDao.getCourseUsers(courseId);
     }
-
 }

@@ -1,5 +1,7 @@
 package ua.com.vertex.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +19,34 @@ public class DataNavigator {
     private int totalPages = 0;
     private int dataSize = 0;
     private Map<Integer, Integer> countRowPerPage = new TreeMap<Integer, Integer>() {{
-        put(3, 3);
-        put(9, 9);
         put(25, 25);
         put(50, 50);
         put(100, 100);
     }};
+
+    private static final Logger LOGGER = LogManager.getLogger(DataNavigator.class);
+
+    public static DataNavigator updateDataNavigator(DataNavigator dataNavigator, int dataSize) {
+        LOGGER.debug("Update dataNavigator");
+        int totalPages = (int) Math.ceil((double) dataSize / dataNavigator.getRowPerPage());
+
+        dataNavigator.setDataSize(dataSize);
+        if (totalPages == 0) {
+            dataNavigator.setCurrentNumberPage(1);
+            dataNavigator.setNextPage(1);
+            dataNavigator.setLastPage(1);
+            dataNavigator.setTotalPages(1);
+        } else if (totalPages != dataNavigator.totalPages) {
+            dataNavigator.setTotalPages(totalPages);
+            dataNavigator.setCurrentNumberPage(1);
+            dataNavigator.setLastPage(totalPages);
+        } else {
+            dataNavigator.setTotalPages(totalPages);
+            dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
+            dataNavigator.setLastPage(totalPages);
+        }
+        return dataNavigator;
+    }
 
     public DataNavigator() {
     }

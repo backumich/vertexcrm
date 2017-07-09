@@ -14,12 +14,10 @@ import ua.com.vertex.utils.DataNavigator;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @SessionAttributes(value = "viewAllUsers")
 public class ViewAllUsersController {
-    private static final String ERROR_JSP = "error";
     private static final String PAGE_JSP = "viewAllUsers";
 
     private static final Logger LOGGER = LogManager.getLogger(ViewAllUsersController.class);
@@ -29,8 +27,8 @@ public class ViewAllUsersController {
     @RequestMapping(value = "/viewAllUsers")
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
-
-        dataNavigator = userLogic.updateDataNavigator(dataNavigator);
+        int quantityUsers = userLogic.getQuantityUsers();
+        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, quantityUsers);
         List<User> users = userLogic.getUsersPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllUsers", dataNavigator);

@@ -55,7 +55,7 @@ public class ViewAllUsersControllerTest {
                 .andExpect(model().attribute("viewAllUsers", hasProperty("currentNumberPage", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("nextPage", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("lastPage", is(1))))
-                .andExpect(model().attribute("viewAllUsers", hasProperty("currentRowPerPage", is(25))))
+                .andExpect(model().attribute("viewAllUsers", hasProperty("rowPerPage", is(25))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("totalPages", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
                     put(25, 25);
@@ -84,7 +84,7 @@ public class ViewAllUsersControllerTest {
                 .andExpect(model().attribute("viewAllUsers", hasProperty("currentNumberPage", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("nextPage", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("lastPage", is(1))))
-                .andExpect(model().attribute("viewAllUsers", hasProperty("currentRowPerPage", is(25))))
+                .andExpect(model().attribute("viewAllUsers", hasProperty("rowPerPage", is(25))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("totalPages", is(1))))
                 .andExpect(model().attribute("viewAllUsers", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
                     put(25, 25);

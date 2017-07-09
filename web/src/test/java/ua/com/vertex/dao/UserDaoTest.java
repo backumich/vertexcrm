@@ -113,8 +113,8 @@ public class UserDaoTest {
 
     @Test
     public void getListUsersNotEmpty() throws Exception {
-//        List<User> users = userDao.getUsersPerPages();
-//        assertEquals(false, users.isEmpty());
+        List<User> users = userDao.getUsersPerPages(new DataNavigator());
+        assertEquals(false, users.isEmpty());
     }
 
     @Test

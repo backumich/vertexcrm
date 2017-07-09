@@ -22,8 +22,6 @@ public interface UserLogic {
 
     Optional<byte[]> getImage(int userId, String imageType);
 
-    DataNavigator updateDataNavigator(DataNavigator dataNavigator) throws SQLException;
-
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
     Optional<User> getUserDetailsByID(int userId) throws SQLException;
@@ -45,4 +43,6 @@ public interface UserLogic {
     void registrationUserUpdate(User user) throws DataAccessException;
 
     List<User> getCourseUsers(int courseId) throws DataAccessException;
+
+    int getQuantityUsers() throws SQLException;
 }
