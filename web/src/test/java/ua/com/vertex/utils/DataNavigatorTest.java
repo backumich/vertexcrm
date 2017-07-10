@@ -11,7 +11,7 @@ public class DataNavigatorTest {
     @Test
     public void dataNavigatorDefaultValueTest() {
         DataNavigator dataNavigator = new DataNavigator("Test DataNavigator");
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, 999);
+        dataNavigator.updateDataNavigator(999);
 
         assertEquals("Test DataNavigator", dataNavigator.getCurrentNamePage());
         assertEquals(1, dataNavigator.getCurrentNumberPage());
@@ -30,7 +30,7 @@ public class DataNavigatorTest {
     @Test
     public void DataNavigatorZeroDataSizeTest() {
         DataNavigator dataNavigator = new DataNavigator("Test DataNavigator");
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, 0);
+        dataNavigator.updateDataNavigator(0);
 
         assertEquals("Test DataNavigator", dataNavigator.getCurrentNamePage());
         assertEquals(1, dataNavigator.getCurrentNumberPage());
@@ -53,10 +53,10 @@ public class DataNavigatorTest {
         dataNavigator.setNextPage(20);
         dataNavigator.setLastPage(20);
         dataNavigator.setRowPerPage(50);
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, 999);
+        dataNavigator.updateDataNavigator(999);
 
         dataNavigator.setRowPerPage(25);
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, 999);
+        dataNavigator.updateDataNavigator(999);
 
         assertEquals("Test DataNavigator", dataNavigator.getCurrentNamePage());
         assertEquals(1, dataNavigator.getCurrentNumberPage());

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface CourseLogic {
-    int getQuantityUsers() throws SQLException;
+    int getQuantityCourses() throws SQLException;
 
     List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 

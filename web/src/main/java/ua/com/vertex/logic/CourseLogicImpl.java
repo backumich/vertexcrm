@@ -18,7 +18,7 @@ public class CourseLogicImpl implements CourseLogic {
     private final CourseDaoInf courseDao;
 
     @Override
-    public int getQuantityUsers() throws SQLException {
+    public int getQuantityCourses() throws SQLException {
         return courseDao.getQuantityCourses();
     }
 

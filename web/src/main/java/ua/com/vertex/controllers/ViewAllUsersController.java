@@ -28,7 +28,8 @@ public class ViewAllUsersController {
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
         int quantityUsers = userLogic.getQuantityUsers();
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, quantityUsers);
+
+       dataNavigator.updateDataNavigator(quantityUsers);
         List<User> users = userLogic.getUsersPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllUsers", dataNavigator);

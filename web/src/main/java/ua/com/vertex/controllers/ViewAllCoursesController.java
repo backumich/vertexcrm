@@ -27,8 +27,9 @@ public class ViewAllCoursesController {
     @RequestMapping(value = "/viewAllCourses")
     public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
-        int quantityUsers = courseLogic.getQuantityUsers();
-        dataNavigator = DataNavigator.updateDataNavigator(dataNavigator, quantityUsers);
+        int quantityCourses = courseLogic.getQuantityCourses();
+
+       dataNavigator.updateDataNavigator(quantityCourses);
         List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllCourses", dataNavigator);

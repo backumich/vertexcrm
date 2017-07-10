@@ -26,26 +26,25 @@ public class DataNavigator {
 
     private static final Logger LOGGER = LogManager.getLogger(DataNavigator.class);
 
-    public static DataNavigator updateDataNavigator(DataNavigator dataNavigator, int dataSize) {
+    public void updateDataNavigator(int dataSize) {
         LOGGER.debug("Update dataNavigator");
-        int totalPages = (int) Math.ceil((double) dataSize / dataNavigator.getRowPerPage());
+        int totalPages = (int) Math.ceil((double) dataSize / this.rowPerPage);
 
-        dataNavigator.setDataSize(dataSize);
+        this.dataSize = dataSize;
         if (totalPages == 0) {
-            dataNavigator.setCurrentNumberPage(1);
-            dataNavigator.setNextPage(1);
-            dataNavigator.setLastPage(1);
-            dataNavigator.setTotalPages(1);
-        } else if (totalPages != dataNavigator.totalPages) {
-            dataNavigator.setTotalPages(totalPages);
-            dataNavigator.setCurrentNumberPage(1);
-            dataNavigator.setLastPage(totalPages);
+            this.currentNumberPage = 1;
+            this.nextPage = 1;
+            this.lastPage = 1;
+            this.totalPages = 1;
+        } else if (totalPages != this.totalPages) {
+            this.totalPages = totalPages;
+            this.currentNumberPage = 1;
+            this.lastPage = totalPages;
         } else {
-            dataNavigator.setTotalPages(totalPages);
-            dataNavigator.setCurrentNumberPage(dataNavigator.getNextPage());
-            dataNavigator.setLastPage(totalPages);
+            this.totalPages = totalPages;
+            this.currentNumberPage = this.nextPage;
+            this.lastPage = totalPages;
         }
-        return dataNavigator;
     }
 
     public DataNavigator() {
