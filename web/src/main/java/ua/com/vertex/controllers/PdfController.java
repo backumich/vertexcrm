@@ -16,17 +16,14 @@ import java.io.File;
 
 @Controller
 public class PdfController {
-
+    private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
     private final PdfGenerator pdfGenerator;
     private final PdfDownloader pdfDownloader;
     private final LogInfo logInfo;
 
-    private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
-
     @PostMapping(value = "/generatePdf")
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void generatePdf(@ModelAttribute PdfDto dto, HttpServletResponse response)
-            throws Exception {
+    public void generatePdf(@ModelAttribute PdfDto dto, HttpServletResponse response) throws Exception {
 
         LOGGER.debug(logInfo.getId() + "GeneratePdf page accessed");
         String pdfFileName = logInfo.getEmail() + "_certificate.pdf";

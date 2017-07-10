@@ -33,6 +33,14 @@ import static org.mockito.Mockito.verify;
 @ActiveProfiles("test")
 @Transactional
 public class CourseUsersControllerTest2 {
+    private static final String ASSIGNED_USERS = "assignedUsers";
+    private static final String FREE_USERS = "freeUsers";
+    private static final String SEARCH = "search";
+    private static final String SEARCH_TYPE_FIRST_NAME = "first_name";
+    private static final String SEARCH_TYPE_LAST_NAME = "last_name";
+    private static final String SEARCH_TYPE_EMAIL = "email";
+    private static final String DTO = "dto";
+    private static final int COURSE_ID = 1;
 
     @Autowired
     private CourseLogic courseLogic;
@@ -47,15 +55,6 @@ public class CourseUsersControllerTest2 {
     private User user1, user2, user3, user4, user5, user6, user7, user8;
     private CourseUserDto dto;
     private List<User> assignedUsers;
-
-    private static final String ASSIGNED_USERS = "assignedUsers";
-    private static final String FREE_USERS = "freeUsers";
-    private static final String SEARCH = "search";
-    private static final String SEARCH_TYPE_FIRST_NAME = "first_name";
-    private static final String SEARCH_TYPE_LAST_NAME = "last_name";
-    private static final String SEARCH_TYPE_EMAIL = "email";
-    private static final String DTO = "dto";
-    private static final int COURSE_ID = 1;
 
     @Before
     public void setUp() throws Exception {

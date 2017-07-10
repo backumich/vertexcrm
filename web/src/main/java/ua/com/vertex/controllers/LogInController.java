@@ -14,14 +14,11 @@ import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class LogInController {
-
-    private final LogInfo logInfo;
-    private final LoggingLogic loggingLogic;
-
     private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
-
     private static final String LOGIN = "logIn";
     private static final String ERROR = "error";
+    private final LogInfo logInfo;
+    private final LoggingLogic loggingLogic;
 
     @RequestMapping(value = "/logIn")
     public String showLogInPage(Model model) {

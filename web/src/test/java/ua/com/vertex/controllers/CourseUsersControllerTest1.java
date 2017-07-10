@@ -25,6 +25,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class CourseUsersControllerTest1 {
+    private static final String COURSE_USERS = "courseUsers";
+    private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
 
     @Mock
     private CourseLogic courseLogic;
@@ -33,9 +35,6 @@ public class CourseUsersControllerTest1 {
     private LogInfo logInfo;
 
     private CourseUsersController controller;
-
-    private static final String COURSE_USERS = "courseUsers";
-    private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
 
     @Before
     public void setUp() throws Exception {

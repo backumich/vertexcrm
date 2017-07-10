@@ -9,13 +9,10 @@ import ua.com.vertex.utils.LogInfo;
 
 @Controller
 public class LogOutController {
-
-    private final LogInfo logInfo;
-
     private static final Logger LOGGER = LogManager.getLogger(LogOutController.class);
-
     private static final String LOGOUT = "logOut";
     private static final String INDEX = "index";
+    private final LogInfo logInfo;
 
     @RequestMapping(value = "/logOut")
     public String showLogOutPage() {

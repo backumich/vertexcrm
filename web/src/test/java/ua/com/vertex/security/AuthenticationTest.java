@@ -34,15 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class AuthenticationTest {
+    private static final String CORRECT_PASSWORD = "123456";
+    private static final String EXISTING_EMAIL = "44@test.com";
+    private static final String INCORRECT_DATA = "incorrect";
+    private static final String ADMIN_EMAIL = "33@test.com";
 
     @Autowired
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    private static final String CORRECT_PASSWORD = "123456";
-    private static final String EXISTING_EMAIL = "44@test.com";
-    private static final String INCORRECT = "incorrect";
-    private static final String ADMIN_EMAIL = "33@test.com";
 
     @Before
     public void setUp() {
@@ -77,7 +77,7 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void testFormLoginWithIncorrectPassword() throws Exception {
-        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(INCORRECT))
+        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(INCORRECT_DATA))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
                 .andExpect(unauthenticated());
@@ -86,7 +86,7 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void testFormLoginWithIncorrectLogin() throws Exception {
-        mockMvc.perform(formLogin("/logIn").user(INCORRECT).password(CORRECT_PASSWORD))
+        mockMvc.perform(formLogin("/logIn").user(INCORRECT_DATA).password(CORRECT_PASSWORD))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
                 .andExpect(unauthenticated());

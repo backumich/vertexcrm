@@ -12,10 +12,10 @@ import java.net.SocketTimeoutException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
-    private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
 
     private final LogInfo logInfo;
 

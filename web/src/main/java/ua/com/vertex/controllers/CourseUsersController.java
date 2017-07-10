@@ -18,16 +18,16 @@ import java.util.List;
 
 @Controller
 public class CourseUsersController {
-    private final CourseLogic courseLogic;
-    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(CourseUsersController.class);
-
     private static final String COURSE_USERS = "courseUsers";
     private static final String ASSIGNED_USERS = "assignedUsers";
     private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
     private static final String DTO = "dto";
+
+    private final CourseLogic courseLogic;
+    private final LogInfo logInfo;
 
     @GetMapping(value = "/showCourseAndUsers")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {

@@ -12,11 +12,10 @@ import java.util.Map;
 
 @Controller
 public class CertificateDetailsPageController {
-
-    private final CertificateLogic certLogic;
-
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     static final String ERROR = "error";
+
+    private final CertificateLogic certLogic;
 
     @GetMapping(value = "/certificateDetails")
     public String showCertificateDetailsPage() {

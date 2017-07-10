@@ -12,9 +12,8 @@ import java.nio.file.Paths;
 
 @Component
 public class PdfDownloader {
-
-    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(PdfDownloader.class);
+    private final LogInfo logInfo;
 
     public int downloadPdf(String pdfFileName, HttpServletResponse response) throws IOException {
 

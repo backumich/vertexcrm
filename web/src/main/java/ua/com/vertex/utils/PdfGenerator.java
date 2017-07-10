@@ -19,14 +19,11 @@ import java.util.Locale;
 
 @Component
 public class PdfGenerator {
-
+    private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
     private final LogInfo logInfo;
 
-    private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
-
     public void generatePdf(String pdfFileName, PdfDto dto) throws Exception {
-
         Document document = new Document();
 
         try (FileOutputStream outputStream = new FileOutputStream(pdfFileName)) {
@@ -58,7 +55,7 @@ public class PdfGenerator {
     private void setText(PdfWriter writer, PdfDto dto) throws IOException, DocumentException {
 
         String fullName = dto.getFirstName() + " " + dto.getLastName();
-        String date = formatter.format(LocalDate.parse(dto.getCertificationDate()));
+        String date = FORMATTER.format(LocalDate.parse(dto.getCertificationDate()));
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);

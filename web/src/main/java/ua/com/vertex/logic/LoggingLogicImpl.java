@@ -14,14 +14,13 @@ import java.util.Optional;
 
 @Service
 public class LoggingLogicImpl implements LoggingLogic {
-
-    private final UserLogic userLogic;
-    private final UserDaoInf userDao;
-
     private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
     private static final String ADMIN = Role.ADMIN.name();
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
+
+    private final UserLogic userLogic;
+    private final UserDaoInf userDao;
 
     @Override
     public Optional<User> logIn(String email) {

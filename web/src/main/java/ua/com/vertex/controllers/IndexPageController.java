@@ -10,10 +10,9 @@ import ua.com.vertex.utils.LogInfo;
 @Controller
 public class IndexPageController {
 
-    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
-
     private static final String INDEX = "index";
+    private final LogInfo logInfo;
 
     @RequestMapping(value = "/")
     public String showIndexPage() {

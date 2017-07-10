@@ -12,11 +12,11 @@ import static ua.com.vertex.context.SecurityConfig.UNKNOWN_ERROR;
 
 @Controller
 public class ErrorController {
+    private static final Logger LOGGER = LogManager.getLogger(ErrorController.class);
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
-    private static final Logger LOGGER = LogManager.getLogger(ErrorController.class);
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, Model model) {
