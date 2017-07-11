@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.lob.DefaultLobHandler;
-import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +20,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -114,7 +113,7 @@ public class UserDaoTest {
 
     @Test
     public void getListUsersNotEmpty() throws Exception {
-        List<User> users = userDao.getAllUsers();
+        List<User> users = userDao.getUsersPerPages(new DataNavigator());
         assertEquals(false, users.isEmpty());
     }
 

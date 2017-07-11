@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface RegistrationUserLogic {
 
-//    boolean isVerifyPassword(UserFormRegistration userFormRegistration);
-
     boolean isEmailAlreadyExists(Optional<User> user);
 
     boolean isRegisteredUser(UserFormRegistration userFormRegistration,
