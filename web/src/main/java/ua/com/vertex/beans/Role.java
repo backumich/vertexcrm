@@ -1,7 +1,7 @@
 package ua.com.vertex.beans;
 
 public enum Role {
-    ADMIN(1), USER(2);
+    ROLE_ADMIN(1), ROLE_USER(2), ROLE_TEACHER(3);
 
     private final int id;
 

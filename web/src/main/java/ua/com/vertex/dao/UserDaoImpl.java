@@ -27,8 +27,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.com.vertex.beans.Role.ADMIN;
-import static ua.com.vertex.beans.Role.USER;
+import static ua.com.vertex.beans.Role.*;
 
 @Repository
 
@@ -221,8 +220,8 @@ public class UserDaoImpl implements UserDaoInf {
         return jdbcTemplate.query(query, rs -> {
             EnumMap<Role, Role> allRoles = new EnumMap<>(Role.class);
             while (rs.next()) {
-                allRoles.put(rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER,
-                        rs.getString("name").equals("ADMIN") ? Role.ADMIN : Role.USER);
+                allRoles.put(rs.getString("name").equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
+                        rs.getString("name").equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
             }
             return allRoles;
         });
@@ -331,7 +330,7 @@ public class UserDaoImpl implements UserDaoInf {
                 .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                 .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
                 .setLastName(resultSet.getString(COLUMN_LAST_NAME))
-                .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN : ROLE_USER)
                 .getInstance());
     }
 
@@ -358,7 +357,8 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPhoto(handler.getBlobAsBytes(resultSet, COLUMN_PHOTO))
                     .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
                     .setPhone(resultSet.getString(COLUMN_PHONE))
-                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN
+                            : (resultSet.getInt(COLUMN_ROLE_ID) == 2) ? ROLE_USER : ROLE_TEACHER)
                     .getInstance();
         }
     }
@@ -369,7 +369,7 @@ public class UserDaoImpl implements UserDaoInf {
             return new User.Builder()
                     .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                     .setPassword(resultSet.getString(COLUMN_PASSWORD))
-                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN : ROLE_USER)
                     .getInstance();
         }
     }

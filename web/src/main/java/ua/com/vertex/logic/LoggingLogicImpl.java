@@ -25,7 +25,7 @@ public class LoggingLogicImpl implements LoggingLogic {
     private static final Logger LOGGER = LogManager.getLogger(LoggingLogicImpl.class);
 
     private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
-    private static final String ADMIN = Role.ADMIN.name();
+    private static final String ADMIN = Role.ROLE_ADMIN.name();
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
     private static final String ERROR = "error";

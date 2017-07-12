@@ -112,10 +112,10 @@
             </div>
         </main>
 
-        <sec:authorize access="hasAuthority('ADMIN')">
+        <sec:authorize access="hasRole('ADMIN')">
             <sec:authentication property="principal.username" var="admin"/>
         </sec:authorize>
-        <sec:authorize access="hasAuthority('USER')">
+        <sec:authorize access="hasRole('USER')">
             <sec:authentication property="principal.username" var="user"/>
         </sec:authorize>
 

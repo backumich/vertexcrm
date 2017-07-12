@@ -210,7 +210,7 @@ public class UserDaoTest {
     @Transactional
     public void addUserForCreateCertificateReturnCorrectData() throws Exception {
         User userForTest = new User.Builder().setEmail("email33").setFirstName("Test")
-                .setLastName("Test").setRole(Role.USER).getInstance();
+                .setLastName("Test").setRole(Role.ROLE_USER).getInstance();
         int result = userDao.addUserForCreateCertificate(userForTest);
         userForTest.setUserId(result);
         assertEquals(MSG, userForTest, userDao.getUser(result).get());
@@ -242,7 +242,7 @@ public class UserDaoTest {
     public void registrationUserInsertCorrectInsert() throws Exception {
         User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
-                .setRole(Role.USER).getInstance();
+                .setRole(Role.ROLE_USER).getInstance();
         userDao.registrationUserInsert(userForInsert);
         User userForCheck = userDao.getUserByEmail("testInsert@Test.com").get();
         userForInsert.setUserId(userForCheck.getUserId());
@@ -253,7 +253,7 @@ public class UserDaoTest {
     @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
-                .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.USER).setIsActive(false).getInstance();
+                .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.ROLE_USER).setIsActive(false).getInstance();
         assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").get());
         userDao.registrationUserUpdate(userForUpdate);
         assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
@@ -263,6 +263,6 @@ public class UserDaoTest {
     public void getTeachersReturnCorrectData() throws Exception{
         List<User> teachers = userDao.getTeachers();
         assertFalse(MSG,teachers.isEmpty());
-        teachers.forEach(teacher1 -> assertTrue(teacher1.getRole().equals(Role.ADMIN)));
+        teachers.forEach(teacher1 -> assertTrue(teacher1.getRole().equals(Role.ROLE_ADMIN)));
     }
 }
