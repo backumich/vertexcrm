@@ -1,8 +1,6 @@
 package ua.com.vertex.dao;
 
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import ua.com.vertex.dao.interfaces.UserDaoForTest;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,41 +77,40 @@ public class UserDaoTest {
 
     @Test
     @WithMockUser
-    public void getUserReturnsUserOptionalForUserExistingInDatabase() {
+    public void getUserReturnsUserOptionalForUserExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.getUser(EXISTING_ID1);
         assertEquals(EXISTING_ID1, optional.orElse(null).getUserId());
     }
 
     @Test
     @WithMockUser
-    public void getUserReturnsNullUserOptionalForUserNotExistingInDatabase() {
+    public void getUserReturnsNullUserOptionalForUserNotExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.getUser(NOT_EXISTING_ID);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test
     @WithMockUser
-    public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() {
+    public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL);
         assertEquals(EXISTING_ID1, optional.orElse(null).getUserId());
     }
 
     @Test
     @WithMockUser
-    public void getUserByEmailReturnsNullUserOptionalForUserNotExistingInDatabase() {
+    public void getUserByEmailReturnsNullUserOptionalForUserNotExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.getUserByEmail(NOT_EXISTING_EMAIL);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test
-    @Ignore
-    public void logInReturnsUserOptionalForUserExistingInDatabase() {
+    public void logInReturnsUserOptionalForUserExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
         assertEquals(EXISTING_EMAIL, optional.orElse(null).getEmail());
     }
 
     @Test
-    public void logInReturnsNullUserOptionalForUserNotExistingInDatabase() {
+    public void logInReturnsNullUserOptionalForUserNotExistingInDatabase() throws SQLException {
         Optional<User> optional = userDao.logIn(NOT_EXISTING_EMAIL);
         assertEquals(new User(), optional.orElse(new User()));
     }
@@ -121,27 +119,6 @@ public class UserDaoTest {
     public void getListUsersNotEmpty() throws Exception {
         List<User> users = userDao.getAllUsers();
         assertEquals(false, users.isEmpty());
-    }
-
-    @Test
-    public void getUserDetailsByIDForUserExistingInDatabase() throws Exception {
-        User testUser = new User();
-        testUser.setUserId(10);
-        testUser.setEmail("emailTest");
-        testUser.setFirstName("first_name");
-        testUser.setLastName("last_name");
-        testUser.setDiscount(0);
-        testUser.setPhone("666666666");
-
-        Optional<User> optional = userDao.getUserDetailsByID(10);
-        Assert.assertNotNull(optional.orElse(null));
-
-        Assert.assertEquals(testUser.getUserId(), optional.orElse(null).getUserId());
-        Assert.assertEquals(testUser.getEmail(), optional.orElse(null).getEmail());
-        Assert.assertEquals(testUser.getFirstName(), optional.orElse(null).getFirstName());
-        Assert.assertEquals(testUser.getLastName(), optional.orElse(null).getLastName());
-        Assert.assertEquals(testUser.getDiscount(), optional.orElse(null).getDiscount());
-        Assert.assertEquals(testUser.getPhone(), optional.orElse(null).getPhone());
     }
 
     @Test
@@ -167,28 +144,28 @@ public class UserDaoTest {
 
     @Test
     @WithMockUser
-    public void getImageReturnsImageOptionalIfSuccessfulPhoto() {
+    public void getImageReturnsImageOptionalIfSuccessfulPhoto() throws SQLException {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PHOTO);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
-    public void getImageReturnsImageOptionalIfSuccessfulPassportScan() {
+    public void getImageReturnsImageOptionalIfSuccessfulPassportScan() throws SQLException {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PASSPORT_SCAN);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
-    public void getImageReturnsNullOptionalIfNotExistingImage() {
+    public void getImageReturnsNullOptionalIfNotExistingImage() throws SQLException {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID2, PHOTO);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @WithMockUser
-    public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() {
+    public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() throws SQLException {
         userDao.getImage(NOT_EXISTING_ID, PHOTO);
     }
 
@@ -271,12 +248,12 @@ public class UserDaoTest {
     @Test
     @WithAnonymousUser
     public void getTeachersReturnCorrectData() throws Exception {
-        int r = userDaoForTest.insertUser(new User.Builder().setEmail("test@test.com")
-                .setPassword("test").setFirstName("test").setLastName("test").setPhone("0933333333")
-                .setRole(Role.ROLE_TEACHER).setIsActive(true).getInstance());
-
-        System.out.println(r);
-        System.out.println(userDao.getUser(r).orElse(null));
+//        int r = userDaoForTest.insertUser(new User.Builder().setEmail("test33@test.com")
+//                .setPassword("test").setFirstName("test").setLastName("test").setPhone("0933333333")
+//                .setRole(Role.ROLE_TEACHER).setIsActive(true).getInstance());
+//
+//        System.out.println(r);
+//        System.out.println(userDao.getUser(r).orElse(null));
 
         List<User> teachers = userDao.getTeachers();
         assertFalse(MSG, teachers.isEmpty());

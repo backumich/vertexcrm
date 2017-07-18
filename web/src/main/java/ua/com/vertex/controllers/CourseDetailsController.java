@@ -49,6 +49,7 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/searchCourse")
+    @PreAuthorize("hasRole('ADMIN')")
     public String searchCourse(@Validated @ModelAttribute(COURSE_DATA) Course course,
                                BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
@@ -79,6 +80,7 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/courseDetails")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
@@ -96,6 +98,7 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/updateCourse")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = ADMIN_JSP;

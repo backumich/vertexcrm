@@ -16,6 +16,10 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
+import static ua.com.vertex.dao.UserDaoImpl.COLUMN_FIRST_NAME;
+import static ua.com.vertex.dao.UserDaoImpl.COLUMN_LAST_NAME;
+import static ua.com.vertex.dao.UserDaoImpl.COLUMN_USER_EMAIL;
+
 
 @Repository
 public class CourseDaoImpl implements CourseDaoInf {
@@ -34,43 +38,55 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public List<Course> getAllCoursesWithDept() throws DataAccessException {
-        LOGGER.debug("Try select all courses where user has dept.");
+        LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
 
-        String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.notes FROM Courses c " +
+        String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.notes, u.first_name," +
+                " u.last_name, u.email FROM Courses c  INNER JOIN Users u ON u.user_id = c.teacher_id " +
                 "INNER JOIN Accounting a ON  a.course_id = c.id WHERE a.debt > 0";
 
+        LOGGER.debug("Try select all courses where user has dept.");
         return jdbcTemplate.query(query, (resultSet, i) -> new Course.Builder()
                 .setId(resultSet.getInt(COLUMN_COURSE_ID))
                 .setName(resultSet.getString(COLUMN_COURSE_NAME))
                 .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
                 .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
                 .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                .setTeacher(new User.Builder().setUserId(resultSet.getInt(COLUMN_COURSE_TEACHER_ID)).getInstance())
+                .setTeacher(new User.Builder().setUserId(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                        .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                        .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                        .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                        .getInstance())
                 .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
     }
 
     @Override
     public List<Course> searchCourseByNameAndStatus(Course course) throws DataAccessException {
-        LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
+        LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)", course));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u  ON c.teacher_id = u.user_id " +
                 "WHERE name LIKE  '%" + course.getName() + "%' AND finished=:finished";
 
+        LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
         return jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_FINISHED, course.isFinished() ? 1 : 0),
                 (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
                         .setName(resultSet.getString(COLUMN_COURSE_NAME))
                         .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
                         .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
                         .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                        .setTeacher(new User.Builder().setUserId(resultSet.getInt(COLUMN_COURSE_TEACHER_ID)).getInstance())
+                        .setTeacher(new User.Builder().setUserId(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                                .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                                .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                                .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                                .getInstance())
                         .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
                         .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
     }
 
     @Override
     public int updateCourseExceptPrice(Course course) throws DataAccessException {
-        LOGGER.debug(String.format("Try update course except price by id -(%s)", course.getId()));
+        LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)", course));
+
         String query = "UPDATE Courses SET name=:name, start=:start, finished=:finished, teacher_id=:teacher_id," +
                 "schedule=:schedule, notes=:notes WHERE id=:id";
 
@@ -83,16 +99,19 @@ public class CourseDaoImpl implements CourseDaoInf {
         source.addValue(COLUMN_COURSE_SCHEDULE, course.getSchedule());
         source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
 
+        LOGGER.debug(String.format("Try update course except price by id -(%s)", course.getId()));
         return jdbcTemplate.update(query, source);
     }
 
     @Override
     public Optional<Course> getCourseById(int courseId) throws DataAccessException {
-        LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
+        LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)", courseId));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
         Course course = null;
+
+        LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
         try {
             course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(COLUMN_COURSE_ID, courseId),
                     (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))

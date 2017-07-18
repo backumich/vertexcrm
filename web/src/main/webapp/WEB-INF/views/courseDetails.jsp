@@ -137,8 +137,8 @@
                 <tr>
                     <td width="150">Teacher name:</td>
                     <td width="450" style="color: black">
-                        <form:select path="teacherName">
-                            <form:option value="NONE" label="--- Select ---"/>
+                        <form:select path="teacher.userId">
+                            <form:option value="0" label="--- Select ---"/>
                             <form:options items="${teachers}"/>
                         </form:select>
                 </tr>

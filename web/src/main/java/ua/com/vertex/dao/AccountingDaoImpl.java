@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,7 +31,7 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
 
     @Override
-    public List<User> getCourseUsers(int courseId) {
+    public List<User> getCourseUsers(int courseId) throws DataAccessException {
 
         LOGGER.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
 
@@ -45,7 +46,7 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public void updateUserDept(int courseId, int userId, double amount) {
+    public void updateUserDept(int courseId, int userId, double amount) throws DataAccessException {
 
         LOGGER.debug(String.format("Try update user dept by course id = (%s) and user id = (%s), from db.Accounting",
                 courseId, userId));

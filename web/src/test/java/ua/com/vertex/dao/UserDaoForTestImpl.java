@@ -33,7 +33,7 @@ public class UserDaoForTestImpl implements UserDaoForTest {
         String query = "INSERT INTO Users ( email, password, first_name, last_name, passport_scan, photo," +
                 " discount, phone, role_id, is_active) VALUES ( :email, :password, :first_name, :last_name," +
                 " :passport_scan, :photo, :discount, :phone," +
-                " (SELECT r.role_id FROM Roles r WHERE r.name= ':name'), :is_active)";
+                " (SELECT r.role_id FROM Roles r WHERE r.name= :name), :is_active)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();

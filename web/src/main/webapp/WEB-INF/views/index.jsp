@@ -40,7 +40,6 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
-
     </style>
 </head>
 <body class="inside footer-under">
@@ -59,7 +58,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -68,8 +66,7 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -112,11 +109,14 @@
             </div>
         </main>
 
-        <sec:authorize access="hasRole('ADMIN')">
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
             <sec:authentication property="principal.username" var="admin"/>
         </sec:authorize>
-        <sec:authorize access="hasRole('USER')">
+        <sec:authorize access="hasRole('ROLE_USER')">
             <sec:authentication property="principal.username" var="user"/>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_TEACHER')">
+            <sec:authentication property="principal.username" var="teacher"/>
         </sec:authorize>
 
         <div class="href">
@@ -126,15 +126,16 @@
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <c:if test="${user != null || admin != null}">
+            <c:if test="${user != null}">
                 <a href="<c:url value="/logIn"/>">User page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <br><br>
             <c:if test="${admin != null}">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a>
             </c:if>
         </div>

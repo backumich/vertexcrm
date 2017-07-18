@@ -72,14 +72,16 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
         }
     })(document, window, "yandex_metrika_callbacks");
 </script>
-<noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
+<noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="Usersposition:absolute; left:-9999px;"
+    alt="" /&gt;&lt;/div&gt;
+</noscript>
 <!-- /Yandex.Metrika counter -->
 <div class="nav navbar navbar-fixed-top navbar-hide">
     <div class="container"><a href="https://vertex-academy.com/index.html" class="logo pull-left"></a>
@@ -110,7 +112,7 @@
             <form:form method="post" commandName="courseIdForPayment"
                        action="selectCourse">
                 <span class="fontSize180 silver">Select course :</span><br><br><br>
-                <table class="active" width="1000" cols="7">
+                <table class="active" width="1200" cols="7">
                     <tr style="color: #2aabd2">
                         <th>Select course</th>
                         <th>Course name</th>
@@ -139,7 +141,7 @@
                                 </c:otherwise>
                             </c:choose></td>
                             <td>${course.price}</td>
-                            <td>${course.teacherName}</td>
+                            <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
                             <td>${course.notes}</td>
                         </tr>
                     </c:forEach>

@@ -52,7 +52,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     }
 
     @Override
-    public Optional<Payment> getPaymentByIdWithOutDate(int paymentId) {
+    public Optional<Payment> getPaymentByIdWithOutDate(int paymentId) throws DataAccessException{
         LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
 
         String query = "SELECT payment_id, deal_id, amount FROM Payments WHERE payment_id = :paymentId";

@@ -156,9 +156,9 @@ public class CourseDetailsControllerTest {
     @Test
     public void courseDetailsHasCorrectDataInModel() throws Exception {
         when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
-        HashMap<String, String> teachers = new HashMap<String, String>() {
+        HashMap<Integer, String> teachers = new HashMap<Integer, String>() {
             {
-                put("test@test.com", "test test 'test@test.com'");
+                put(1, "test test 'test@test.com'");
             }
         };
         when(userLogic.getTeachers()).thenReturn(teachers);
@@ -229,9 +229,9 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseHasCorrectDataInModelWhenBindingResultHasError() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(true);
-        HashMap<String, String> teachers = new HashMap<String, String>() {
+        HashMap<Integer, String> teachers = new HashMap<Integer, String>() {
             {
-                put("test@test.com", "test test 'test@test.com'");
+                put(1, "test test 'test@test.com'");
             }
         };
         when(userLogic.getTeachers()).thenReturn(teachers);

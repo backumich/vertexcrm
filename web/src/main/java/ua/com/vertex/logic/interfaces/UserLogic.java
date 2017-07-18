@@ -4,7 +4,6 @@ import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 
-import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -12,27 +11,25 @@ import java.util.Optional;
 
 public interface UserLogic {
 
-    List<String> getAllUserIds();
+    List<String> getAllUserIds() throws DataAccessException;
 
-    Optional<User> getUserById(int id);
+    Optional<User> getUserById(int id) throws DataAccessException;
 
-    Optional<User> getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email) throws DataAccessException;
 
-    void saveImage(int userId, byte[] image, String imageType) throws Exception;
+    void saveImage(int userId, byte[] image, String imageType) throws DataAccessException;
 
-    Optional<byte[]> getImage(int userId, String imageType);
+    Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException;
 
-    List<User> getAllUsers() throws SQLException;
+    List<User> getAllUsers() throws DataAccessException;
 
-    Optional<User> getUserDetailsByID(int userId) throws SQLException;
+    EnumMap<Role, Role> getAllRoles() throws DataAccessException;
 
-    EnumMap<Role, Role> getAllRoles();
+    int saveUserData(User user) throws DataAccessException;
 
-    int saveUserData(User user);
+    int activateUser(String email) throws DataAccessException;
 
-    int activateUser(String email);
-
-    List<User> searchUser(String userData) throws Exception;
+    List<User> searchUser(String userData) throws DataAccessException;
 
     Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
 
@@ -42,6 +39,6 @@ public interface UserLogic {
 
     void registrationUserUpdate(User user) throws DataAccessException;
 
-    Map<String, String> getTeachers () throws DataAccessException;
+    Map<Integer, String> getTeachers() throws DataAccessException;
 
 }

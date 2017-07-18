@@ -32,7 +32,7 @@ public class UserDetailsController {
 
         // -- Get user data by ID
         try {
-            Optional<User> optionalUser = userLogic.getUserDetailsByID(userId);
+            Optional<User> optionalUser = userLogic.getUserById(userId);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 modelAndView.setViewName(PAGE_JSP);

@@ -11,6 +11,8 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
 
+import java.sql.SQLException;
+
 @Controller
 public class ImageController {
 
@@ -46,7 +48,7 @@ public class ImageController {
         return view;
     }
 
-    private void encode(Model model, int userId, String imageType) {
+    private void encode(Model model, int userId, String imageType) throws SQLException {
         String encoded = Base64.encodeBase64String(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
     }

@@ -27,10 +27,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.com.vertex.beans.Role.*;
-
 @Repository
-
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
@@ -42,20 +39,19 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String PHOTO = "photo";
     private static final String PASSPORT_SCAN = "passportScan";
     private static final String COLUMN_USER_ID = "user_id";
-    private static final String COLUMN_USER_EMAIL = "email";
+    static final String COLUMN_USER_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
-    private static final String COLUMN_FIRST_NAME = "first_name";
-    private static final String COLUMN_LAST_NAME = "last_name";
+    static final String COLUMN_FIRST_NAME = "first_name";
+    static final String COLUMN_LAST_NAME = "last_name";
     private static final String COLUMN_PHONE = "phone";
     private static final String COLUMN_PASSPORT_SCAN = "passport_scan";
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
-    private static final String COLUMN_ROLE_ID = "role_id";
     private static final String COLUMN_ROLE_NAME = "name";
     private static final String COLUMN_IS_ACTIVE = "is_active";
 
     @Override
-    public Optional<User> getUser(int userId) {
+    public Optional<User> getUser(int userId) throws DataAccessException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE user_id=:userId";
@@ -75,7 +71,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) throws DataAccessException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE email=:email";
@@ -103,7 +99,11 @@ public class UserDaoImpl implements UserDaoInf {
 
         User user = null;
         try {
-            user = jdbcTemplate.queryForObject(query, parameters, new UserRowMapperLogIn());
+            user = jdbcTemplate.queryForObject(query, parameters, (resultSet, i) -> new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setRole(Role.valueOf(resultSet.getString(COLUMN_ROLE_NAME)))
+                    .getInstance());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn("No email=" + email);
         }
@@ -116,19 +116,19 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(int userId) throws DataAccessException {
         String query = "DELETE FROM Users WHERE user_id=:userId";
         jdbcTemplate.update(query, new MapSqlParameterSource(USER_ID, userId));
     }
 
     @Override
-    public List<Integer> getAllUserIds() {
+    public List<Integer> getAllUserIds() throws DataAccessException {
         String query = "SELECT user_id FROM Users ORDER BY user_id";
         return jdbcTemplate.query(query, new MapSqlParameterSource(), (resultSet, i) -> resultSet.getInt("user_id"));
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
+    public void saveImage(int userId, byte[] image, String imageType) throws DataAccessException {
         String query;
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(USER_ID, userId);
@@ -151,7 +151,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) {
+    public Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException {
         byte[] image;
         String query;
 
@@ -173,20 +173,6 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<User> getUserDetailsByID(int userID) throws SQLException {
-        String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
-                "u.photo, u.discount, u.phone,r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id " +
-                "WHERE u.user_id=:userId";
-        User user = null;
-        try {
-            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("Get user with a non-existent id " + userID);
-        }
-        return Optional.ofNullable(user);
-    }
-
-    @Override
     public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
 
         LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
@@ -194,7 +180,11 @@ public class UserDaoImpl implements UserDaoInf {
         User user = null;
 
         try {
-            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail), new UserRowMapperRegistrationCheck());
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
+                    (resultSet, i) -> new User.Builder()
+                            .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                            .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
+                            .getInstance());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
@@ -205,7 +195,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() throws DataAccessException {
         LOGGER.debug("Get a list of all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
@@ -218,7 +208,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public EnumMap<Role, Role> getAllRoles() {
+    public EnumMap<Role, Role> getAllRoles() throws DataAccessException {
         LOGGER.debug("Get a list of all users roles");
 
         String query = "SELECT r.name FROM Roles r";
@@ -233,7 +223,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public int saveUserData(User user) {
+    public int saveUserData(User user) throws DataAccessException {
         String query = "UPDATE Users " +
                 "SET email = :email , " +
                 "first_name = :first_name, " +
@@ -259,7 +249,7 @@ public class UserDaoImpl implements UserDaoInf {
         return jdbcTemplate.update(query, parameters);
     }
 
-    public int activateUser(String email) {
+    public int activateUser(String email) throws DataAccessException {
         String query = "UPDATE Users " +
                 "SET is_active = 1 " +
                 "WHERE email = :email";
@@ -270,7 +260,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public int addUserForCreateCertificate(User user) {
+    public int addUserForCreateCertificate(User user) throws DataAccessException {
         String query = "INSERT INTO Users  (email, first_name, last_name, role_id) " +
                 "VALUES (:email, :first_name, :last_name, (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER'))";
 
@@ -291,7 +281,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<User> searchUser(String userData) throws Exception {
+    public List<User> searchUser(String userData) throws DataAccessException {
 
         String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  '%" + userData +
                 "%' OR  first_name LIKE '%" + userData + "%' OR  last_name LIKE '%" + userData + "%'";
@@ -330,10 +320,11 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getTeachers() throws DataAccessException {
         LOGGER.debug("Trying to pull out all users with the role is a teacher.");
 
-        String query = "SELECT u.email, u.first_name, u.last_name, r.name FROM Users u " +
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, r.name FROM Users u " +
                 "INNER JOIN Roles r  ON u.role_id = r.role_id WHERE r.name='ROLE_TEACHER'";
 
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
+                .setUserId(resultSet.getInt(COLUMN_USER_ID))
                 .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                 .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
                 .setLastName(resultSet.getString(COLUMN_LAST_NAME))
@@ -365,27 +356,6 @@ public class UserDaoImpl implements UserDaoInf {
                     .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
                     .setPhone(resultSet.getString(COLUMN_PHONE))
                     .setRole(Role.valueOf(resultSet.getString(COLUMN_ROLE_NAME)))
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperLogIn implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
-                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
-                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN : ROLE_USER)
-                    .getInstance();
-        }
-    }
-
-    private static final class UserRowMapperRegistrationCheck implements RowMapper<User> {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new User.Builder()
-                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
-                    .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
                     .getInstance();
         }
     }

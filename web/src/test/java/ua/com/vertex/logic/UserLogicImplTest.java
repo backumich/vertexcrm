@@ -6,13 +6,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +52,13 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getUserByIdInvokesDao() {
+    public void getUserByIdInvokesDao() throws SQLException {
         logic.getUserById(EXISTING_ID);
         verify(dao, times(1)).getUser(EXISTING_ID);
     }
 
     @Test
-    public void getUserByEmailInvokesDao() {
+    public void getUserByEmailInvokesDao() throws SQLException {
         logic.getUserByEmail(EMAIL);
         verify(dao, times(1)).getUserByEmail(EMAIL);
     }
@@ -95,12 +95,12 @@ public class UserLogicImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void registrationUserInsertReturnNullPointerException() throws DataAccessException {
+    public void registrationUserInsertReturnNullPointerException() throws SQLException {
         logic.registrationUserInsert(new User());
     }
 
     @Test
-    public void registrationUserInsertEncodePasswordAndInvokesDao() throws DataAccessException {
+    public void registrationUserInsertEncodePasswordAndInvokesDao() throws SQLException {
         String passwordBeforeInsert = user.getPassword();
         logic.registrationUserInsert(user);
         verify(dao, times(1)).registrationUserInsert(user);
@@ -108,13 +108,13 @@ public class UserLogicImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void registrationUserUpdateReturnNullPointerException() throws DataAccessException {
+    public void registrationUserUpdateReturnNullPointerException() throws SQLException {
 
         logic.registrationUserUpdate(new User());
     }
 
     @Test
-    public void registrationUserUpdateEncodePasswordAndInvokesDao() throws DataAccessException {
+    public void registrationUserUpdateEncodePasswordAndInvokesDao() throws SQLException {
         String passwordBeforeInsert = user.getPassword();
         logic.registrationUserUpdate(user);
         verify(dao, times(1)).registrationUserUpdate(user);
@@ -122,28 +122,28 @@ public class UserLogicImplTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void encryptPasswordReturnNullPointerException() throws DataAccessException {
+    public void encryptPasswordReturnNullPointerException() throws SQLException {
         logic.encryptPassword(null);
     }
 
     @Test
-    public void encryptPasswordReturnEncodePassword() throws DataAccessException {
+    public void encryptPasswordReturnEncodePassword() {
         assertNotNull(logic.encryptPassword(NAME));
         assertNotEquals(MSG, NAME, logic.encryptPassword(NAME));
     }
 
     @Test
-    public void getTeachersReturnCorrectData() throws Exception {
+    public void getTeachersReturnCorrectData() throws SQLException {
         List<User> teachers = new ArrayList<>();
         teachers.add(user);
         when(dao.getTeachers()).thenReturn(teachers);
-        assertEquals(logic.getTeachers().get(EMAIL),String.format("%s %s \'%s\'",NAME,NAME,EMAIL));
+        assertEquals(logic.getTeachers().get(EXISTING_ID), String.format("%s %s \'%s\'", NAME, NAME, EMAIL));
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void getTeachersReturnException() throws Exception {
-         when(dao.getTeachers()).thenThrow(new DataIntegrityViolationException("test"));
-         logic.getTeachers();
+    public void getTeachersReturnException() throws SQLException {
+        when(dao.getTeachers()).thenThrow(new DataIntegrityViolationException("test"));
+        logic.getTeachers();
     }
 
 }

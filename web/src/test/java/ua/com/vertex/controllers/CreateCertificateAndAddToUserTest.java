@@ -107,7 +107,7 @@ public class CreateCertificateAndAddToUserTest {
 
     @Test
     public void searchUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-        when(userLogic.searchUser("Test")).thenThrow(new Exception("Test"));
+        when(userLogic.searchUser("Test")).thenThrow(new RuntimeException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR);
     }
 

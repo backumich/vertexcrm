@@ -1,7 +1,6 @@
 package ua.com.vertex.security;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ua.com.vertex.context.TestConfig;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
@@ -55,9 +54,9 @@ public class AuthenticationTest {
 
     @Test
     @WithAnonymousUser
-    @Ignore
     public void userTestFormLoginWithCorrectLoginAndPassword() throws Exception {
-        Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("USER"));
+        Collection<? extends GrantedAuthority> authorities = Collections
+                .singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(CORRECT_PASSWORD))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/loggedIn"))
@@ -67,9 +66,9 @@ public class AuthenticationTest {
 
     @Test
     @WithAnonymousUser
-    @Ignore
     public void adminTestFormLoginWithCorrectLoginAndPassword() throws Exception {
-        Collection<? extends GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+        Collection<? extends GrantedAuthority> authorities = Collections
+                .singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         mockMvc.perform(formLogin("/logIn").user(ADMIN_EMAIL).password(CORRECT_PASSWORD))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/loggedIn"))
@@ -79,7 +78,6 @@ public class AuthenticationTest {
 
     @Test
     @WithAnonymousUser
-    @Ignore
     public void testFormLoginWithIncorrectPassword() throws Exception {
         mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(INCORRECT))
                 .andExpect(status().isFound())
@@ -98,7 +96,6 @@ public class AuthenticationTest {
 
     @Test
     @WithAnonymousUser
-    @Ignore
     public void loginWithValidCsrf() throws Exception {
         mockMvc.perform(post("/logIn")
                 .param("username", EXISTING_EMAIL)
