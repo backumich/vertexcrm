@@ -89,10 +89,21 @@ public class CourseDaoImplTest {
 
     @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
-        Course course = new Course.Builder().setId(1).setName("JavaPro")
-                .setStart(LocalDate.of(2017, 2, 1))
-                .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherID(34).setNotes("Test").getInstance();
-        assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
+        CourseForOutput coursesForOutput = new CourseForOutput(
+                "FirstName",
+                "LastName",
+                new Course.Builder()
+                        .setId(1)
+                        .setName("JavaPro")
+                        .setStart(LocalDate.of(2017, 2, 1))
+                        .setFinished(false)
+                        .setPrice(BigDecimal.valueOf(4000))
+                        .setTeacherID(34)
+                        .setNotes("Test")
+                        .setSchedule("Sat, Sun")
+                        .getInstance());
+        assertTrue("Maybe method was changed",
+                courseDaoInf.getAllCoursesForOutputWithDept().contains(coursesForOutput));
     }
 
     @Test

@@ -146,17 +146,17 @@
                         <td>There are no courses!</td>
                     </tr>
                 </c:if>
-                <c:forEach var="courses" items="${coursesForOutput}">
+                <c:forEach items="${coursesForOutput}" var="courseForOutput">
                     <tr>
-                        <td>${courses.course.id} </td>
-                        <td>${courses.course.name} </td>
-                        <td>${courses.course.start} </td>
-                        <td>${courses.course.finished} </td>
-                        <td>${courses.course.price} </td>
-                        <td>${courses.teacherFirstName} </td>
-                        <td>${courses.teacherLastName} </td>
-                        <td>${courses.course.schedule} </td>
-                        <td>${courses.course.notes} </td>
+                        <td>${courseForOutput.course.id} </td>
+                        <td>${courseForOutput.course.name} </td>
+                        <td>${courseForOutput.course.start} </td>
+                        <td>${courseForOutput.course.finished} </td>
+                        <td>${courseForOutput.course.price} </td>
+                        <td>${courseForOutput.teacherFirstName} </td>
+                        <td>${courseForOutput.teacherLastName} </td>
+                        <td>${courseForOutput.course.schedule} </td>
+                        <td>${courseForOutput.course.notes} </td>
                     </tr>
                 </c:forEach>
             </table>

@@ -14,6 +14,6 @@ public interface CourseLogic {
 
     int addCourse(Course course) throws Exception;
 
-    List<Course> getAllCoursesWithDept();
+    List<CourseForOutput> getAllCoursesForOutputWithDept();
 
 }

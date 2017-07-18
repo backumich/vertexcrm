@@ -26,8 +26,8 @@ public class CourseLogicImplTest {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void getAllCoursesWithDeptVerifyCourseDaoAndReturnException() throws Exception {
-        when(courseDaoInf.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
-        courseLogic.getAllCoursesWithDept();
-        verify(courseDaoInf, times(1)).getAllCoursesWithDept();
+        when(courseDaoInf.getAllCoursesForOutputWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
+        courseLogic.getAllCoursesForOutputWithDept();
+        verify(courseDaoInf, times(1)).getAllCoursesForOutputWithDept();
     }
 }

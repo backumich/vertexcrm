@@ -18,5 +18,5 @@ public interface CourseDaoInf {
 
     int getQuantityCourses() throws SQLException;
 
-    List<Course> getAllCoursesWithDept();
+    List<CourseForOutput> getAllCoursesForOutputWithDept();
 }

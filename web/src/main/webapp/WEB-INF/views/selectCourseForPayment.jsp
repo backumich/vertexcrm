@@ -96,12 +96,12 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="center">
-        <c:if test="${empty courses}">
+        <c:if test="${empty coursesForOutput}">
             <h3><span class="errorText250">Payment is not possible. All courses were paid.</span></h3>
         </c:if>
     </div>
     <div class="container pt1_5" align="center">
-        <c:if test="${!empty courses}">
+        <c:if test="${!empty coursesForOutput}">
             <form:form method="post" commandName="courseIdForPayment"
                        action="selectCourse">
                 <span class="fontSize180 silver">Select course :</span><br><br><br>
@@ -112,30 +112,34 @@
                         <th>Start</th>
                         <th>Finished</th>
                         <th>Price</th>
-                        <th>Teacher ID</th>
+                        <th>Teacher's first name</th>
+                        <th>Teacher's last name</th>
+                        <th>Schedule</th>
                         <th>Notes</th>
 
                     </tr>
                     <tr>
                         <td></td>
                     </tr>
-                    <c:forEach items="${courses}" var="course">
+                    <c:forEach items="${coursesForOutput}" var="courseForOutput">
                         <tr>
-                            <td><input type="radio" name="courseIdForPayment" checked="checked" value=${course.id}>
+                            <td><input type="radio" name="courseIdForPayment" checked="checked" value=${courseForOutput.course.id}>
                             </td>
-                            <td>${course.name}</td>
-                            <td>${course.start}</td>
+                            <td>${courseForOutput.course.name}</td>
+                            <td>${courseForOutput.course.start}</td>
                             <td><c:choose>
-                                <c:when test="${course.finished}">
+                                <c:when test="${courseForOutput.course.finished}">
                                     Yes
                                 </c:when>
                                 <c:otherwise>
                                     No
                                 </c:otherwise>
                             </c:choose></td>
-                            <td>${course.price}</td>
-                            <td>${course.teacherID}</td>
-                            <td>${course.notes}</td>
+                            <td>${courseForOutput.course.price}</td>
+                            <td>${courseForOutput.teacherFirstName}</td>
+                            <td>${courseForOutput.teacherLastName}</td>
+                            <td>${courseForOutput.course.schedule}</td>
+                            <td>${courseForOutput.course.notes}</td>
                         </tr>
                     </c:forEach>
                 </table>

@@ -35,9 +35,9 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<Course> getAllCoursesWithDept() {
-        LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
-        return courseDao.getAllCoursesWithDept();
+    public List<CourseForOutput> getAllCoursesForOutputWithDept() {
+        LOGGER.debug("Call - courseDaoInf.getAllCoursesForOutputWithDept()");
+        return courseDao.getAllCoursesForOutputWithDept();
     }
 
     @Autowired

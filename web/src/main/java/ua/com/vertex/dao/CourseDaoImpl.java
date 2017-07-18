@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -64,7 +65,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
         parameters.addValue("offset", dataNavigator.getRowPerPage());
 
-        List<CourseForOutput> courses = jdbcTemplate.query(query, parameters, this::mapCoursesForOutput);
+        List<CourseForOutput> courses = jdbcTemplate.query(query, parameters, new CourseForOutputRowMapper());
 
         String allCourses = courses.stream()
                 .map((CourseForOutput c) -> c.getCourse().getName())
@@ -105,40 +106,44 @@ public class CourseDaoImpl implements CourseDaoInf {
         try {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
             parameters.addValue("id", courseId);
-            course = jdbcTemplate.queryForObject(query, parameters, this::mapCourses);
+            course = jdbcTemplate.queryForObject(query, parameters, new CourseRowMapper());
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
         }
         return Optional.ofNullable(course);
     }
 
-    public Course mapCourses(ResultSet resultSet, int i) throws SQLException {
-        return new Course.Builder()
-                .setId(resultSet.getInt(COLUMN_COURSE_ID))
-                .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
-                .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
-                .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
-                .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
-                .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
-                .getInstance();
+    private static final class CourseRowMapper implements RowMapper<Course> {
+        public Course mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new Course.Builder()
+                    .setId(resultSet.getInt(COLUMN_COURSE_ID))
+                    .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                    .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
+                    .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
+                    .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                    .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                    .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                    .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
+                    .getInstance();
+        }
     }
 
-    private CourseForOutput mapCoursesForOutput(ResultSet resultSet, int i) throws SQLException {
-        return new CourseForOutput(
-                resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME),
-                resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME),
-                new Course.Builder()
-                        .setId(resultSet.getInt(COLUMN_COURSE_ID))
-                        .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                        .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
-                        .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
-                        .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                        .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
-                        .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
-                        .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
-                        .getInstance());
+    private static final class CourseForOutputRowMapper implements RowMapper<CourseForOutput> {
+        public CourseForOutput mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new CourseForOutput(
+                    resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME),
+                    resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME),
+                    new Course.Builder()
+                            .setId(resultSet.getInt(COLUMN_COURSE_ID))
+                            .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                            .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
+                            .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
+                            .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                            .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                            .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                            .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
+                            .getInstance());
+        }
     }
 
     private MapSqlParameterSource getCourseParameters(Course course) {
@@ -154,20 +159,26 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public List<Course> getAllCoursesWithDept() throws DataAccessException {
+    public List<CourseForOutput> getAllCoursesForOutputWithDept() throws DataAccessException {
         LOGGER.debug("Try select all courses where user has dept.");
 
-        String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.notes FROM Courses c " +
-                "INNER JOIN Accounting a ON  a.course_id = c.id WHERE a.debt > 0";
+        String query = "SELECT DISTINCT " +
+                "c." + COLUMN_COURSE_ID + ", " +
+                "c." + COLUMN_COURSE_NAME + ", " +
+                "c." + COLUMN_COURSE_START + ", " +
+                "c." + COLUMN_COURSE_FINISHED + ", " +
+                "c." + COLUMN_COURSE_PRICE + ", " +
+                "c." + COLUMN_COURSE_TEACHER_ID + ", " +
+                "u." + COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME + ", " +
+                "u." + COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME + ", " +
+                "c." + COLUMN_COURSE_SCHEDULE + ", " +
+                "c." + COLUMN_COURSE_NOTES + " " +
+                "FROM Courses c " +
+                "LEFT JOIN Users u ON c." + COLUMN_COURSE_TEACHER_ID + " = u.user_id " +
+                "INNER JOIN Accounting a ON c." + COLUMN_COURSE_ID + " = a.course_id " +
+                "WHERE a.debt > 0 ";
 
-        return jdbcTemplate.query(query, (resultSet, i) -> new Course.Builder()
-                .setId(resultSet.getInt(COLUMN_COURSE_ID))
-                .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
-                .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
-                .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
-                .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
+        return jdbcTemplate.query(query, new CourseForOutputRowMapper());
     }
 
     @Autowired
