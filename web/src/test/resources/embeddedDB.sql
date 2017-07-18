@@ -57,7 +57,7 @@ CREATE TABLE Courses
   start        DATETIME,
   finished     TINYINT,
   price        DECIMAL,
-  teacher_name VARCHAR(255),
+  teacher_id   INT(11),
   schedule     VARCHAR(255),
   notes        VARCHAR(999),
   PRIMARY KEY (id)
@@ -104,9 +104,9 @@ VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1
 
 INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (1, 1, 1, 4000, 4000);
 
-INSERT INTO Courses (id, name, start, finished, price, teacher_name, notes)
-VALUES (1, 'JavaPro', '2017-02-01 10:10:10', 0, 4000, 'Test', 'Test');
+INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
+VALUES (1, 'JavaPro', '2017-02-01 10:10:10', 0, 4000, 34, 'Sat, Sun', 'Test');
 
 INSERT INTO Courses VALUES
-  (111, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.99, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
-  (222, 'MEGA Java', '2017-02-01 00:00:00', 1, 100.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');
+  (111, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.99, 34, 'Sat, Sun', 'Welcome, we don''t expect you (='),
+  (222, 'MEGA Java', '2017-02-01 00:00:00', 1, 100.11, 33, 'Sat, Sun', 'Come, the courses are over.');

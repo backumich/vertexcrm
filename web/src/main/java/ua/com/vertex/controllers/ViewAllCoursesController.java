@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -30,10 +30,10 @@ public class ViewAllCoursesController {
         int quantityCourses = courseLogic.getQuantityCourses();
 
        dataNavigator.updateDataNavigator(quantityCourses);
-        List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
+        List<CourseForOutput> coursesForOutput = courseLogic.getCoursesForOutputPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllCourses", dataNavigator);
-        modelAndView.addObject("courses", courses);
+        modelAndView.addObject("coursesForOutput", coursesForOutput);
         modelAndView.setViewName(PAGE_JSP);
         LOGGER.debug("Received a list of all courses and transferred to the model");
 

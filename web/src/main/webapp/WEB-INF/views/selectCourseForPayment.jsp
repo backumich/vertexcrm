@@ -112,7 +112,7 @@
                         <th>Start</th>
                         <th>Finished</th>
                         <th>Price</th>
-                        <th>Teacher name</th>
+                        <th>Teacher ID</th>
                         <th>Notes</th>
 
                     </tr>
@@ -134,7 +134,7 @@
                                 </c:otherwise>
                             </c:choose></td>
                             <td>${course.price}</td>
-                            <td>${course.teacherName}</td>
+                            <td>${course.teacherID}</td>
                             <td>${course.notes}</td>
                         </tr>
                     </c:forEach>

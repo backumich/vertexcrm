@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 import ua.com.vertex.utils.LogInfo;
@@ -26,10 +27,13 @@ import java.util.stream.Collectors;
 public class CourseDaoImpl implements CourseDaoInf {
     private static final String COLUMN_COURSE_ID = "id";
     private static final String COLUMN_COURSE_NAME = "name";
-    private static final String COLUMN_COURSE_TEACHER_NAME = "teacher_name";
     private static final String COLUMN_COURSE_START = "start";
     private static final String COLUMN_COURSE_FINISHED = "finished";
     private static final String COLUMN_COURSE_PRICE = "price";
+    private static final String COLUMN_COURSE_TEACHER_ID = "teacher_id";
+    private static final String COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME = "first_name";
+    private static final String COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME = "last_name";
+    private static final String COLUMN_COURSE_SCHEDULE = "schedule";
     private static final String COLUMN_COURSE_NOTES = "notes";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -37,20 +41,34 @@ public class CourseDaoImpl implements CourseDaoInf {
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
 
     @Override
-    public List<Course> getAllCourses(DataNavigator dataNavigator) {
+    public List<CourseForOutput> getCoursesForOutputPerPages(DataNavigator dataNavigator) {
 
         LOGGER.debug("Get all courses list");
 
-        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
-                "FROM Courses c LIMIT :from, :offset";
+        String query = "SELECT " +
+                "c." + COLUMN_COURSE_ID + ", " +
+                "c." + COLUMN_COURSE_NAME + ", " +
+                "c." + COLUMN_COURSE_START + ", " +
+                "c." + COLUMN_COURSE_FINISHED + ", " +
+                "c." + COLUMN_COURSE_PRICE + ", " +
+                "c." + COLUMN_COURSE_TEACHER_ID + ", " +
+                "u." + COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME + ", " +
+                "u." + COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME + ", " +
+                "c." + COLUMN_COURSE_SCHEDULE + ", " +
+                "c." + COLUMN_COURSE_NOTES + " " +
+                "FROM Courses c " +
+                "LEFT JOIN Users u ON c." + COLUMN_COURSE_TEACHER_ID + " = u.user_id " +
+                "LIMIT :from, :offset ";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
         parameters.addValue("offset", dataNavigator.getRowPerPage());
 
-        List<Course> courses = jdbcTemplate.query(query, parameters, this::mapCourses);
+        List<CourseForOutput> courses = jdbcTemplate.query(query, parameters, this::mapCoursesForOutput);
 
-        String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
+        String allCourses = courses.stream()
+                .map((CourseForOutput c) -> c.getCourse().getName())
+                .collect(Collectors.joining("|"));
         LOGGER.debug("Quantity courses -" + courses.size());
         LOGGER.debug("All courses list -" + allCourses);
 
@@ -68,8 +86,8 @@ public class CourseDaoImpl implements CourseDaoInf {
     public int addCourse(Course course) throws SQLException {
         LOGGER.info("Adding a new course into database");
 
-        String query = "INSERT INTO Courses(name, start, finished, price, teacher_name, schedule, notes) " +
-                "VALUES (:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
+        String query = "INSERT INTO Courses(name, start, finished, price, teacher_id, schedule, notes) " +
+                "VALUES (:name, :start, :finished, :price, :teacher_id, :schedule, :notes)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, getCourseParameters(course), keyHolder);
 
@@ -81,7 +99,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     public Optional<Course> getCourseById(int courseId) throws DataAccessException {
         LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
 
-        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
+        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
         Course course = null;
         try {
@@ -96,15 +114,31 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     public Course mapCourses(ResultSet resultSet, int i) throws SQLException {
         return new Course.Builder()
-                .setId(resultSet.getInt("id"))
-                .setName(resultSet.getString("name"))
-                .setStart(resultSet.getDate("start").toLocalDate())
-                .setFinished(resultSet.getInt("finished") != 0)
-                .setPrice(resultSet.getBigDecimal("price"))
-                .setTeacherName(resultSet.getString("teacher_name"))
-                .setSchedule(resultSet.getString("schedule"))
-                .setNotes(resultSet.getString("notes"))
+                .setId(resultSet.getInt(COLUMN_COURSE_ID))
+                .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
+                .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
+                .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
                 .getInstance();
+    }
+
+    private CourseForOutput mapCoursesForOutput(ResultSet resultSet, int i) throws SQLException {
+        return new CourseForOutput(
+                resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_FIRST_NAME),
+                resultSet.getString(COLUMN_COURSE_FOR_OUTPUT_TEACHER_LAST_NAME),
+                new Course.Builder()
+                        .setId(resultSet.getInt(COLUMN_COURSE_ID))
+                        .setName(resultSet.getString(COLUMN_COURSE_NAME))
+                        .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
+                        .setFinished(resultSet.getInt(COLUMN_COURSE_FINISHED) != 0)
+                        .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
+                        .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
+                        .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                        .setNotes(resultSet.getString(COLUMN_COURSE_NOTES))
+                        .getInstance());
     }
 
     private MapSqlParameterSource getCourseParameters(Course course) {
@@ -113,7 +147,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         namedParameters.addValue("start", course.getStart());
         namedParameters.addValue("finished", course.getFinished());
         namedParameters.addValue("price", course.getPrice());
-        namedParameters.addValue("teacher_name", course.getTeacherName());
+        namedParameters.addValue("teacher_id", course.getTeacherID());
         namedParameters.addValue("schedule", course.getSchedule());
         namedParameters.addValue("notes", course.getNotes());
         return namedParameters;
@@ -123,7 +157,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     public List<Course> getAllCoursesWithDept() throws DataAccessException {
         LOGGER.debug("Try select all courses where user has dept.");
 
-        String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.notes FROM Courses c " +
+        String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.notes FROM Courses c " +
                 "INNER JOIN Accounting a ON  a.course_id = c.id WHERE a.debt > 0";
 
         return jdbcTemplate.query(query, (resultSet, i) -> new Course.Builder()
@@ -132,7 +166,7 @@ public class CourseDaoImpl implements CourseDaoInf {
                 .setStart(resultSet.getDate(COLUMN_COURSE_START).toLocalDate())
                 .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
                 .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
+                .setTeacherID(resultSet.getInt(COLUMN_COURSE_TEACHER_ID))
                 .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
     }
 

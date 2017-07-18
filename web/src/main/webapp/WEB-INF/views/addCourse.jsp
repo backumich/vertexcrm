@@ -135,8 +135,8 @@
                     </tr>
                     <tr>
                         <td>Teacher:</td>
-                        <td><form:input class="buttonText" placeholder="Teacher name" path="teacherName"/></td>
-                        <td><form:errors path="teacherName"/></td>
+                        <td><form:input class="buttonText" placeholder="Teacher ID" path="teacherID"/></td>
+                        <td><form:errors path="teacherID"/></td>
                     </tr>
                     <tr>
                         <td>Schedule:</td>

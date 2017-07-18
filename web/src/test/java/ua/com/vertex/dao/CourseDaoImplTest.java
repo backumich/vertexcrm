@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -17,21 +18,11 @@ import ua.com.vertex.utils.DataNavigator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-import ua.com.vertex.beans.Course;
-import ua.com.vertex.context.TestConfig;
-import ua.com.vertex.dao.interfaces.CourseDaoInf;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,7 +45,7 @@ public class CourseDaoImplTest {
     public void setUp() throws Exception {
         course = new Course.Builder().setId(3).setName("JavaPro").setFinished(false)
                 .setStart(LocalDate.of(2017, 2, 1))
-                .setPrice(new BigDecimal("4000.00")).setTeacherName("Test").setNotes("Test").getInstance();
+                .setPrice(new BigDecimal("4000.00")).setTeacherID(34).setNotes("Test").getInstance();
         user1 = new User.Builder()
                 .setEmail("user1@email.com")
                 .setFirstName("Name1")
@@ -87,12 +78,12 @@ public class CourseDaoImplTest {
     public void getAllCourses() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
-        List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
-        assertFalse(MSG, courses.isEmpty());
+        List<CourseForOutput> coursesForOutput = courseDaoInf.getCoursesForOutputPerPages(dataNavigator);
+        assertFalse(MSG, coursesForOutput.isEmpty());
 
-        courses.forEach(course1 -> {
-            assertTrue(course1.getId() > 0);
-            assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
+        coursesForOutput.forEach(course1 -> {
+            assertTrue(course1.getCourse().getId() > 0);
+            assertTrue(course1.getCourse().getName().length() > 5 && course1.getCourse().getName().length() < 256);
         });
     }
 
@@ -100,7 +91,7 @@ public class CourseDaoImplTest {
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
         Course course = new Course.Builder().setId(1).setName("JavaPro")
                 .setStart(LocalDate.of(2017, 2, 1))
-                .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
+                .setFinished(false).setPrice(BigDecimal.valueOf(4000)).setTeacherID(34).setNotes("Test").getInstance();
         assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
     }
 
@@ -113,7 +104,7 @@ public class CourseDaoImplTest {
                     .setStart(LocalDate.parse("2017-04-01"))
                     .setFinished(false)
                     .setPrice(BigDecimal.valueOf(999999.99))
-                    .setTeacherName("Yo Ho Ho")
+                    .setTeacherID(34)
                     .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
                     .getInstance(), courseDaoInf.getCourseById(111).get());

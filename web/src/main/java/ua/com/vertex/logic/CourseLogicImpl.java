@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
@@ -23,9 +24,9 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
+    public List<CourseForOutput> getCoursesForOutputPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get part data courses list (dataNavigator)");
-        return courseDao.getAllCourses(dataNavigator);
+        return courseDao.getCoursesForOutputPerPages(dataNavigator);
     }
 
     @Override

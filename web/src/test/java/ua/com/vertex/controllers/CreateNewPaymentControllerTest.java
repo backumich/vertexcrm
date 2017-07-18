@@ -61,7 +61,8 @@ public class CreateNewPaymentControllerTest {
                 .getInstance();
         course = new Course.Builder().setId(1).setName("JavaPro").
                 setStart(LocalDate.of(2017, 4, 25)).setFinished(false)
-                .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
+                .setPrice(BigDecimal.valueOf(4000)).setTeacherID(34)
+                .setSchedule("Sat, Sun").setNotes("Test").getInstance();
         paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
                 .setAmount(BigDecimal.valueOf(1000))
                 .setPaymentDate(LocalDateTime.of(2017, 4, 25, 12, 30)).getInstance());
