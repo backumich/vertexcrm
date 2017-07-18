@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoForTest;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -41,7 +42,8 @@ public class CourseDaoImplTest {
     public void setUp() throws Exception {
         course = new Course.Builder().setId(3).setName("JavaPro").setFinished(false)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
-                .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Test").setNotes("Test").getInstance();
+                .setPrice(BigDecimal.valueOf(4000)).setTeacher(new User.Builder().setUserId(10).getInstance())
+                .setNotes("Test").getInstance();
 
     }
 
@@ -70,7 +72,8 @@ public class CourseDaoImplTest {
     public void updateCourseExceptPriceCorrectUpdate() throws Exception {
         Course courseForUpdate = new Course.Builder().setId(1).setName("JavaStart").setFinished(true)
                 .setStart(LocalDateTime.of(2017, 2, 1, 10, 10, 10))
-                .setPrice(BigDecimal.valueOf(8000)).setTeacherName("After update").setNotes("After update").getInstance();
+                .setPrice(BigDecimal.valueOf(8000)).setTeacher(new User.Builder().setUserId(22).getInstance())
+                .setNotes("After update").getInstance();
 
         courseDaoInf.updateCourseExceptPrice(courseForUpdate);
         assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
@@ -79,7 +82,7 @@ public class CourseDaoImplTest {
 
     @Test
     public void getCourseByIdReturnCorrectData() throws Exception {
-        int courseId = courseDaoForTest.createCourse(course);
+        int courseId = courseDaoForTest.insertCourse(course);
         course.setId(courseId);
         assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }

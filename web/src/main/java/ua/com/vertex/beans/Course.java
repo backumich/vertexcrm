@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Course {
 
@@ -15,35 +14,41 @@ public class Course {
 
     @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String name;
-    private String teacherName, schedule, notes;
+    private User teacher;
+    private String schedule, notes;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
     private LocalDateTime start;
     private boolean finished;
 
-    public Course() {
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Course)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Course course = (Course) o;
-        return getId() == course.getId() &&
-                isFinished() == course.isFinished() &&
-                Objects.equals(getPrice(), course.getPrice()) &&
-                Objects.equals(getName(), course.getName()) &&
-                Objects.equals(getTeacherName(), course.getTeacherName()) &&
-                Objects.equals(getSchedule(), course.getSchedule()) &&
-                Objects.equals(getNotes(), course.getNotes()) &&
-                Objects.equals(getStart(), course.getStart());
+
+        return getId() == course.getId() && isFinished() == course.isFinished()
+                && (getPrice() != null ? getPrice().equals(course.getPrice()) : course.getPrice() == null)
+                && (getName() != null ? getName().equals(course.getName()) : course.getName() == null)
+                && (getTeacher() != null ? getTeacher().equals(course.getTeacher()) : course.getTeacher() == null)
+                && (getSchedule() != null ? getSchedule().equals(course.getSchedule()) : course.getSchedule() == null)
+                && (getNotes() != null ? getNotes().equals(course.getNotes()) : course.getNotes() == null)
+                && (getStart() != null ? getStart().equals(course.getStart()) : course.getStart() == null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getPrice(), getName(), getTeacherName(), getSchedule(), getNotes(), getStart(),
-                isFinished());
+        int result = getId();
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getTeacher() != null ? getTeacher().hashCode() : 0);
+        result = 31 * result + (getSchedule() != null ? getSchedule().hashCode() : 0);
+        result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
+        result = 31 * result + (getStart() != null ? getStart().hashCode() : 0);
+        result = 31 * result + (isFinished() ? 1 : 0);
+        return result;
     }
 
     @Override
@@ -52,7 +57,7 @@ public class Course {
                 "id=" + id +
                 ", price=" + price +
                 ", name='" + name + '\'' +
-                ", teacherName='" + teacherName + '\'' +
+                ", teacher=" + teacher +
                 ", schedule='" + schedule + '\'' +
                 ", notes='" + notes + '\'' +
                 ", start=" + start +
@@ -84,12 +89,12 @@ public class Course {
         this.name = name;
     }
 
-    public String getTeacherName() {
-        return teacherName;
+    public User getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     public String getSchedule() {
@@ -156,8 +161,8 @@ public class Course {
             return this;
         }
 
-        public Builder setTeacherName(String teacherName) {
-            instance.setTeacherName(teacherName);
+        public Builder setTeacher(User teacher) {
+            instance.setTeacher(teacher);
             return this;
         }
 

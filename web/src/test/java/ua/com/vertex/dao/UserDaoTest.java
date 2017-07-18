@@ -2,6 +2,7 @@ package ua.com.vertex.dao;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.dao.interfaces.UserDaoForTest;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 
 import javax.sql.DataSource;
@@ -27,7 +29,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("ALL")
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
@@ -42,9 +44,13 @@ public class UserDaoTest {
     @Autowired
     private UserDaoInf userDao;
 
+    @Autowired
+    private UserDaoForTest userDaoForTest;
+
     private static final int EXISTING_ID1 = 22;
     private static final int EXISTING_ID2 = 34;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
+    @SuppressWarnings("WeakerAccess")
     static final String EXISTING_EMAIL = "22@test.com";
     private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
@@ -74,7 +80,7 @@ public class UserDaoTest {
     @WithMockUser
     public void getUserReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.getUser(EXISTING_ID1);
-        assertEquals(EXISTING_ID1, optional.get().getUserId());
+        assertEquals(EXISTING_ID1, optional.orElse(null).getUserId());
     }
 
     @Test
@@ -88,7 +94,7 @@ public class UserDaoTest {
     @WithMockUser
     public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL);
-        assertEquals(EXISTING_ID1, optional.get().getUserId());
+        assertEquals(EXISTING_ID1, optional.orElse(null).getUserId());
     }
 
     @Test
@@ -99,9 +105,10 @@ public class UserDaoTest {
     }
 
     @Test
+    @Ignore
     public void logInReturnsUserOptionalForUserExistingInDatabase() {
         Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
-        assertEquals(EXISTING_EMAIL, optional.get().getEmail());
+        assertEquals(EXISTING_EMAIL, optional.orElse(null).getEmail());
     }
 
     @Test
@@ -127,14 +134,14 @@ public class UserDaoTest {
         testUser.setPhone("666666666");
 
         Optional<User> optional = userDao.getUserDetailsByID(10);
-        Assert.assertNotNull(optional.get());
+        Assert.assertNotNull(optional.orElse(null));
 
-        Assert.assertEquals(testUser.getUserId(), optional.get().getUserId());
-        Assert.assertEquals(testUser.getEmail(), optional.get().getEmail());
-        Assert.assertEquals(testUser.getFirstName(), optional.get().getFirstName());
-        Assert.assertEquals(testUser.getLastName(), optional.get().getLastName());
-        Assert.assertEquals(testUser.getDiscount(), optional.get().getDiscount());
-        Assert.assertEquals(testUser.getPhone(), optional.get().getPhone());
+        Assert.assertEquals(testUser.getUserId(), optional.orElse(null).getUserId());
+        Assert.assertEquals(testUser.getEmail(), optional.orElse(null).getEmail());
+        Assert.assertEquals(testUser.getFirstName(), optional.orElse(null).getFirstName());
+        Assert.assertEquals(testUser.getLastName(), optional.orElse(null).getLastName());
+        Assert.assertEquals(testUser.getDiscount(), optional.orElse(null).getDiscount());
+        Assert.assertEquals(testUser.getPhone(), optional.orElse(null).getPhone());
     }
 
     @Test
@@ -162,14 +169,14 @@ public class UserDaoTest {
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPhoto() {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PHOTO);
-        assertNotNull(optional.get());
+        assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPassportScan() {
         Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PASSPORT_SCAN);
-        assertNotNull(optional.get());
+        assertNotNull(optional.orElse(null));
     }
 
     @Test
@@ -201,8 +208,9 @@ public class UserDaoTest {
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
         assertFalse(MSG, users.isEmpty());
-        assertEquals(MSG, users.get(1), user);
-
+        users.forEach(user1 ->
+                assertTrue(MSG, user1.getEmail().contains("Name") || user1.getFirstName().contains("Name")
+                        || user1.getLastName().contains("Name")));
     }
 
     @Test
@@ -213,7 +221,8 @@ public class UserDaoTest {
                 .setLastName("Test").setRole(Role.ROLE_USER).getInstance();
         int result = userDao.addUserForCreateCertificate(userForTest);
         userForTest.setUserId(result);
-        assertEquals(MSG, userForTest, userDao.getUser(result).get());
+        System.out.println(userForTest.getRole());
+        assertEquals(MSG, userForTest, userDao.getUser(result).orElse(null));
     }
 
     @Test(expected = IllegalTransactionStateException.class)
@@ -229,7 +238,7 @@ public class UserDaoTest {
     @Test
     public void userForRegistrationCheckReturnCorrectData() throws Exception {
         assertEquals(MSG, new User.Builder().setEmail(EXISTING_EMAIL).setIsActive(false).getInstance()
-                , userDao.userForRegistrationCheck(EXISTING_EMAIL).get());
+                , userDao.userForRegistrationCheck(EXISTING_EMAIL).orElse(null));
     }
 
     @Test(expected = DataAccessException.class)
@@ -244,7 +253,7 @@ public class UserDaoTest {
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
                 .setRole(Role.ROLE_USER).getInstance();
         userDao.registrationUserInsert(userForInsert);
-        User userForCheck = userDao.getUserByEmail("testInsert@Test.com").get();
+        User userForCheck = userDao.getUserByEmail("testInsert@Test.com").orElse(null);
         userForInsert.setUserId(userForCheck.getUserId());
         assertEquals(MSG, userForInsert, userForCheck);
     }
@@ -254,15 +263,26 @@ public class UserDaoTest {
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.ROLE_USER).setIsActive(false).getInstance();
-        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").get());
+        assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").orElse(null));
         userDao.registrationUserUpdate(userForUpdate);
-        assertEquals(MSG,userForUpdate,userDao.getUserByEmail("34@test.com").get());
+        assertEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").orElse(null));
     }
 
     @Test
-    public void getTeachersReturnCorrectData() throws Exception{
+    @WithAnonymousUser
+    public void getTeachersReturnCorrectData() throws Exception {
+        int r = userDaoForTest.insertUser(new User.Builder().setEmail("test@test.com")
+                .setPassword("test").setFirstName("test").setLastName("test").setPhone("0933333333")
+                .setRole(Role.ROLE_TEACHER).setIsActive(true).getInstance());
+
+        System.out.println(r);
+        System.out.println(userDao.getUser(r).orElse(null));
+
         List<User> teachers = userDao.getTeachers();
-        assertFalse(MSG,teachers.isEmpty());
-        teachers.forEach(teacher1 -> assertTrue(teacher1.getRole().equals(Role.ROLE_ADMIN)));
+        assertFalse(MSG, teachers.isEmpty());
+        teachers.forEach(teacher1 -> {
+            System.out.println(teacher1);
+            assertTrue(teacher1.getRole().equals(Role.ROLE_TEACHER));
+        });
     }
 }

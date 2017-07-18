@@ -21,14 +21,14 @@ public class CourseDaoForTest implements ua.com.vertex.dao.interfaces.CourseDaoF
     private static final String COLUMN_COURSE_START = "start";
     private static final String COLUMN_COURSE_FINISHED = "finished";
     private static final String COLUMN_COURSE_PRICE = "price";
-    private static final String COLUMN_COURSE_TEACHER_NAME = "teacher_name";
+    private static final String COLUMN_COURSE_TEACHER_ID = "teacher_id";
     private static final String COLUMN_COURSE_SCHEDULE = "schedule";
     private static final String COLUMN_COURSE_NOTES = "notes";
 
     @Override
-    public int createCourse(Course course) throws DataAccessException {
-        String query = "INSERT INTO Courses (name, start, finished, price, teacher_name, schedule, notes) " +
-                "VALUES(:name, :start, :finished, :price, :teacher_name, :schedule, :notes)";
+    public int insertCourse(Course course) throws DataAccessException {
+        String query = "INSERT INTO Courses (name, start, finished, price, teacher_id, schedule, notes) " +
+                "VALUES(:name, :start, :finished, :price, :teacher_id, :schedule, :notes)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();
@@ -36,7 +36,7 @@ public class CourseDaoForTest implements ua.com.vertex.dao.interfaces.CourseDaoF
         source.addValue(COLUMN_COURSE_START, course.getStart());
         source.addValue(COLUMN_COURSE_FINISHED, course.isFinished());
         source.addValue(COLUMN_COURSE_PRICE, course.getPrice());
-        source.addValue(COLUMN_COURSE_TEACHER_NAME, course.getTeacherName());
+        source.addValue(COLUMN_COURSE_TEACHER_ID, course.getTeacher().getUserId());
         source.addValue(COLUMN_COURSE_SCHEDULE, course.getSchedule());
         source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
 

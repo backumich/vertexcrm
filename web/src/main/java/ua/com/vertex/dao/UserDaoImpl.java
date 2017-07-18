@@ -51,12 +51,14 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String COLUMN_PHOTO = "photo";
     private static final String COLUMN_DISCOUNT = "discount";
     private static final String COLUMN_ROLE_ID = "role_id";
+    private static final String COLUMN_ROLE_NAME = "name";
     private static final String COLUMN_IS_ACTIVE = "is_active";
 
     @Override
     public Optional<User> getUser(int userId) {
-        String query = "SELECT user_id, email, password, first_name, " +
-                "last_name, passport_scan, photo, discount, phone, role_id FROM Users WHERE user_id=:userId";
+        String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
+                "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
+                " WHERE user_id=:userId";
 
         User user = null;
         try {
@@ -74,8 +76,9 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        String query = "SELECT user_id, email, password, first_name, last_name, passport_scan, photo, discount, " +
-                "phone, role_id FROM Users WHERE email=:email";
+        String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
+                "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
+                " WHERE email=:email";
 
         User user = null;
         try {
@@ -93,7 +96,8 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> logIn(String email) {
-        String query = "SELECT email, password, role_id FROM Users WHERE email=:email";
+        String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id " +
+                "WHERE u.email=:email";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
 
@@ -171,7 +175,8 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     public Optional<User> getUserDetailsByID(int userID) throws SQLException {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, " +
-                "u.photo, u.discount, u.phone, u.role_id FROM Users u WHERE u.user_id=:userId";
+                "u.photo, u.discount, u.phone,r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id " +
+                "WHERE u.user_id=:userId";
         User user = null;
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource("userId", userID), new UserRowMapping());
@@ -216,12 +221,12 @@ public class UserDaoImpl implements UserDaoInf {
     public EnumMap<Role, Role> getAllRoles() {
         LOGGER.debug("Get a list of all users roles");
 
-        String query = "SELECT r.role_id, r.name FROM Roles r";
+        String query = "SELECT r.name FROM Roles r";
         return jdbcTemplate.query(query, rs -> {
             EnumMap<Role, Role> allRoles = new EnumMap<>(Role.class);
             while (rs.next()) {
-                allRoles.put(rs.getString("name").equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER,
-                        rs.getString("name").equals("ROLE_ADMIN") ? Role.ROLE_ADMIN : Role.ROLE_USER);
+                allRoles.put(Role.valueOf(rs.getString("name")),
+                        Role.valueOf(rs.getString("name")));
             }
             return allRoles;
         });
@@ -237,7 +242,7 @@ public class UserDaoImpl implements UserDaoInf {
                 "photo = :photo, " +
                 "discount = :discount, " +
                 "phone = :phone, " +
-                "role_id = :role_id" +
+                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name= :role)" +
                 " WHERE user_id = :user_id";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -248,7 +253,7 @@ public class UserDaoImpl implements UserDaoInf {
         parameters.addValue("photo", user.getPhoto());
         parameters.addValue("discount", user.getDiscount());
         parameters.addValue("phone", user.getPhone());
-        parameters.addValue("role_id", user.getRole().getId());
+        parameters.addValue("role", user.getRole());
         parameters.addValue("user_id", user.getUserId());
 
         return jdbcTemplate.update(query, parameters);
@@ -266,8 +271,8 @@ public class UserDaoImpl implements UserDaoInf {
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public int addUserForCreateCertificate(User user) {
-        String query = "INSERT INTO Users (email, first_name, last_name) " +
-                "VALUES (:email, :first_name, :last_name)";
+        String query = "INSERT INTO Users  (email, first_name, last_name, role_id) " +
+                "VALUES (:email, :first_name, :last_name, (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER'))";
 
         LOGGER.debug(String.format("Try add user -(%s) ;", user));
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -305,7 +310,8 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
-                "VALUES (:email, :password, :first_name, :last_name, :phone, 2)";
+                "VALUES (:email, :password, :first_name, :last_name, :phone, " +
+                "(SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER'))";
 
         jdbcTemplate.update(query, getRegistrationParameters(user));
     }
@@ -315,7 +321,7 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.info("Update not active user .");
 
         String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
-                "phone =:phone, role_id =2 WHERE email =:email";
+                "phone =:phone, role_id = (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER') WHERE email =:email";
 
         jdbcTemplate.update(query, getRegistrationParameters(user));
     }
@@ -324,13 +330,14 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getTeachers() throws DataAccessException {
         LOGGER.debug("Trying to pull out all users with the role is a teacher.");
 
-        String query = "SELECT email, first_name,last_name, role_id FROM Users WHERE role_id = 1";
+        String query = "SELECT u.email, u.first_name, u.last_name, r.name FROM Users u " +
+                "INNER JOIN Roles r  ON u.role_id = r.role_id WHERE r.name='ROLE_TEACHER'";
 
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
                 .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                 .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
                 .setLastName(resultSet.getString(COLUMN_LAST_NAME))
-                .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN : ROLE_USER)
+                .setRole(Role.valueOf(resultSet.getString(COLUMN_ROLE_NAME)))
                 .getInstance());
     }
 
@@ -357,8 +364,7 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPhoto(handler.getBlobAsBytes(resultSet, COLUMN_PHOTO))
                     .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
                     .setPhone(resultSet.getString(COLUMN_PHONE))
-                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ROLE_ADMIN
-                            : (resultSet.getInt(COLUMN_ROLE_ID) == 2) ? ROLE_USER : ROLE_TEACHER)
+                    .setRole(Role.valueOf(resultSet.getString(COLUMN_ROLE_NAME)))
                     .getInstance();
         }
     }

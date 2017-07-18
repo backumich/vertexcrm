@@ -7,6 +7,6 @@ import ua.com.vertex.beans.Course;
 @Profile("test")
 public interface CourseDaoForTest {
 
-    int createCourse(Course course) throws DataAccessException;
+    int insertCourse(Course course) throws DataAccessException;
 
     }
