@@ -36,7 +36,7 @@ public class RegistrationController {
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
-        LOGGER.info("First request to " + REGISTRATION_PAGE);
+        LOGGER.info("Get page - " + REGISTRATION_PAGE);
         return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 

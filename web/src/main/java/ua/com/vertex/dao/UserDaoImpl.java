@@ -18,14 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static ua.com.vertex.beans.Role.ADMIN;
 import static ua.com.vertex.beans.Role.USER;
@@ -208,8 +211,8 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
-        LOGGER.debug("Get a list of all users");
+    public List<User> getAllUser() throws SQLException {
+        LOGGER.debug("Get all users list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
@@ -218,6 +221,33 @@ public class UserDaoImpl implements UserDaoInf {
                 setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
                 setLastName(resultSet.getString(COLUMN_LAST_NAME)).
                 setPhone(resultSet.getString(COLUMN_PHONE)).getInstance());
+    }
+
+    @Override
+    public List<User> getUsersPerPages(DataNavigator dataNavigator) {
+
+        LOGGER.debug("Get all user list");
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
+        parameters.addValue("offset", dataNavigator.getRowPerPage());
+
+        List<User> users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
+
+        String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+        LOGGER.debug("Quantity users -" + users.size());
+        LOGGER.debug("All users list -" + allUsersEmail);
+
+        return users;
+    }
+
+    @Override
+    public int getQuantityUsers() throws SQLException {
+        LOGGER.debug("Get all users list");
+        String query = "SELECT count(*) FROM Users";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
 
     @Override
@@ -379,6 +409,30 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPhoto(handler.getBlobAsBytes(resultSet, COLUMN_PHOTO))
                     .setDiscount(resultSet.getInt(COLUMN_DISCOUNT))
                     .setPhone(resultSet.getString(COLUMN_PHONE))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance();
+        }
+    }
+
+    private static final class UserPartDataRowMapping implements RowMapper<User> {
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            LobHandler handler = new DefaultLobHandler();
+            return new User.Builder()
+                    .setUserId(resultSet.getInt(COLUMN_USER_ID))
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setFirstName(resultSet.getString(COLUMN_FIRST_NAME))
+                    .setLastName(resultSet.getString(COLUMN_LAST_NAME))
+                    .setPhone(resultSet.getString(COLUMN_PHONE))
+                    .getInstance();
+        }
+    }
+
+    private static final class UserRowMapperLogIn implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
                     .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
                     .getInstance();
         }

@@ -1,6 +1,5 @@
 package ua.com.vertex.logic;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.sql.SQLException;
 import java.util.EnumMap;
@@ -53,8 +53,15 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<User> getAllUsers() throws SQLException {
-        return userDao.getAllUsers();
+    public int getQuantityUsers() throws SQLException {
+        return userDao.getQuantityUsers();
+    }
+
+    @Override
+    public List<User> getUsersPerPages(DataNavigator dataNavigator) {
+        LOGGER.debug("Get part data users list (dataNavigator)");
+
+        return userDao.getUsersPerPages(dataNavigator);
     }
 
     @Override
@@ -129,5 +136,4 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
         return userDao.getCourseUsers(courseId);
     }
-
 }

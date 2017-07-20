@@ -40,7 +40,7 @@ public class UserDetailsController {
             }
             LOGGER.debug("Get full data for user ID - " + userId);
         } catch (Exception e) {
-            LOGGER.debug("During preparation the all data for user ID - " + userId + " there was a database error", e);
+            LOGGER.warn("During preparation the all data for user ID - " + userId + " there was a database error", e);
             modelAndView.setViewName(ERROR_JSP);
         }
 
@@ -100,7 +100,7 @@ public class UserDetailsController {
                 }
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR_JSP);
-                LOGGER.debug("Update user data failed for user ID - " + user.getUserId(), e);
+                LOGGER.warn("Update user data failed for user ID - " + user.getUserId(), e);
             }
         }
 
@@ -110,7 +110,7 @@ public class UserDetailsController {
             LOGGER.debug("We received all the roles of the system");
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
-            LOGGER.debug("There are problems with access to roles of the system", e);
+            LOGGER.warn("There are problems with access to roles of the system", e);
         }
 
         //  -- Get all user certificates
@@ -119,7 +119,7 @@ public class UserDetailsController {
             LOGGER.debug("Received all roles");
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
-            LOGGER.debug("There are problems with access to roles of the system", e);
+            LOGGER.warn("There are problems with access to roles of the system", e);
         }
         return modelAndView;
     }

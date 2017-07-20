@@ -1,13 +1,11 @@
 package ua.com.vertex.controllers;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,16 +13,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
-//import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
@@ -32,12 +26,11 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -117,16 +110,16 @@ public class UserDetailsControllerTest {
         testUser.setPhone("0000000000");
 
         when(logic.getUserDetailsByID(1)).thenReturn(Optional.ofNullable(testUser));
-        Assert.assertNotNull(testUser);
+        assertNotNull(testUser);
 
-        Assert.assertEquals(1, testUser.getUserId());
-        Assert.assertEquals("chewed.mole@gmail.com", testUser.getEmail());
-        Assert.assertEquals("Bond", testUser.getLastName());
-        Assert.assertEquals("James", testUser.getFirstName());
-        Assert.assertEquals("passportScan", new String(testUser.getPassportScan()));
-        Assert.assertEquals("photo", new String(testUser.getPhoto()));
-        Assert.assertEquals(10, testUser.getDiscount());
-        Assert.assertEquals("0000000000", testUser.getPhone());
+        assertEquals(1, testUser.getUserId());
+        assertEquals("chewed.mole@gmail.com", testUser.getEmail());
+        assertEquals("Bond", testUser.getLastName());
+        assertEquals("James", testUser.getFirstName());
+        assertEquals("passportScan", new String(testUser.getPassportScan()));
+        assertEquals("photo", new String(testUser.getPhoto()));
+        assertEquals(10, testUser.getDiscount());
+        assertEquals("0000000000", testUser.getPhone());
     }
 
     @Test

@@ -9,20 +9,37 @@ import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
-
-    private final CourseDaoInf courseDaoInf;
     private static final Logger LOGGER = LogManager.getLogger(CourseLogicImpl.class);
+    private final CourseDaoInf courseDao;
+
+    @Override
+    public int getQuantityCourses() throws SQLException {
+        return courseDao.getQuantityCourses();
+    }
+
+    @Override
+    public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
+        LOGGER.debug("Get part data courses list (dataNavigator)");
+        return courseDao.getAllCourses(dataNavigator);
+    }
+
+    @Override
+    public int addCourse(Course course) throws Exception {
+        return courseDao.addCourse(course);
+    }
 
     @Override
     public List<Course> getAllCoursesWithDept() throws Exception {
         LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
-        return courseDaoInf.getAllCoursesWithDept();
+        return courseDao.getAllCoursesWithDept();
     }
 
     @Override
@@ -64,7 +81,8 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Autowired
-    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
-        this.courseDaoInf = courseDaoInf;
+    public CourseLogicImpl(CourseDaoInf courseDao) {
+        this.courseDao = courseDao;
     }
+
 }

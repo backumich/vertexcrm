@@ -90,3 +90,14 @@ a:hover {
     padding-bottom: 30px;
     color: red;
 }
+
+.block {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.block img {
+    max-width: 100%;
+    max-height: 100%;
+}

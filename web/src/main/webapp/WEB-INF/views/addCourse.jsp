@@ -3,9 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
+<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html lang="en" charset="UTF-8">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="./css" rel="stylesheet" type="text/css">
@@ -18,46 +20,67 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style id="style-1-cropbar-clipper">
-        .en-markup-crop-options {
-            top: 18px !important;
-            left: 50% !important;
-            margin-left: -100px !important;
-            width: 200px !important;
-            border: 2px rgba(255, 255, 255, .38) solid !important;
-            border-radius: 4px !important;
-        }
+    <%--suppress CommaExpressionJS --%>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-62731553-2', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
 
-        .en-markup-crop-options div div:first-of-type {
-            margin-left: 0px !important;
-        }
+    .en-markup-crop-options div div:first-of-type {
+        margin-left: 0 !important;
+    }
 
-        .colortext {
-            background-color: #ffe; /* Цвет фона */
-            color: black; /* Цвет текста */
-        }
-
-        .buttonText {
-            color: black;
-        }
+    .buttonText {
+        color: black;
+    }
     </style>
 </head>
 <body class="inside footer-under">
+<!-- Yandex.Metrika counter -->
+<%--suppress JSValidateTypes --%>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#perPage').change(function () {
-            $('#submit').click();
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter37563830 = new Ya.Metrika({
+                    id: 37563830,
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true,
+                    webvisor: true
+                });
+            } catch (e) {
+            }
         });
-
-        $('a.page').click(function () {
-            var id = $(this).attr('id');
-            $('#nextPage').val(id);
-            $('#submit').click();
-        });
-    });
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");
 </script>
 <noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
+<!-- /Yandex.Metrika counter -->
 <div class="nav navbar navbar-fixed-top navbar-hide">
     <div class="container"><a href="https://vertex-academy.com/index.html" class="logo pull-left"></a>
         <button data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span
@@ -76,97 +99,63 @@
         </div>
     </div>
 </div>
-
 <div class="page gray-page mh100">
     <div class="container pt1_5">
+
         <div align="center">
-            <c:if test="${dataNavigator.currentNumberPage!=1}">
-                <a id="1" class="page" style="cursor: pointer;">&lt;&lt;</a>
-            </c:if>
-            <c:if test="${dataNavigator.currentNumberPage>1}">
-                <a id="${dataNavigator.currentNumberPage-1}" class="page" style="cursor: pointer;">Prev</a>
-            </c:if>
-
-            <c:forEach begin="1" end="${dataNavigator.totalPages}" var="val">
-                <c:if test="${val==dataNavigator.currentNumberPage}">
-                    <a style="color: #ffffff" id="${val}" class="page" style="cursor: pointer;">${val}</a>
-                </c:if>
-                <c:if test="${val!=dataNavigator.currentNumberPage}">
-                    <a id="${val}" class="page" style="cursor: pointer;">${val}</a>
-                </c:if>
-            </c:forEach>
-
-            <c:if test="${dataNavigator.currentNumberPage<dataNavigator.lastPage}">
-                <a id="${dataNavigator.currentNumberPage+1}" class="page" style="cursor: pointer;">Next</a>
-            </c:if>
-            <c:if test="${dataNavigator.lastPage!=dataNavigator.currentNumberPage}">
-                <a id="${dataNavigator.lastPage}" class="page" style="cursor: pointer;">&gt;&gt;</a>
-            </c:if>
-            <br/>
-            <br/>
-            <br/>
-            <form:form action="viewAllUsers" method="post" commandName="dataNavigator">
-                <form:select id="perPage" class="buttonText" path="rowPerPage" items="${dataNavigator.countRowPerPage}"/>
-
-                <input id="currentNamePage" type="hidden" name="currentNamePage"
-                       value="${dataNavigator.currentNamePage}">
-                <input id="currentNumberPage" type="hidden" name="currentNumberPage"
-                       value="${dataNavigator.currentNumberPage}">
-                <input id="nextPage" type="hidden" name="nextPage" value="${dataNavigator.nextPage}">
-                <input id="lastPage" type="hidden" name="lastPage" value="${dataNavigator.lastPage}">
-                <input id="rowPerPage" type="hidden" name="rowPerPage"
-                       value="${dataNavigator.rowPerPage}">
-                <input id="totalPages" type="hidden" name="totalPages" value="${dataNavigator.totalPages}">
-                <input id="dataSize" type="hidden" name="dataSize" value="${dataNavigator.dataSize}">
-
-                <input value="Submit" id="submit" class="buttonText" type="submit" style="display:none;"/>
+            <form:form action="addCourse" method="post" commandName="course">
+                <table border="0">
+                    <tr>
+                        <td colspan="2" align="center"><h2>Add new Course</h2></td>
+                    </tr>
+                        <%--<tr>--%>
+                        <%--<td>ID:</td>--%>
+                        <%--<td><form:input class="buttonText" placeholder="id" path="id"/></td>--%>
+                        <%--<td><form:errors path="id"/></td>--%>
+                        <%--</tr>--%>
+                    <tr>
+                        <td>Course name:</td>
+                        <td><form:input class="buttonText" placeholder="Course name" path="name"/></td>
+                        <td><form:errors path="name"/></td>
+                    </tr>
+                    <tr>
+                        <td>Start:</td>
+                        <td><form:input class="buttonText" placeholder="YYYY-MM-DD" path="start"/></td>
+                        <td><form:errors path="start"/></td>
+                    </tr>
+                    <tr>
+                        <td>Finished:</td>
+                        <td><form:checkbox class="buttonText" placeholder="finished" path="finished"/></td>
+                        <td><form:errors path="finished"/></td>
+                    </tr>
+                    <tr>
+                        <td>Price:</td>
+                        <td><form:input class="buttonText" placeholder="Course price" path="price"/></td>
+                        <td><form:errors path="price"/></td>
+                    </tr>
+                    <tr>
+                        <td>Teacher:</td>
+                        <td><form:input class="buttonText" placeholder="Teacher name" path="teacherName"/></td>
+                        <td><form:errors path="teacherName"/></td>
+                    </tr>
+                    <tr>
+                        <td>Schedule:</td>
+                        <td><form:input class="buttonText" placeholder="Schedule" path="schedule"/></td>
+                        <td><form:errors path="schedule"/></td>
+                    </tr>
+                    <tr>
+                        <td>Notes:</td>
+                        <td><form:input class="buttonText" placeholder="Notes" path="notes"/></td>
+                        <td><form:errors path="notes"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input class="buttonText" type="submit" value="Add course"/></td>
+                    </tr>
+                </table>
             </form:form>
-            <br/>
-            <br/>
-            <br/>
-
-            <table bordercolor="red" border="2">
-
-                <tr>
-                    <th width="60px">User ID</th>
-                    <th width="150px">E-mail</th>
-                    <th width="150px">Last name</th>
-                    <th width="150px">First name</th>
-                    <th width="150px">Phone</th>
-                    <th width="100px"></th>
-                </tr>
-                <c:if test="${empty users}">
-                    <tr>
-                        <td>There are no users!</td>
-                    </tr>
-                </c:if>
-                <c:forEach var="users" items="${users}">
-                    <tr>
-                        <td>${users.userId} </td>
-                        <td>${users.email} </td>
-                        <td>${users.lastName} </td>
-                        <td>${users.firstName} </td>
-                        <td>${users.phone} </td>
-                        <td>
-                            <c:set var="titleURL">
-                                <c:url value="userDetails">
-                                    <c:param name="userId" value="${users.userId}"/>
-                                </c:url>
-                            </c:set>
-                            <a href="${titleURL}">Detail</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-
-            </table>
-            <br/>
-            <br/>
-            <br/>
-            <div class="href">
-                <a href="javascript:history.back();">Back</a> |
-                <a href="<c:url value="/" />">Home</a>
-            </div>
         </div>
+
+
     </div>
 </div>
 <div class="footer">
