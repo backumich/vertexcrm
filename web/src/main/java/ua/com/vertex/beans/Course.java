@@ -79,7 +79,7 @@ public class Course {
         this.start = start;
     }
 
-    public boolean getFinished() {
+    public boolean isFinished() {
         return finished;
     }
 

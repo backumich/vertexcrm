@@ -14,6 +14,10 @@ public interface CourseLogic {
 
     List<Course> searchCourseByNameAndStatus(Course course) throws Exception;
 
+    int getQuantityCourses() throws SQLException;
+
+    int addCourse(Course course) throws Exception;
+
     int updateCourseExceptPrice(Course course) throws Exception;
 
     Optional<Course> getCourseById(int courseId) throws Exception;
@@ -25,10 +29,7 @@ public interface CourseLogic {
     void assignUserToCourse(CourseUserDto dto);
 
     List<User> searchForUsersToAssign(CourseUserDto dto);
-    int getQuantityCourses() throws SQLException;
 
     List<Course> getCoursesPerPages(DataNavigator dataNavigator);
-
-    int addCourse(Course course) throws Exception;
 
 }

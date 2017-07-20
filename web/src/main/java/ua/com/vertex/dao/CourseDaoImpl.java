@@ -16,11 +16,11 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 import ua.com.vertex.utils.LogInfo;
-import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,6 +66,8 @@ public class CourseDaoImpl implements CourseDaoInf {
         jdbcTemplate.update(query, source, keyHolder);
         LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
+    }
+
     @Override
     public List<Course> getAllCourses(DataNavigator dataNavigator) {
 
@@ -141,7 +143,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("name", course.getName());
         namedParameters.addValue("start", course.getStart());
-        namedParameters.addValue("finished", course.getFinished());
+        namedParameters.addValue("finished", course.isFinished());
         namedParameters.addValue("price", course.getPrice());
         namedParameters.addValue("teacher_name", course.getTeacherName());
         namedParameters.addValue("schedule", course.getSchedule());
@@ -174,11 +176,11 @@ public class CourseDaoImpl implements CourseDaoInf {
         return jdbcTemplate.query(query, new MapSqlParameterSource(COLUMN_COURSE_FINISHED, course.isFinished() ? 1 : 0),
                 (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
                         .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                        .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
+                        .setStart(LocalDate.parse(resultSet.getString(COLUMN_COURSE_START)))
                         .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
                         .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
                         .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
-                        .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
+                        .setSchedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
                         .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
     }
 
@@ -198,30 +200,6 @@ public class CourseDaoImpl implements CourseDaoInf {
         source.addValue(COLUMN_COURSE_NOTES, course.getNotes());
 
         return jdbcTemplate.update(query, source);
-    }
-
-    @Override
-    public Optional<Course> getCourseById(int courseId) throws DataAccessException {
-        LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
-
-        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_name, c.schedule, c.notes " +
-                "FROM Courses c WHERE id=:id";
-        Course course = null;
-        try {
-            course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(COLUMN_COURSE_ID, courseId),
-                    (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(COLUMN_COURSE_ID))
-                            .setName(resultSet.getString(COLUMN_COURSE_NAME))
-                            .setStart(resultSet.getTimestamp(COLUMN_COURSE_START).toLocalDateTime())
-                            .setFinished((resultSet.getInt(COLUMN_COURSE_FINISHED) == 1))
-                            .setPrice(resultSet.getBigDecimal(COLUMN_COURSE_PRICE))
-                            .setTeacherName(resultSet.getString(COLUMN_COURSE_TEACHER_NAME))
-                            .setShedule(resultSet.getString(COLUMN_COURSE_SCHEDULE))
-                            .setNotes(resultSet.getString(COLUMN_COURSE_NOTES)).getInstance());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
-        }
-
-        return Optional.ofNullable(course);
     }
 
     @Override

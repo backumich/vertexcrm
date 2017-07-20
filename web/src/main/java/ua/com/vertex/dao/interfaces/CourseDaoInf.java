@@ -13,9 +13,9 @@ public interface CourseDaoInf {
 
     int addCourse(Course course) throws SQLException;
 
-    List<Course> getAllCourses(DataNavigator dataNavigator);
-
     int getQuantityCourses() throws SQLException;
+
+    List<Course> getAllCourses(DataNavigator dataNavigator);
 
     int createCourse(Course course);
 

@@ -45,39 +45,39 @@ public class CourseLogicImpl implements CourseLogic {
     @Override
     public List<Course> searchCourseByNameAndStatus(Course course) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)",course));
-        return courseDaoInf.searchCourseByNameAndStatus(course);
+        return courseDao.searchCourseByNameAndStatus(course);
     }
 
     @Override
     public int updateCourseExceptPrice(Course course) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)",course));
-        return courseDaoInf.updateCourseExceptPrice(course);
+        return courseDao.updateCourseExceptPrice(course);
     }
 
     @Override
     public Optional<Course> getCourseById(int courseId) throws Exception {
         LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)",courseId));
-        return courseDaoInf.getCourseById(courseId);
+        return courseDao.getCourseById(courseId);
     }
 
     @Override
     public List<User> getUsersAssignedToCourse(int courseId) {
-        return courseDaoInf.getUsersAssignedToCourse(courseId);
+        return courseDao.getUsersAssignedToCourse(courseId);
     }
 
     @Override
     public void removeUserFromCourse(CourseUserDto dto) {
-        courseDaoInf.removeUserFromCourse(dto);
+        courseDao.removeUserFromCourse(dto);
     }
 
     @Override
     public void assignUserToCourse(CourseUserDto dto) {
-        courseDaoInf.assignUserToCourse(dto);
+        courseDao.assignUserToCourse(dto);
     }
 
     @Override
     public List<User> searchForUsersToAssign(CourseUserDto dto) {
-        return courseDaoInf.searchForUsersToAssign(dto);
+        return courseDao.searchForUsersToAssign(dto);
     }
 
     @Autowired
