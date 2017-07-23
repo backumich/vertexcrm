@@ -57,6 +57,7 @@ public class User {
         firstName = userFormRegistration.getFirstName();
         lastName = userFormRegistration.getLastName();
         phone = userFormRegistration.getPhone();
+        role = Role.USER;
     }
 
     public static class Builder {

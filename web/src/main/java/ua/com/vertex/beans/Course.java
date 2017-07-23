@@ -2,20 +2,40 @@ package ua.com.vertex.beans;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class Course {
+    private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
+    private final String COURSE_TEACHER_NAME_MSG = "Teacher's name must be longer than 2 and less than 256 characters";
+    private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
+    private final String NOTES_MSG = "The schedule must be up to 256 characters long";
 
     private int id;
     private BigDecimal price;
 
-    @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
+    @Size(min = 1, max = 256, message = COURSE_NAME_MSG)
     private String name;
+
+    @Valid
     private User teacher;
-    private String schedule, notes;
+
+    @Size(max = 256, message = SCHEDULE_MSG)
+    private String schedule;
+
+    @Size(max = 256, message = NOTES_MSG)
+    private String notes;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
@@ -146,7 +166,7 @@ public class Course {
             return this;
         }
 
-        public Builder setStart(LocalDateTime startDate) {
+        public Builder setStart(LocalDate startDate) {
             instance.setStart(startDate);
             return this;
         }
@@ -166,8 +186,8 @@ public class Course {
             return this;
         }
 
-        public Builder setShedule(String shedule) {
-            instance.setSchedule(shedule);
+        public Builder setSchedule(String Schedule) {
+            instance.setSchedule(Schedule);
             return this;
         }
 
@@ -180,5 +200,4 @@ public class Course {
             return instance;
         }
     }
-
 }

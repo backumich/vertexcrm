@@ -8,9 +8,6 @@ import java.util.Optional;
 
 public interface RegistrationUserLogic {
 
-    boolean isVerifyPassword(UserFormRegistration userFormRegistration);
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     boolean isEmailAlreadyExists(Optional<User> user);
 
     boolean isRegisteredUser(UserFormRegistration userFormRegistration,

@@ -8,7 +8,6 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.util.Optional;
 
@@ -17,9 +16,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class LoggingLogicImplTest {
-
-    @Mock
-    private LogInfo logInfo;
 
     @Mock
     private UserLogic userLogic;
@@ -35,7 +31,7 @@ public class LoggingLogicImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        loggingLogic = new LoggingLogicImpl(logInfo, userLogic, userDao);
+        loggingLogic = new LoggingLogicImpl(userLogic, userDao);
     }
 
     @Test

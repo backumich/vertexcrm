@@ -1,9 +1,10 @@
 package ua.com.vertex.dao.interfaces;
 
-
 import org.springframework.dao.DataAccessException;
+import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -22,6 +23,13 @@ public interface UserDaoInf {
 
     List<Integer> getAllUserIds() throws DataAccessException;
 
+    List<User> getAllUser() throws SQLException;
+
+    List<User> getUsersPerPages(DataNavigator dataNavigator);
+
+    int getQuantityUsers() throws SQLException;
+
+    Optional<User> getUserDetailsByID(int userID) throws SQLException;
     List<User> getAllUsers() throws DataAccessException;
 
     Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
@@ -43,6 +51,8 @@ public interface UserDaoInf {
     void registrationUserInsert(User user) throws DataAccessException;
 
     void registrationUserUpdate(User user) throws DataAccessException;
+
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
 
     List<User> getTeachers () throws DataAccessException;
 

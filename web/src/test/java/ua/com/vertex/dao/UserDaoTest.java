@@ -20,6 +20,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.UserDaoForTest;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -117,7 +118,7 @@ public class UserDaoTest {
 
     @Test
     public void getListUsersNotEmpty() throws Exception {
-        List<User> users = userDao.getAllUsers();
+        List<User> users = userDao.getUsersPerPages(new DataNavigator());
         assertEquals(false, users.isEmpty());
     }
 
@@ -198,7 +199,6 @@ public class UserDaoTest {
                 .setLastName("Test").setRole(Role.ROLE_USER).getInstance();
         int result = userDao.addUserForCreateCertificate(userForTest);
         userForTest.setUserId(result);
-        System.out.println(userForTest.getRole());
         assertEquals(MSG, userForTest, userDao.getUser(result).orElse(null));
     }
 
@@ -223,6 +223,11 @@ public class UserDaoTest {
         userDao.registrationUserInsert(new User());
     }
 
+    @Test(expected = DataAccessException.class)
+    public void registrationUserInsertReturnDataAccessExceptionWhenEmptyUserHasRole() throws Exception {
+        userDao.registrationUserInsert(new User.Builder().setRole(Role.ADMIN).getInstance());
+    }
+
     @Test
     @WithAnonymousUser
     public void registrationUserInsertCorrectInsert() throws Exception {
@@ -243,6 +248,14 @@ public class UserDaoTest {
         assertNotEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").orElse(null));
         userDao.registrationUserUpdate(userForUpdate);
         assertEquals(MSG, userForUpdate, userDao.getUserByEmail("34@test.com").orElse(null));
+    }
+
+    @Test
+    public void getCourseUsersReturnCorrectData() throws Exception {
+        assertEquals("Maybe method was changed", userDao.getCourseUsers(1).get(0),
+                new User.Builder().setUserId(1).setEmail("email1").setFirstName("FirstName")
+                        .setLastName("LastName").setDiscount(0).getInstance());
+
     }
 
     @Test

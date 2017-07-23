@@ -3,6 +3,7 @@ package ua.com.vertex.logic.interfaces;
 import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -21,6 +22,7 @@ public interface UserLogic {
 
     Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException;
 
+    List<User> getUsersPerPages(DataNavigator dataNavigator);
     List<User> getAllUsers() throws DataAccessException;
 
     EnumMap<Role, Role> getAllRoles() throws DataAccessException;
@@ -41,4 +43,8 @@ public interface UserLogic {
 
     Map<Integer, String> getTeachers() throws DataAccessException;
 
+
+    List<User> getCourseUsers(int courseId) throws DataAccessException;
+
+    int getQuantityUsers() throws SQLException;
 }

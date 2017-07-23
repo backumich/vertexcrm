@@ -36,17 +36,18 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     @Override
     @Transactional
     public int createNewPayment(int courseId, int userId, Payment payment) throws DataAccessException {
-        LOGGER.debug(String.format("Try create new payment by courseId = (%s) and userId - (%s)", courseId, userId));
+        LOGGER.debug(String.format("Call - paymentDaoInf.createNewPayment((%s), (%s) , (%s)) ;",
+                courseId, userId, payment));
 
         String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM Accounting " +
                 "WHERE course_id = :courseId AND user_id = :userId) , :amount)";
-
         MapSqlParameterSource source = new MapSqlParameterSource(COURSE_ID, courseId);
         source.addValue(USER_ID, userId);
         source.addValue(AMOUNT, payment.getAmount().doubleValue());
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
+        LOGGER.debug(String.format("Try create new Payment = (%s), by courseId = (%s) and userId - (%s)",
+                payment, courseId, userId));
         jdbcTemplate.update(query, source, keyHolder);
         return keyHolder.getKey().intValue();
     }

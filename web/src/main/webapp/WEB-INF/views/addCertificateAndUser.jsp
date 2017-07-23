@@ -34,13 +34,10 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
-
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
@@ -62,7 +59,6 @@
             } catch (e) {
             }
         });
-
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -71,7 +67,6 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
-
         //noinspection JSValidateTypes
         if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);

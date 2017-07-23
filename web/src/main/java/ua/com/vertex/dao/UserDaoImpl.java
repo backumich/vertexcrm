@@ -18,14 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
+import ua.com.vertex.utils.DataNavigator;
 import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 
 @Repository
 public class UserDaoImpl implements UserDaoInf {
@@ -104,6 +109,11 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPassword(resultSet.getString(COLUMN_PASSWORD))
                     .setRole(Role.valueOf(resultSet.getString(COLUMN_ROLE_NAME)))
                     .getInstance());
+            user = jdbcTemplate.queryForObject(query, parameters, ((resultSet, i) -> new User.Builder()
+                    .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                    .setPassword(resultSet.getString(COLUMN_PASSWORD))
+                    .setRole(resultSet.getInt(COLUMN_ROLE_ID) == 1 ? ADMIN : USER)
+                    .getInstance()));
         } catch (EmptyResultDataAccessException e) {
             LOGGER.warn("No email=" + email);
         }
@@ -181,6 +191,11 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
+                    ((resultSet, i) -> new User.Builder()
+                            .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
+                            .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
+                            .getInstance()));
+            user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
                     (resultSet, i) -> new User.Builder()
                             .setEmail(resultSet.getString(COLUMN_USER_EMAIL))
                             .setIsActive(resultSet.getInt(COLUMN_IS_ACTIVE) == 1)
@@ -188,9 +203,7 @@ public class UserDaoImpl implements UserDaoInf {
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
-        if (user != null) {
-            LOGGER.warn(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
-        }
+        LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user == null ? "empty user" : user));
         return Optional.ofNullable(user);
     }
 
@@ -205,6 +218,33 @@ public class UserDaoImpl implements UserDaoInf {
                 setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
                 setLastName(resultSet.getString(COLUMN_LAST_NAME)).
                 setPhone(resultSet.getString(COLUMN_PHONE)).getInstance());
+    }
+
+    @Override
+    public List<User> getUsersPerPages(DataNavigator dataNavigator) {
+
+        LOGGER.debug("Get all user list");
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
+        parameters.addValue("offset", dataNavigator.getRowPerPage());
+
+        List<User> users = jdbcTemplate.query(query, parameters, new UserPartDataRowMapping());
+
+        String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
+        LOGGER.debug("Quantity users -" + users.size());
+        LOGGER.debug("All users list -" + allUsersEmail);
+
+        return users;
+    }
+
+    @Override
+    public int getQuantityUsers() throws SQLException {
+        LOGGER.debug("Get all users list");
+        String query = "SELECT count(*) FROM Users";
+        return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
 
     @Override
@@ -340,6 +380,19 @@ public class UserDaoImpl implements UserDaoInf {
         namedParameters.addValue(COLUMN_LAST_NAME, user.getLastName());
         namedParameters.addValue(COLUMN_PHONE, user.getPhone());
         return namedParameters;
+    }
+
+    @Override
+    public List<User> getCourseUsers(int courseId) {
+        LOGGER.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
+
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name FROM Users u" +
+                "  INNER JOIN Accounting a ON u.user_id = a.user_id WHERE course_id = :courseId";
+        return jdbcTemplate.query(query, new MapSqlParameterSource(COURSE_ID, courseId),
+                (resultSet, i) -> new User.Builder().setUserId(resultSet.getInt(COLUMN_USER_ID)).
+                        setEmail(resultSet.getString(COLUMN_USER_EMAIL)).
+                        setFirstName(resultSet.getString(COLUMN_FIRST_NAME)).
+                        setLastName(resultSet.getString(COLUMN_LAST_NAME)).getInstance());
     }
 
     private static final class UserRowMapping implements RowMapper<User> {

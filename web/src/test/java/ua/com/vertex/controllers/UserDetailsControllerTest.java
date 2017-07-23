@@ -1,6 +1,5 @@
 package ua.com.vertex.controllers;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +25,12 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -109,15 +111,17 @@ public class UserDetailsControllerTest {
 
         when(logic.getUserById(1)).thenReturn(Optional.ofNullable(testUser));
         Assert.assertNotNull(testUser);
+        when(logic.getUserDetailsByID(1)).thenReturn(Optional.ofNullable(testUser));
+        assertNotNull(testUser);
 
-        Assert.assertEquals(1, testUser.getUserId());
-        Assert.assertEquals("chewed.mole@gmail.com", testUser.getEmail());
-        Assert.assertEquals("Bond", testUser.getLastName());
-        Assert.assertEquals("James", testUser.getFirstName());
-        Assert.assertEquals("passportScan", new String(testUser.getPassportScan()));
-        Assert.assertEquals("photo", new String(testUser.getPhoto()));
-        Assert.assertEquals(10, testUser.getDiscount());
-        Assert.assertEquals("0000000000", testUser.getPhone());
+        assertEquals(1, testUser.getUserId());
+        assertEquals("chewed.mole@gmail.com", testUser.getEmail());
+        assertEquals("Bond", testUser.getLastName());
+        assertEquals("James", testUser.getFirstName());
+        assertEquals("passportScan", new String(testUser.getPassportScan()));
+        assertEquals("photo", new String(testUser.getPhoto()));
+        assertEquals(10, testUser.getDiscount());
+        assertEquals("0000000000", testUser.getPhone());
     }
 
     @Test

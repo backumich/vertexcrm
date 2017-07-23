@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import javax.sql.DataSource;
+import javax.validation.Validator;
 
 @Configuration
 @Import(RootConfig.class)
@@ -22,5 +23,11 @@ public class TestConfig {
                 .addScript("embeddedDB.sql")
                 .build();
     }
-}
 
+    @Bean
+    public Validator validator() {
+
+        return new org.springframework.validation.beanvalidation.LocalValidatorFactoryBean();
+
+    }
+}

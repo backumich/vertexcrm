@@ -11,7 +11,6 @@ import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 import ua.com.vertex.dao.interfaces.PaymentDaoInf;
 import ua.com.vertex.logic.interfaces.PaymentLogic;
 
-
 @Service
 public class PaymentLogicImpl implements PaymentLogic {
     private static final Logger LOGGER = LogManager.getLogger(PaymentLogicImpl.class);

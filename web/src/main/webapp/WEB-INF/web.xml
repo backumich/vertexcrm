@@ -6,4 +6,13 @@
     <session-config>
         <session-timeout>5</session-timeout>
     </session-config>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404</location>
+    </error-page>
 </web-app>

@@ -52,10 +52,34 @@
     padding-top: 100px;
 }
 
+.buttonPadding {
+    padding-top: 10px;
+}
+
 .buttonWidth {
     width: 100px;
 }
 
+.labelWidth {
+    width: 150px;
+}
+
 a:hover {
     color: white;
+}
+
+.errorMessage {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.block {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.block img {
+    max-width: 100%;
+    max-height: 100%;
 }
