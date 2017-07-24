@@ -301,8 +301,8 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> searchUser(String userData) {
         LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
 
-        String query = "SELECT user_id, email, first_name,last_name FROM Users WHERE email LIKE  :userData" +
-                " OR  first_name LIKE :userData OR  last_name LIKE :userData";
+        String query = "SELECT user_id, email, first_name, last_name FROM Users WHERE email LIKE :userData " +
+                "OR first_name LIKE :userData OR last_name LIKE :userData";
 
         LOGGER.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "'%" + userData + "%'"),
@@ -338,7 +338,7 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getTeachers() {
         LOGGER.debug("Trying to pull out all users with the role is a teacher.");
 
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, r.name FROM Users u " +
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name,u.is_active, r.name FROM Users u " +
                 "INNER JOIN Roles r  ON u.role_id = r.role_id WHERE r.name='ROLE_TEACHER' AND is_active=1";
 
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder()
@@ -347,6 +347,7 @@ public class UserDaoImpl implements UserDaoInf {
                 .setFirstName(resultSet.getString(FIRST_NAME))
                 .setLastName(resultSet.getString(LAST_NAME))
                 .setRole(Role.valueOf(resultSet.getString(ROLE_NAME)))
+                .setIsActive(resultSet.getInt(IS_ACTIVE) == 1)
                 .getInstance());
     }
 
