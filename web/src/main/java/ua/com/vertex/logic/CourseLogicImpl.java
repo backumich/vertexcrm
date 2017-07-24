@@ -15,23 +15,20 @@ import java.util.Optional;
 public class CourseLogicImpl implements CourseLogic {
 
     private final CourseDaoInf courseDaoInf;
-    private static final Logger LOGGER = LogManager.getLogger(CourseLogicImpl.class);
-    private final CourseDaoInf courseDao;
 
     @Override
     public int getQuantityCourses() throws SQLException {
-        return courseDao.getQuantityCourses();
+        return courseDaoInf.getQuantityCourses();
     }
 
     @Override
     public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
-        LOGGER.debug("Get part data courses list (dataNavigator)");
-        return courseDao.getAllCourses(dataNavigator);
+        return courseDaoInf.getAllCourses(dataNavigator);
     }
 
     @Override
     public int addCourse(Course course) throws Exception {
-        return courseDao.addCourse(course);
+        return courseDaoInf.addCourse(course);
     }
 
     @Override

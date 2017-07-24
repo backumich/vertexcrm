@@ -5,6 +5,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public interface UserLogic {
     Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException;
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
+
     List<User> getAllUsers() throws DataAccessException;
 
     EnumMap<Role, Role> getAllRoles() throws DataAccessException;
@@ -42,7 +44,6 @@ public interface UserLogic {
     void registrationUserUpdate(User user) throws DataAccessException;
 
     Map<Integer, String> getTeachers() throws DataAccessException;
-
 
     List<User> getCourseUsers(int courseId) throws DataAccessException;
 

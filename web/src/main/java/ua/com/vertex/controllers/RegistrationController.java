@@ -34,10 +34,12 @@ public class RegistrationController {
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;
 
-    @GetMapping
-    public ModelAndView viewRegistrationForm() {
-        LOGGER.info("Get page - " + REGISTRATION_PAGE);
-        return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic,
+                                  EmailLogic emailLogic, MailService mailService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
     }
 
     @PostMapping
@@ -67,11 +69,9 @@ public class RegistrationController {
         return modelAndView;
     }
 
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic,
-                                  EmailLogic emailLogic, MailService mailService) {
-        this.registrationUserLogic = registrationUserLogic;
-        this.emailLogic = emailLogic;
-        this.mailService = mailService;
+    @GetMapping
+    public ModelAndView viewRegistrationForm() {
+        LOGGER.info("Get page - " + REGISTRATION_PAGE);
+        return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 }

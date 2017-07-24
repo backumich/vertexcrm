@@ -36,14 +36,9 @@ public class LoggingLogicImpl implements LoggingLogic {
         return toReturn;
     }
 
-    @Override
-    public String setUser(String email, Model model) throws Exception {
-        String view = requiredView();
-        User user = userLogic.getUserByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Not logged in: failed to fetch login details"));
-        model.addAttribute("user", user);
-
-        return view;
+    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
+        this.userLogic = userLogic;
+        this.userDao = userDao;
     }
 
     private String requiredView() throws Exception {
@@ -60,8 +55,13 @@ public class LoggingLogicImpl implements LoggingLogic {
         return view;
     }
 
-    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
-        this.userLogic = userLogic;
-        this.userDao = userDao;
+    @Override
+    public String setUser(String email, Model model) throws Exception {
+        String view = requiredView();
+        User user = userLogic.getUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Not logged in: failed to fetch login details"));
+        model.addAttribute("user", user);
+
+        return view;
     }
 }

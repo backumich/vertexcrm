@@ -20,13 +20,6 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     private final UserLogic userLogic;
 
     @Override
-    public boolean isVerifyPassword(UserFormRegistration userFormRegistration) {
-        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkPassword(%s) ;", userFormRegistration));
-        return userFormRegistration.getPassword().equals(userFormRegistration.getVerifyPassword());
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @Override
     public boolean isEmailAlreadyExists(Optional<User> user) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));
         return user.isPresent() && user.get().isActive();
@@ -38,27 +31,21 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
 
         boolean result = false;
-        if (!isVerifyPassword(userFormRegistration)) {
-            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() +
-                    " were entered passwords do not match");
-            bindingResult.rejectValue("verifyPassword", "error.verifyPassword",
-                    "Passwords do not match!");
+        Optional<User> user = userLogic.userForRegistrationCheck(userFormRegistration.getEmail());
+        if (isEmailAlreadyExists(user)) {
+            LOGGER.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
+            bindingResult.rejectValue("email", "error.email",
+                    "User with that email is already registered!");
         } else {
-            Optional<User> user = userLogic.userForRegistrationCheck(userFormRegistration.getEmail());
-            if (isEmailAlreadyExists(user)) {
-                LOGGER.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
-                bindingResult.rejectValue("email", "error.email",
-                        "User with that email is already registered!");
-            } else {
-                if (user.isPresent()) {
-                    userLogic.registrationUserUpdate(new User(userFormRegistration));
+            if (user.isPresent()) {
+                userLogic.registrationUserUpdate(new User(userFormRegistration));
 
-                } else {
-                    userLogic.registrationUserInsert(new User(userFormRegistration));
-                }
-                result = true;
+            } else {
+                userLogic.registrationUserInsert(new User(userFormRegistration));
             }
+            result = true;
         }
+
         return result;
     }
 

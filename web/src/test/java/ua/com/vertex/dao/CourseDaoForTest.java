@@ -1,14 +1,12 @@
 package ua.com.vertex.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
-
 
 import javax.sql.DataSource;
 
@@ -26,7 +24,7 @@ public class CourseDaoForTest implements ua.com.vertex.dao.interfaces.CourseDaoF
     private static final String COLUMN_COURSE_NOTES = "notes";
 
     @Override
-    public int insertCourse(Course course) throws DataAccessException {
+    public int insertCourse(Course course) {
         String query = "INSERT INTO Courses (name, start, finished, price, teacher_id, schedule, notes) " +
                 "VALUES(:name, :start, :finished, :price, :teacher_id, :schedule, :notes)";
 

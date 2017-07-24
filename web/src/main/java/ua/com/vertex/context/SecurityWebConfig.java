@@ -18,7 +18,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
     private static final int ENCRYPTION_STRENGTH = 10;
     private static final int VALIDITY_SECONDS = 604800;
-
+    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
     @Bean
     public SpringDataUserDetailsService springDataUserDetailsService() {
         return new SpringDataUserDetailsService();

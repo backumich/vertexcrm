@@ -1,5 +1,6 @@
 package ua.com.vertex.validators;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+@Ignore
 public class PasswordVerificationValidatorTest {
 
     @Autowired

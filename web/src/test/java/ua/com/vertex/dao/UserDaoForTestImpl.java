@@ -37,7 +37,6 @@ public class UserDaoForTestImpl implements UserDaoForTest {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();
-
         source.addValue(COLUMN_USER_EMAIL,user.getEmail());
         source.addValue(COLUMN_PASSWORD,user.getPassword());
         source.addValue(COLUMN_FIRST_NAME,user.getFirstName());

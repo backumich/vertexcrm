@@ -21,9 +21,7 @@ import java.util.Collections;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
@@ -61,7 +59,9 @@ public class CreateNewPaymentControllerTest {
                 .getInstance();
         course = new Course.Builder().setId(1).setName("JavaPro").
                 setStart(LocalDate.of(2017, 4, 25)).setFinished(false)
-                .setPrice(BigDecimal.valueOf(4000)).setTeacherName("Mr. Teacher").setNotes("Test").getInstance();
+                .setPrice(BigDecimal.valueOf(4000)).setTeacher(new User.Builder().setUserId(1)
+                        .setFirstName("Mr. Teacher").setLastName("Mr.teacher").setRole(Role.ROLE_TEACHER).getInstance())
+                .setNotes("Test").getInstance();
         paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
                 .setAmount(BigDecimal.valueOf(1000))
                 .setPaymentDate(LocalDateTime.of(2017, 4, 25, 12, 30)).getInstance());

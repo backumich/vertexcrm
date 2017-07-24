@@ -24,12 +24,17 @@ public class ViewAllCoursesController {
 
     private CourseLogic courseLogic;
 
+    @Autowired
+    public ViewAllCoursesController(CourseLogic courseLogic) {
+        this.courseLogic = courseLogic;
+    }
+
     @RequestMapping(value = "/viewAllCourses")
     public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
         int quantityCourses = courseLogic.getQuantityCourses();
 
-       dataNavigator.updateDataNavigator(quantityCourses);
+        dataNavigator.updateDataNavigator(quantityCourses);
         List<Course> courses = courseLogic.getCoursesPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllCourses", dataNavigator);
@@ -43,11 +48,6 @@ public class ViewAllCoursesController {
     @ModelAttribute
     public DataNavigator createDataNavigator() {
         return new DataNavigator("viewAllCourses");
-    }
-
-    @Autowired
-    public ViewAllCoursesController(CourseLogic courseLogic) {
-        this.courseLogic = courseLogic;
     }
 }
 

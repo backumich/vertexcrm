@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,7 +29,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -81,7 +81,7 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerReturnedFailViewTest() throws Exception {
-        when(logic.getUserById(-5)).thenThrow(new RuntimeException());
+        when(logic.getUserById(-5)).thenThrow(new DataIntegrityViolationException("test"));
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("error"))
                 .build();
@@ -110,8 +110,6 @@ public class UserDetailsControllerTest {
         testUser.setPhone("0000000000");
 
         when(logic.getUserById(1)).thenReturn(Optional.ofNullable(testUser));
-        Assert.assertNotNull(testUser);
-        when(logic.getUserDetailsByID(1)).thenReturn(Optional.ofNullable(testUser));
         assertNotNull(testUser);
 
         assertEquals(1, testUser.getUserId());

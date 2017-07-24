@@ -2,23 +2,13 @@ package ua.com.vertex.beans;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Course {
     private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
-    private final String COURSE_TEACHER_NAME_MSG = "Teacher's name must be longer than 2 and less than 256 characters";
     private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
     private final String NOTES_MSG = "The schedule must be up to 256 characters long";
 
@@ -28,7 +18,6 @@ public class Course {
     @Size(min = 1, max = 256, message = COURSE_NAME_MSG)
     private String name;
 
-    @Valid
     private User teacher;
 
     @Size(max = 256, message = SCHEDULE_MSG)
@@ -37,9 +26,9 @@ public class Course {
     @Size(max = 256, message = NOTES_MSG)
     private String notes;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
-    private LocalDateTime start;
+    private LocalDate start;
     private boolean finished;
 
     @Override
@@ -133,11 +122,11 @@ public class Course {
         this.notes = notes;
     }
 
-    public LocalDateTime getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 

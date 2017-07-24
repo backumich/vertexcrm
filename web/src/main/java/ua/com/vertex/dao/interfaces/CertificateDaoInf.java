@@ -1,23 +1,20 @@
 package ua.com.vertex.dao.interfaces;
 
-
-import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Certificate;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 
 public interface CertificateDaoInf {
 
-    Optional<Certificate> getCertificateById(int certificateId) throws DataAccessException;
+    Optional<Certificate> getCertificateById(int certificateId);
 
-    Optional<Certificate> getCertificateByUid(String certificateUid) throws DataAccessException;
+    Optional<Certificate> getCertificateByUid(String certificateUid);
 
-    List<Certificate> getAllCertificatesByUserEmail(String eMail) throws DataAccessException;
+    List<Certificate> getAllCertificatesByUserEmail(String eMail);
 
-    int addCertificate(Certificate certificate) throws DataAccessException;
+    int addCertificate(Certificate certificate);
 
-    List<Certificate> getAllCertificatesByUserIdFullData(int userId) throws DataAccessException;
+    List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 
 }

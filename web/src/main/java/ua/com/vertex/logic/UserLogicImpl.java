@@ -12,6 +12,7 @@ import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,6 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public List<String> getAllUserIds() throws DataAccessException {
-        LOGGER.debug("Call - userDao.getAllUserIds() ;");
         return userDao.getAllUserIds().stream().map(id -> Integer.toString(id)).collect(Collectors.toList());
     }
 
@@ -54,6 +54,8 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public List<User> getAllUsers() throws DataAccessException {
         return userDao.getAllUsers();
+    }
+
     public int getQuantityUsers() throws SQLException {
         return userDao.getQuantityUsers();
     }
@@ -82,13 +84,11 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public List<User> searchUser(String userData) throws DataAccessException {
-        LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
         return userDao.searchUser(userData);
     }
 
     @Override
     public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
-        LOGGER.debug(String.format("Call - userDao.userForRegistrationCheck(%s) ;", userEmail));
         return userDao.userForRegistrationCheck(userEmail);
     }
 

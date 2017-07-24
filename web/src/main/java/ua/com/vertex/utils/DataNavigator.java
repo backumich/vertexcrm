@@ -11,6 +11,7 @@ import java.util.TreeMap;
 @Component
 @Scope("session")
 public class DataNavigator {
+    private static final Logger LOGGER = LogManager.getLogger(DataNavigator.class);
     private String currentNamePage = "";
     private int currentNumberPage = 1;
     private int nextPage = 1;
@@ -24,7 +25,19 @@ public class DataNavigator {
         put(100, 100);
     }};
 
-    private static final Logger LOGGER = LogManager.getLogger(DataNavigator.class);
+    public DataNavigator() {
+    }
+
+    public DataNavigator(String currentNamePage) {
+        this.currentNamePage = currentNamePage;
+    }
+
+    public DataNavigator(String currentNamePage, int currentNumberPage, int rowPerPage, int dataSize) {
+        this.currentNamePage = currentNamePage;
+        this.currentNumberPage = currentNumberPage;
+        this.rowPerPage = rowPerPage;
+        this.dataSize = dataSize;
+    }
 
     public void updateDataNavigator(int dataSize) {
         LOGGER.debug("Update dataNavigator");
@@ -45,20 +58,6 @@ public class DataNavigator {
             this.currentNumberPage = this.nextPage;
             this.lastPage = totalPages;
         }
-    }
-
-    public DataNavigator() {
-    }
-
-    public DataNavigator(String currentNamePage) {
-        this.currentNamePage = currentNamePage;
-    }
-
-    public DataNavigator(String currentNamePage, int currentNumberPage, int rowPerPage, int dataSize) {
-        this.currentNamePage = currentNamePage;
-        this.currentNumberPage = currentNumberPage;
-        this.rowPerPage = rowPerPage;
-        this.dataSize = dataSize;
     }
 
     public String getCurrentNamePage() {

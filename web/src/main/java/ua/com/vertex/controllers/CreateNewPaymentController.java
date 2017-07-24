@@ -3,21 +3,17 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.PaymentForm;
-import ua.com.vertex.logic.interfaces.*;
+import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.logic.interfaces.PaymentLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
@@ -25,9 +21,11 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CreateNewPaymentController {
+
     private static final Logger LOGGER = LogManager.getLogger(CreateNewPaymentController.class);
+
     private final CourseLogic courseLogic;
-    private final AccountingLogic accountingLogic;
+    private final UserLogic userLogic;
     private final PaymentLogic paymentLogic;
 
     static final String SELECT_COURSE_FOR_PAYMENT_JSP = "selectCourseForPayment";
@@ -50,31 +48,11 @@ public class CreateNewPaymentController {
         return result;
     }
 
-    @PostMapping(value = "/selectCourse")
-    public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
-        ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
-        try {
-            result.addObject(USERS, accountingLogic.getCourseUsers(courseId));
-            result.addObject(COURSE_ID_FOR_PAY, courseId);
-            result.addObject(PAYMENT, new PaymentForm());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result.setViewName(ERROR);
-        }
-        return result;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        DecimalFormat decimalFormat = new DecimalFormat();
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-
-        decimalFormat.setMaximumIntegerDigits(5);
-        decimalFormat.setMaximumFractionDigits(2);
-        binder.registerCustomEditor(BigDecimal.class, new CustomNumberEditor(
-                BigDecimal.class, decimalFormat, true));
+    @Autowired
+    public CreateNewPaymentController(CourseLogic courseLogic, UserLogic userLogic, PaymentLogic paymentLogic) {
+        this.courseLogic = courseLogic;
+        this.userLogic = userLogic;
+        this.paymentLogic = paymentLogic;
     }
 
     @PostMapping(value = "/selectUserForPayment")
@@ -98,10 +76,17 @@ public class CreateNewPaymentController {
         return modelAndView;
     }
 
-    @Autowired
-    public CreateNewPaymentController(CourseLogic courseLogic, AccountingLogic accountingLogic, PaymentLogic paymentLogic) {
-        this.courseLogic = courseLogic;
-        this.accountingLogic = accountingLogic;
-        this.paymentLogic = paymentLogic;
+    @PostMapping(value = "/selectCourse")
+    public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
+        ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
+        try {
+            result.addObject(USERS, userLogic.getCourseUsers(courseId));
+            result.addObject(COURSE_ID_FOR_PAY, courseId);
+            result.addObject(PAYMENT, new PaymentForm());
+        } catch (Exception e) {
+            LOGGER.warn(e);
+            result.setViewName(ERROR);
+        }
+        return result;
     }
 }

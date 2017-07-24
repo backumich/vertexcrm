@@ -1,7 +1,5 @@
 package ua.com.vertex.dao.interfaces;
 
-import org.springframework.dao.DataAccessException;
-import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
@@ -12,48 +10,42 @@ import java.util.Optional;
 
 public interface UserDaoInf {
 
-    Optional<User> getUser(int id)throws DataAccessException;
+    Optional<User> getUser(int id);
 
-    Optional<User> getUserByEmail(String email)throws DataAccessException;
+    Optional<User> getUserByEmail(String email);
 
     Optional<User> logIn(String username);
 
-    @SuppressWarnings("unused")
-    void deleteUser(int id) throws DataAccessException;
-
-    List<Integer> getAllUserIds() throws DataAccessException;
-
-    List<User> getAllUser() throws SQLException;
+    List<Integer> getAllUserIds();
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
-    int getQuantityUsers() throws SQLException;
+    int getQuantityUsers();
 
-    Optional<User> getUserDetailsByID(int userID) throws SQLException;
-    List<User> getAllUsers() throws DataAccessException;
+    List<User> getAllUsers();
 
-    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+    Optional<User> userForRegistrationCheck(String userEmail);
 
-    EnumMap<Role, Role> getAllRoles() throws DataAccessException;
+    EnumMap<Role, Role> getAllRoles();
 
-    int saveUserData(User user) throws DataAccessException;
+    int saveUserData(User user);
 
-    void saveImage(int userId, byte[] image, String imageType) throws DataAccessException;
+    void saveImage(int userId, byte[] image, String imageType);
 
-    Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException;
+    Optional<byte[]> getImage(int userId, String imageType);
 
-    int activateUser(String email) throws DataAccessException;
+    int activateUser(String email);
 
-    int addUserForCreateCertificate(User user) throws DataAccessException;
+    int addUserForCreateCertificate(User user);
 
-    List<User> searchUser(String userData) throws DataAccessException;
+    List<User> searchUser(String userData);
 
-    void registrationUserInsert(User user) throws DataAccessException;
+    void registrationUserInsert(User user);
 
-    void registrationUserUpdate(User user) throws DataAccessException;
+    void registrationUserUpdate(User user);
 
-    List<User> getCourseUsers(int courseId) throws DataAccessException;
+    List<User> getCourseUsers(int courseId);
 
-    List<User> getTeachers () throws DataAccessException;
+    List<User> getTeachers();
 
 }
