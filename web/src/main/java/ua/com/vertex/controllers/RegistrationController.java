@@ -15,7 +15,9 @@ import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
 import ua.com.vertex.utils.MailService;
+import ua.com.vertex.utils.ReCaptchaService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -33,6 +35,7 @@ public class RegistrationController {
     private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;
+    private ReCaptchaService reCaptchaService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
@@ -43,11 +46,15 @@ public class RegistrationController {
     @PostMapping
     public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
                                                     UserFormRegistration userFormRegistration,
-                                            BindingResult bindingResult, ModelAndView modelAndView) {
+                                            BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
 
         LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
+
+        String reCaptchaResponse = request.getParameter("g-recaptcha-response");
+        String reCaptchaRemoteAddr = request.getRemoteAddr();
+
         modelAndView.setViewName(REGISTRATION_PAGE);
-        if (!bindingResult.hasErrors()) {
+        if (reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr) && !bindingResult.hasErrors()) {
             try {
                 if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
                     modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
@@ -63,15 +70,15 @@ public class RegistrationController {
                 LOGGER.warn(e);
             }
         }
-
         return modelAndView;
     }
 
     @Autowired
     public RegistrationController(RegistrationUserLogic registrationUserLogic,
-                                  EmailLogic emailLogic, MailService mailService) {
+                                  EmailLogic emailLogic, MailService mailService, ReCaptchaService reCaptchaService) {
         this.registrationUserLogic = registrationUserLogic;
         this.emailLogic = emailLogic;
         this.mailService = mailService;
+        this.reCaptchaService = reCaptchaService;
     }
 }

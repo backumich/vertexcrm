@@ -25,8 +25,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -117,14 +117,14 @@
                         <td>Password:</td>
                         <td><form:password class="buttonText" placeholder="Password" path="password"/></td>
                         <td><form:errors path="password"/></td>
-                        <td><form:errors>${userFormRegistration.errors}</form:errors></td>
+                            <%--<td><form:errors>${userFormRegistration.errors}</form:errors></td>--%>
                     </tr>
                     <tr>
                         <td>Repeat password:</td>
                         <td><form:password class="buttonText" placeholder="Confirm password"
                                            path="verifyPassword"/></td>
                         <td><form:errors path="verifyPassword"/></td>
-                        <td><form:errors>${userFormRegistration.errors}</form:errors></td>
+                            <%--<td><form:errors>${userFormRegistration.errors}</form:errors></td>--%>
                     </tr>
                     <tr>
                         <td>First name:</td>
@@ -140,6 +140,14 @@
                         <td>Phone:</td>
                         <td><form:input class="buttonText" placeholder="Phone" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <br>
+                            <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM;"></div>
+                            <br>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="2" align="center"><input class="buttonText" type="submit" value="Register"/></td>
@@ -210,6 +218,7 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 </body>
 </html>

@@ -24,7 +24,6 @@ import ua.com.vertex.utils.LogInfo;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +34,6 @@ import static ua.com.vertex.beans.Role.USER;
 import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 
 @Repository
-
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
