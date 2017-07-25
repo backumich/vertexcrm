@@ -133,22 +133,23 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u  ON c.teacher_id = u.user_id " +
-                "WHERE name LIKE  '%" + course.getName() + "%' AND finished=:finished";
+                "WHERE name LIKE  :name AND finished=:finished";
+        MapSqlParameterSource source = new MapSqlParameterSource(FINISHED, course.isFinished() ? 1 : 0);
+        source.addValue(NAME, "%" + course.getName() + "%");
 
         LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
-        return jdbcTemplate.query(query, new MapSqlParameterSource(FINISHED, course.isFinished() ? 1 : 0),
-                (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(ID))
-                        .setName(resultSet.getString(NAME))
-                        .setStart(resultSet.getDate(START).toLocalDate())
-                        .setFinished((resultSet.getInt(FINISHED) == 1))
-                        .setPrice(resultSet.getBigDecimal(PRICE))
-                        .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
-                                .setEmail(resultSet.getString(EMAIL))
-                                .setFirstName(resultSet.getString(FIRST_NAME))
-                                .setLastName(resultSet.getString(LAST_NAME))
-                                .getInstance())
-                        .setSchedule(resultSet.getString(SCHEDULE))
-                        .setNotes(resultSet.getString(NOTES)).getInstance());
+        return jdbcTemplate.query(query, source, (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(ID))
+                .setName(resultSet.getString(NAME))
+                .setStart(resultSet.getDate(START).toLocalDate())
+                .setFinished((resultSet.getInt(FINISHED) == 1))
+                .setPrice(resultSet.getBigDecimal(PRICE))
+                .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
+                        .setEmail(resultSet.getString(EMAIL))
+                        .setFirstName(resultSet.getString(FIRST_NAME))
+                        .setLastName(resultSet.getString(LAST_NAME))
+                        .getInstance())
+                .setSchedule(resultSet.getString(SCHEDULE))
+                .setNotes(resultSet.getString(NOTES)).getInstance());
     }
 
     @Override

@@ -305,7 +305,7 @@ public class UserDaoImpl implements UserDaoInf {
                 "OR first_name LIKE :userData OR last_name LIKE :userData";
 
         LOGGER.debug(String.format("Search users by -(%s) ;", userData));
-        return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "'%" + userData + "%'"),
+        return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "%" + userData + "%"),
                 (rs, i) -> new User.Builder().setUserId(rs.getInt(USER_ID))
                         .setEmail(rs.getString(EMAIL))
                         .setFirstName(rs.getString(FIRST_NAME))

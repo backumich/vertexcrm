@@ -52,7 +52,7 @@ public class UserDaoTest {
     private static final String EXISTING_LAST_NAME = "LastName";
     private static final String NOT_EXISTING_EMAIL = "notExisting@test.com";
     private static final String PHOTO = "photo";
-    static final String PASSPORT_SCAN = "passportScan";
+    private static final String PASSPORT_SCAN = "passportScan";
     private static final String WRONG_IMAGE_TYPE = "wrongImageType";
 
     @Autowired
@@ -182,8 +182,7 @@ public class UserDaoTest {
     @Test
     public void searchUserReturnCorrectData() throws Exception {
         List<User> users = userDao.searchUser("Name");
-//        assertFalse(MSG, users.isEmpty());
-        System.out.println(users);
+        assertFalse(MSG, users.isEmpty());
         users.forEach(user1 -> assertTrue(MSG, user1.getEmail().contains("Name")
                 || user1.getFirstName().contains("Name") || user1.getLastName().contains("Name")));
     }
@@ -228,6 +227,7 @@ public class UserDaoTest {
                 .setRole(Role.ROLE_USER).getInstance();
         userDao.registrationUserInsert(userForInsert);
         User userForCheck = userDao.getUserByEmail("testInsert@Test.com").orElse(null);
+        assert userForCheck != null;
         userForInsert.setUserId(userForCheck.getUserId());
         assertEquals(MSG, userForInsert, userForCheck);
     }
