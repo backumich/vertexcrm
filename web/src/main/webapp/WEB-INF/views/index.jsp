@@ -136,7 +136,7 @@
                 <a href="<c:url value="/admin"/>">Admin page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
-                <a href="<c:url value="/viewAllUsers"/>">View all users</a>
+                <a href="<c:url value="/viewAllUsers"/>">View all users</a> |
                 <a href="<c:url value="/viewAllCourses"/>">View all courses</a>
             </c:if>
         </div>

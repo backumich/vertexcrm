@@ -139,7 +139,8 @@
                     <th width="100px">Price</th>
                     <th width="150px">Teacher name</th>
                     <th width="150px">Schedule</th>
-                    <th width="200px">Notes</th>
+                    <th width="300px">Notes</th>
+                    <th width="100px"></th>
                 </tr>
                 <c:if test="${empty courses}">
                     <tr>
@@ -153,9 +154,17 @@
                         <td>${courses.start} </td>
                         <td>${courses.finished} </td>
                         <td>${courses.price} </td>
-                        <td>${courses.teacherName} </td>
+                        <td>${courses.teacher.firstName};${courses.teacher.lastName};${courses.teacher.email} </td>
                         <td>${courses.schedule} </td>
                         <td>${courses.notes} </td>
+                        <td>
+                            <c:set var="titleURL">
+                                <c:url value="/courseDetails">
+                                    <c:param name="courseId" value="${courses.id}"/>
+                                </c:url>
+                            </c:set>
+                            <a href="${titleURL}">Detail</a>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

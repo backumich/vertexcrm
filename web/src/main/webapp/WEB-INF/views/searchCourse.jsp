@@ -126,7 +126,7 @@
                         <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
-                        <td><form:hidden path="start" value="2011-12-03T19:20:30"/></td>
+                        <td><form:hidden path="start" value="2011-12-03"/></td>
                     </tr>
                     <tr>
                         <td><form:label path="finished">Course is finished? </form:label></td>
@@ -141,7 +141,7 @@
     </div>
     <div class="container pt1_5" align="center">
         <c:if test="${!empty courses}">
-            <form:form cssClass="buttonText" method="post" commandName="courseId" action="courseDetails">
+            <form:form cssClass="buttonText" method="get" commandName="courseId" action="/courseDetails">
                 <span class="fontSize180 silver">Select course :</span><br><br><br>
                 <table class="active" width="1200" cols="7">
                     <tr style="color: #2aabd2">
@@ -155,7 +155,7 @@
                     </tr>
                     <c:forEach items="${courses}" var="course">
                         <tr>
-                            <td><input type="radio" name="courseId" checked="checked" value=${course.id}>
+                            <td><input type="radio" name="courseId" checked="true" value=${course.id}>
                             </td>
                             <td>${course.name}</td>
                             <td>${course.start}</td>

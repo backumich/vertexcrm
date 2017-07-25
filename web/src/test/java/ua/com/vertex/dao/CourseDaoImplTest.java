@@ -84,8 +84,9 @@ public class CourseDaoImplTest {
 
     @Test
     public void searchCourseByNameAndStatusReturnCorrectData() throws Exception {
-        Course courseForSearch = new Course.Builder().setName("java").setFinished(true).getInstance();
+        Course courseForSearch = new Course.Builder().setName("ava").setFinished(true).getInstance();
         List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch);
+        assertFalse(MSG, courses.isEmpty());
         courses.forEach(course -> assertTrue(course.getName().contains(courseForSearch.getName())
                 && course.isFinished()));
     }
@@ -139,6 +140,7 @@ public class CourseDaoImplTest {
     @Test
     public void getQuantityCoursesReturnNotNull() throws Exception {
         int result = courseDaoInf.getQuantityCourses();
+        //noinspection ObviousNullCheck
         assertNotNull(MSG, result);
     }
 }

@@ -132,10 +132,10 @@ public class CourseDaoImpl implements CourseDaoInf {
         LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)", course));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
-                "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u  ON c.teacher_id = u.user_id " +
-                "WHERE name LIKE  :name AND finished=:finished";
+                "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u ON c.teacher_id = u.user_id " +
+                "WHERE c.finished = :finished AND c.name LIKE :courseName";
         MapSqlParameterSource source = new MapSqlParameterSource(FINISHED, course.isFinished() ? 1 : 0);
-        source.addValue(NAME, "%" + course.getName() + "%");
+        source.addValue("courseName", "%" + course.getName() + "%");
 
         LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
         return jdbcTemplate.query(query, source, (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(ID))

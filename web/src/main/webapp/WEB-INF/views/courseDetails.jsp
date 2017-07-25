@@ -27,8 +27,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -107,6 +107,13 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
     <div class="container pt1_5" align="center">
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+        <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TEACHER')">
+            <sec:authentication property="principal.username" var="user"/>
+        </sec:authorize>
+        <c:if test="${admin != null}">
         <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
             <span class="fontSize180 silver">Course details</span><br><br><br>
             <table class="table fontSize140" cols="2" width="600">
@@ -118,15 +125,15 @@
                 <tr>
                     <td width="150">Course name:</td>
                     <td width="450" style="color: black"><form:input id="name" class="buttonText" type="text" size="40"
-                                                         value="${course.name}"
-                                                         path="name"/>
+                                                                     value="${course.name}"
+                                                                     path="name"/>
                     <td><form:errors path="name"/></td>
                 </tr>
                 <tr>
                     <td width="150">Start date:</td>
-                    <td  width="450" style="color: black"><form:input id="start" class="buttonText" type="text" size="40"
-                                                         value="${course.start}"
-                                                         path="start"/>
+                    <td width="450" style="color: black"><form:input id="start" class="buttonText" type="text" size="40"
+                                                                     value="${course.start}"
+                                                                     path="start"/>
                     <td><form:errors path="start"/></td>
                 </tr>
                 <tr>
@@ -144,16 +151,17 @@
                 </tr>
                 <tr>
                     <td width="150">Schedule:</td>
-                    <td width="450" style="color: black"><form:input id="schedule" class="buttonText" type="text" size="40"
-                                                         value="${course.schedule}"
-                                                         path="schedule"/>
+                    <td width="450" style="color: black"><form:input id="schedule" class="buttonText" type="text"
+                                                                     size="40"
+                                                                     value="${course.schedule}"
+                                                                     path="schedule"/>
                     <td><form:errors path="schedule"/></td>
                 </tr>
                 <tr>
                     <td width="150">Notes:</td>
-                    <td width="450" style="color: black"><form:input  id="notes" class="buttonText" type="text" size="40"
-                                                         value="${course.notes}"
-                                                         path="notes"/>
+                    <td width="450" style="color: black"><form:input id="notes" class="buttonText" type="text" size="40"
+                                                                     value="${course.notes}"
+                                                                     path="notes"/>
                     <td><form:errors path="notes"/></td>
                 </tr>
                 <tr style="color: black" align="center">
@@ -170,6 +178,45 @@
         </c:if>
         <br>
     </div>
+    </c:if>
+
+    <c:if test="${user != null}">
+        <span class="fontSize180 silver">Course details</span><br><br><br>
+        <table class="table fontSize140" cols="2" width="600">
+            <tr>
+                <td width="150">Course id:</td>
+                <td>${course.id}</td>
+            </tr>
+            <tr>
+                <td width="150">Course name:</td>
+                <td width="450" style="color: black">${course.name}</td>
+            </tr>
+            <tr>
+                <td width="150">Start date:</td>
+                <td width="450" style="color: black">${course.start}</td>
+            </tr>
+            <tr>
+                <td width="150">Price:</td>
+                <td width="450">${course.price}</td>
+            </tr>
+            <tr>
+                <td width="150">Teacher name:</td>
+                <td width="450" style="color: black">
+                        ${course.teacher.firstName}_${course.teacher.lastName}_${course.teacher.email}</td>
+            </tr>
+            <tr>
+                <td width="150">Schedule:</td>
+                <td width="450" style="color: black"><${course.schedule}/
+                >
+            </tr>
+            <tr>
+                <td width="150">Notes:</td>
+                <td width="450" style="color: black"><${course.notes}/
+                >
+            </tr>
+        </table>
+    </c:if>
+
     <div class="container pt1_5" align="center">
         <div class="hrefText" align="center">
             <a href="javascript:history.back();">Back</a> |

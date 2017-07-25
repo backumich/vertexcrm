@@ -120,6 +120,9 @@ VALUES (1, 'JavaPro', '2017-02-01', 0, 4000, 1, 'Test');
 INSERT INTO Courses (id, name, start, finished, price, teacher_id, notes)
 VALUES (2, 'JavaStart', '2017-02-01', 0, 8000, 1, 'Before update');
 
+INSERT INTO Courses (id, name, start, finished, price, teacher_id, notes)
+VALUES (3, 'JavaPro', '2016-01-01', 1, 8000, 1, 'test');
+
 INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes) VALUES
   (111, 'Super JAVA', '2017-04-01', 0, 999999.99, 1, 'Sat, Sun', 'Welcome, we don''t expect you (='),
   (222, 'MEGA Java', '2017-02-01', 1, 100.11, 1, 'Sat, Sun', 'Come, the courses are over.');
