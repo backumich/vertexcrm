@@ -135,8 +135,11 @@
                     </tr>
                     <tr>
                         <td>Teacher:</td>
-                        <td><form:input class="buttonText" placeholder="Teacher name" path="teacherName"/></td>
-                        <td><form:errors path="teacherName"/></td>
+                        <td><form:select path="teacher.userId">
+                            <form:option value="0" label="--- Select ---"/>
+                            <form:options items="${teachers}"/>
+                        </form:select></td>
+
                     </tr>
                     <tr>
                         <td>Schedule:</td>

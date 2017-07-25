@@ -145,6 +145,13 @@
         <br>
 
         <div>
+            <span class="formHeaderText1">Add course:</span><br><br>
+            <form:form cssClass="buttonText" method="get" action="/addCourse">
+                <input class="black" type="submit" name="addCourse" value="Add course"/>
+            </form:form>
+        </div>
+
+        <div>
             <span class="formHeaderText1">Course info:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>

@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
+
+import static ua.com.vertex.controllers.CourseDetailsController.TEACHERS;
 
 @Controller
 @RequestMapping(value = "/addCourse")
@@ -27,17 +30,21 @@ public class AddCourseController {
     private static final Logger LOGGER = LogManager.getLogger(AddCourseController.class);
 
     private CourseLogic courseLogic;
+    private UserLogic userLogic;
 
 
     @Autowired
-    public AddCourseController(CourseLogic courseLogic) {
+    public AddCourseController(CourseLogic courseLogic, UserLogic userLogic) {
         this.courseLogic = courseLogic;
+        this.userLogic = userLogic;
     }
 
     @GetMapping
     public ModelAndView viewAddCourseForm() {
         LOGGER.debug("Get page -" + PAGE_JSP);
-        return new ModelAndView(PAGE_JSP, COURSE, new Course());
+        ModelAndView result = new ModelAndView(PAGE_JSP, COURSE, new Course());
+        result.addObject(TEACHERS, userLogic.getTeachers());
+        return result;
     }
 
     @PostMapping

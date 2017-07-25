@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +32,9 @@ public class AddCourseControllerTest {
     @Autowired
     private CourseLogic logic;
 
+    @Autowired
+    private UserLogic userLogic;
+
     private MockMvc mockMvc;
 
     @Autowired
@@ -43,7 +47,7 @@ public class AddCourseControllerTest {
 
     @Test
     public void addCourseFirstAppealTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
+        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("addCourse"))
                 .build();
         mockMvc.perform(get("/addCourse"))
@@ -59,7 +63,7 @@ public class AddCourseControllerTest {
         String start = "2001-01-01";
         String price = "1";
 
-        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
+        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("/viewAllCourses"))
                 .build();
         mockMvc.perform(post("/addCourse")
