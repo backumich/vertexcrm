@@ -7,7 +7,6 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public class CourseLogicImpl implements CourseLogic {
     private final CourseDaoInf courseDaoInf;
 
     @Override
-    public int getQuantityCourses() throws SQLException {
+    public int getQuantityCourses() {
         return courseDaoInf.getQuantityCourses();
     }
 
@@ -27,27 +26,27 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public int addCourse(Course course) throws Exception {
+    public int addCourse(Course course) {
         return courseDaoInf.addCourse(course);
     }
 
     @Override
-    public List<Course> getAllCoursesWithDept() throws Exception {
+    public List<Course> getAllCoursesWithDept() {
         return courseDaoInf.getAllCoursesWithDept();
     }
 
     @Override
-    public List<Course> searchCourseByNameAndStatus(Course course) throws Exception {
+    public List<Course> searchCourseByNameAndStatus(Course course) {
         return courseDaoInf.searchCourseByNameAndStatus(course);
     }
 
     @Override
-    public int updateCourseExceptPrice(Course course) throws Exception {
+    public int updateCourseExceptPrice(Course course) {
         return courseDaoInf.updateCourseExceptPrice(course);
     }
 
     @Override
-    public Optional<Course> getCourseById(int courseId) throws Exception {
+    public Optional<Course> getCourseById(int courseId) {
         return courseDaoInf.getCourseById(courseId);
     }
 

@@ -48,14 +48,14 @@ public class CertificateLogicImpl implements CertificateLogic {
         return certificateDaoInf.getCertificateById(certificateId);
     }
 
-    public int addCertificate(Certificate certificate) throws Exception {
+    public int addCertificate(Certificate certificate) {
         LOGGER.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
         certificate.setCertificateUid(generateCertificateUid());
         return certificateDaoInf.addCertificate(certificate);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public int addCertificateAndCreateUser(Certificate certificate, User user) throws Exception {
+    public int addCertificateAndCreateUser(Certificate certificate, User user) {
         LOGGER.debug(String.format("Call - userDaoInf.addUserForCreateCertificate(%s) ;", user));
         int userID = userDaoInf.addUserForCreateCertificate(user);
         certificate.setUserId(userID);

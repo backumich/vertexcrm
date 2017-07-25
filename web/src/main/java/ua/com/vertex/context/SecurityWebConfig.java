@@ -1,5 +1,6 @@
 package ua.com.vertex.context;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,8 +16,7 @@ import ua.com.vertex.logic.SpringDataUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-
-    private static final int ENCRYPTION_STRENGTH = 10;
+    private BCryptPasswordEncoder passwordEncoder;
     private static final int VALIDITY_SECONDS = 604800;
     public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
     @Bean
@@ -24,15 +24,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         return new SpringDataUserDetailsService();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(ENCRYPTION_STRENGTH);
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder());
+    @Autowired
+    public SecurityWebConfig(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -70,5 +64,11 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(springDataUserDetailsService())
+                .passwordEncoder(passwordEncoder);
     }
 }

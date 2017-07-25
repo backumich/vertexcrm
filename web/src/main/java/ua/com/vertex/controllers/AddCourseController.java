@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,8 @@ import static ua.com.vertex.controllers.CourseDetailsController.TEACHERS;
 
 @Controller
 @RequestMapping(value = "/addCourse")
+@PreAuthorize("hasRole('ADMIN')")
 public class AddCourseController {
-
     private static final String PAGE_JSP = "addCourse";
     private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewAllCourses";
     private static final String ERROR_JSP = "error";
@@ -31,13 +32,6 @@ public class AddCourseController {
 
     private CourseLogic courseLogic;
     private UserLogic userLogic;
-
-
-    @Autowired
-    public AddCourseController(CourseLogic courseLogic, UserLogic userLogic) {
-        this.courseLogic = courseLogic;
-        this.userLogic = userLogic;
-    }
 
     @GetMapping
     public ModelAndView viewAddCourseForm() {
@@ -65,5 +59,11 @@ public class AddCourseController {
             }
         }
         return modelAndView;
+    }
+
+    @Autowired
+    public AddCourseController(CourseLogic courseLogic, UserLogic userLogic) {
+        this.courseLogic = courseLogic;
+        this.userLogic = userLogic;
     }
 }

@@ -24,7 +24,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
+import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.USERS;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 import static ua.com.vertex.controllers.CreateNewPaymentController.*;
 

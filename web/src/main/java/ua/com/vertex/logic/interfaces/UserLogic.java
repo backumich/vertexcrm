@@ -13,23 +13,21 @@ import java.util.Optional;
 
 public interface UserLogic {
 
-    List<String> getAllUserIds() throws DataAccessException;
+    List<String> getAllUserIds();
 
-    Optional<User> getUserById(int id) throws DataAccessException;
+    Optional<User> getUserById(int id);
 
-    Optional<User> getUserByEmail(String email) throws DataAccessException;
+    Optional<User> getUserByEmail(String email);
 
-    void saveImage(int userId, byte[] image, String imageType) throws DataAccessException;
+    void saveImage(int userId, byte[] image, String imageType);
 
-    Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException;
+    Optional<byte[]> getImage(int userId, String imageType);
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
-    List<User> getAllUsers() throws DataAccessException;
+    EnumMap<Role, Role> getAllRoles();
 
-    EnumMap<Role, Role> getAllRoles() throws DataAccessException;
-
-    int saveUserData(User user) throws DataAccessException;
+    int saveUserData(User user);
 
     int activateUser(String email) throws DataAccessException;
 

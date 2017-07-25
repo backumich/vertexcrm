@@ -81,6 +81,7 @@ public class CourseDetailsController {
     }
 
     @GetMapping(value = "/courseDetails")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 

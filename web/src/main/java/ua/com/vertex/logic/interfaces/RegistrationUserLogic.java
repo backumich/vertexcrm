@@ -8,8 +8,7 @@ import java.util.Optional;
 
 public interface RegistrationUserLogic {
 
-    boolean isEmailAlreadyExists(Optional<User> user);
+    boolean isEmailAlreadyExists(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<User> user);
 
-    boolean isRegisteredUser(UserFormRegistration userFormRegistration,
-                             BindingResult bindingResult) throws Exception;
+    boolean isRegisteredUser(UserFormRegistration userFormRegistration, BindingResult bindingResult);
 }

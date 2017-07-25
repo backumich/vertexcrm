@@ -12,7 +12,6 @@ import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -32,31 +31,26 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public Optional<User> getUserById(int id) throws DataAccessException {
+    public Optional<User> getUserById(int id) {
         return userDao.getUser(id);
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) throws DataAccessException {
+    public Optional<User> getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) throws DataAccessException {
+    public void saveImage(int userId, byte[] image, String imageType) {
         userDao.saveImage(userId, image, imageType);
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) throws DataAccessException {
+    public Optional<byte[]> getImage(int userId, String imageType) {
         return userDao.getImage(userId, imageType);
     }
 
-    @Override
-    public List<User> getAllUsers() throws DataAccessException {
-        return userDao.getAllUsers();
-    }
-
-    public int getQuantityUsers() throws SQLException {
+    public int getQuantityUsers() {
         return userDao.getQuantityUsers();
     }
 
@@ -68,32 +62,32 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public EnumMap<Role, Role> getAllRoles() throws DataAccessException {
+    public EnumMap<Role, Role> getAllRoles() {
         return userDao.getAllRoles();
     }
 
     @Override
-    public int saveUserData(User user) throws DataAccessException {
+    public int saveUserData(User user) {
         return userDao.saveUserData(user);
     }
 
     @Override
-    public int activateUser(String email) throws DataAccessException {
+    public int activateUser(String email) {
         return userDao.activateUser(email);
     }
 
     @Override
-    public List<User> searchUser(String userData) throws DataAccessException {
+    public List<User> searchUser(String userData) {
         return userDao.searchUser(userData);
     }
 
     @Override
-    public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
+    public Optional<User> userForRegistrationCheck(String userEmail) {
         return userDao.userForRegistrationCheck(userEmail);
     }
 
     @Override
-    public void registrationUserInsert(User user) throws DataAccessException {
+    public void registrationUserInsert(User user) {
         LOGGER.debug(String.format("Call - userDao.registrationUserInsert(%s) ;", user));
         user.setPassword(encryptPassword(user.getPassword()));
         userDao.registrationUserInsert(user);

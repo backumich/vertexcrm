@@ -138,7 +138,7 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void searchCourseReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenThrow(new Exception("test"));
+        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenThrow(new RuntimeException("test"));
         when(bindingResult.hasErrors()).thenReturn(false);
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
                 , ERROR);
@@ -188,13 +188,13 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void courseDetailsReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.getCourseById(1)).thenThrow(new Exception("test"));
+        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
     }
 
     @Test
     public void courseDetailsHasCorrectDataInModelWhenException() throws Exception {
-        when(courseLogic.getCourseById(1)).thenThrow(new Exception("test"));
+        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
         ModelMap result = courseDetailsController.courseDetails(1).getModelMap();
 
         assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
@@ -260,7 +260,7 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseReturnCorrectViewWhenException() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new Exception("test"));
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new RuntimeException("test"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
                 ERROR);
     }

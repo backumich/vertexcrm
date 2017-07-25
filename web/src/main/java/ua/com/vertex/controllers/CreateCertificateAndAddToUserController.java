@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,13 +16,15 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.util.List;
+
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
-public class CreateCertificateAndAddToUser {
+public class CreateCertificateAndAddToUserController {
 
     static final String SELECT_USER_JSP = "selectUser";
     static final String ADD_CERTIFICATE_WITH_USER_ID_JSP = "addCertificateWithUserId";
@@ -30,19 +33,28 @@ public class CreateCertificateAndAddToUser {
     static final String USERS = "users";
     private final String USER_DATA = "userDataForSearch";
 
-    private static final Logger LOGGER = LogManager.getLogger(CreateCertificateAndAddToUser.class);
+    private static final Logger LOGGER = LogManager.getLogger(CreateCertificateAndAddToUserController.class);
 
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
 
 
+    @Autowired
+    public CreateCertificateAndAddToUserController(CertificateLogic certificateLogic, UserLogic userLogic) {
+        this.certificateLogic = certificateLogic;
+        this.userLogic = userLogic;
+
+    }
+
     @PostMapping(value = "/addCertificateWithUserId")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCertificateWithUserId() {
         LOGGER.debug("Request to '/addCertificateWithUserId' . Redirect to " + SELECT_USER_JSP);
         return new ModelAndView(SELECT_USER_JSP);
     }
 
     @PostMapping(value = "/searchUser")
+    @PreAuthorize("hasRole('ADMIN')")
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
 
         LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
@@ -74,6 +86,7 @@ public class CreateCertificateAndAddToUser {
     }
 
     @PostMapping(value = "/selectUser")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectUser(@RequestParam(USER_ID) int userId) {
         LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
@@ -82,6 +95,7 @@ public class CreateCertificateAndAddToUser {
     }
 
     @PostMapping(value = "/checkCertificateWithUserId")
+    @PreAuthorize("hasRole('ADMIN')")
     public String checkCertificateWithUserId(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                              BindingResult bindingResult, Model model) {
 
@@ -106,12 +120,5 @@ public class CreateCertificateAndAddToUser {
 
         LOGGER.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
         return returnPage;
-    }
-
-    @Autowired
-    public CreateCertificateAndAddToUser(CertificateLogic certificateLogic, UserLogic userLogic) {
-        this.certificateLogic = certificateLogic;
-        this.userLogic = userLogic;
-
     }
 }
