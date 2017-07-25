@@ -1,11 +1,9 @@
 package ua.com.vertex.logic.interfaces;
 
-import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -29,21 +27,21 @@ public interface UserLogic {
 
     int saveUserData(User user);
 
-    int activateUser(String email) throws DataAccessException;
+    int activateUser(String email);
 
-    List<User> searchUser(String userData) throws DataAccessException;
+    List<User> searchUser(String userData);
 
-    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+    Optional<User> userForRegistrationCheck(String userEmail);
 
     String encryptPassword(String password);
 
-    void registrationUserInsert(User user) throws DataAccessException;
+    void registrationUserInsert(User user);
 
-    void registrationUserUpdate(User user) throws DataAccessException;
+    void registrationUserUpdate(User user);
 
-    Map<Integer, String> getTeachers() throws DataAccessException;
+    Map<Integer, String> getTeachers();
 
-    List<User> getCourseUsers(int courseId) throws DataAccessException;
+    List<User> getCourseUsers(int courseId);
 
-    int getQuantityUsers() throws SQLException;
+    int getQuantityUsers();
 }

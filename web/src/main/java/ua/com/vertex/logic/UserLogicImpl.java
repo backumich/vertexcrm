@@ -26,7 +26,7 @@ public class UserLogicImpl implements UserLogic {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public List<String> getAllUserIds() throws DataAccessException {
+    public List<String> getAllUserIds() {
         return userDao.getAllUserIds().stream().map(id -> Integer.toString(id)).collect(Collectors.toList());
     }
 

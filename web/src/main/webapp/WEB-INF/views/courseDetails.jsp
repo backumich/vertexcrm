@@ -145,9 +145,10 @@
                     <td width="150">Teacher name:</td>
                     <td width="450" style="color: black">
                         <form:select path="teacher.userId">
-                            <form:option value="0" label="--- Select ---"/>
+                            <form:option value="${teacher.uer}" label="--- Select ---"/>
                             <form:options items="${teachers}"/>
                         </form:select>
+                    </td>
                 </tr>
                 <tr>
                     <td width="150">Schedule:</td>
@@ -155,6 +156,7 @@
                                                                      size="40"
                                                                      value="${course.schedule}"
                                                                      path="schedule"/>
+                    </td>
                     <td><form:errors path="schedule"/></td>
                 </tr>
                 <tr>
@@ -162,6 +164,7 @@
                     <td width="450" style="color: black"><form:input id="notes" class="buttonText" type="text" size="40"
                                                                      value="${course.notes}"
                                                                      path="notes"/>
+                    </td>
                     <td><form:errors path="notes"/></td>
                 </tr>
                 <tr style="color: black" align="center">
@@ -201,8 +204,9 @@
             </tr>
             <tr>
                 <td width="150">Teacher name:</td>
-                <td width="450" style="color: black">
-                        ${course.teacher.firstName}_${course.teacher.lastName}_${course.teacher.email}</td>
+                <td width="450" style="color: black">${course.teacher.firstName} ${course.teacher.lastName}
+                    '${course.teacher.email}'
+                </td>
             </tr>
             <tr>
                 <td width="150">Schedule:</td>

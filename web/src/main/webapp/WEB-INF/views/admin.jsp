@@ -172,9 +172,11 @@
         <br>
         <br>
 
-        <div class="hrefText">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+        <div class="container pt1_5" align="center">
+            <div class="hrefText" align="center">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
         </div>
     </div>
 

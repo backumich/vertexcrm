@@ -137,7 +137,7 @@
                     <th width="150px">Start course</th>
                     <th width="100px">Finished</th>
                     <th width="100px">Price</th>
-                    <th width="150px">Teacher name</th>
+                    <th width="300px">Teacher name</th>
                     <th width="150px">Schedule</th>
                     <th width="300px">Notes</th>
                     <th width="100px"></th>
@@ -154,7 +154,7 @@
                         <td>${courses.start} </td>
                         <td>${courses.finished} </td>
                         <td>${courses.price} </td>
-                        <td>${courses.teacher.firstName};${courses.teacher.lastName};${courses.teacher.email} </td>
+                        <td>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</td>
                         <td>${courses.schedule} </td>
                         <td>${courses.notes} </td>
                         <td>
