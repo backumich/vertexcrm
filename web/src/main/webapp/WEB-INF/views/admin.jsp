@@ -150,6 +150,9 @@
                 <input class="black" type="submit" name="addCourse" value="Add course"/>
             </form:form>
         </div>
+        <br>
+        <br>
+        <br>
 
         <div>
             <span class="formHeaderText1">Course info:</span><br><br>
@@ -157,7 +160,6 @@
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>
             </form:form>
         </div>
-
         <br>
         <br>
         <br>
