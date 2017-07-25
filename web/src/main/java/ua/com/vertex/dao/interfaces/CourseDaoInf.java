@@ -1,7 +1,6 @@
 package ua.com.vertex.dao.interfaces;
 
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.sql.SQLException;
@@ -14,9 +13,9 @@ public interface CourseDaoInf {
 
     Optional<Course> getCourseById(int courseId);
 
-    List<CourseForOutput> getCoursesForOutputPerPages(DataNavigator dataNavigator);
+    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
     int getQuantityCourses() throws SQLException;
 
-    List<CourseForOutput> getAllCoursesForOutputWithDept();
+    List<Course> getAllCoursesWithDept();
 }

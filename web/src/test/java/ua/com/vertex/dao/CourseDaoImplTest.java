@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseForOutput;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
@@ -45,7 +44,11 @@ public class CourseDaoImplTest {
     public void setUp() throws Exception {
         course = new Course.Builder().setId(3).setName("JavaPro").setFinished(false)
                 .setStart(LocalDate.of(2017, 2, 1))
-                .setPrice(new BigDecimal("4000.00")).setTeacherID(34).setNotes("Test").getInstance();
+                .setPrice(new BigDecimal("4000.00"))
+                .setTeacher(new User.Builder()
+                        .setUserId(34).setFirstName("FirstName").setLastName("LastName")
+                        .getInstance())
+                .setNotes("Test").getInstance();
         user1 = new User.Builder()
                 .setEmail("user1@email.com")
                 .setFirstName("Name1")
@@ -78,32 +81,31 @@ public class CourseDaoImplTest {
     public void getAllCourses() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
-        List<CourseForOutput> coursesForOutput = courseDaoInf.getCoursesForOutputPerPages(dataNavigator);
-        assertFalse(MSG, coursesForOutput.isEmpty());
+        List<Course> courses = courseDaoInf.getCoursesPerPages(dataNavigator);
+        assertFalse(MSG, courses.isEmpty());
 
-        coursesForOutput.forEach(course1 -> {
-            assertTrue(course1.getCourse().getId() > 0);
-            assertTrue(course1.getCourse().getName().length() > 5 && course1.getCourse().getName().length() < 256);
+        courses.forEach(course1 -> {
+            assertTrue(course1.getId() > 0);
+            assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
         });
     }
 
     @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
-        CourseForOutput coursesForOutput = new CourseForOutput(
-                "FirstName",
-                "LastName",
-                new Course.Builder()
+        Course course = new Course.Builder()
                         .setId(1)
                         .setName("JavaPro")
                         .setStart(LocalDate.of(2017, 2, 1))
                         .setFinished(false)
                         .setPrice(BigDecimal.valueOf(4000))
-                        .setTeacherID(34)
+                        .setTeacher(new User.Builder().setUserId(34)
+                                .setUserId(34).setFirstName("FirstName").setLastName("LastName")
+                                .getInstance())
                         .setNotes("Test")
                         .setSchedule("Sat, Sun")
-                        .getInstance());
+                        .getInstance();
         assertTrue("Maybe method was changed",
-                courseDaoInf.getAllCoursesForOutputWithDept().contains(coursesForOutput));
+                courseDaoInf.getAllCoursesWithDept().contains(course));
     }
 
     @Test
@@ -115,7 +117,9 @@ public class CourseDaoImplTest {
                     .setStart(LocalDate.parse("2017-04-01"))
                     .setFinished(false)
                     .setPrice(BigDecimal.valueOf(999999.99))
-                    .setTeacherID(34)
+                    .setTeacher(new User.Builder()
+                            .setUserId(34).setFirstName("FirstName").setLastName("LastName")
+                            .getInstance())
                     .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
                     .getInstance(), courseDaoInf.getCourseById(111).get());

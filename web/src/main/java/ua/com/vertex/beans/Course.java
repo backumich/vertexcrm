@@ -8,14 +8,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Course {
-    private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
-    private final String COURSE_TEACHER_ID_MSG = "Teacher's ID value must be a positive integer";
+    private final String NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
     private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
     private final String NOTES_MSG = "The schedule must be up to 256 characters long";
 
     private int id;
 
-    @Size(min = 2, max = 256, message = COURSE_NAME_MSG)
+    @Size(min = 2, max = 256, message = NAME_MSG)
     private String name;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -29,9 +28,8 @@ public class Course {
     @NotNull
     private BigDecimal price;
 
-    @Min(value = 1, message = COURSE_TEACHER_ID_MSG)
-    @Max(value = Integer.MAX_VALUE, message = COURSE_TEACHER_ID_MSG)
-    private int teacherID;
+    @NotNull
+    private User teacher;
 
     @Size(min = 2, max = 256, message = SCHEDULE_MSG)
     private String schedule;
@@ -42,13 +40,13 @@ public class Course {
     public Course() {
     }
 
-    public Course(int id, String name, LocalDate start, boolean finished, BigDecimal price, int teacherID, String schedule, String notes) {
+    public Course(int id, String name, LocalDate start, boolean finished, BigDecimal price, User teacher, String schedule, String notes) {
         this.id = id;
         this.name = name;
         this.start = start;
         this.finished = finished;
         this.price = price;
-        this.teacherID = teacherID;
+        this.teacher = teacher;
         this.schedule = schedule;
         this.notes = notes;
     }
@@ -93,12 +91,12 @@ public class Course {
         this.price = price;
     }
 
-    public int getTeacherID() {
-        return teacherID;
+    public User getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherID(int teacherID) {
-        this.teacherID = teacherID;
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     public String getSchedule() {
@@ -127,14 +125,14 @@ public class Course {
                 Objects.equals(name, course.name) &&
                 Objects.equals(start, course.start) &&
                 Objects.equals(price, course.price) &&
-                Objects.equals(teacherID, course.teacherID) &&
+                Objects.equals(teacher, course.teacher) &&
                 Objects.equals(schedule, course.schedule) &&
                 Objects.equals(notes, course.notes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, start, finished, price, teacherID, schedule, notes);
+        return Objects.hash(id, name, start, finished, price, teacher, schedule, notes);
     }
 
     @Override
@@ -145,7 +143,7 @@ public class Course {
                 ", start=" + start +
                 ", finished=" + finished +
                 ", price=" + price +
-                ", teacherID='" + teacherID + '\'' +
+                ", teacher='" + teacher + '\'' +
                 ", schedule='" + schedule + '\'' +
                 ", notes='" + notes + '\'' +
                 '}';
@@ -183,8 +181,8 @@ public class Course {
             return this;
         }
 
-        public Builder setTeacherID(int teacherID) {
-            instance.setTeacherID(teacherID);
+        public Builder setTeacher(User teacher) {
+            instance.setTeacher(teacher);
             return this;
         }
 

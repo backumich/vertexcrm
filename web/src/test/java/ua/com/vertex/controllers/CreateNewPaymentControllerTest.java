@@ -38,7 +38,7 @@ public class CreateNewPaymentControllerTest {
 
     private CreateNewPaymentController underTest;
     private User user;
-    private CourseForOutput courseForOutput;
+    private Course course;
     private PaymentForm paymentForm;
 
     @Mock
@@ -59,19 +59,16 @@ public class CreateNewPaymentControllerTest {
 
         user = new User.Builder().setUserId(1).setEmail("test@mail.com").setFirstName("Test").setLastName("Test")
                 .getInstance();
-        courseForOutput = new CourseForOutput(
-                "FirstName",
-                "LastName",
-                new Course.Builder()
+        course = new Course.Builder()
                         .setId(1)
                         .setName("JavaPro")
                         .setStart(LocalDate.of(2017, 4, 25))
                         .setFinished(false)
                         .setPrice(BigDecimal.valueOf(4000))
-                        .setTeacherID(34)
+                        .setTeacher(new User.Builder().setUserId(34).getInstance())
                         .setSchedule("Sat, Sun")
                         .setNotes("Test")
-                        .getInstance());
+                        .getInstance();
         paymentForm = new PaymentForm(1, 1, new Payment.Builder().setPaymentId(1).setDealId(1)
                 .setAmount(BigDecimal.valueOf(1000))
                 .setPaymentDate(LocalDateTime.of(2017, 4, 25, 12, 30)).getInstance());
@@ -80,19 +77,19 @@ public class CreateNewPaymentControllerTest {
 
     @Test
     public void selectCourseForPaymentReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.getAllCoursesForOutputWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
+        when(courseLogic.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.selectCourseForPayment().getViewName(), ERROR);
     }
 
     @Test
     public void selectCourseForPaymentReturnCorrectViewAndDataInModel() throws Exception {
-        when(courseLogic.getAllCoursesForOutputWithDept()).thenReturn(Collections.singletonList(courseForOutput));
+        when(courseLogic.getAllCoursesWithDept()).thenReturn(Collections.singletonList(course));
 
         ModelAndView result = underTest.selectCourseForPayment();
-        verify(courseLogic, times(1)).getAllCoursesForOutputWithDept();
+        verify(courseLogic, times(1)).getAllCoursesWithDept();
 
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_COURSE_FOR_PAYMENT_JSP);
-        assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES_FOR_OUTPUT), Collections.singletonList(courseForOutput));
+        assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES), Collections.singletonList(course));
     }
 
     @Test

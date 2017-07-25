@@ -28,7 +28,7 @@ public class CreateNewPaymentController {
 
     static final String SELECT_COURSE_FOR_PAYMENT_JSP = "selectCourseForPayment";
     static final String SELECT_USER_FOR_PAYMENT_JSP = "selectUserForPayment";
-    static final String COURSES_FOR_OUTPUT = "coursesForOutput";
+    static final String COURSES = "courses";
     private static final String PAYMENT = "paymentForm";
     static final String USER_ID_FOR_PAY = "userIdForPayment";
     static final String COURSE_ID_FOR_PAY = "courseIdForPayment";
@@ -38,7 +38,7 @@ public class CreateNewPaymentController {
         LOGGER.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
         ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
         try {
-            result.addObject(COURSES_FOR_OUTPUT, courseLogic.getAllCoursesForOutputWithDept());
+            result.addObject(COURSES, courseLogic.getAllCoursesWithDept());
         } catch (Exception e) {
             LOGGER.warn(e);
             result.setViewName(ERROR);

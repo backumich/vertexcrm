@@ -141,22 +141,22 @@
                     <th width="150px">Schedule</th>
                     <th width="200px">Notes</th>
                 </tr>
-                <c:if test="${empty coursesForOutput}">
+                <c:if test="${empty courses}">
                     <tr>
                         <td>There are no courses!</td>
                     </tr>
                 </c:if>
-                <c:forEach items="${coursesForOutput}" var="courseForOutput">
+                <c:forEach items="${courses}" var="course">
                     <tr>
-                        <td>${courseForOutput.course.id} </td>
-                        <td>${courseForOutput.course.name} </td>
-                        <td>${courseForOutput.course.start} </td>
-                        <td>${courseForOutput.course.finished} </td>
-                        <td>${courseForOutput.course.price} </td>
-                        <td>${courseForOutput.teacherFirstName} </td>
-                        <td>${courseForOutput.teacherLastName} </td>
-                        <td>${courseForOutput.course.schedule} </td>
-                        <td>${courseForOutput.course.notes} </td>
+                        <td>${course.id} </td>
+                        <td>${course.name} </td>
+                        <td>${course.start} </td>
+                        <td>${course.finished} </td>
+                        <td>${course.price} </td>
+                        <td>${course.teacher.firstName} </td>
+                        <td>${course.teacher.lastName} </td>
+                        <td>${course.schedule} </td>
+                        <td>${course.notes} </td>
                     </tr>
                 </c:forEach>
             </table>

@@ -43,11 +43,9 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAllCourses"))
                 .andExpect(forwardedUrl("viewAllCourses"))
-                .andExpect(model().attributeExists("coursesForOutput"))
-                .andExpect(model().attribute("coursesForOutput",
-                        hasItem(allOf(hasProperty("course", hasProperty("id", is(111)))))))
-                .andExpect(model().attribute("coursesForOutput",
-                        hasItem(allOf(hasProperty("course", hasProperty("id", is(222)))))))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
                 .andExpect(model().attributeExists("viewAllCourses"))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentNamePage", is("viewAllCourses"))))
@@ -72,11 +70,9 @@ public class ViewAllCoursesControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAllCourses"))
                 .andExpect(forwardedUrl("viewAllCourses"))
-                .andExpect(model().attributeExists("coursesForOutput"))
-                .andExpect(model().attribute("coursesForOutput",
-                        hasItem(allOf(hasProperty("course", hasProperty("id", is(111)))))))
-                .andExpect(model().attribute("coursesForOutput",
-                        hasItem(allOf(hasProperty("course", hasProperty("id", is(222)))))))
+                .andExpect(model().attributeExists("courses"))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(111))))))
+                .andExpect(model().attribute("courses", hasItem(allOf(hasProperty("id", is(222))))))
 
                 .andExpect(model().attributeExists("viewAllCourses"))
                 .andExpect(model().attribute("viewAllCourses", hasProperty("currentNamePage", is("viewAllCourses"))))
