@@ -19,13 +19,13 @@ import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
-
     static final String REGISTRATION_PAGE = "registration";
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
@@ -46,7 +46,8 @@ public class RegistrationController {
     @PostMapping
     public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
                                                     UserFormRegistration userFormRegistration,
-                                            BindingResult bindingResult, ModelAndView modelAndView, HttpServletRequest request) {
+                                            BindingResult bindingResult, ModelAndView modelAndView,
+                                            HttpServletRequest request) throws IOException {
 
         LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
 
