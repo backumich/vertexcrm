@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -141,12 +142,18 @@
                         <td><form:input class="buttonText" placeholder="Phone" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
+
                     <tr>
                         <td></td>
                         <td>
                             <br>
                             <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM;"></div>
                             <br>
+                        </td>
+                        <td>
+                            <c:if test="${captcha == false}">
+                                <br><s:message code="reCaptcha.error"/><br>
+                            </c:if>
                         </td>
                     </tr>
                     <tr>

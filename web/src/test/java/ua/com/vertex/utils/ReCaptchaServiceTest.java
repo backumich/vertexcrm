@@ -5,6 +5,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ReCaptchaServiceTest {
     private final String MSG = "Maybe method was changed";
@@ -16,15 +21,15 @@ public class ReCaptchaServiceTest {
     private ReCaptchaService reCaptchaService;
 
     @Test
-    public void VerificationPassed() {
-//        when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);
-//        assertEquals(MSG, true, reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr));
+    public void VerificationPassed() throws IOException {
+        when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);
+        assertEquals(MSG, true, reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr));
     }
 
     @Test
-    public void VerificationFailed() {
-//        when(reCaptchaService.verify(reCaptchaResponse + "Test", reCaptchaRemoteAddr + "Test")).thenReturn(false);
-//        assertEquals(MSG, false, reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr));
+    public void VerificationFailed() throws IOException {
+        when(reCaptchaService.verify(reCaptchaResponse + "Test", reCaptchaRemoteAddr + "Test")).thenReturn(false);
+        assertEquals(MSG, false, reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr));
     }
 
 }

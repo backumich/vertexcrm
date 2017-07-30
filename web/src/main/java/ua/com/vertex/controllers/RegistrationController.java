@@ -30,6 +30,7 @@ public class RegistrationController {
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
+    static final String CAPTCHA = "captcha";
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
     private final MailService mailService;
@@ -53,14 +54,14 @@ public class RegistrationController {
 
         String reCaptchaResponse = request.getParameter("g-recaptcha-response");
         String reCaptchaRemoteAddr = request.getRemoteAddr();
+        Boolean captcha = reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr);
 
         modelAndView.setViewName(REGISTRATION_PAGE);
-        if (reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr) && !bindingResult.hasErrors()) {
+        if (captcha && !bindingResult.hasErrors()) {
             try {
                 if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
                     modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(),
-                            "Confirmation of registration",
+                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
                             emailLogic.createRegistrationMessage(userFormRegistration));
                 }
             } catch (DataAccessException e) {
@@ -71,6 +72,7 @@ public class RegistrationController {
                 LOGGER.warn(e);
             }
         }
+        modelAndView.addObject(CAPTCHA, captcha);
         return modelAndView;
     }
 
