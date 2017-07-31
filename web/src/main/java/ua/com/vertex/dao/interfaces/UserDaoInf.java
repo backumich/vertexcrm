@@ -1,12 +1,9 @@
 package ua.com.vertex.dao.interfaces;
 
-import org.springframework.dao.DataAccessException;
-import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
@@ -19,26 +16,21 @@ public interface UserDaoInf {
 
     Optional<User> logIn(String username);
 
-    @SuppressWarnings("unused")
-    void deleteUser(int id);
-
     List<Integer> getAllUserIds();
-
-    List<User> getAllUser() throws SQLException;
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 
-    int getQuantityUsers() throws SQLException;
+    int getQuantityUsers();
 
-    Optional<User> getUserDetailsByID(int userID) throws SQLException;
+    List<User> getAllUsers();
 
-    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+    Optional<User> userForRegistrationCheck(String userEmail);
 
     EnumMap<Role, Role> getAllRoles();
 
     int saveUserData(User user);
 
-    void saveImage(int userId, byte[] image, String imageType) throws Exception;
+    void saveImage(int userId, byte[] image, String imageType);
 
     Optional<byte[]> getImage(int userId, String imageType);
 
@@ -46,12 +38,14 @@ public interface UserDaoInf {
 
     int addUserForCreateCertificate(User user);
 
-    List<User> searchUser(String userData) throws Exception;
+    List<User> searchUser(String userData);
 
-    void registrationUserInsert(User user) throws DataAccessException;
+    void registrationUserInsert(User user);
 
-    void registrationUserUpdate(User user) throws DataAccessException;
+    void registrationUserUpdate(User user);
 
-    List<User> getCourseUsers(int courseId) throws DataAccessException;
+    List<User> getCourseUsers(int courseId);
+
+    List<User> getTeachers();
 
 }

@@ -25,8 +25,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -135,8 +135,11 @@
                     </tr>
                     <tr>
                         <td>Teacher:</td>
-                        <td><form:input class="buttonText" placeholder="Teacher ID" path="teacherID"/></td>
-                        <td><form:errors path="teacherID"/></td>
+                        <td><form:select path="teacher.userId">
+                            <form:option value="0" label="--- Select ---"/>
+                            <form:options items="${teachers}"/>
+                        </form:select></td>
+
                     </tr>
                     <tr>
                         <td>Schedule:</td>

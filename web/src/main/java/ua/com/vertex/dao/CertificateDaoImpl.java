@@ -21,25 +21,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import static ua.com.vertex.dao.UserDaoImpl.EMAIL;
+
 @Repository
 public class CertificateDaoImpl implements CertificateDaoInf {
 
-    private static final String USER_ID = "userId";
-    private static final String USER_EMAIL = "userEmail";
-    private static final String CERTIFICATE_ID = "certificateId";
-    private static final String CERTIFICATE_UID = "certificateUid";
-    private static final String CERTIFICATION_DATE = "certificationDate";
-    private static final String COURSE_NAME = "courseName";
+    private static final String CERTIFICATION_ID = "certification_id";
+    private static final String USER_ID = "user_id";
+    private static final String CERTIFICATION_DATE = "certification_date";
+    private static final String COURSE_NAME = "course_name";
     private static final String LANGUAGE = "language";
-    private static final String COLUMN_CERTIFICATE_ID = "certification_id";
-    private static final String COLUMN_CERTIFICATE_UID = "certificate_uid";
-    private static final String COLUMN_USER_ID = "user_id";
-    private static final String COLUMN_CERTIFICATION_DATE = "certification_date";
-    private static final String COLUMN_COURSE_NAME = "course_name";
-    private static final String COLUMN_LANGUAGE = "language";
+    private static final String CERTIFICATE_UID = "certificate_uid";
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
-
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final LogInfo logInfo;
 
@@ -47,11 +41,18 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     public List<Certificate> getAllCertificatesByUserEmail(String eMail) {
 
         String query = "SELECT c.certification_id, c.certificate_uid, c.user_id, c.certification_date, c.course_name " +
-                "FROM Certificate c INNER JOIN  Users u ON c.user_id = u.user_id WHERE email = :userEmail";
+                "FROM Certificate c INNER JOIN  Users u ON c.user_id = u.user_id WHERE email = :email";
 
         LOGGER.debug("Retrieved all certificates by eMail=" + eMail);
 
-        return jdbcTemplate.query(query, new MapSqlParameterSource(USER_EMAIL, eMail), new ShortCertificateRowMapper());
+        return jdbcTemplate.query(query, new MapSqlParameterSource(EMAIL, eMail),
+                (resultSet, i) -> new Certificate.Builder()
+                        .setCertificationId(resultSet.getInt(CERTIFICATION_ID))
+                        .setCertificateUid(String.valueOf(resultSet.getLong(CERTIFICATE_UID)))
+                        .setUserId(0)
+                        .setCertificationDate(resultSet.getDate(CERTIFICATION_DATE).toLocalDate())
+                        .setCourseName(resultSet.getString(COURSE_NAME))
+                        .getInstance());
     }
 
     private MapSqlParameterSource addParameterToMapSqlParameterSourceFromCertificate(Certificate certificate) {
@@ -65,9 +66,9 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Override
-    public int addCertificate(Certificate certificate) throws Exception {
+    public int addCertificate(Certificate certificate) {
         String query = "INSERT INTO Certificate (user_id, certification_date, course_name, language, certificate_uid)" +
-                "VALUES ( :userId, :certificationDate, :courseName, :language, :certificateUid)";
+                "VALUES ( :user_id, :certification_date, :course_name, :language, :certificate_uid)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(query, addParameterToMapSqlParameterSourceFromCertificate(certificate), keyHolder);
@@ -78,7 +79,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
 
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE user_id =:userId";
+                + "FROM Certificate WHERE user_id =:user_id";
 
         LOGGER.debug("Retrieved all certificates by id=" + userId);
 
@@ -88,18 +89,15 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     @Override
     public Optional<Certificate> getCertificateById(int certificateId) {
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certification_id =:certificateId";
+                + "FROM Certificate WHERE certification_id =:certification_id";
 
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
-                    new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No certificate in DB, id=" + certificateId);
-        }
-
-        if (certificate != null) {
+                    new MapSqlParameterSource(CERTIFICATION_ID, certificateId), new CertificateRowMapper());
             LOGGER.debug(logInfo.getId() + "Retrieved certificate id=" + certificateId);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn(logInfo.getId() + "No certificate in DB, id=" + certificateId);
         }
 
         return Optional.ofNullable(certificate);
@@ -108,18 +106,15 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     @Override
     public Optional<Certificate> getCertificateByUid(String certificateUid) {
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certificate_uid =:certificateUid";
+                + "FROM Certificate WHERE certificate_uid =:certificate_uid";
 
         Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_UID, certificateUid), new CertificateRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug(logInfo.getId() + "No certificate in DB, UID=" + certificateUid);
-        }
-
-        if (certificate != null) {
             LOGGER.debug(logInfo.getId() + "Retrieved certificate UID=" + certificateUid);
+        } catch (EmptyResultDataAccessException e) {
+            LOGGER.warn(logInfo.getId() + "No certificate in DB, UID=" + certificateUid);
         }
 
         return Optional.ofNullable(certificate);
@@ -128,25 +123,12 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
         public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Certificate.Builder()
-                    .setCertificationId(resultSet.getInt(COLUMN_CERTIFICATE_ID))
-                    .setCertificateUid(resultSet.getString(COLUMN_CERTIFICATE_UID))
-                    .setUserId(resultSet.getInt(COLUMN_USER_ID))
-                    .setCertificationDate(resultSet.getDate(COLUMN_CERTIFICATION_DATE).toLocalDate())
-                    .setCourseName(resultSet.getString(COLUMN_COURSE_NAME))
-                    .setLanguage(resultSet.getString(COLUMN_LANGUAGE))
-                    .getInstance();
-        }
-    }
-
-    private static final class ShortCertificateRowMapper implements RowMapper<Certificate> {
-        public Certificate mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Certificate.Builder()
-                    .setCertificationId(resultSet.getInt(COLUMN_CERTIFICATE_ID))
-                    .setCertificateUid(String.valueOf(resultSet.getLong(COLUMN_CERTIFICATE_UID)))
-                    .setUserId(0)
-                    .setCertificationDate(resultSet.getDate(COLUMN_CERTIFICATION_DATE).toLocalDate())
-                    .setCourseName(resultSet.getString(COLUMN_COURSE_NAME))
-                    .setLanguage(null)
+                    .setCertificationId(resultSet.getInt(CERTIFICATION_ID))
+                    .setCertificateUid(resultSet.getString(CERTIFICATE_UID))
+                    .setUserId(resultSet.getInt(USER_ID))
+                    .setCertificationDate(resultSet.getDate(CERTIFICATION_DATE).toLocalDate())
+                    .setCourseName(resultSet.getString(COURSE_NAME))
+                    .setLanguage(resultSet.getString(LANGUAGE))
                     .getInstance();
         }
     }

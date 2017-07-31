@@ -64,7 +64,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLogInPageForLoggedInUserReturnsUserView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -78,7 +78,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void showLogInPageForLoggedInUserReturnsAdminView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -92,7 +92,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -103,7 +103,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLoggedInPageForLoggedInUserReturnsUserView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn("user");
@@ -117,7 +117,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void showLoggedInPageForLoggedInUserReturnsAdminView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn("user");

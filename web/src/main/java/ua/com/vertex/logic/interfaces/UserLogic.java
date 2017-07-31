@@ -1,13 +1,12 @@
 package ua.com.vertex.logic.interfaces;
 
-import org.springframework.dao.DataAccessException;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserLogic {
@@ -18,13 +17,11 @@ public interface UserLogic {
 
     Optional<User> getUserByEmail(String email);
 
-    void saveImage(int userId, byte[] image, String imageType) throws Exception;
+    void saveImage(int userId, byte[] image, String imageType);
 
     Optional<byte[]> getImage(int userId, String imageType);
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
-
-    Optional<User> getUserDetailsByID(int userId) throws SQLException;
 
     EnumMap<Role, Role> getAllRoles();
 
@@ -32,17 +29,19 @@ public interface UserLogic {
 
     int activateUser(String email);
 
-    List<User> searchUser(String userData) throws Exception;
+    List<User> searchUser(String userData);
 
-    Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException;
+    Optional<User> userForRegistrationCheck(String userEmail);
 
     String encryptPassword(String password);
 
-    void registrationUserInsert(User user) throws DataAccessException;
+    void registrationUserInsert(User user);
 
-    void registrationUserUpdate(User user) throws DataAccessException;
+    void registrationUserUpdate(User user);
 
-    List<User> getCourseUsers(int courseId) throws DataAccessException;
+    Map<Integer, String> getTeachers();
 
-    int getQuantityUsers() throws SQLException;
+    List<User> getCourseUsers(int courseId);
+
+    int getQuantityUsers();
 }

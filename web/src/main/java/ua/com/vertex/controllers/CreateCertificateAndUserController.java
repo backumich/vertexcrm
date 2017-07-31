@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.CertificateWithUserForm;
-import ua.com.vertex.logic.interfaces.*;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
+
 import javax.validation.Valid;
+
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
@@ -28,12 +31,14 @@ public class CreateCertificateAndUserController {
     private final CertificateLogic certificateLogic;
 
     @PostMapping(value = "/addCertificateAndCreateUser")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCertificateAndCreateUser() {
         LOGGER.debug("Request to '/addCertificateAndCreateUser' " + ADD_CERTIFICATE_AND_USER_JSP);
         return new ModelAndView(ADD_CERTIFICATE_AND_USER_JSP, CERTIFICATE_WITH_USER_FORM, new CertificateWithUserForm());
     }
 
     @PostMapping(value = "/checkCertificateAndUser")
+    @PreAuthorize("hasRole('ADMIN')")
     public String checkCertificateAndUser(@Validated @ModelAttribute(CERTIFICATE_WITH_USER_FORM)
                                                   CertificateWithUserForm certificateWithUserForm,
                                           BindingResult bindingResult, @Valid Model model) {

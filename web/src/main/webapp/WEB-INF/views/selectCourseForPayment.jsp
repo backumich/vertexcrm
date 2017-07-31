@@ -33,10 +33,13 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
+
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
@@ -58,6 +61,7 @@
             } catch (e) {
             }
         });
+
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -66,15 +70,18 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
+
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
         }
     })(document, window, "yandex_metrika_callbacks");
 </script>
-<noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
+<noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="Usersposition:absolute; left:-9999px;"
+    alt="" /&gt;&lt;/div&gt;
+</noscript>
 <!-- /Yandex.Metrika counter -->
 <div class="nav navbar navbar-fixed-top navbar-hide">
     <div class="container"><a href="https://vertex-academy.com/index.html" class="logo pull-left"></a>
@@ -105,16 +112,14 @@
             <form:form method="post" commandName="courseIdForPayment"
                        action="selectCourse">
                 <span class="fontSize180 silver">Select course :</span><br><br><br>
-                <table class="active" width="1000" cols="7">
+                <table class="active" width="1200" cols="7">
                     <tr style="color: #2aabd2">
                         <th>Select course</th>
                         <th>Course name</th>
                         <th>Start</th>
                         <th>Finished</th>
                         <th>Price</th>
-                        <th>Teacher's first name</th>
-                        <th>Teacher's last name</th>
-                        <th>Schedule</th>
+                        <th>Teacher name</th>
                         <th>Notes</th>
 
                     </tr>
@@ -136,9 +141,7 @@
                                 </c:otherwise>
                             </c:choose></td>
                             <td>${course.price}</td>
-                            <td>${course.teacher.firstName}</td>
-                            <td>${course.teacher.lastName}</td>
-                            <td>${course.schedule}</td>
+                            <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
                             <td>${course.notes}</td>
                         </tr>
                     </c:forEach>

@@ -117,14 +117,14 @@
                         <td>Password:</td>
                         <td><form:password class="buttonText" placeholder="Password" path="password"/></td>
                         <td><form:errors path="password"/></td>
-                        <td><form:errors>${userFormRegistration.errors}</form:errors></td>
+                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>Repeat password:</td>
                         <td><form:password class="buttonText" placeholder="Confirm password"
                                            path="verifyPassword"/></td>
                         <td><form:errors path="verifyPassword"/></td>
-                        <td><form:errors>${userFormRegistration.errors}</form:errors></td>
+                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>First name:</td>
@@ -147,7 +147,24 @@
                 </table>
             </form:form>
         </div>
+        <br>
+        <br>
+        <br>
+        <div class="container pt1_5" align="center">
+            <div align="center">
+                <form:errors path="userFormRegistration"/>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
 
+        <div class="container pt1_5" align="center">
+            <div class="hrefText" align="center">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
+        </div>
 
     </div>
 </div>

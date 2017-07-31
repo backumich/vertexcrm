@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -10,16 +11,6 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
     <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
     <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
@@ -36,8 +27,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -54,6 +45,7 @@
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
 
     </style>
 </head>
@@ -84,7 +76,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera === "[object Opera]") {
+        if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -111,76 +103,132 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5">
 
-        <div>
-            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
 
-        <div>
-            <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
+<div align="center" class="page gray-page mh100 up-padding">
+    <div class="container pt1_5" align="center">
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+        <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_TEACHER')">
+            <sec:authentication property="principal.username" var="user"/>
+        </sec:authorize>
+        <c:if test="${admin != null}">
+        <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
+            <span class="fontSize180 silver">Course details</span><br><br><br>
+            <table class="table fontSize140" cols="2" width="600">
+                <tr>
+                    <td width="150">Course id:</td>
+                    <td><form:label path="id">${course.id}</form:label>
+                        <form:hidden path="id" value="${course.id}"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td width="150">Course name:</td>
+                    <td width="450" style="color: black"><form:input id="name" class="buttonText" type="text" size="40"
+                                                                     value="${course.name}"
+                                                                     path="name"/>
+                    <td><form:errors path="name"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Start date:</td>
+                    <td width="450" style="color: black"><form:input id="start" class="buttonText" type="text" size="40"
+                                                                     value="${course.start}"
+                                                                     path="start"/>
+                    <td><form:errors path="start"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Price:</td>
+                    <td width="450"><form:label path="price">${course.price}</form:label>
+                        <form:hidden path="price" value="${course.price}"></form:hidden></td>
+                </tr>
+                <tr>
+                    <td width="150">Teacher name:</td>
+                    <td width="450" style="color: black">
+                        <form:select path="teacher.userId">
+                            <form:option value="${teacher.uer}" label="--- Select ---"/>
+                            <form:options items="${teachers}"/>
+                        </form:select>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="150">Schedule:</td>
+                    <td width="450" style="color: black"><form:input id="schedule" class="buttonText" type="text"
+                                                                     size="40"
+                                                                     value="${course.schedule}"
+                                                                     path="schedule"/>
+                    </td>
+                    <td><form:errors path="schedule"/></td>
+                </tr>
+                <tr>
+                    <td width="150">Notes:</td>
+                    <td width="450" style="color: black"><form:input id="notes" class="buttonText" type="text" size="40"
+                                                                     value="${course.notes}"
+                                                                     path="notes"/>
+                    </td>
+                    <td><form:errors path="notes"/></td>
+                </tr>
+                <tr style="color: black" align="center">
+                    <td></td>
+                    <td width="450" colspan="5"><input type="submit" value="Update course"/></td>
+                </tr>
+            </table>
+        </form:form>
+    </div>
+    <div class="container pt1_5" align="center">
         <br>
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
         <br>
-        <br>
+    </div>
+    </c:if>
 
-        <div>
-            <span class="formHeaderText1">Create new payment:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="createPayment">
-                <input class="black" type="submit" name="createPayment" value="Create new payment"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+    <c:if test="${user != null}">
+        <span class="fontSize180 silver">Course details</span><br><br><br>
+        <table class="table fontSize140" cols="2" width="600">
+            <tr>
+                <td width="150">Course id:</td>
+                <td>${course.id}</td>
+            </tr>
+            <tr>
+                <td width="150">Course name:</td>
+                <td width="450" style="color: black">${course.name}</td>
+            </tr>
+            <tr>
+                <td width="150">Start date:</td>
+                <td width="450" style="color: black">${course.start}</td>
+            </tr>
+            <tr>
+                <td width="150">Price:</td>
+                <td width="450">${course.price}</td>
+            </tr>
+            <tr>
+                <td width="150">Teacher name:</td>
+                <td width="450" style="color: black">${course.teacher.firstName} ${course.teacher.lastName}
+                    '${course.teacher.email}'
+                </td>
+            </tr>
+            <tr>
+                <td width="150">Schedule:</td>
+                <td width="450" style="color: black"><${course.schedule}/
+                >
+            </tr>
+            <tr>
+                <td width="150">Notes:</td>
+                <td width="450" style="color: black"><${course.notes}/
+                >
+            </tr>
+        </table>
+    </c:if>
 
-        <div>
-            <span class="formHeaderText1">Add course:</span><br><br>
-            <form:form cssClass="buttonText" method="get" action="/addCourse">
-                <input class="black" type="submit" name="addCourse" value="Add course"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div>
-            <span class="formHeaderText1">Course info:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
-                <input class="black" type="submit" name="courseInfo" value="Course info"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div class="container pt1_5" align="center">
-            <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
-            </c:if>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div class="container pt1_5" align="center">
-            <div class="hrefText" align="center">
-                <a href="javascript:history.back();">Back</a> |
-                <a href="<c:url value="/" />">Home</a>
-            </div>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
-
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -235,11 +283,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>

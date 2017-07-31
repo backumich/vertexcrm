@@ -75,7 +75,8 @@ public class RegistrationControllerTest {
 
     @Test
     public void processRegistrationReturnCorrectViewWhenException() throws Exception {
-        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)).thenThrow(new Exception(NAME));
+        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult))
+                .thenThrow(new RuntimeException(NAME));
         ModelAndView modelAndView = registrationController.processRegistration(userFormRegistration, bindingResult,
                 new ModelAndView());
         assertEquals(MSG, CertificateDetailsPageController.ERROR, modelAndView.getViewName());

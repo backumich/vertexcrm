@@ -83,7 +83,7 @@ public class CertificateDaoTest {
     @Test(expected = NoSuchElementException.class)
     @WithAnonymousUser
     public void getCertificateByIdReturnNull() throws Exception {
-        //noinspection ConstantConditions,ResultOfMethodCallIgnored
+
         certificateDao.getCertificateById(-1).get();
     }
 
@@ -116,8 +116,7 @@ public class CertificateDaoTest {
         int result = certificateDao.addCertificate(certificate);
         certificate.setCertificationId(result);
 
-        //noinspection ConstantConditions
-        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).get());
+        assertEquals(MSG, certificate, certificateDao.getCertificateById(result).orElse(EMPTY_CERTIFICATE));
     }
 
     @Test

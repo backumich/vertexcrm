@@ -110,7 +110,8 @@
             <br/>
             <br/>
             <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
-                <form:select id="perPage" class="buttonText" path="rowPerPage" items="${dataNavigator.countRowPerPage}"/>
+                <form:select id="perPage" class="buttonText" path="rowPerPage"
+                             items="${dataNavigator.countRowPerPage}"/>
 
                 <input id="currentNamePage" type="hidden" name="currentNamePage"
                        value="${dataNavigator.currentNamePage}">
@@ -136,27 +137,34 @@
                     <th width="150px">Start course</th>
                     <th width="100px">Finished</th>
                     <th width="100px">Price</th>
-                    <th width="150px">Teacher's first name</th>
-                    <th width="150px">Teacher's last name</th>
+                    <th width="300px">Teacher name</th>
                     <th width="150px">Schedule</th>
-                    <th width="200px">Notes</th>
+                    <th width="300px">Notes</th>
+                    <th width="100px"></th>
                 </tr>
                 <c:if test="${empty courses}">
                     <tr>
                         <td>There are no courses!</td>
                     </tr>
                 </c:if>
-                <c:forEach items="${courses}" var="course">
+                <c:forEach var="courses" items="${courses}">
                     <tr>
-                        <td>${course.id} </td>
-                        <td>${course.name} </td>
-                        <td>${course.start} </td>
-                        <td>${course.finished} </td>
-                        <td>${course.price} </td>
-                        <td>${course.teacher.firstName} </td>
-                        <td>${course.teacher.lastName} </td>
-                        <td>${course.schedule} </td>
-                        <td>${course.notes} </td>
+                        <td>${courses.id} </td>
+                        <td>${courses.name} </td>
+                        <td>${courses.start} </td>
+                        <td>${courses.finished} </td>
+                        <td>${courses.price} </td>
+                        <td>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</td>
+                        <td>${courses.schedule} </td>
+                        <td>${courses.notes} </td>
+                        <td>
+                            <c:set var="titleURL">
+                                <c:url value="/courseDetails">
+                                    <c:param name="courseId" value="${courses.id}"/>
+                                </c:url>
+                            </c:set>
+                            <a href="${titleURL}">Detail</a>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

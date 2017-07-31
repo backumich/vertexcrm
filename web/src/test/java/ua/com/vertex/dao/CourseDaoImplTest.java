@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.dao.interfaces.CourseDaoForTest;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -20,9 +21,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -36,31 +34,18 @@ public class CourseDaoImplTest {
     @Autowired
     private CourseDaoInf courseDaoInf;
 
+    @Autowired
+    private CourseDaoForTest courseDaoForTest;
+
     private Course course;
-    private User user1;
-    private User user3;
 
     @Before
     public void setUp() throws Exception {
+
         course = new Course.Builder().setId(3).setName("JavaPro").setFinished(false)
                 .setStart(LocalDate.of(2017, 2, 1))
-                .setPrice(new BigDecimal("4000.00"))
-                .setTeacher(new User.Builder()
-                        .setUserId(34).setFirstName("FirstName").setLastName("LastName")
-                        .getInstance())
+                .setPrice(new BigDecimal("4000.00")).setTeacher(new User.Builder().setUserId(10).getInstance())
                 .setNotes("Test").getInstance();
-        user1 = new User.Builder()
-                .setEmail("user1@email.com")
-                .setFirstName("Name1")
-                .setLastName("Surname1")
-                .setPhone("+38050 111 1111")
-                .getInstance();
-        user3 = new User.Builder()
-                .setEmail("user3@email.com")
-                .setFirstName("Name3")
-                .setLastName("Surname3")
-                .setPhone("+38050 333 3333")
-                .getInstance();
     }
 
     @Test
@@ -81,7 +66,7 @@ public class CourseDaoImplTest {
     public void getAllCourses() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
-        List<Course> courses = courseDaoInf.getCoursesPerPages(dataNavigator);
+        List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
         assertFalse(MSG, courses.isEmpty());
 
         courses.forEach(course1 -> {
@@ -92,20 +77,48 @@ public class CourseDaoImplTest {
 
     @Test
     public void getAllCoursesWithDeptReturnCorrectData() throws Exception {
-        Course course = new Course.Builder()
-                        .setId(1)
-                        .setName("JavaPro")
-                        .setStart(LocalDate.of(2017, 2, 1))
-                        .setFinished(false)
-                        .setPrice(BigDecimal.valueOf(4000))
-                        .setTeacher(new User.Builder().setUserId(34)
-                                .setUserId(34).setFirstName("FirstName").setLastName("LastName")
-                                .getInstance())
-                        .setNotes("Test")
-                        .setSchedule("Sat, Sun")
-                        .getInstance();
-        assertTrue("Maybe method was changed",
-                courseDaoInf.getAllCoursesWithDept().contains(course));
+        List<Course> courses = courseDaoInf.getAllCoursesWithDept();
+        assertFalse(MSG, courses.isEmpty());
+        courses.forEach(course1 -> assertTrue(course1.getPrice().intValue() > 0));
+    }
+
+    @Test
+    public void searchCourseByNameAndStatusReturnCorrectData() throws Exception {
+        Course courseForSearch = new Course.Builder().setName("ava").setFinished(true).getInstance();
+        List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch);
+        assertFalse(MSG, courses.isEmpty());
+        courses.forEach(course -> assertTrue(course.getName().contains(courseForSearch.getName())
+                && course.isFinished()));
+    }
+
+    @Test
+    public void searchCourseByNameAndStatusReturnEmptyList() throws Exception {
+        Course courseForSearch = new Course.Builder().setName("wwwwwwwwwwww").setFinished(false).getInstance();
+        assertTrue(courseDaoInf.searchCourseByNameAndStatus(courseForSearch).isEmpty());
+    }
+
+    @Test
+    public void updateCourseExceptPriceCorrectUpdate() throws Exception {
+        Course courseForUpdate = new Course.Builder().setId(1).setName("JavaStart").setFinished(true)
+                .setStart(LocalDate.of(2017, 2, 1))
+                .setPrice(BigDecimal.valueOf(4000)).setTeacher(new User.Builder().setUserId(22).getInstance())
+                .setNotes("After update").getInstance();
+
+        courseDaoInf.updateCourseExceptPrice(courseForUpdate);
+        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
+
+    }
+
+    @Test
+    public void getCourseByIdReturnCorrectData() throws Exception {
+        int courseId = courseDaoForTest.insertCourse(course);
+        course.setId(courseId);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+    }
+
+    @Test
+    public void getCourseByIdReturnEmptyOptional() throws Exception {
+        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
     }
 
     @Test
@@ -117,9 +130,7 @@ public class CourseDaoImplTest {
                     .setStart(LocalDate.parse("2017-04-01"))
                     .setFinished(false)
                     .setPrice(BigDecimal.valueOf(999999.99))
-                    .setTeacher(new User.Builder()
-                            .setUserId(34).setFirstName("FirstName").setLastName("LastName")
-                            .getInstance())
+                    .setTeacher(new User.Builder().setUserId(1).getInstance())
                     .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
                     .getInstance(), courseDaoInf.getCourseById(111).get());
@@ -129,6 +140,7 @@ public class CourseDaoImplTest {
     @Test
     public void getQuantityCoursesReturnNotNull() throws Exception {
         int result = courseDaoInf.getQuantityCourses();
+        //noinspection ObviousNullCheck
         assertNotNull(MSG, result);
     }
 }

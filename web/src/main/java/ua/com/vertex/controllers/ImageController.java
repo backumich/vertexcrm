@@ -4,12 +4,15 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.LogInfo;
+
+import java.sql.SQLException;
 
 @Controller
 public class ImageController {
@@ -27,6 +30,7 @@ public class ImageController {
     private static final String USER = "user";
     private static final String IMAGE_ERROR = "imageError";
 
+    @SuppressWarnings("UnusedReturnValue")
     @RequestMapping(value = "/showImage")
     public String showImage(@ModelAttribute(USER) User user,
                             @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
@@ -46,11 +50,13 @@ public class ImageController {
         return view;
     }
 
-    private void encode(Model model, int userId, String imageType) {
+    private void encode(Model model, int userId, String imageType) throws SQLException {
         String encoded = Base64.encodeBase64String(userLogic.getImage(userId, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     public String uploadImage(@ModelAttribute(USER) User user,
                               @RequestPart(value = IMAGE, required = false) byte[] image,

@@ -1,5 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -16,14 +20,15 @@
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
     <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
     <script async="" src="../../javascript/analytics.js"></script>
+    <%--suppress CommaExpressionJS --%>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
             a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
+                m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
@@ -34,17 +39,9 @@
 
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
 
     .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
+        margin-left: 0 !important;
     }
     </style>
 </head>
@@ -66,15 +63,16 @@
         });
 
         var n = d.getElementsByTagName("script")[0],
-                s = d.createElement("script"),
-                f = function () {
-                    n.parentNode.insertBefore(s, n);
-                };
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-        if (w.opera == "[object Opera]") {
+        //noinspection JSValidateTypes
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -102,12 +100,100 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5">
+    <div class="container pt1_5" align="center">
 
-        ${userIds}
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_USER')">
+            <sec:authentication property="principal.username" var="user"/>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_TEACHER')">
+            <sec:authentication property="principal.username" var="teacher"/>
+        </sec:authorize>
 
+        <c:if test="${admin != null}">
+
+        <c:if test="${empty courses}">
+            <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
+                       action="searchCourse">
+                <span class="fontSize180 silver">Search course :</span><br><br><br>
+                <table class="active" width="500">
+                    <tr>
+                        <td><form:label path="name" size="100">Course name:</form:label></td>
+                        <td style="color: black"><form:input path="name" placeholder="Course name:"
+                                                             type="text"/></td>
+                        <td><form:errors path="name"/></td>
+                    </tr>
+                    <tr>
+                        <td><form:hidden path="start" value="2011-12-03"/></td>
+                    </tr>
+                    <tr>
+                        <td><form:label path="finished">Course is finished? </form:label></td>
+                        <td><form:checkbox path="finished"/></td>
+                        <td><form:errors path="finished"/></td>
+                    </tr>
+                </table
+                <br>
+                <input style="color: black" type="submit" value="Search"/>
+            </form:form>
+        </c:if>
+    </div>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty courses}">
+            <form:form cssClass="buttonText" method="get" commandName="courseId" action="/courseDetails">
+                <span class="fontSize180 silver">Select course :</span><br><br><br>
+                <table class="active" width="1200" cols="7">
+                    <tr style="color: #2aabd2">
+                        <th>Select course</th>
+                        <th>Course name</th>
+                        <th>Course start date</th>
+                        <th>Course is finished</th>
+                        <th>Course price</th>
+                        <th>Course teacher</th>
+                        <th>Course schedule</th>
+                    </tr>
+                    <c:forEach items="${courses}" var="course">
+                        <tr>
+                            <td><input type="radio" name="courseId" checked="true" value=${course.id}>
+                            </td>
+                            <td>${course.name}</td>
+                            <td>${course.start}</td>
+                            <td>${course.finished}</td>
+                            <td>${course.price}</td>
+                            <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
+                            <td>${course.schedule}</td>
+                            <td>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <br>
+                <input style="color: black" type="submit" value="Select"/>
+            </form:form>
+        </c:if>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+    </div>
+    </c:if>
+    <br>
+    <br>
+    <br>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
+</div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -120,7 +206,8 @@
         <div class="left">
             <div class="row">
                 <div class="col-md-5">
-                    <div class="copyright"><a href="https://vertex-academy.com/lecturer-bakumov.html#" class="logo"></a>©
+                    <div class="copyright"><a href="https://vertex-academy.com/lecturer-bakumov.html#"
+                                              class="logo"></a>©
                         2015, Все права защищены
                     </div>
                 </div>
