@@ -145,7 +145,7 @@
                     <td width="150">Teacher name:</td>
                     <td width="450" style="color: black">
                         <form:select path="teacher.userId">
-                            <form:option value="${teacher.uer}" label="--- Select ---"/>
+                            <form:option value="${teacher.userId}" label="--- Select ---"/>
                             <form:options items="${teachers}"/>
                         </form:select>
                     </td>

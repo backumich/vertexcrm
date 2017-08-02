@@ -15,6 +15,8 @@ import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,18 +52,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
         parameters.addValue("offset", dataNavigator.getRowPerPage());
 
-        List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> new Course.Builder()
-                .setId(resultSet.getInt(ID))
-                .setName(resultSet.getString(NAME))
-                .setStart(resultSet.getDate(START).toLocalDate())
-                .setFinished((resultSet.getInt(FINISHED) == 1))
-                .setPrice(resultSet.getBigDecimal(PRICE))
-                .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
-                        .setEmail(resultSet.getString(EMAIL))
-                        .setFirstName(resultSet.getString(FIRST_NAME))
-                        .setLastName(resultSet.getString(LAST_NAME))
-                        .getInstance())
-                .setNotes(resultSet.getString(NOTES)).getInstance());
+        List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
 
         String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
         LOGGER.debug("Quantity courses -" + courses.size());
@@ -138,18 +129,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         source.addValue("courseName", "%" + course.getName() + "%");
 
         LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
-        return jdbcTemplate.query(query, source, (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(ID))
-                .setName(resultSet.getString(NAME))
-                .setStart(resultSet.getDate(START).toLocalDate())
-                .setFinished((resultSet.getInt(FINISHED) == 1))
-                .setPrice(resultSet.getBigDecimal(PRICE))
-                .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
-                        .setEmail(resultSet.getString(EMAIL))
-                        .setFirstName(resultSet.getString(FIRST_NAME))
-                        .setLastName(resultSet.getString(LAST_NAME))
-                        .getInstance())
-                .setSchedule(resultSet.getString(SCHEDULE))
-                .setNotes(resultSet.getString(NOTES)).getInstance());
+        return jdbcTemplate.query(query, source, (resultSet, i) -> mapCourses(resultSet));
     }
 
     @Override
@@ -197,6 +177,21 @@ public class CourseDaoImpl implements CourseDaoInf {
         }
 
         return Optional.ofNullable(course);
+    }
+
+    private Course mapCourses(ResultSet resultSet) throws SQLException {
+        return new Course.Builder().setId(resultSet.getInt(ID))
+                .setName(resultSet.getString(NAME))
+                .setStart(resultSet.getDate(START).toLocalDate())
+                .setFinished((resultSet.getInt(FINISHED) == 1))
+                .setPrice(resultSet.getBigDecimal(PRICE))
+                .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
+                        .setEmail(resultSet.getString(EMAIL))
+                        .setFirstName(resultSet.getString(FIRST_NAME))
+                        .setLastName(resultSet.getString(LAST_NAME))
+                        .getInstance())
+                .setSchedule(resultSet.getString(SCHEDULE))
+                .setNotes(resultSet.getString(NOTES)).getInstance();
     }
 
     @Autowired
