@@ -24,6 +24,9 @@ public class ReCaptchaService {
     @Value("${reCaptcha.secretKey}")
     private String secretKey;
 
+    @Value("${reCaptcha.siteKey}")
+    private String siteKey;
+
     private static final Logger LOGGER = LogManager.getLogger(ReCaptchaService.class);
 
     public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddr) throws IOException {
@@ -36,16 +39,7 @@ public class ReCaptchaService {
             String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse + "&remoteip=" + reCaptchaRemoteAddr;
 
             connection = getConnection(url);
-            try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
-                outputStream.writeBytes(postParams);
-            }
-            String line;
-            StringBuilder outputString = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                while ((line = reader.readLine()) != null) {
-                    outputString.append(line);
-                }
-            }
+            StringBuilder outputString = getResponseData(connection, postParams);
 
             Captcha captcha = new Gson().fromJson(outputString.toString(), Captcha.class);
             verified = captcha.isSuccess();
@@ -57,6 +51,20 @@ public class ReCaptchaService {
             }
         }
         return verified;
+    }
+
+    private StringBuilder getResponseData(HttpsURLConnection connection, String postParams) throws IOException {
+        try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
+            outputStream.writeBytes(postParams);
+        }
+        String line;
+        StringBuilder outputString = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            while ((line = reader.readLine()) != null) {
+                outputString.append(line);
+            }
+        }
+        return outputString;
     }
 
     private HttpsURLConnection getConnection(URL url) throws IOException {

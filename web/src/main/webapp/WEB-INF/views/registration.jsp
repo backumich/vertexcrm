@@ -147,7 +147,7 @@
                         <td></td>
                         <td>
                             <br>
-                            <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM;"></div>
+                            <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
                             <br>
                         </td>
                         <td>

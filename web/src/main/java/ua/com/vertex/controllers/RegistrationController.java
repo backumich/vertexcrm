@@ -54,10 +54,10 @@ public class RegistrationController {
 
         String reCaptchaResponse = request.getParameter("g-recaptcha-response");
         String reCaptchaRemoteAddr = request.getRemoteAddr();
-        Boolean captcha = reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr);
+        Boolean isVerified = reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr);
 
         modelAndView.setViewName(REGISTRATION_PAGE);
-        if (captcha && !bindingResult.hasErrors()) {
+        if (isVerified && !bindingResult.hasErrors()) {
             try {
                 if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
                     modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
@@ -72,7 +72,7 @@ public class RegistrationController {
                 LOGGER.warn(e);
             }
         }
-        modelAndView.addObject(CAPTCHA, captcha);
+        modelAndView.addObject(CAPTCHA, isVerified);
         return modelAndView;
     }
 
