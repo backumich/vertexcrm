@@ -199,12 +199,10 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get all user list");
 
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                dataNavigator.getPagingSQLText();
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1)
-                * dataNavigator.getRowPerPage());
-        parameters.addValue("offset", dataNavigator.getRowPerPage());
+        MapSqlParameterSource parameters = dataNavigator.setPagingSQLParameters(new MapSqlParameterSource());
 
         List<User> users = jdbcTemplate.query(query, parameters, (resultSet, i) -> new User.Builder().
                 setUserId(resultSet.getInt(USER_ID)).

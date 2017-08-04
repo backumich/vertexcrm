@@ -4,43 +4,44 @@
 
 <!DOCTYPE html>
 <html lang="en" charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vertex Crm</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href="./css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="css/slick.css">
-<link rel="stylesheet" href="css/main.css">
-<link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-<script type="text/javascript" async="" src="javascript/watch.js"></script>
-<script async="" src="javascript/analytics.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style id="style-1-cropbar-clipper">
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Vertex Crm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="./css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style id="style-1-cropbar-clipper">
+        .en-markup-crop-options {
+            top: 18px !important;
+            left: 50% !important;
+            margin-left: -100px !important;
+            width: 200px !important;
+            border: 2px rgba(255, 255, 255, .38) solid !important;
+            border-radius: 4px !important;
+        }
 
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
-    }
+        .en-markup-crop-options div div:first-of-type {
+            margin-left: 0px !important;
+        }
 
-    .colortext {
-        background-color: #ffe; /* Цвет фона */
-        color: black; /* Цвет текста */
-    }
+        .colortext {
+            background-color: #ffe; /* Цвет фона */
+            color: black; /* Цвет текста */
+        }
 
-    .buttonText {
-        color: black;
-    }
-</style>
+        .buttonText {
+            color: black;
+        }
+    </style>
 </head>
 <body class="inside footer-under">
 <script type="text/javascript">
@@ -77,14 +78,21 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
+
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+
         <div align="center">
-            <br/>
-            <br/>
-            <br/>
-            <a href="<c:url value="/addCourse"/>">Add course</a>
-            <br/>
-            <br/>
-            <br/>
+            <c:if test="${admin != null}">
+                <br/>
+                <br/>
+                <br/>
+                <a href="<c:url value="/addCourse"/>">Add course</a>
+                <br/>
+                <br/>
+                <br/>
+            </c:if>
             <c:if test="${dataNavigator.currentNumberPage!=1}">
                 <a id="1" class="page" style="cursor: pointer;">&lt;&lt;</a>
             </c:if>
@@ -109,7 +117,7 @@
             </c:if>
             <br/>
             <br/>
-            <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
+            <form:form servletRelativeAction="" method="post" modelAttribute="dataNavigator">
                 <form:select id="perPage" class="buttonText" path="rowPerPage"
                              items="${dataNavigator.countRowPerPage}"/>
 

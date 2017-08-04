@@ -137,7 +137,11 @@
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a> |
-                <a href="<c:url value="/viewAllCourses"/>">View all courses</a>
+                <a href="<c:url value="/viewCourses/all"/>">View all courses</a>
+            </c:if>
+
+            <c:if test="${teacher != null}">
+                <a href="<c:url value="/viewCourses/teacher"/>">View courses that I teach</a>
             </c:if>
         </div>
     </div>

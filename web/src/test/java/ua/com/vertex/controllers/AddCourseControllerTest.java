@@ -57,7 +57,6 @@ public class AddCourseControllerTest {
     }
 
     @Test
-    @Ignore
     public void addCourseTest() throws Exception {
         String name = "Test course name";
         String start = "2001-01-01";
@@ -66,19 +65,19 @@ public class AddCourseControllerTest {
         String schedule = "Sat";
 
         MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
-                .setSingleView(new InternalResourceView("/viewAllCourses"))
+                .setSingleView(new InternalResourceView("/viewCourses/all"))
                 .build();
         mockMvc.perform(post("/addCourse")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("name", name)
                 .param("start", start)
                 .param("price", price)
-                .param("teacherID", teacherID)
+                .param("teacher.userId", teacherID)
                 .param("schedule", schedule)
                 .sessionAttr("course", new Course()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("redirect:/viewAllCourses"))
-                .andExpect(forwardedUrl("/viewAllCourses"))
+                .andExpect(view().name("redirect:/viewCourses/all"))
+                .andExpect(forwardedUrl("/viewCourses/all"))
         ;
     }
 }

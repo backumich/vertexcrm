@@ -66,7 +66,7 @@ public class CourseDaoImplTest {
     public void getAllCourses() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
-        List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
+        List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator);
         assertFalse(MSG, courses.isEmpty());
 
         courses.forEach(course1 -> {

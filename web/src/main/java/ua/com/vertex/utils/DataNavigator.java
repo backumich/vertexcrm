@@ -3,6 +3,7 @@ package ua.com.vertex.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -58,6 +59,16 @@ public class DataNavigator {
             this.currentNumberPage = this.nextPage;
             this.lastPage = totalPages;
         }
+    }
+
+    public MapSqlParameterSource setPagingSQLParameters(MapSqlParameterSource parameters) {
+        parameters.addValue("from", (this.getCurrentNumberPage() - 1) * this.getRowPerPage());
+        parameters.addValue("offset", this.getRowPerPage());
+        return parameters;
+    }
+
+    public String getPagingSQLText() {
+        return "LIMIT :from, :offset";
     }
 
     public String getCurrentNamePage() {

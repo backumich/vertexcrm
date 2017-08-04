@@ -1,6 +1,7 @@
 package ua.com.vertex.logic.interfaces;
 
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.util.List;
@@ -10,7 +11,11 @@ public interface CourseLogic {
 
     int getQuantityCourses();
 
-    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
+    int getQuantityCourses(User teacher);
+
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator);
+
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher);
 
     int addCourse(Course course);
 

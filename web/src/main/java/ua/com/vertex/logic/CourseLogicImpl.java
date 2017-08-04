@@ -3,6 +3,7 @@ package ua.com.vertex.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
@@ -15,14 +16,29 @@ public class CourseLogicImpl implements CourseLogic {
 
     private final CourseDaoInf courseDaoInf;
 
+    @Autowired
+    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
+        this.courseDaoInf = courseDaoInf;
+    }
+
     @Override
     public int getQuantityCourses() {
         return courseDaoInf.getQuantityCourses();
     }
 
     @Override
-    public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
-        return courseDaoInf.getAllCourses(dataNavigator);
+    public int getQuantityCourses(User teacher) {
+        return courseDaoInf.getQuantityCourses(teacher);
+    }
+
+    @Override
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator) {
+        return courseDaoInf.getCoursesPerPage(dataNavigator);
+    }
+
+    @Override
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher) {
+        return courseDaoInf.getCoursesPerPage(dataNavigator, teacher);
     }
 
     @Override
@@ -50,8 +66,4 @@ public class CourseLogicImpl implements CourseLogic {
         return courseDaoInf.getCourseById(courseId);
     }
 
-    @Autowired
-    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
-        this.courseDaoInf = courseDaoInf;
-    }
 }
