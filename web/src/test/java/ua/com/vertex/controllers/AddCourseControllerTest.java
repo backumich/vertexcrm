@@ -57,11 +57,11 @@ public class AddCourseControllerTest {
     }
 
     @Test
-    @Ignore
     public void addCourseTest() throws Exception {
         String name = "Test course name";
         String start = "2001-01-01";
         String price = "1";
+        String userId = "1";
 
         MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("/viewAllCourses"))
@@ -71,6 +71,7 @@ public class AddCourseControllerTest {
                 .param("name", name)
                 .param("start", start)
                 .param("price", price)
+                .param("teacher.userId", userId)
                 .sessionAttr("course", new Course()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("redirect:/viewAllCourses"))

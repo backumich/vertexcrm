@@ -57,7 +57,6 @@ public class LogInControllerTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         controller = new LogInController(logInfo, loggingLogic);
         user = new User.Builder().getInstance();
         optional = Optional.ofNullable(user);
