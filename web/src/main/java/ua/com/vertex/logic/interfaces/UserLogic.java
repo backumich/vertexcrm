@@ -1,10 +1,8 @@
 package ua.com.vertex.logic.interfaces;
 
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,8 +20,6 @@ public interface UserLogic {
     Optional<byte[]> getImage(int userId, String imageType);
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
-
-    EnumMap<Role, Role> getAllRoles();
 
     int saveUserData(User user);
 

@@ -20,6 +20,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -59,7 +60,7 @@ public class CourseDetailsController {
 
         if (!bindingResult.hasErrors()) {
             try {
-                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
+                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished());
                 if (courses.isEmpty()) {
                     model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
                             "Please check the data and try it again.", course.getName()));
@@ -73,22 +74,20 @@ public class CourseDetailsController {
                 LOGGER.warn(e);
                 result = ERROR;
             }
-        }else {
-            model.addAttribute(MSG, "Enter the correct data !!! ");
         }
 
         return result;
     }
 
     @GetMapping(value = "/courseDetails")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         try {
-            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((Exception::new)));
+            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
             result.addObject(TEACHERS, userLogic.getTeachers());
         } catch (Exception e) {
             LOGGER.warn(e);
@@ -105,7 +104,7 @@ public class CourseDetailsController {
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             try {
-                model.addAttribute(MSG, String.format("Course with id - (%s) updated!!!",
+                model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
                         courseLogic.updateCourseExceptPrice(course)));
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
@@ -117,7 +116,7 @@ public class CourseDetailsController {
             }
         } else {
             result = COURSE_DETAILS_JSP;
-            model.addAttribute(model.addAttribute(TEACHERS, userLogic.getTeachers()));
+            model.addAttribute(TEACHERS, userLogic.getTeachers());
         }
         return result;
     }

@@ -16,7 +16,7 @@ public interface CourseLogic {
 
     List<Course> getAllCoursesWithDept();
 
-    List<Course> searchCourseByNameAndStatus(Course course);
+    List<Course> searchCourseByNameAndStatus(String name, boolean isFinished);
 
     int updateCourseExceptPrice(Course course);
 

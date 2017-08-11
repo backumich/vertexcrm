@@ -5,18 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
@@ -39,8 +34,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 
 public class UserDetailsControllerTest {
-    @Autowired
-    private WebApplicationContext context;
 
     @Mock
     private UserLogic logic;
@@ -49,12 +42,6 @@ public class UserDetailsControllerTest {
     private CertificateLogic certificateLogic;
 
     private UserDetailsController userDetailsController;
-
-    @Mock
-    ModelAndView modelAndView;
-
-    @Mock
-    BindingResult bindingResult;
 
     private User user;
     private Optional<User> optional;
@@ -109,7 +96,7 @@ public class UserDetailsControllerTest {
         testUser.setDiscount(10);
         testUser.setPhone("0000000000");
 
-        when(logic.getUserById(1)).thenReturn(Optional.ofNullable(testUser));
+        when(logic.getUserById(1)).thenReturn(Optional.of(testUser));
         assertNotNull(testUser);
 
         assertEquals(1, testUser.getUserId());
@@ -144,33 +131,5 @@ public class UserDetailsControllerTest {
 
         Optional<User> optional = logic.getUserById(-1);
         assertEquals(null, optional.orElse(null));
-    }
-
-    @Test
-    public void userDetailsControllerSaveUserDataReturnedPassViewTest() throws Exception {
-
-        MockMvc mockMvc = standaloneSetup(userDetailsController)
-                .setSingleView(new InternalResourceView("userDetails")).build();
-        MockMultipartFile passportScan = new MockMultipartFile("data", "fakePassportScan.png", "image/jpeg", "fakePassportScan".getBytes());
-        MockMultipartFile photo = new MockMultipartFile("data", "fakePhoto.png", "image/jpeg", "fakePhoto".getBytes());
-
-//        User user = new User();
-//        user.setUserId(1);
-//        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/saveUserData")
-//                .file(passportScan)
-//                .file(photo)
-//                .flashAttr("user", user))
-//                .andExpect(status().isOk())
-//                .andExpect(model().size(4))
-//                .andExpect(model().attributeExists("user"))
-//                .andExpect(model().attributeExists("allRoles"))
-//                .andExpect(model().attributeExists("certificates"));
-
-//        mockMvc.perform(post("/saveUserData"))
-//                .andExpect(status().isOk())
-//                .andExpect(model().size(4))
-//                .andExpect(model().attributeExists("user"))
-//                .andExpect(model().attributeExists("allRoles"))
-//                .andExpect(model().attributeExists("certificates"));
     }
 }
