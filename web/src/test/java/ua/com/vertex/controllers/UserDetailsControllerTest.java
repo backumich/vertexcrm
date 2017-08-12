@@ -5,24 +5,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -39,8 +34,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 
 public class UserDetailsControllerTest {
-    @Autowired
-    private WebApplicationContext context;
 
     @Mock
     private UserLogic logic;
@@ -49,12 +42,6 @@ public class UserDetailsControllerTest {
     private CertificateLogic certificateLogic;
 
     private UserDetailsController userDetailsController;
-
-    @Mock
-    ModelAndView modelAndView;
-
-    @Mock
-    BindingResult bindingResult;
 
     private User user;
     private Optional<User> optional;
@@ -69,7 +56,7 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerReturnedPassViewTest() throws Exception {
-        when(logic.getUserDetailsByID(1)).thenReturn(optional);
+        when(logic.getUserById(1)).thenReturn(optional);
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("userDetails"))
                 .build();
@@ -81,7 +68,7 @@ public class UserDetailsControllerTest {
 
     @Test
     public void userDetailsControllerReturnedFailViewTest() throws Exception {
-        when(logic.getUserDetailsByID(-5)).thenThrow(new SQLException());
+        when(logic.getUserById(-5)).thenThrow(new DataIntegrityViolationException("test"));
         MockMvc mockMvc = standaloneSetup(userDetailsController)
                 .setSingleView(new InternalResourceView("error"))
                 .build();
@@ -109,7 +96,7 @@ public class UserDetailsControllerTest {
         testUser.setDiscount(10);
         testUser.setPhone("0000000000");
 
-        when(logic.getUserDetailsByID(1)).thenReturn(Optional.ofNullable(testUser));
+        when(logic.getUserById(1)).thenReturn(Optional.of(testUser));
         assertNotNull(testUser);
 
         assertEquals(1, testUser.getUserId());
@@ -140,37 +127,9 @@ public class UserDetailsControllerTest {
         user.setDiscount(10);
         user.setPhone("0000000000");
 
-        when(logic.getUserDetailsByID(-1)).thenReturn(Optional.empty());
+        when(logic.getUserById(-1)).thenReturn(Optional.empty());
 
-        Optional<User> optional = logic.getUserDetailsByID(-1);
+        Optional<User> optional = logic.getUserById(-1);
         assertEquals(null, optional.orElse(null));
-    }
-
-    @Test
-    public void userDetailsControllerSaveUserDataReturnedPassViewTest() throws Exception {
-
-        MockMvc mockMvc = standaloneSetup(userDetailsController)
-                .setSingleView(new InternalResourceView("userDetails")).build();
-        MockMultipartFile passportScan = new MockMultipartFile("data", "fakePassportScan.png", "image/jpeg", "fakePassportScan".getBytes());
-        MockMultipartFile photo = new MockMultipartFile("data", "fakePhoto.png", "image/jpeg", "fakePhoto".getBytes());
-
-//        User user = new User();
-//        user.setUserId(1);
-//        mockMvc.perform(MockMvcRequestBuilders.fileUpload("/saveUserData")
-//                .file(passportScan)
-//                .file(photo)
-//                .flashAttr("user", user))
-//                .andExpect(status().isOk())
-//                .andExpect(model().size(4))
-//                .andExpect(model().attributeExists("user"))
-//                .andExpect(model().attributeExists("allRoles"))
-//                .andExpect(model().attributeExists("certificates"));
-
-//        mockMvc.perform(post("/saveUserData"))
-//                .andExpect(status().isOk())
-//                .andExpect(model().size(4))
-//                .andExpect(model().attributeExists("user"))
-//                .andExpect(model().attributeExists("allRoles"))
-//                .andExpect(model().attributeExists("certificates"));
     }
 }

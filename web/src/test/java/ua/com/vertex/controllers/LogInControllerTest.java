@@ -57,14 +57,13 @@ public class LogInControllerTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         controller = new LogInController(logInfo, loggingLogic);
         user = new User.Builder().getInstance();
         optional = Optional.ofNullable(user);
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLogInPageForLoggedInUserReturnsUserView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -78,7 +77,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void showLogInPageForLoggedInUserReturnsAdminView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -92,7 +91,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
 
         when(logInfo.getEmail()).thenReturn(EMAIL);
@@ -103,7 +102,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "USER")
+    @WithMockUser(authorities = "ROLE_USER")
     public void showLoggedInPageForLoggedInUserReturnsUserView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn("user");
@@ -117,7 +116,7 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void showLoggedInPageForLoggedInUserReturnsAdminView() throws Exception {
 
         when(logInfo.getEmail()).thenReturn("user");

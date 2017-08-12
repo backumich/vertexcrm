@@ -2,89 +2,84 @@ package ua.com.vertex.beans;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Course {
-    private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
-    private final String COURSE_TEACHER_NAME_MSG = "Teacher's name must be longer than 2 and less than 256 characters";
+    private final String COURSE_NAME_MSG = "Course's name must be longer than 1 and less than 256 characters";
     private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
-    private final String NOTES_MSG = "The schedule must be up to 256 characters long";
+    private final String NOTES_MSG = "The notes must be up to 256 characters long";
 
     private int id;
-
-    @Size(min = 2, max = 256, message = COURSE_NAME_MSG)
-    private String name;
-
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @NotNull
-    private LocalDate start;
-
-    private boolean finished;
-
-    @DecimalMin("0.00")
-    @DecimalMax("999999999.99")
-    @NotNull
     private BigDecimal price;
 
-    @Size(min = 2, max = 256, message = COURSE_TEACHER_NAME_MSG)
-    private String teacherName;
+    @Size(min = 1, max = 256, message = COURSE_NAME_MSG)
+    private String name;
 
-    @Size(min = 2, max = 256, message = SCHEDULE_MSG)
+    private User teacher;
+
+    @Size(max = 256, message = SCHEDULE_MSG)
     private String schedule;
 
     @Size(max = 256, message = NOTES_MSG)
     private String notes;
 
-    public Course() {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull
+    private LocalDate start;
+    private boolean finished;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        return getId() == course.getId() && isFinished() == course.isFinished()
+                && (getPrice() != null ? getPrice().equals(course.getPrice()) : course.getPrice() == null)
+                && (getName() != null ? getName().equals(course.getName()) : course.getName() == null)
+                && (getTeacher() != null ? getTeacher().equals(course.getTeacher()) : course.getTeacher() == null)
+                && (getSchedule() != null ? getSchedule().equals(course.getSchedule()) : course.getSchedule() == null)
+                && (getNotes() != null ? getNotes().equals(course.getNotes()) : course.getNotes() == null)
+                && (getStart() != null ? getStart().equals(course.getStart()) : course.getStart() == null);
     }
 
-    public Course(int id, String name, LocalDate start, boolean finished, BigDecimal price, String teacherName, String schedule, String notes) {
-        this.id = id;
-        this.name = name;
-        this.start = start;
-        this.finished = finished;
-        this.price = price;
-        this.teacherName = teacherName;
-        this.schedule = schedule;
-        this.notes = notes;
+    @Override
+    public int hashCode() {
+        int result = getId();
+        result = 31 * result + (getPrice() != null ? getPrice().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getTeacher() != null ? getTeacher().hashCode() : 0);
+        result = 31 * result + (getSchedule() != null ? getSchedule().hashCode() : 0);
+        result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
+        result = 31 * result + (getStart() != null ? getStart().hashCode() : 0);
+        result = 31 * result + (isFinished() ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                ", teacher=" + teacher +
+                ", schedule='" + schedule + '\'' +
+                ", notes='" + notes + '\'' +
+                ", start=" + start +
+                ", finished=" + finished +
+                '}';
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDate start) {
-        this.start = start;
-    }
-
-    public boolean getFinished() {
-        return finished;
-    }
-
-    public void setFinished(boolean finished) {
-        this.finished = finished;
+    public void setId(int courseId) {
+        this.id = courseId;
     }
 
     public BigDecimal getPrice() {
@@ -95,12 +90,20 @@ public class Course {
         this.price = price;
     }
 
-    public String getTeacherName() {
-        return teacherName;
+    public String getName() {
+        return name;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
     }
 
     public String getSchedule() {
@@ -119,38 +122,20 @@ public class Course {
         this.notes = notes;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id &&
-                finished == course.finished &&
-                Objects.equals(name, course.name) &&
-                Objects.equals(start, course.start) &&
-                Objects.equals(price, course.price) &&
-                Objects.equals(teacherName, course.teacherName) &&
-                Objects.equals(schedule, course.schedule) &&
-                Objects.equals(notes, course.notes);
+    public LocalDate getStart() {
+        return start;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, start, finished, price, teacherName, schedule, notes);
+    public void setStart(LocalDate start) {
+        this.start = start;
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", start=" + start +
-                ", finished=" + finished +
-                ", price=" + price +
-                ", teacherName='" + teacherName + '\'' +
-                ", schedule='" + schedule + '\'' +
-                ", notes='" + notes + '\'' +
-                '}';
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
     public static class Builder {
@@ -185,8 +170,8 @@ public class Course {
             return this;
         }
 
-        public Builder setTeacherName(String teacherName) {
-            instance.setTeacherName(teacherName);
+        public Builder setTeacher(User teacher) {
+            instance.setTeacher(teacher);
             return this;
         }
 

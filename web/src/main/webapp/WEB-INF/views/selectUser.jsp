@@ -131,7 +131,7 @@
                     </tr>
                     <c:forEach items="${users}" var="user">
                         <tr>
-                            <td><input type="radio" name="userIdForCertificate" checked="checked" value=${user.userId}>
+                            <td><input type="radio" name="userIdForCertificate" checked="true" value=${user.userId}>
                             </td>
                             <td>${user.userId}</td>
                             <td>${user.email}</td>

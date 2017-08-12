@@ -3,11 +3,13 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -27,12 +29,13 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserDetailsController.class);
 
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
 
         // -- Get user data by ID
         try {
-            Optional<User> optionalUser = userLogic.getUserDetailsByID(userId);
+            Optional<User> optionalUser = userLogic.getUserById(userId);
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
                 modelAndView.setViewName(PAGE_JSP);
@@ -45,12 +48,8 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-        try {
-            modelAndView.addObject("allRoles", userLogic.getAllRoles());
+            modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception ignore) {
-            LOGGER.warn("There are problems with access to roles of the system", ignore);
-        }
 
         //  -- Get all user certificate
         try {
@@ -63,6 +62,7 @@ public class UserDetailsController {
     }
 
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView saveUserData(@RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
                                      @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
                                      @Valid @ModelAttribute(USERDATA_MODEL) User user,
@@ -105,13 +105,8 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-        try {
-            modelAndView.addObject("allRoles", userLogic.getAllRoles());
+            modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
-            modelAndView.setViewName(ERROR_JSP);
-            LOGGER.warn("There are problems with access to roles of the system", e);
-        }
 
         //  -- Get all user certificates
         try {

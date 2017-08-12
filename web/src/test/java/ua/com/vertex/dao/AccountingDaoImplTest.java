@@ -36,7 +36,7 @@ public class AccountingDaoImplTest {
         double amount = 3000d;
         accounting.setDealId(accountingDaoImplForTest.createAccounting(accounting));
         accountingDaoInf.updateUserDept(2, 2, amount);
-        accounting.setDebt(accounting.getDebt()-amount);
+        accounting.setDebt(accounting.getDebt() - amount);
         assertEquals("Maybe method was changed", accountingDaoImplForTest.
                 getAccountingByCourseIdAndUserId(2, 2).orElse(new Accounting()), accounting);
     }

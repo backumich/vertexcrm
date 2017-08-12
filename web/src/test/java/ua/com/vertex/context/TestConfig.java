@@ -1,9 +1,6 @@
 package ua.com.vertex.context;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
@@ -12,6 +9,7 @@ import javax.validation.Validator;
 
 @Configuration
 @Import(RootConfig.class)
+@ComponentScan("ua.com.vertex")
 @Profile("test")
 public class TestConfig {
 
