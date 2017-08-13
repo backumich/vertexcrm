@@ -4,10 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
@@ -41,12 +44,14 @@ public class CourseDetailsController {
     private final UserLogic userLogic;
 
     @PostMapping(value = "/searchCourseJsp")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView searchCourseJsp() {
         LOGGER.debug("Show search page for courses");
         return new ModelAndView(SEARCH_COURSE_JSP, COURSE_DATA, new Course());
     }
 
     @PostMapping(value = "/searchCourse")
+    @PreAuthorize("hasRole('ADMIN')")
     public String searchCourse(@Validated @ModelAttribute(COURSE_DATA) Course course,
                                BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
@@ -55,7 +60,7 @@ public class CourseDetailsController {
 
         if (!bindingResult.hasErrors()) {
             try {
-                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course);
+                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished());
                 if (courses.isEmpty()) {
                     model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
                             "Please check the data and try it again.", course.getName()));
@@ -69,21 +74,20 @@ public class CourseDetailsController {
                 LOGGER.warn(e);
                 result = ERROR;
             }
-        }else {
-            model.addAttribute(MSG, "Enter the correct data !!! ");
         }
 
         return result;
     }
 
-    @PostMapping(value = "/courseDetails")
+    @GetMapping(value = "/courseDetails")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
         LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         try {
-            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((Exception::new)));
+            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
             result.addObject(TEACHERS, userLogic.getTeachers());
         } catch (Exception e) {
             LOGGER.warn(e);
@@ -94,12 +98,13 @@ public class CourseDetailsController {
     }
 
     @PostMapping(value = "/updateCourse")
+    @PreAuthorize("hasRole('ADMIN')")
     public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             try {
-                model.addAttribute(MSG, String.format("Course with id - (%s) updated!!!",
+                model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
                         courseLogic.updateCourseExceptPrice(course)));
             } catch (DataAccessException e) {
                 LOGGER.warn(e);
@@ -111,7 +116,7 @@ public class CourseDetailsController {
             }
         } else {
             result = COURSE_DETAILS_JSP;
-            model.addAttribute(model.addAttribute(TEACHERS, userLogic.getTeachers()));
+            model.addAttribute(TEACHERS, userLogic.getTeachers());
         }
         return result;
     }

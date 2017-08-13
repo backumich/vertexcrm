@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +26,12 @@ public class ViewAllUsersController {
     private UserLogic userLogic;
 
     @RequestMapping(value = "/viewAllUsers")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
         int quantityUsers = userLogic.getQuantityUsers();
 
-       dataNavigator.updateDataNavigator(quantityUsers);
+        dataNavigator.updateDataNavigator(quantityUsers);
         List<User> users = userLogic.getUsersPerPages(dataNavigator);
 
         modelAndView.addObject("viewAllUsers", dataNavigator);

@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.PaymentForm;
-import ua.com.vertex.logic.interfaces.*;
+import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.logic.interfaces.PaymentLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.USERS;
+import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.USERS;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
@@ -33,7 +36,15 @@ public class CreateNewPaymentController {
     static final String USER_ID_FOR_PAY = "userIdForPayment";
     static final String COURSE_ID_FOR_PAY = "courseIdForPayment";
 
+    @Autowired
+    public CreateNewPaymentController(CourseLogic courseLogic, UserLogic userLogic, PaymentLogic paymentLogic) {
+        this.courseLogic = courseLogic;
+        this.userLogic = userLogic;
+        this.paymentLogic = paymentLogic;
+    }
+
     @PostMapping(value = "/createPayment")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectCourseForPayment() {
         LOGGER.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
         ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
@@ -46,21 +57,8 @@ public class CreateNewPaymentController {
         return result;
     }
 
-    @PostMapping(value = "/selectCourse")
-    public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
-        ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
-        try {
-            result.addObject(USERS, userLogic.getCourseUsers(courseId));
-            result.addObject(COURSE_ID_FOR_PAY, courseId);
-            result.addObject(PAYMENT, new PaymentForm());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result.setViewName(ERROR);
-        }
-        return result;
-    }
-
     @PostMapping(value = "/selectUserForPayment")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView createPayment(@Validated @ModelAttribute(PAYMENT) PaymentForm payment,
                                       BindingResult bindingResult, ModelAndView modelAndView) {
         modelAndView.setViewName(SELECT_USER_FOR_PAYMENT_JSP);
@@ -81,10 +79,18 @@ public class CreateNewPaymentController {
         return modelAndView;
     }
 
-    @Autowired
-    public CreateNewPaymentController(CourseLogic courseLogic, UserLogic userLogic, PaymentLogic paymentLogic) {
-        this.courseLogic = courseLogic;
-        this.userLogic = userLogic;
-        this.paymentLogic = paymentLogic;
+    @PostMapping(value = "/selectCourse")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
+        ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
+        try {
+            result.addObject(USERS, userLogic.getCourseUsers(courseId));
+            result.addObject(COURSE_ID_FOR_PAY, courseId);
+            result.addObject(PAYMENT, new PaymentForm());
+        } catch (Exception e) {
+            LOGGER.warn(e);
+            result.setViewName(ERROR);
+        }
+        return result;
     }
 }

@@ -1,7 +1,5 @@
 package ua.com.vertex.dao;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
@@ -24,10 +22,13 @@ import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
 class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LogManager.getLogger(AccountingDaoImplForTest.class);
 
-    public int createAccounting(Accounting accounting) throws DataAccessException {
-        LOGGER.debug(String.format("Try insert accounting  = (%s)", accounting));
+    @Autowired
+    AccountingDaoImplForTestImpl(DataSource dataSource) {
+        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    public int createAccounting(Accounting accounting) {
         String query = "INSERT INTO  Accounting (user_id, course_id, course_coast, debt) " +
                 "VALUES (:user_id, :course_id, :course_coast, :debt) ";
 
@@ -43,10 +44,9 @@ class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
     }
 
     @SuppressWarnings("SameParameterValue")
-    public Optional<Accounting> getAccountingByCourseIdAndUserId( int courseId, int userId) throws DataAccessException {
-        LOGGER.debug(String.format("Try select accounting by course id = (%s) and user id = (%s)", courseId, userId));
+    public Optional<Accounting> getAccountingByCourseIdAndUserId(int courseId, int userId) {
         String query = "SELECT deal_id, user_id, course_id, course_coast,debt FROM Accounting " +
-                "WHERE course_id = :courseId AND user_id = :userId";
+                "WHERE course_id = :course_id AND user_id = :user_id";
 
         MapSqlParameterSource source = new MapSqlParameterSource(COURSE_ID, courseId);
         source.addValue(USER_ID, userId);
@@ -60,14 +60,8 @@ class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
                             setCourseId(resultSet.getInt("course_id")).
                             setCourseCoast(resultSet.getDouble("course_coast")).
                             setDept(resultSet.getDouble("debt")).getInstance());
-        } catch (DataAccessException e) {
-            LOGGER.warn(e);
+        } catch (DataAccessException ignored) {
         }
         return Optional.ofNullable(accounting);
-    }
-
-    @Autowired
-    AccountingDaoImplForTestImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

@@ -82,25 +82,33 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void searchCourseReturnCorrectViewWhenNotEmptyList() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenReturn(Collections.singletonList(new Course()));
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+                thenReturn(Collections.singletonList(new Course.Builder().setName("test").
+                        setFinished(true).getInstance()));
         when(bindingResult.hasErrors()).thenReturn(false);
-        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course.Builder().setName("test").
+                        setFinished(true).getInstance(), bindingResult, model)
                 , SEARCH_COURSE_JSP);
     }
 
     @Test
     public void searchCourseHasCorrectDataInModelWhenNotEmptyList() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenReturn(Collections.singletonList(new Course()));
-        courseDetailsController.searchCourse(new Course(), bindingResult, model);
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+                thenReturn(Collections.singletonList(new Course.Builder().setName("test").
+                        setFinished(true).getInstance()));
+        courseDetailsController.searchCourse(new Course.Builder().setName("test").
+                setFinished(true).getInstance(), bindingResult, model);
         when(bindingResult.hasErrors()).thenReturn(false);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(COURSES));
-        assertEquals(MSG_INVALID_DATA, model.asMap().get(COURSES), Collections.singletonList(new Course()));
+        assertEquals(MSG_INVALID_DATA, model.asMap().get(COURSES), Collections.singletonList(new Course.Builder().
+                setName("test").setFinished(true).getInstance()));
 
     }
 
     @Test
     public void searchCourseReturnCorrectViewWhenEmptyList() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenReturn(Collections.singletonList(new Course()));
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+                thenReturn(Collections.singletonList(new Course()));
         when(bindingResult.hasErrors()).thenReturn(false);
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
                 , SEARCH_COURSE_JSP);
@@ -109,7 +117,8 @@ public class CourseDetailsControllerTest {
     @Test
     public void searchCourseHasCorrectDataInModelWhenEmptyList() throws Exception {
         Course course = new Course.Builder().setName("test").getInstance();
-        when(courseLogic.searchCourseByNameAndStatus(course)).thenReturn(new ArrayList<>());
+        when(courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished())).
+                thenReturn(new ArrayList<>());
         when(bindingResult.hasErrors()).thenReturn(false);
         courseDetailsController.searchCourse(course, bindingResult, model);
         assertFalse(MSG_INVALID_DATA, model.containsAttribute(COURSES));
@@ -122,25 +131,29 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void searchCourseReturnCorrectViewWhenDataAcesException() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenThrow(new DataIntegrityViolationException("t"));
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+                thenThrow(new DataIntegrityViolationException("t"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
                 , SEARCH_COURSE_JSP);
     }
 
     @Test
     public void searchCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenThrow(new DataIntegrityViolationException("t"));
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+                thenThrow(new DataIntegrityViolationException("t"));
         when(bindingResult.hasErrors()).thenReturn(false);
-        courseDetailsController.searchCourse(new Course(), bindingResult, model);
+        courseDetailsController.searchCourse(new Course.Builder().setName("test").
+                setFinished(true).getInstance(), bindingResult, model);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
     }
 
     @Test
     public void searchCourseReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus(new Course())).thenThrow(new Exception("test"));
+        when(courseLogic.searchCourseByNameAndStatus("test", true)).thenThrow(new RuntimeException("test"));
         when(bindingResult.hasErrors()).thenReturn(false);
-        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course.Builder().setName("test").
+                        setFinished(true).getInstance(), bindingResult, model)
                 , ERROR);
     }
 
@@ -156,9 +169,9 @@ public class CourseDetailsControllerTest {
     @Test
     public void courseDetailsHasCorrectDataInModel() throws Exception {
         when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
-        HashMap<String, String> teachers = new HashMap<String, String>() {
+        HashMap<Integer, String> teachers = new HashMap<Integer, String>() {
             {
-                put("test@test.com", "test test 'test@test.com'");
+                put(1, "test test 'test@test.com'");
             }
         };
         when(userLogic.getTeachers()).thenReturn(teachers);
@@ -188,13 +201,13 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void courseDetailsReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.getCourseById(1)).thenThrow(new Exception("test"));
+        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
     }
 
     @Test
     public void courseDetailsHasCorrectDataInModelWhenException() throws Exception {
-        when(courseLogic.getCourseById(1)).thenThrow(new Exception("test"));
+        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
         ModelMap result = courseDetailsController.courseDetails(1).getModelMap();
 
         assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
@@ -212,10 +225,12 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseHasCorrectDataInModel() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(courseLogic.updateCourseExceptPrice(new Course())).thenReturn(1);
-        courseDetailsController.updateCourse(new Course(), bindingResult, model);
+        when(courseLogic.updateCourseExceptPrice(new Course.Builder().setId(1).setName("test").
+                setFinished(true).getInstance())).thenReturn(1);
+        courseDetailsController.updateCourse(new Course.Builder().setId(1).setName("test").
+                setFinished(true).getInstance(), bindingResult, model);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-        assertEquals(MSG_INVALID_VIEW, model.asMap().get(MSG), "Course with id - (1) updated!!!");
+        assertEquals(MSG_INVALID_VIEW, model.asMap().get(MSG), "Course with id - (1) updated.");
     }
 
     @Test
@@ -229,9 +244,9 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseHasCorrectDataInModelWhenBindingResultHasError() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(true);
-        HashMap<String, String> teachers = new HashMap<String, String>() {
+        HashMap<Integer, String> teachers = new HashMap<Integer, String>() {
             {
-                put("test@test.com", "test test 'test@test.com'");
+                put(1, "test test 'test@test.com'");
             }
         };
         when(userLogic.getTeachers()).thenReturn(teachers);
@@ -260,7 +275,7 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseReturnCorrectViewWhenException() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new Exception("test"));
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new RuntimeException("test"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
                 ERROR);
     }

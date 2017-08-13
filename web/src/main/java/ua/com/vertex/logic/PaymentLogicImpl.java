@@ -10,6 +10,7 @@ import ua.com.vertex.logic.interfaces.PaymentLogic;
 
 @Service
 public class PaymentLogicImpl implements PaymentLogic {
+
     private final PaymentDaoInf paymentDaoInf;
     private final AccountingDaoInf accountingDaoInf;
 

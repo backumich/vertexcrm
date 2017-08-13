@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

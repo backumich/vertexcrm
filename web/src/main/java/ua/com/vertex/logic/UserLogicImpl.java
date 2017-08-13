@@ -6,14 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,7 +25,6 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public List<String> getAllUserIds() {
-        LOGGER.debug("Call - userDao.getAllUserIds() ;");
         return userDao.getAllUserIds().stream().map(id -> Integer.toString(id)).collect(Collectors.toList());
     }
 
@@ -43,7 +39,7 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) throws Exception {
+    public void saveImage(int userId, byte[] image, String imageType) {
         userDao.saveImage(userId, image, imageType);
     }
 
@@ -52,8 +48,7 @@ public class UserLogicImpl implements UserLogic {
         return userDao.getImage(userId, imageType);
     }
 
-    @Override
-    public int getQuantityUsers() throws SQLException {
+    public int getQuantityUsers() {
         return userDao.getQuantityUsers();
     }
 
@@ -62,16 +57,6 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug("Get part data users list (dataNavigator)");
 
         return userDao.getUsersPerPages(dataNavigator);
-    }
-
-    @Override
-    public Optional<User> getUserDetailsByID(int userId) throws SQLException {
-        return userDao.getUserDetailsByID(userId);
-    }
-
-    @Override
-    public EnumMap<Role, Role> getAllRoles() {
-        return userDao.getAllRoles();
     }
 
     @Override
@@ -85,19 +70,17 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public List<User> searchUser(String userData) throws Exception {
-        LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
+    public List<User> searchUser(String userData) {
         return userDao.searchUser(userData);
     }
 
     @Override
-    public Optional<User> userForRegistrationCheck(String userEmail) throws DataAccessException {
-        LOGGER.debug(String.format("Call - userDao.userForRegistrationCheck(%s) ;", userEmail));
+    public Optional<User> userForRegistrationCheck(String userEmail) {
         return userDao.userForRegistrationCheck(userEmail);
     }
 
     @Override
-    public void registrationUserInsert(User user) throws DataAccessException {
+    public void registrationUserInsert(User user) {
         LOGGER.debug(String.format("Call - userDao.registrationUserInsert(%s) ;", user));
         user.setPassword(encryptPassword(user.getPassword()));
         userDao.registrationUserInsert(user);
@@ -111,10 +94,10 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public Map<String, String> getTeachers() throws DataAccessException {
+    public Map<Integer, String> getTeachers() throws DataAccessException {
         LOGGER.debug("Call - userDao.getTeachers()");
 
-        return userDao.getTeachers().stream().collect(Collectors.toMap(User::getEmail,
+        return userDao.getTeachers().stream().collect(Collectors.toMap(User::getUserId,
                 x -> x.getFirstName() + " " + x.getLastName() + " \'" + x.getEmail() + "\'"));
     }
 

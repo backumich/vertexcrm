@@ -21,11 +21,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ua.com.vertex.controllers.AdminController.*;
+import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.CreateCertificateAndUserController.ADD_CERTIFICATE_AND_USER_JSP;
-import static ua.com.vertex.controllers.CreateCertificateAndUserController.CERTIFICATE_WITH_USER_FORM;
-import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
+import static ua.com.vertex.controllers.CreateCertificateAndUserController.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateCertificateAndUserControllerTest {
@@ -100,7 +98,7 @@ public class CreateCertificateAndUserControllerTest {
     @Test
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
         when(certificateLogic.addCertificateAndCreateUser(certificate
-                , user)).thenThrow(new Exception("Test"));
+                , user)).thenThrow(new RuntimeException("Test"));
 
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
                 , ERROR);

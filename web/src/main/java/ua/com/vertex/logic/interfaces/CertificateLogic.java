@@ -15,9 +15,9 @@ public interface CertificateLogic {
 
     Optional<Certificate> getCertificateById(int certificateId);
 
-    int addCertificate(Certificate certificate) throws Exception;
+    int addCertificate(Certificate certificate);
 
-    int addCertificateAndCreateUser(Certificate certificate, User user) throws Exception;
+    int addCertificateAndCreateUser(Certificate certificate, User user);
 
     String generateCertificateUid();
 

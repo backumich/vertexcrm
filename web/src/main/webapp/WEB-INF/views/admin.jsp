@@ -44,13 +44,17 @@
             a.src = g;
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
         ga('create', 'UA-62731553-2', 'auto');
         ga('send', 'pageview');
+
     </script>
     <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
     .en-markup-crop-options div div:first-of-type {
         margin-left: 0 !important;
     }
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -69,6 +73,7 @@
             } catch (e) {
             }
         });
+
         var n = d.getElementsByTagName("script")[0],
             s = d.createElement("script"),
             f = function () {
@@ -77,6 +82,7 @@
         s.type = "text/javascript";
         s.async = true;
         s.src = "https://mc.yandex.ru/metrika/watch.js";
+
         //noinspection JSValidateTypes
         if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
@@ -139,23 +145,37 @@
         <br>
 
         <div>
+            <span class="formHeaderText1">Add course:</span><br><br>
+            <form:form cssClass="buttonText" method="get" action="/addCourse">
+                <input class="black" type="submit" name="addCourse" value="Add course"/>
+            </form:form>
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div>
             <span class="formHeaderText1">Course info:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>
             </form:form>
         </div>
+        <br>
+        <br>
+        <br>
 
-        <br>
-        <br>
-        <br>
+        <div class="hrefText">
+=========
         <div class="container pt1_5" align="center">
+>>>>>>>>> Temporary merge branch 2
             <c:if test="${!empty msg}">
-                <h3><span class="errorText250">${msg}</span></h3>
+                <h3><span class="alert-success">${msg}</span></h3>
             </c:if>
         </div>
         <br>
         <br>
         <br>
+
         <div class="container pt1_5" align="center">
             <div class="hrefText" align="center">
                 <a href="javascript:history.back();">Back</a> |
@@ -163,8 +183,8 @@
             </div>
         </div>
     </div>
-</div>
 
+</div>
 <div class="footer">
     <div class="container">
         <div class="right">

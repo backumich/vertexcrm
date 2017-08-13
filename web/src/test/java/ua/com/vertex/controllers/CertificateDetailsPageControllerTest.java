@@ -92,7 +92,7 @@ public class CertificateDetailsPageControllerTest {
                 .setPhoto(new byte[]{100})
                 .setPassportScan(new byte[]{100})
                 .setPhone("38066 000 00 00")
-                .setRole(Role.USER)
+                .setRole(Role.ROLE_USER)
                 .getInstance();
 
         attributes = new HashMap<>();

@@ -10,8 +10,6 @@ import ua.com.vertex.utils.LogInfo;
 
 import java.net.SocketTimeoutException;
 
-import java.sql.SQLException;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);

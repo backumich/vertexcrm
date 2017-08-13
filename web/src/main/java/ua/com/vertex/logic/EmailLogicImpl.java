@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.controllers.UserController;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.utils.Aes;
 
@@ -41,11 +40,9 @@ class EmailLogicImpl implements EmailLogic {
             LOGGER.warn("While encrypting email any errors" + user.getEmail());
         }
 
-        String emailMessage = header + user.getFirstName() + " " + user.getLastName() + "." + "\n"
+        return header + user.getFirstName() + " " + user.getLastName() + "." + "\n"
                 + body + "\n"
                 + confirmationLink + "http://localhost:8080/activationUser?activeUser=" + stringEmailAES + "\n"
                 + footer;
-
-        return emailMessage;
     }
 }

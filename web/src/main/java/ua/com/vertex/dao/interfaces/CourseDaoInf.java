@@ -5,23 +5,20 @@ import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface CourseDaoInf {
 
-    int addCourse(Course course) throws SQLException;
-
-    int getQuantityCourses() throws SQLException;
-
     List<Course> getAllCourses(DataNavigator dataNavigator);
 
-    int createCourse(Course course);
+    int getQuantityCourses();
+
+    int addCourse(Course course);
 
     List<Course> getAllCoursesWithDept();
 
-    List<Course> searchCourseByNameAndStatus(Course course);
+    List<Course> searchCourseByNameAndStatus(String name, boolean isFinished);
 
     int updateCourseExceptPrice(Course course);
 

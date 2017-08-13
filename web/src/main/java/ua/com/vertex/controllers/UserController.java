@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getCertificateByUserId", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
     public String getAllCertificatesByUserEmail(Model model) {
 
         LOGGER.debug(LOG_REQ_IN);

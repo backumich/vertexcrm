@@ -5,22 +5,24 @@ import ua.com.vertex.beans.CourseUserDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public interface CourseLogic {
-    List<Course> getAllCoursesWithDept() throws Exception;
 
-    List<Course> searchCourseByNameAndStatus(Course course) throws Exception;
+    int getQuantityCourses();
 
-    int getQuantityCourses() throws SQLException;
+    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
-    int addCourse(Course course) throws Exception;
+    int addCourse(Course course);
 
-    int updateCourseExceptPrice(Course course) throws Exception;
+    List<Course> getAllCoursesWithDept();
 
-    Optional<Course> getCourseById(int courseId) throws Exception;
+    List<Course> searchCourseByNameAndStatus(String name, boolean isFinished);
+
+    int updateCourseExceptPrice(Course course);
+
+    Optional<Course> getCourseById(int courseId);
 
     List<User> getUsersAssignedToCourse(int courseId);
 
@@ -29,7 +31,5 @@ public interface CourseLogic {
     void assignUserToCourse(CourseUserDto dto);
 
     List<User> searchForUsersToAssign(CourseUserDto dto);
-
-    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
 
 }

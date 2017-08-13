@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
-<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -72,7 +72,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera == "[object Opera]") {
+        if (w.opera === "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -100,37 +100,51 @@
     </div>
 </div>
 <div class="page gray-page mh100">
-    <div class="container pt1_5" align="centr">
+    <div class="container pt1_5" align="center">
+
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_USER')">
+            <sec:authentication property="principal.username" var="user"/>
+        </sec:authorize>
+        <sec:authorize access="hasRole('ROLE_TEACHER')">
+            <sec:authentication property="principal.username" var="teacher"/>
+        </sec:authorize>
+
+        <c:if test="${admin != null}">
 
         <c:if test="${empty courses}">
             <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
                        action="searchCourse">
-                <table>
+                <span class="fontSize180 silver">Search course :</span><br><br><br>
+                <table class="active" width="500">
                     <tr>
                         <td><form:label path="name" size="100">Course name:</form:label></td>
-                        <td><form:input path="name" placeholder="Course name:" type="text"/></td>
+                        <td style="color: black"><form:input path="name" placeholder="Course name:"
+                                                             type="text"/></td>
                         <td><form:errors path="name"/></td>
                     </tr>
                     <tr>
-                        <td><form:hidden path="start" value="2011-12-03T19:20:30" /></td>
+                        <td><form:hidden path="start" value="2011-12-03"/></td>
                     </tr>
                     <tr>
                         <td><form:label path="finished">Course is finished? </form:label></td>
                         <td><form:checkbox path="finished"/></td>
                         <td><form:errors path="finished"/></td>
                     </tr>
-                    <tr>
-                        <td colspan="5" align="center"><input type="submit" value="Search course"/></td>
-                    </tr>
-                </table>
+                </table
+                <br>
+                <input style="color: black" type="submit" value="Search"/>
             </form:form>
         </c:if>
     </div>
-    <div>
+    <div class="container pt1_5" align="center">
         <c:if test="${!empty courses}">
-            <form:form method="post" commandName="courseId" action="courseDetails">
-                <table class="active" width="500">
-                    <tr>
+            <form:form cssClass="buttonText" method="get" commandName="courseId" action="/courseDetails">
+                <span class="fontSize180 silver">Select course :</span><br><br><br>
+                <table class="active" width="1200" cols="7">
+                    <tr style="color: #2aabd2">
                         <th>Select course</th>
                         <th>Course name</th>
                         <th>Course start date</th>
@@ -141,43 +155,45 @@
                     </tr>
                     <c:forEach items="${courses}" var="course">
                         <tr>
-                            <td><input type="radio" name="courseId" checked="checked" value=${course.id}>
+                            <td><input type="radio" name="courseId" checked="true" value=${course.id}>
                             </td>
                             <td>${course.name}</td>
                             <td>${course.start}</td>
                             <td>${course.finished}</td>
                             <td>${course.price}</td>
-                            <td>${course.teacherName}</td>
+                            <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
                             <td>${course.schedule}</td>
                             <td>
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
-                <tr>
-                    <td colspan="5" align="center"><input type="submit" value="Select course"/></td>
-                </tr>
+                <br>
+                <input style="color: black" type="submit" value="Select"/>
             </form:form>
         </c:if>
     </div>
-
     <br>
     <br>
     <br>
-    <c:if test="${!empty msg}">
-        <h3><span class="errorText250">${msg}</span></h3>
+    <div class="container pt1_5" align="center">
+        <c:if test="${!empty msg}">
+            <h3><span class="errorText250">${msg}</span></h3>
+        </c:if>
+    </div>
     </c:if>
     <br>
     <br>
     <br>
-
-    <div class="hrefText">
-        <a href="javascript:history.back();">Back</a> |
-        <a href="<c:url value="/" />">Home</a>
+    <div class="container pt1_5" align="center">
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
-
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -190,7 +206,8 @@
         <div class="left">
             <div class="row">
                 <div class="col-md-5">
-                    <div class="copyright"><a href="https://vertex-academy.com/lecturer-bakumov.html#" class="logo"></a>©
+                    <div class="copyright"><a href="https://vertex-academy.com/lecturer-bakumov.html#"
+                                              class="logo"></a>©
                         2015, Все права защищены
                     </div>
                 </div>

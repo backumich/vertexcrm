@@ -3,6 +3,7 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.utils.LogInfo;
@@ -15,12 +16,14 @@ public class LogOutController {
     private final LogInfo logInfo;
 
     @RequestMapping(value = "/logOut")
+    @PreAuthorize("isAuthenticated()")
     public String showLogOutPage() {
         LOGGER.debug(logInfo.getId() + LOGOUT + " page accessed");
         return LOGOUT;
     }
 
     @RequestMapping(value = "/logOutRefuse")
+    @PreAuthorize("isAuthenticated()")
     public String processLogOutRefuse() {
         LOGGER.debug(logInfo.getId() + "logging out refused");
         return INDEX;

@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class LoggingLogicImpl implements LoggingLogic {
     private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
-    private static final String ADMIN = Role.ADMIN.name();
+    private static final String ADMIN = Role.ROLE_ADMIN.name();
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
 
@@ -23,7 +23,7 @@ public class LoggingLogicImpl implements LoggingLogic {
     private final UserDaoInf userDao;
 
     @Override
-    public Optional<User> logIn(String email) {
+    public Optional<User> logIn(String email)  {
         Optional<User> toReturn;
 
         if (email.isEmpty()) {
@@ -35,14 +35,9 @@ public class LoggingLogicImpl implements LoggingLogic {
         return toReturn;
     }
 
-    @Override
-    public String setUser(String email, Model model) throws Exception {
-        String view = requiredView();
-        User user = userLogic.getUserByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Not logged in: failed to fetch login details"));
-        model.addAttribute("user", user);
-
-        return view;
+    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
+        this.userLogic = userLogic;
+        this.userDao = userDao;
     }
 
     private String requiredView() throws Exception {
@@ -59,8 +54,13 @@ public class LoggingLogicImpl implements LoggingLogic {
         return view;
     }
 
-    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
-        this.userLogic = userLogic;
-        this.userDao = userDao;
+    @Override
+    public String setUser(String email, Model model) throws Exception {
+        String view = requiredView();
+        User user = userLogic.getUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Not logged in: failed to fetch login details"));
+        model.addAttribute("user", user);
+
+        return view;
     }
 }
