@@ -120,8 +120,8 @@
         <tr></tr>
         <tr></tr>
         <c:forEach items="${assignedUsers}" var="assignedUser">
-            <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dto">
-                <input type="hidden" name="courseId" value="${dto.courseId}">
+            <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dtoCourseUser">
+                <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
                 <input type="hidden" name="userId" value="${assignedUser.userId}">
                 <tr>
                     <td>${assignedUser.email}</td>
@@ -137,8 +137,8 @@
 
     <div class="fontSize180">Search for a user to assign (by name or email):</div>
     <br>
-    <sf:form action="searchForUsersToAssign" method="get" commandName="dto">
-        <input type="hidden" name="courseId" value="${dto.courseId}">
+    <sf:form action="searchForUsersToAssign" method="get" commandName="dtoCourseUser">
+        <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
         <table>
             <tr>
                 <td><label for="searchParam" class="fontSize125 labelWidth300">
@@ -167,8 +167,8 @@
 
     <c:if test="${!empty search}">
         <br>
-        <sf:form action="clearSearchResults" method="get" commandName="dto">
-            <input type="hidden" name="courseId" value="${dto.courseId}">
+        <sf:form action="clearSearchResults" method="get" commandName="dtoCourseUser">
+            <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
             <table>
                 <tr>
                     <td class="buttonPaddingTop fontSize125">
@@ -193,10 +193,10 @@
             <tr></tr>
             <tr></tr>
             <c:forEach items="${freeUsers}" var="freeUser">
-                <sf:form action="assignUser" method="post" commandName="dto">
-                    <input type="hidden" name="searchType" value="${dto.searchType}">
-                    <input type="hidden" name="searchParam" value="${dto.searchParam}">
-                    <input type="hidden" name="courseId" value="${dto.courseId}">
+                <sf:form action="assignUser" method="post" commandName="dtoCourseUser">
+                    <input type="hidden" name="searchType" value="${dtoCourseUser.searchType}">
+                    <input type="hidden" name="searchParam" value="${dtoCourseUser.searchParam}">
+                    <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
                     <input type="hidden" name="userId" value="${freeUser.userId}">
                     <input type="hidden" name="email" value="${freeUser.email}">
                     <input type="hidden" name="firstName" value="${freeUser.firstName}">
@@ -220,7 +220,7 @@
     </c:if><br><br><br>
 
     <sf:form action="courseDetails" method="get">
-        <input type="hidden" name="courseId" value="${dto.courseId}"/>
+        <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}"/>
         <input type="submit" value="Back to course details" class="black fontSize125"/>
     </sf:form>
 

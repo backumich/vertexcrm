@@ -24,7 +24,7 @@ public class CourseUsersController {
     private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
-    private static final String DTO = "dto";
+    private static final String DTO = "dtoCourseUser";
 
     private final CourseLogic courseLogic;
 
@@ -35,43 +35,45 @@ public class CourseUsersController {
         LOGGER.debug("Show users assigned to course id=" + course.getId());
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
-        DtoCourseUser dto = new DtoCourseUser();
-        dto.setCourseId(course.getId());
+        DtoCourseUser dtoCourseUser = new DtoCourseUser();
+        dtoCourseUser.setCourseId(course.getId());
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(new User());
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
 
         return COURSE_USERS;
     }
 
     @PostMapping(value = "/removeUserFromCourse")
     @PreAuthorize("hasRole('ADMIN')")
-    public String removeUserFromAssigned(@ModelAttribute DtoCourseUser dto, Model model) {
+    public String removeUserFromAssigned(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        LOGGER.debug(String.format("Remove user=%d from course id=%d", dto.getUserId(), dto.getCourseId()));
+        LOGGER.debug(String.format("Remove user=%d from course id=%d", dtoCourseUser.getUserId(),
+                dtoCourseUser.getCourseId()));
 
-        courseLogic.removeUserFromCourse(dto);
-        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
+        courseLogic.removeUserFromCourse(dtoCourseUser);
+        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
 
         return COURSE_USERS;
     }
 
     @PostMapping(value = "/assignUser")
     @PreAuthorize("hasRole('ADMIN')")
-    public String assignUserToCourse(@ModelAttribute DtoCourseUser dto, Model model) {
+    public String assignUserToCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        LOGGER.debug(String.format("Assign user=%d to course id=%d", dto.getUserId(), dto.getCourseId()));
+        LOGGER.debug(String.format("Assign user=%d to course id=%d", dtoCourseUser.getUserId(),
+                dtoCourseUser.getCourseId()));
 
-        courseLogic.assignUserToCourse(dto);
-        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
-        List<User> freeUsers = courseLogic.searchForUsersToAssign(dto);
+        courseLogic.assignUserToCourse(dtoCourseUser);
+        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
+        List<User> freeUsers = courseLogic.searchForUsersToAssign(dtoCourseUser);
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(FREE_USERS, freeUsers);
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
 
         return COURSE_USERS;
@@ -79,17 +81,18 @@ public class CourseUsersController {
 
     @GetMapping(value = "/searchForUsersToAssign")
     @PreAuthorize("hasRole('ADMIN')")
-    public String searchForUsersToAssign(@ModelAttribute DtoCourseUser dto, Model model) {
+    public String searchForUsersToAssign(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
         LOGGER.debug(String.format("Search for users that can be assigned to course id=%d" +
-                "by searchType=%s and searchParam=%s", dto.getCourseId(), dto.getSearchType(), dto.getSearchParam()));
+                        "by searchType=%s and searchParam=%s", dtoCourseUser.getCourseId(), dtoCourseUser.getSearchType(),
+                dtoCourseUser.getSearchParam()));
 
-        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
-        List<User> freeUsers = courseLogic.searchForUsersToAssign(dto);
+        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
+        List<User> freeUsers = courseLogic.searchForUsersToAssign(dtoCourseUser);
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(FREE_USERS, freeUsers);
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
 
         return COURSE_USERS;
@@ -97,26 +100,26 @@ public class CourseUsersController {
 
     @GetMapping(value = "/clearSearchResults")
     @PreAuthorize("hasRole('ADMIN')")
-    public String clearSearchResults(@ModelAttribute DtoCourseUser dto, Model model) {
+    public String clearSearchResults(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
         LOGGER.debug("Clear free users search results");
 
-        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
+        List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
 
         return COURSE_USERS;
     }
 
     @PostMapping(value = "/confirmUserRemovalFromCourse")
     @PreAuthorize("hasRole('ADMIN')")
-    public String confirmUserRemovalFromCourse(@ModelAttribute DtoCourseUser dto, Model model) {
+    public String confirmUserRemovalFromCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
         LOGGER.debug(String.format("Confirm removing user id=%d from course id=%d",
-                dto.getUserId(), dto.getCourseId()));
+                dtoCourseUser.getUserId(), dtoCourseUser.getCourseId()));
 
         model.addAttribute(new Course());
-        model.addAttribute(DTO, dto);
+        model.addAttribute(DTO, dtoCourseUser);
 
         return REMOVAL_CONFIRM;
     }

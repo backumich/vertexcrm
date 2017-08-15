@@ -111,15 +111,15 @@
     <table>
         <tr>
             <td>
-                <sf:form action="removeUserFromCourse" method="post" commandName="dto">
-                    <input type="hidden" name="courseId" value="${dto.courseId}">
-                    <input type="hidden" name="userId" value="${dto.userId}">
+                <sf:form action="removeUserFromCourse" method="post" commandName="dtoCourseUser">
+                    <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+                    <input type="hidden" name="userId" value="${dtoCourseUser.userId}">
                     <input type="submit" value="Yes" class="buttonWidth black"/>
                 </sf:form>
             </td>
             <td>
-                <sf:form action="showCourseAndUsers" method="get" commandName="dto">
-                    <input type="hidden" name="id" value="${dto.courseId}">
+                <sf:form action="showCourseAndUsers" method="get" commandName="dtoCourseUser">
+                    <input type="hidden" name="id" value="${dtoCourseUser.courseId}">
                     <input type="submit" value="No" class="buttonWidth black"/>
                 </sf:form>
             </td>
