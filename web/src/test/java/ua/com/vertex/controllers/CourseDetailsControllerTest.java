@@ -2,7 +2,6 @@ package ua.com.vertex.controllers;
 
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -70,16 +69,6 @@ public class CourseDetailsControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course(), bindingResult, model)
                 , SEARCH_COURSE_JSP);
-    }
-
-    @Test
-    @Ignore
-    public void searchCourseHasCorrectDataInModelWhenBindingResultHasError() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(true);
-        courseDetailsController.searchCourse(new Course(), bindingResult, model);
-        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), "Enter the correct data !!! ");
-
     }
 
     @Test
