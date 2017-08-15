@@ -95,7 +95,6 @@ public class CourseUsersControllerTest2 {
     @WithAnonymousUser
     public void removeUserFromAssignedFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
-        dto.setEmail(user2.getEmail());
         assignedUsers = Arrays.asList(user1, user2);
 
         controller.removeUserFromAssigned(dto, model);
@@ -109,10 +108,6 @@ public class CourseUsersControllerTest2 {
     public void assignUserToCourseFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setUserId(user3.getUserId());
-        dto.setEmail(user3.getEmail());
-        dto.setFirstName(user3.getFirstName());
-        dto.setLastName(user3.getLastName());
-        dto.setPhone(user3.getPhone());
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
         assignedUsers = Arrays.asList(user1, user2, user3);
 

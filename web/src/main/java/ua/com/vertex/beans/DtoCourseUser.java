@@ -5,10 +5,6 @@ import java.util.Objects;
 public class DtoCourseUser {
     private int courseId;
     private int userId;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private String phone;
     private String searchType;
     private String searchParam;
 
@@ -26,38 +22,6 @@ public class DtoCourseUser {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getSearchType() {
@@ -83,22 +47,18 @@ public class DtoCourseUser {
         DtoCourseUser that = (DtoCourseUser) o;
         return courseId == that.courseId &&
                 userId == that.userId &&
-                Objects.equals(email, that.email) &&
-                Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(phone, that.phone) &&
                 Objects.equals(searchType, that.searchType) &&
                 Objects.equals(searchParam, that.searchParam);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, userId, email, firstName, lastName, phone, searchType, searchParam);
+        return Objects.hash(courseId, userId, searchType, searchParam);
     }
 
     @Override
     public String toString() {
-        return String.format("%d %d %s %s %s %s %s %s",
-                courseId, userId, email, firstName, lastName, phone, searchType, searchParam);
+        return String.format("%d %d %s %s",
+                courseId, userId, searchType, searchParam);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class RootConfig {
 
-    @Bean
+    @Bean(name = "DS")
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return new BasicDataSource();

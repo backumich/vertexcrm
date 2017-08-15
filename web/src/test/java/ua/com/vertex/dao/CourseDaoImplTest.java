@@ -167,9 +167,7 @@ public class CourseDaoImplTest {
         dto.setUserId(user1.getUserId());
 
         assertThat(courseDaoInf.getUsersAssignedToCourse(COURSE_ID), hasItem(user1));
-
         courseDaoInf.removeUserFromCourse(dto);
-
         assertThat(courseDaoInf.getUsersAssignedToCourse(COURSE_ID), not(hasItem(user1)));
     }
 
@@ -178,15 +176,9 @@ public class CourseDaoImplTest {
     public void assignUserToCourse() {
         dto.setCourseId(COURSE_ID);
         dto.setUserId(user3.getUserId());
-        dto.setEmail(user3.getEmail());
-        dto.setFirstName(user3.getFirstName());
-        dto.setLastName(user3.getLastName());
-        dto.setPhone(user3.getPhone());
 
         assertThat(courseDaoInf.getUsersAssignedToCourse(COURSE_ID), not(hasItem(user3)));
-
         courseDaoInf.assignUserToCourse(dto);
-
         assertThat(courseDaoInf.getUsersAssignedToCourse(COURSE_ID), hasItem(user3));
     }
 
