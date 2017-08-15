@@ -72,15 +72,6 @@ public class CourseDetailsControllerTest {
     }
 
     @Test
-    public void searchCourseHasCorrectDataInModelWhenBindingResultHasError() throws Exception {
-        when(bindingResult.hasErrors()).thenReturn(true);
-        courseDetailsController.searchCourse(new Course(), bindingResult, model);
-        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), "Enter the correct data !!! ");
-
-    }
-
-    @Test
     public void searchCourseReturnCorrectViewWhenNotEmptyList() throws Exception {
         when(courseLogic.searchCourseByNameAndStatus("test", true)).
                 thenReturn(Collections.singletonList(new Course.Builder().setName("test").
