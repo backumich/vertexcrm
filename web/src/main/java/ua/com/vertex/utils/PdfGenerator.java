@@ -6,7 +6,6 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import ua.com.vertex.beans.PdfDto;
@@ -21,7 +20,6 @@ import java.util.Locale;
 public class PdfGenerator {
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
-    private final LogInfo logInfo;
 
     public void generatePdf(String pdfFileName, PdfDto dto) throws Exception {
         Document document = new Document();
@@ -37,7 +35,7 @@ public class PdfGenerator {
             setText(writer, dto);
             document.close();
 
-            LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
+            LOGGER.debug(pdfFileName + " file generated");
         }
     }
 
@@ -80,10 +78,5 @@ public class PdfGenerator {
         cb.showTextAligned(Element.ALIGN_CENTER, parameter, shiftX, shiftY, 0);
         cb.endText();
         cb.restoreState();
-    }
-
-    @Autowired
-    public PdfGenerator(LogInfo logInfo) {
-        this.logInfo = logInfo;
     }
 }

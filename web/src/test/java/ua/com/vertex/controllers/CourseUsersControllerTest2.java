@@ -14,11 +14,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,20 +45,17 @@ public class CourseUsersControllerTest2 {
     private CourseLogic courseLogic;
 
     @Mock
-    private LogInfo logInfo;
-
-    @Mock
     private Model model;
 
     private CourseUsersController controller;
-    private User user1, user2, user3, user4, user5, user6, user7, user8;
-    private CourseUserDto dto;
+    private User user1, user2, user3, user4, user5, user6, user7, user8, user9;
+    private DtoCourseUser dto;
     private List<User> assignedUsers;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new CourseUsersController(courseLogic, logInfo);
+        controller = new CourseUsersController(courseLogic);
         user1 = new User.Builder().setUserId(401).setEmail("user1@email.com")
                 .setFirstName("Name1").setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
         user2 = new User.Builder().setUserId(402).setEmail("user2@email.com")
@@ -68,15 +64,17 @@ public class CourseUsersControllerTest2 {
                 .setFirstName("Name3").setLastName("Surname3").setPhone("+38050 333 3333").getInstance();
         user4 = new User.Builder().setUserId(1).setEmail("email1").setFirstName("FirstName").setLastName("LastName")
                 .setPhone("38066 000 00 00").getInstance();
-        user5 = new User.Builder().setUserId(22).setEmail("22@test.com").setFirstName("FirstName")
+        user5 = new User.Builder().setUserId(2).setEmail("email1@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
-        user6 = new User.Builder().setUserId(33).setEmail("33@test.com").setFirstName("FirstName")
+        user6 = new User.Builder().setUserId(22).setEmail("22@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
-        user7 = new User.Builder().setUserId(34).setEmail("34@test.com").setFirstName("FirstName")
+        user7 = new User.Builder().setUserId(33).setEmail("33@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
-        user8 = new User.Builder().setUserId(44).setEmail("44@test.com").setFirstName("FirstName")
+        user8 = new User.Builder().setUserId(34).setEmail("34@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
-        dto = new CourseUserDto();
+        user9 = new User.Builder().setUserId(44).setEmail("44@test.com").setFirstName("FirstName")
+                .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
+        dto = new DtoCourseUser();
     }
 
     @Test
@@ -133,7 +131,7 @@ public class CourseUsersControllerTest2 {
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
         dto.setSearchParam("FirstName");
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8);
+        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9);
 
         controller.searchForUsersToAssign(dto, model);
 
@@ -150,7 +148,7 @@ public class CourseUsersControllerTest2 {
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
         dto.setSearchParam("LastName");
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8);
+        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9);
 
         controller.searchForUsersToAssign(dto, model);
 
@@ -167,7 +165,7 @@ public class CourseUsersControllerTest2 {
         dto.setSearchType(SEARCH_TYPE_EMAIL);
         dto.setSearchParam("44@test.com");
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(user8);
+        List<User> freeUsers = Arrays.asList(user9);
 
         controller.searchForUsersToAssign(dto, model);
 

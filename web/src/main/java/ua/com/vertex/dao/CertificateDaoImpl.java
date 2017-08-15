@@ -14,7 +14,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
-import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.Date;
@@ -37,7 +36,6 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final LogInfo logInfo;
 
     @Override
     public List<Certificate> getAllCertificatesByUserEmail(String eMail) {
@@ -91,20 +89,18 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     @Override
     public Optional<Certificate> getCertificateById(int certificateId) {
 
-        LOGGER.debug(logInfo.getId() + "Retrieving certificate by certificate UID=" + certificateId);
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certification_id =:certificateId";
+                + "FROM Certificate WHERE certification_id =:certification_id";
 
         Certificate certificate;
         try {
             certificate = jdbcTemplate.queryForObject(query,
-                    new MapSqlParameterSource(CERTIFICATE_ID, certificateId), new CertificateRowMapper());
+                    new MapSqlParameterSource(CERTIFICATION_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
             certificate = null;
         }
 
-        LOGGER.debug(logInfo.getId() +
-                (certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
+        LOGGER.debug((certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
 
         return Optional.ofNullable(certificate);
     }
@@ -112,9 +108,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     @Override
     public Optional<Certificate> getCertificateByUid(String certificateUid) {
 
-        LOGGER.debug(logInfo.getId() + "Retrieving certificate by certificate UID=" + certificateUid);
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
-                + "FROM Certificate WHERE certificate_uid =:certificateUid";
+                + "FROM Certificate WHERE certificate_uid =:certificate_uid";
 
         Certificate certificate;
         try {
@@ -124,8 +119,8 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = null;
         }
 
-        LOGGER.debug(logInfo.getId() +
-                (certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=") + certificateUid);
+        LOGGER.debug((certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=")
+                + certificateUid);
 
         return Optional.ofNullable(certificate);
     }
@@ -144,8 +139,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Autowired
-    public CertificateDaoImpl(DataSource dataSource, LogInfo logInfo) {
+    public CertificateDaoImpl(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.logInfo = logInfo;
     }
 }

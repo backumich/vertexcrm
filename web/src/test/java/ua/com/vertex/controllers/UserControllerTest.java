@@ -2,14 +2,15 @@ package ua.com.vertex.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.UserController.CERTIFICATES;
 import static ua.com.vertex.controllers.UserController.USER_JSP;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
 
     private UserController underTest;
@@ -30,15 +31,13 @@ public class UserControllerTest {
     private Model model;
 
     @Mock
-    private LogInfo logInfo;
-
-    @Mock
     private CertificateLogic certificateLogic;
+    @Mock
+    private EmailExtractor emailExtractor;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        underTest = new UserController(logInfo, certificateLogic);
+        underTest = new UserController(certificateLogic, emailExtractor);
         model = new ExtendedModelMap();
     }
 
@@ -62,7 +61,7 @@ public class UserControllerTest {
     @Test
     public void getAllCertificateByUserEmailShouldReturnAppropriateStringWhenException() {
         //noinspection unchecked
-        when(logInfo.getEmail()).thenThrow(Exception.class);
+        when(emailExtractor.getEmailFromAuthentication()).thenThrow(Exception.class);
         assertEquals("Return wrong view", ERROR, underTest.getAllCertificatesByUserEmail(model));
     }
 
@@ -72,7 +71,7 @@ public class UserControllerTest {
         certificates.add(new Certificate.Builder().getInstance());
 
         when(certificateLogic.getAllCertificatesByUserEmail("test")).thenReturn(certificates);
-        when(logInfo.getEmail()).thenReturn("test");
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn("test");
 
         underTest.getAllCertificatesByUserEmail(model);
 

@@ -3,16 +3,16 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CourseLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.util.List;
 
@@ -27,15 +27,15 @@ public class CourseUsersController {
     private static final String DTO = "dto";
 
     private final CourseLogic courseLogic;
-    private final LogInfo logInfo;
 
     @GetMapping(value = "/showCourseAndUsers")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {
 
-        LOGGER.debug(logInfo.getId() + "Show users assigned to course id=" + course.getId());
+        LOGGER.debug("Show users assigned to course id=" + course.getId());
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
-        CourseUserDto dto = new CourseUserDto();
+        DtoCourseUser dto = new DtoCourseUser();
         dto.setCourseId(course.getId());
 
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -46,10 +46,10 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/removeUserFromCourse")
-    public String removeUserFromAssigned(@ModelAttribute CourseUserDto dto, Model model) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String removeUserFromAssigned(@ModelAttribute DtoCourseUser dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Remove user=%d from course id=%d",
-                dto.getUserId(), dto.getCourseId()));
+        LOGGER.debug(String.format("Remove user=%d from course id=%d", dto.getUserId(), dto.getCourseId()));
 
         courseLogic.removeUserFromCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -60,10 +60,10 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/assignUser")
-    public String assignUserToCourse(@ModelAttribute CourseUserDto dto, Model model) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String assignUserToCourse(@ModelAttribute DtoCourseUser dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Assign user=%d to course id=%d",
-                dto.getUserId(), dto.getCourseId()));
+        LOGGER.debug(String.format("Assign user=%d to course id=%d", dto.getUserId(), dto.getCourseId()));
 
         courseLogic.assignUserToCourse(dto);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -78,9 +78,10 @@ public class CourseUsersController {
     }
 
     @GetMapping(value = "/searchForUsersToAssign")
-    public String searchForUsersToAssign(@ModelAttribute CourseUserDto dto, Model model) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String searchForUsersToAssign(@ModelAttribute DtoCourseUser dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Search for users that can be assigned to course id=%d" +
+        LOGGER.debug(String.format("Search for users that can be assigned to course id=%d" +
                 "by searchType=%s and searchParam=%s", dto.getCourseId(), dto.getSearchType(), dto.getSearchParam()));
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
@@ -95,9 +96,10 @@ public class CourseUsersController {
     }
 
     @GetMapping(value = "/clearSearchResults")
-    public String clearSearchResults(@ModelAttribute CourseUserDto dto, Model model) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String clearSearchResults(@ModelAttribute DtoCourseUser dto, Model model) {
 
-        LOGGER.debug(logInfo + "Clear free users search results");
+        LOGGER.debug("Clear free users search results");
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dto.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -107,9 +109,10 @@ public class CourseUsersController {
     }
 
     @PostMapping(value = "/confirmUserRemovalFromCourse")
-    public String confirmUserRemovalFromCourse(@ModelAttribute CourseUserDto dto, Model model) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public String confirmUserRemovalFromCourse(@ModelAttribute DtoCourseUser dto, Model model) {
 
-        LOGGER.debug(logInfo.getId() + String.format("Confirm removing user id=%d from course id=%d",
+        LOGGER.debug(String.format("Confirm removing user id=%d from course id=%d",
                 dto.getUserId(), dto.getCourseId()));
 
         model.addAttribute(new Course());
@@ -119,8 +122,7 @@ public class CourseUsersController {
     }
 
     @Autowired
-    public CourseUsersController(CourseLogic courseLogic, LogInfo logInfo) {
+    public CourseUsersController(CourseLogic courseLogic) {
         this.courseLogic = courseLogic;
-        this.logInfo = logInfo;
     }
 }

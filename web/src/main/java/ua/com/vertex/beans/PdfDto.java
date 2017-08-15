@@ -3,14 +3,16 @@ package ua.com.vertex.beans;
 import java.util.Objects;
 
 public class PdfDto {
+    private String email;
     private String firstName;
     private String lastName;
     private String courseName;
     private String certificationDate;
     private String certificateUid;
 
-    public PdfDto(String firstName, String lastName, String courseName, String certificationDate,
+    public PdfDto(String email, String firstName, String lastName, String courseName, String certificationDate,
                   String certificateUid) {
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.courseName = courseName;
@@ -19,6 +21,14 @@ public class PdfDto {
     }
 
     public PdfDto() {
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -65,16 +75,17 @@ public class PdfDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PdfDto that = (PdfDto) o;
-        return Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(courseName, that.courseName) &&
-                Objects.equals(certificationDate, that.certificationDate) &&
-                Objects.equals(certificateUid, that.certificateUid);
+        PdfDto pdfDto = (PdfDto) o;
+        return Objects.equals(email, pdfDto.email) &&
+                Objects.equals(firstName, pdfDto.firstName) &&
+                Objects.equals(lastName, pdfDto.lastName) &&
+                Objects.equals(courseName, pdfDto.courseName) &&
+                Objects.equals(certificationDate, pdfDto.certificationDate) &&
+                Objects.equals(certificateUid, pdfDto.certificateUid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, courseName, certificationDate, certificateUid);
+        return Objects.hash(email, firstName, lastName, courseName, certificationDate, certificateUid);
     }
 }

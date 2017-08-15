@@ -219,7 +219,7 @@
         <span class="fontSize140">No users found</span>
     </c:if><br><br><br>
 
-    <sf:form action="courseDetails" method="post">
+    <sf:form action="courseDetails" method="get">
         <input type="hidden" name="courseId" value="${dto.courseId}"/>
         <input type="submit" value="Back to course details" class="black fontSize125"/>
     </sf:form>

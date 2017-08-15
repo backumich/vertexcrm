@@ -3,7 +3,7 @@ package ua.com.vertex.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
@@ -57,17 +57,17 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public void removeUserFromCourse(CourseUserDto dto) {
+    public void removeUserFromCourse(DtoCourseUser dto) {
         courseDaoInf.removeUserFromCourse(dto);
     }
 
     @Override
-    public void assignUserToCourse(CourseUserDto dto) {
+    public void assignUserToCourse(DtoCourseUser dto) {
         courseDaoInf.assignUserToCourse(dto);
     }
 
     @Override
-    public List<User> searchForUsersToAssign(CourseUserDto dto) {
+    public List<User> searchForUsersToAssign(DtoCourseUser dto) {
         return courseDaoInf.searchForUsersToAssign(dto);
     }
 

@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.dao.interfaces.CourseDaoForTest;
@@ -44,7 +44,7 @@ public class CourseDaoImplTest {
     private Course course;
     private User user1;
     private User user3;
-    private CourseUserDto dto;
+    private DtoCourseUser dto;
 
     private static final int COURSE_ID = 1;
     private static final String SEARCH_TYPE_FIRST_NAME = "first_name";
@@ -62,7 +62,7 @@ public class CourseDaoImplTest {
                 .setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
         user3 = new User.Builder().setUserId(403).setEmail("user3@email.com").setFirstName("Name3")
                 .setLastName("Surname3").setPhone("+38050 333 3333").getInstance();
-        dto = new CourseUserDto();
+        dto = new DtoCourseUser();
     }
 
     @Test
@@ -288,8 +288,10 @@ public class CourseDaoImplTest {
 
     @Test
     @WithAnonymousUser
-    public void searchUsersByEmailNonMatch() {
+    public void searchUsersByEmailNotMatch() {
         final String nonMatchingEmail = "notExistingEmail";
+        final User teacher = new User.Builder().setUserId(1).setEmail("email1")
+                .setFirstName("FirstName").setLastName("LastName").getInstance();
         dto.setSearchType(SEARCH_TYPE_EMAIL);
         dto.setSearchParam(nonMatchingEmail);
 
@@ -298,8 +300,9 @@ public class CourseDaoImplTest {
         assertTrue(users.size() == 0);
         Course course = new Course.Builder().setId(1).setName("JavaPro")
                 .setStart(LocalDate.of(2017, 2, 1))
-                .setFinished(false).setPrice(BigDecimal.valueOf(8000)).setTeacherName("Test").setNotes("Test").getInstance();
-        assertTrue("Maybe method was changed", courseDaoInf.getAllCoursesWithDept().contains(course));
+                .setFinished(false).setPrice(BigDecimal.valueOf(4000))
+                .setTeacher(teacher).setNotes("Test").getInstance();
+        assertTrue(courseDaoInf.getAllCoursesWithDept().contains(course));
     }
 
     @Test

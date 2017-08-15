@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -13,7 +12,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.context.TestConfig;
-import ua.com.vertex.utils.LogInfo;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -25,16 +23,13 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ActiveProfiles("test")
 public class LogOutControllerTest {
 
-    @Mock
-    private LogInfo logInfo;
-
     private MockMvc mockMvc;
     private LogOutController controller;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new LogOutController(logInfo);
+        controller = new LogOutController();
     }
 
     @Test

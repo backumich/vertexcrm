@@ -12,7 +12,6 @@ import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.util.*;
 
@@ -23,7 +22,6 @@ public class CertificateLogicImpl implements CertificateLogic {
 
     private final UserDaoInf userDaoInf;
     private final CertificateDaoInf certificateDaoInf;
-    private final LogInfo logInfo;
 
     private static final String USER = "user";
     private static final String CERTIFICATE = "certificate";
@@ -71,7 +69,7 @@ public class CertificateLogicImpl implements CertificateLogic {
 
     @Override
     public Map<String, Object> getUserAndCertificate(String certificateUid) {
-        LOGGER.debug(logInfo.getId() + "Processing request with certificateId=" + certificateUid);
+        LOGGER.debug("Processing request with certificateId=" + certificateUid);
 
         Map<String, Object> attributes = new HashMap<>();
         Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
@@ -84,9 +82,8 @@ public class CertificateLogicImpl implements CertificateLogic {
     }
 
     @Autowired
-    public CertificateLogicImpl(UserDaoInf userDaoInf, CertificateDaoInf certificateDaoInf, LogInfo logInfo) {
+    public CertificateLogicImpl(UserDaoInf userDaoInf, CertificateDaoInf certificateDaoInf) {
         this.userDaoInf = userDaoInf;
         this.certificateDaoInf = certificateDaoInf;
-        this.logInfo = logInfo;
     }
 }

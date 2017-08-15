@@ -163,11 +163,7 @@
         <br>
         <br>
         <br>
-
-        <div class="hrefText">
-=========
-        <div class="container pt1_5" align="center">
->>>>>>>>> Temporary merge branch 2
+        <div align="center">
             <c:if test="${!empty msg}">
                 <h3><span class="alert-success">${msg}</span></h3>
             </c:if>
@@ -176,7 +172,7 @@
         <br>
         <br>
 
-        <div class="container pt1_5" align="center">
+        <div align="center">
             <div class="hrefText" align="center">
                 <a href="javascript:history.back();">Back</a> |
                 <a href="<c:url value="/" />">Home</a>

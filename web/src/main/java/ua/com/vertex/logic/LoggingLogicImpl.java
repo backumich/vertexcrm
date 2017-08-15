@@ -1,5 +1,6 @@
 package ua.com.vertex.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -35,11 +36,6 @@ public class LoggingLogicImpl implements LoggingLogic {
         return toReturn;
     }
 
-    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
-        this.userLogic = userLogic;
-        this.userDao = userDao;
-    }
-
     private String requiredView() throws Exception {
         String view = USER_PAGE;
         Collection authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
@@ -62,5 +58,11 @@ public class LoggingLogicImpl implements LoggingLogic {
         model.addAttribute("user", user);
 
         return view;
+    }
+
+    @Autowired
+    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
+        this.userLogic = userLogic;
+        this.userDao = userDao;
     }
 }

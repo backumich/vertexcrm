@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 
@@ -72,21 +72,21 @@ public class CourseLogicImplTest {
 
     @Test
     public void removeUserFromCourseInvokesDao() {
-        CourseUserDto dto = new CourseUserDto();
+        DtoCourseUser dto = new DtoCourseUser();
         courseLogic.removeUserFromCourse(dto);
         verify(courseDaoInf, times(1)).removeUserFromCourse(dto);
     }
 
     @Test
     public void assignUserToCourseInvokesDao() {
-        CourseUserDto dto = new CourseUserDto();
+        DtoCourseUser dto = new DtoCourseUser();
         courseLogic.assignUserToCourse(dto);
         verify(courseDaoInf, times(1)).assignUserToCourse(dto);
     }
 
     @Test
     public void searchForUsersToAssignInvokesDao() {
-        CourseUserDto dto = new CourseUserDto();
+        DtoCourseUser dto = new DtoCourseUser();
         courseLogic.searchForUsersToAssign(dto);
         verify(courseDaoInf, times(1)).searchForUsersToAssign(dto);
     }

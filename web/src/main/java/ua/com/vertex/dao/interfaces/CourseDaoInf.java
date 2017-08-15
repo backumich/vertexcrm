@@ -1,7 +1,7 @@
 package ua.com.vertex.dao.interfaces;
 
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.beans.CourseUserDto;
+import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -26,10 +26,10 @@ public interface CourseDaoInf {
 
     List<User> getUsersAssignedToCourse(int courseId);
 
-    void removeUserFromCourse(CourseUserDto dto);
+    void removeUserFromCourse(DtoCourseUser dto);
 
-    void assignUserToCourse(CourseUserDto dto);
+    void assignUserToCourse(DtoCourseUser dto);
 
-    List<User> searchForUsersToAssign(CourseUserDto dto);
+    List<User> searchForUsersToAssign(DtoCourseUser dto);
 
 }

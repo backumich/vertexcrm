@@ -2,8 +2,9 @@ package ua.com.vertex.beans;
 
 import java.util.Objects;
 
-public class CourseUserDTO {
+public class DtoCourseUser {
     private int courseId;
+    private int userId;
     private String email;
     private String firstName;
     private String lastName;
@@ -17,6 +18,14 @@ public class CourseUserDTO {
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -71,8 +80,9 @@ public class CourseUserDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CourseUserDTO that = (CourseUserDTO) o;
+        DtoCourseUser that = (DtoCourseUser) o;
         return courseId == that.courseId &&
+                userId == that.userId &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
@@ -83,13 +93,12 @@ public class CourseUserDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, email, firstName, lastName, phone, searchType, searchParam);
+        return Objects.hash(courseId, userId, email, firstName, lastName, phone, searchType, searchParam);
     }
 
     @Override
     public String toString() {
-        return String.format("%d %s %s %s %s %s %s",
-                courseId, email, firstName, lastName, phone, searchType, searchParam);
+        return String.format("%d %d %s %s %s %s %s %s",
+                courseId, userId, email, firstName, lastName, phone, searchType, searchParam);
     }
 }
-

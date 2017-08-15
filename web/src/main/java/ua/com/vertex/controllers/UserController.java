@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.PdfDto;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.List;
 
@@ -28,10 +28,10 @@ public class UserController {
     private static final String LOG_GET_EMAIL = "Request to '/getCertificateByUserId' with userEmail=";
     private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserId' return '%s.jsp' ";
 
-    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     private final CertificateLogic certificateLogic;
+    private final EmailExtractor emailExtractor;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView user() {
@@ -45,9 +45,9 @@ public class UserController {
         LOGGER.debug(LOG_REQ_IN);
         String view;
         try {
-            String eMail = logInfo.getEmail();
-            LOGGER.debug(LOG_GET_EMAIL + eMail);
-            List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(eMail);
+            String email = emailExtractor.getEmailFromAuthentication();
+            LOGGER.debug(LOG_GET_EMAIL + email);
+            List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(email);
             model.addAttribute(PDF_DTO, new PdfDto());
             model.addAttribute(CERTIFICATES, result);
             model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
@@ -62,9 +62,8 @@ public class UserController {
     }
 
     @Autowired
-    public UserController(LogInfo logInfo, CertificateLogic certificateLogic) {
-        this.logInfo = logInfo;
+    public UserController(CertificateLogic certificateLogic, EmailExtractor emailExtractor) {
         this.certificateLogic = certificateLogic;
+        this.emailExtractor = emailExtractor;
     }
-
 }

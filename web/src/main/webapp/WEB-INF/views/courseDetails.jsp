@@ -106,7 +106,7 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <div class="container pt1_5" align="center">
+    <div align="center">
         <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
             <span class="fontSize180 silver">Course details</span><br><br><br>
             <table class="table fontSize140" cols="2" width="600">
@@ -177,7 +177,7 @@
             </table>
         </form:form>
     </div>
-    <div class="container pt1_5" align="center">
+    <div align="center">
         <br>
         <c:if test="${!empty msg}">
             <h3><span class="errorText250">${msg}</span></h3>
@@ -186,7 +186,7 @@
     </div>
 
 
-    <div class="container pt1_5" align="center">
+    <div align="center">
         <div class="hrefText" align="center">
             <a href="javascript:history.back();">Back</a> |
             <a href="<c:url value="/" />">Home</a>

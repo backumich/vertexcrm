@@ -22,7 +22,6 @@ import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler;
 import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -48,9 +47,6 @@ public class CertificateDetailsPageControllerTest {
     @Mock
     private Model model;
 
-    @Mock
-    private LogInfo logInfo;
-
     private Certificate certificate;
     private User user;
     private Map<String, Object> attributes;
@@ -71,7 +67,7 @@ public class CertificateDetailsPageControllerTest {
         MockitoAnnotations.initMocks(this);
         controller = new CertificateDetailsPageController(certLogic);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new GlobalExceptionHandler(logInfo))
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
         certificate = new Certificate.Builder()
                 .setCertificationId(EXISTING_CERT_ID)

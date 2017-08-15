@@ -170,13 +170,14 @@
         </sf:form>
         <br><br>
 
-        <sec:authorize access="hasAuthority('USER')">
+        <sec:authorize access="isAuthenticated()">
             <sec:authentication property="principal.username" var="authenticated"/>
         </sec:authorize>
 
         <c:if test="${(user.email).equals(authenticated)}">
             <sf:form method="post" action="/generatePdf" commandName="dto">
                 <input type="hidden" name="certificateUid" value="${certificate.certificateUid}"/>
+                <input type="hidden" name="email" value="${user.email}"/>
                 <input type="hidden" name="firstName" value="${user.firstName}"/>
                 <input type="hidden" name="lastName" value="${user.lastName}"/>
                 <input type="hidden" name="courseName" value="${certificate.courseName}"/>

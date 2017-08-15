@@ -85,9 +85,6 @@ VALUES (3, 'ROLE_TEACHER');
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('1', 'email1', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '1');
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone)
-VALUES ('1', 'email1', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00');
-
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
 VALUES ('2', 'email1@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '3', '1');
 
