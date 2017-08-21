@@ -2,19 +2,12 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-
-import static ua.com.vertex.context.SecurityWebConfig.UNKNOWN_ERROR;
 
 
 @Controller
 public class AppErrorController {
-//        implements ErrorController{
+    //        implements ErrorController{
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";

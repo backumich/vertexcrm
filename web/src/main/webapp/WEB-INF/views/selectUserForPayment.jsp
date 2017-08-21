@@ -176,7 +176,6 @@
     </div>
 </div>
 
-</div>
 <div class="footer">
     <div class="container">
         <div class="right">

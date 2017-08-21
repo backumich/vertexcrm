@@ -24,7 +24,7 @@ public class LoggingLogicImpl implements LoggingLogic {
     private static final String USER_PAGE = "userProfile";
 
     @Override
-    public Optional<User> logIn(String email)  {
+    public Optional<User> logIn(String email) {
         Optional<User> toReturn;
 
         if (email.isEmpty()) {
