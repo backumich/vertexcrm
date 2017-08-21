@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface LoggingLogic {
 
-    Optional<User> logIn(String email);
+    Optional<User> logIn(String email) ;
 
     String setUser(String email, Model model) throws Exception;
 }

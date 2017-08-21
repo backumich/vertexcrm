@@ -47,9 +47,6 @@ public class RegistrationControllerTest {
     private UserFormRegistration userFormRegistration;
     private final String NAME = "test";
 
-//    String reCaptchaResponse = "03AJz9lvSs2VBCrNUG8kQe9Z3SST63squTtaIeFg7hwdh6eoAw5hSTOtE7IjxRpAc7xB1XkYSylpKCaaYhFkMDONwGQGPwai3ZdN9AlXe3y4qtrodWlAOLc5SNrGuxZHP3tTIvAHQI4WUbjBCr_ZyWaombdwEywQDD_R3410";
-//    String reCaptchaRemoteAddr = "localhost";
-
     @Before
     public void setUp() throws Exception {
         registrationController = new RegistrationController(registrationUserLogic, emailLogic, mailService, reCaptchaService);

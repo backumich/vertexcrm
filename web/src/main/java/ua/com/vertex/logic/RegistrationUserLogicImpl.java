@@ -26,8 +26,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
     }
 
     @Override
-    public boolean isRegisteredUser(UserFormRegistration userFormRegistration,
-                                    BindingResult bindingResult) throws Exception {
+    public boolean isRegisteredUser(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
         LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
 
         boolean result = false;
@@ -47,7 +46,7 @@ public class RegistrationUserLogicImpl implements RegistrationUserLogic {
         }
 
         return result;
-}
+    }
 
     @Autowired
     public RegistrationUserLogicImpl(UserLogic userLogic) {

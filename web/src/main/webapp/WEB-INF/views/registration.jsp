@@ -26,8 +26,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -118,14 +118,14 @@
                         <td>Password:</td>
                         <td><form:password class="buttonText" placeholder="Password" path="password"/></td>
                         <td><form:errors path="password"/></td>
-                            <%--<td><form:errors>${userFormRegistration.errors}</form:errors></td>--%>
+                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>Repeat password:</td>
                         <td><form:password class="buttonText" placeholder="Confirm password"
                                            path="verifyPassword"/></td>
                         <td><form:errors path="verifyPassword"/></td>
-                            <%--<td><form:errors>${userFormRegistration.errors}</form:errors></td>--%>
+                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>First name:</td>
@@ -142,7 +142,6 @@
                         <td><form:input class="buttonText" placeholder="Phone" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
-
                     <tr>
                         <td></td>
                         <td>
@@ -162,7 +161,24 @@
                 </table>
             </form:form>
         </div>
+        <br>
+        <br>
+        <br>
+        <div class="container pt1_5" align="center">
+            <div align="center">
+                <form:errors path="userFormRegistration"/>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
 
+        <div class="container pt1_5" align="center">
+            <div class="hrefText" align="center">
+                <a href="javascript:history.back();">Back</a> |
+                <a href="<c:url value="/" />">Home</a>
+            </div>
+        </div>
 
     </div>
 </div>

@@ -11,29 +11,30 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.*;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.logic.interfaces.UserLogic;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.CreateCertificateAndAddToUser.*;
+import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class CreateCertificateAndAddToUserTest {
+public class CreateCertificateAndAddToUserControllerTest {
 
     private final String MSG_INVALID_DATA = "Have wrong objects in model";
     private final String MSG_INVALID_VIEW = "Have wrong viewName in ModelAndView";
 
-    private CreateCertificateAndAddToUser underTest;
+    private CreateCertificateAndAddToUserController underTest;
     private Model model;
     private Certificate certificate;
     private User user;
@@ -49,7 +50,7 @@ public class CreateCertificateAndAddToUserTest {
 
     @Before
     public void setUp() throws Exception {
-        underTest = new CreateCertificateAndAddToUser(certificateLogic, userLogic);
+        underTest = new CreateCertificateAndAddToUserController(certificateLogic, userLogic);
         model = new ExtendedModelMap();
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
@@ -78,7 +79,7 @@ public class CreateCertificateAndAddToUserTest {
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertNotNull(MSG_INVALID_DATA, model.asMap().get(MSG));
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(USERS));
-        assertNotNull(MSG_INVALID_DATA, model.containsAttribute(USERS));
+        assertTrue(model.containsAttribute(USERS));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("User not found, try again."));
         @SuppressWarnings("unchecked") List<User> users = (List<User>) model.asMap().get(USERS);
         assertTrue(MSG_INVALID_DATA, users.isEmpty());
@@ -101,12 +102,11 @@ public class CreateCertificateAndAddToUserTest {
         assertEquals(MSG_INVALID_VIEW, underTest.searchUser("", model), SELECT_USER_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("The data have not been validated!!!"));
-        assertNotNull(MSG_INVALID_DATA, model.asMap().containsValue("The data have not been validated!!!"));
     }
 
     @Test
     public void searchUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-        when(userLogic.searchUser("Test")).thenThrow(new Exception("Test"));
+        when(userLogic.searchUser("Test")).thenThrow(new RuntimeException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR);
     }
 
@@ -135,7 +135,7 @@ public class CreateCertificateAndAddToUserTest {
 
     @Test
     public void checkCertificateWithUserIdReturnCorrectViewWhenException() throws Exception {
-        when(certificateLogic.addCertificate(certificate)).thenThrow(new Exception("Test"));
+        when(certificateLogic.addCertificate(certificate)).thenThrow(new RuntimeException("Test"));
         assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
                 , ERROR);
     }

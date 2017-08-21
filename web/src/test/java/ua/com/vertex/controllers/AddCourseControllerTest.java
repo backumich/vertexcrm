@@ -17,9 +17,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +32,9 @@ public class AddCourseControllerTest {
     @Autowired
     private CourseLogic logic;
 
+    @Autowired
+    private UserLogic userLogic;
+
     private MockMvc mockMvc;
 
     @Autowired
@@ -46,7 +47,7 @@ public class AddCourseControllerTest {
 
     @Test
     public void addCourseFirstAppealTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
+        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("addCourse"))
                 .build();
         mockMvc.perform(get("/addCourse"))
@@ -60,8 +61,9 @@ public class AddCourseControllerTest {
         String name = "Test course name";
         String start = "2001-01-01";
         String price = "1";
+        String userId = "1";
 
-        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic))
+        MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("/viewAllCourses"))
                 .build();
         mockMvc.perform(post("/addCourse")
@@ -69,6 +71,7 @@ public class AddCourseControllerTest {
                 .param("name", name)
                 .param("start", start)
                 .param("price", price)
+                .param("teacher.userId", userId)
                 .sessionAttr("course", new Course()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("redirect:/viewAllCourses"))
