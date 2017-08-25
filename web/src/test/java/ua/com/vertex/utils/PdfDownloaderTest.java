@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -21,9 +20,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class PdfDownloaderTest {
 
-    @Mock
-    private LogInfo logInfo;
-
     @Spy
     private final HttpServletResponse response = new MockHttpServletResponse();
 
@@ -36,7 +32,7 @@ public class PdfDownloaderTest {
         if (!file.exists()) {
             file.createNewFile();
         }
-        pdfDownloader = new PdfDownloader(logInfo);
+        pdfDownloader = new PdfDownloader();
     }
 
     @After

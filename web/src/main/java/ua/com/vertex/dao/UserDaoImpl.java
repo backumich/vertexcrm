@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,7 +19,6 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
-import ua.com.vertex.utils.LogInfo;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -32,7 +32,6 @@ import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 @Repository
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final LogInfo logInfo;
     private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
     static final String EMAIL = "email";
@@ -59,9 +58,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
-            LOGGER.debug(logInfo.getId() + "Retrieved user, id=" + userId);
+            LOGGER.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + "No user id=" + userId);
+            LOGGER.warn("No user id=" + userId);
         }
 
         return Optional.ofNullable(user);
@@ -78,9 +77,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
-            LOGGER.debug(logInfo.getId() + "Retrieved user, email=" + email);
+            LOGGER.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(logInfo.getId() + "No user email=" + email);
+            LOGGER.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -90,7 +89,7 @@ public class UserDaoImpl implements UserDaoInf {
     public Optional<User> logIn(String email) {
         LOGGER.debug(String.format("Call -  logIn(%s) ;", email));
 
-        String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id " +
+        String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id " +
                 "WHERE u.email=:email";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
@@ -134,7 +133,7 @@ public class UserDaoImpl implements UserDaoInf {
             throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
         }
 
-        LOGGER.debug(logInfo.getId() + "image saved");
+        LOGGER.debug("Image saved");
         jdbcTemplate.update(query, parameters);
     }
 
@@ -155,7 +154,7 @@ public class UserDaoImpl implements UserDaoInf {
 
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
 
-        LOGGER.debug(logInfo.getId() + "Image of userId=" + userId + " retrieved");
+        LOGGER.debug("Image of userId=" + userId + " retrieved");
 
         return Optional.ofNullable(image);
     }
@@ -377,8 +376,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Autowired
-    public UserDaoImpl(DataSource dataSource, LogInfo logInfo) {
+    public UserDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.logInfo = logInfo;
     }
 }

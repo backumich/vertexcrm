@@ -3,6 +3,7 @@ package ua.com.vertex.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -71,7 +72,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     }
 
     @Autowired
-    public PaymentDaoImpl(DataSource dataSource) {
+    public PaymentDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }

@@ -104,15 +104,13 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <div class="fontSize200 red">
-        <div class="errorMessage">
-            <c:if test="${empty errorMessage}">
-                Something went wrong...
-            </c:if>
-            <c:if test="${!empty errorMessage}">
-                Error: ${errorMessage}
-            </c:if>
-        </div>
+    <div class="fontSize200 errorMessage">
+        <c:if test="${empty errorMessage}">
+            Something went wrong...
+        </c:if>
+        <c:if test="${!empty errorMessage}">
+            Error: ${errorMessage}
+        </c:if>
     </div>
     <span class="href"><a href="<c:url value="/" />">Home</a></span>
 

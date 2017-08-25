@@ -113,17 +113,17 @@
         <span class="fontSize125 bold">Enter certificate UID:</span><br><br>
 
         <sf:form cssClass="black" method="get" action="getCertificate">
-            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20"/>
+            <input placeholder="xxxx-xxxx-xxxx-xxxx" type="text" name="certificateUid" size="20" maxlength="19"/>
             <input type="submit" value="Send">
         </sf:form>
     </c:if>
     <br><br>
 
-    <c:if test="${error != null}">
-        <h3><span class="fontSize140 red">${error}</span></h3>
+    <c:if test="${errorMessage != null}">
+        <h3><span class="fontSize140 red">${errorMessage}</span></h3>
     </c:if>
 
-    <c:if test="${error == null && certificate != null}">
+    <c:if test="${errorMessage == null && certificate != null}">
         <table class="table fontSize140">
             <tr>
                 <td>Certificate UID:</td>
@@ -155,7 +155,9 @@
             </tr>
             <tr>
                 <td>Certificate Link:</td>
-                <td class="fontSize70">localhost:8080/getCertificate/${certificate.certificateUid}</td>
+                <td class="fontSize70">
+                    <a href="<c:url value="/getCertificate/${certificate.certificateUid}"/>">
+                        localhost:8080/getCertificate/${certificate.certificateUid}</a></td>
             </tr>
         </table>
         <br>
@@ -168,13 +170,14 @@
         </sf:form>
         <br><br>
 
-        <sec:authorize access="hasAuthority('USER')">
+        <sec:authorize access="isAuthenticated()">
             <sec:authentication property="principal.username" var="authenticated"/>
         </sec:authorize>
 
         <c:if test="${(user.email).equals(authenticated)}">
             <sf:form method="post" action="/generatePdf" commandName="dto">
                 <input type="hidden" name="certificateUid" value="${certificate.certificateUid}"/>
+                <input type="hidden" name="email" value="${user.email}"/>
                 <input type="hidden" name="firstName" value="${user.firstName}"/>
                 <input type="hidden" name="lastName" value="${user.lastName}"/>
                 <input type="hidden" name="courseName" value="${certificate.courseName}"/>

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
@@ -50,37 +51,6 @@
         margin-left: 0px !important;
     }
 
-    .hrefText {
-        font-size: 120%;
-    }
-
-    .formHeader {
-        font-size: 125%;
-        font-weight: bold;
-        color: #adadad;
-    }
-
-    .pageHeader {
-        font-size: 180%
-    }
-
-    .errorText140 {
-        font-size: 140%;
-        color: red;
-    }
-
-    .errorField {
-        background-color: #ffcccc;
-        border: 2px solid red;
-    }
-
-    .buttonText {
-        color: black;
-    }
-
-    .up-padding {
-        padding-top: 100px;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -139,20 +109,16 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize180 silver">Log into the system</span><br><br><br>
+    <span class="fontSize200 silver">Log into the system</span><br><br><br>
 
     <c:if test="${param.error != null}">
         <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
     </c:if>
 
-    <c:if test="${param.logout != null}">
-        <p><span class="fontSize140 red">You have been logged out</span></p>
-    </c:if>
-
-    <form action="${pageContext.request.contextPath}/logIn" method="post">
+    <sf:form action="logIn" method="post">
         <table>
             <tr>
-                <td class="labelWidth"><span class="fontSize125 bold silver">E-mail:</span></td>
+                <td class="labelWidth150"><span class="fontSize125 bold silver">E-mail:</span></td>
                 <c:if test="${param.error == null}">
                     <td><input type="text" name="username"/></td>
                 </c:if>
@@ -161,7 +127,7 @@
                 </c:if>
             </tr>
             <tr>
-                <td class="labelWidth"><span class="fontSize125 bold silver">Password:</span></td>
+                <td><span class="fontSize125 bold silver">Password:</span></td>
                 <c:if test="${param.error == null}">
                     <td><input type="password" name="password"/></td>
                 </c:if>
@@ -174,13 +140,10 @@
                 <td><input id="remember_me" name="remember-me" type="checkbox"/></td>
             </tr>
             <tr>
-                <td><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"></td>
-            </tr>
-            <tr>
-                <td class="buttonPadding"><input type="submit" value="Log in" class="black"></td>
+                <td class="buttonPaddingTop"><input type="submit" value="Log in" class="black"></td>
             </tr>
         </table>
-    </form>
+    </sf:form>
 
     <br><br>
     <div class="href">

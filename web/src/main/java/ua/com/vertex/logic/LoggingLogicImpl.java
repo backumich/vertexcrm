@@ -1,5 +1,6 @@
 package ua.com.vertex.logic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -14,14 +15,13 @@ import java.util.Optional;
 
 @Service
 public class LoggingLogicImpl implements LoggingLogic {
-
-    private final UserLogic userLogic;
-    private final UserDaoInf userDao;
-
     private static final String AUTHORITIES_ERROR = "0 or more than 1 authority found";
     private static final String ADMIN = Role.ROLE_ADMIN.name();
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
+
+    private final UserLogic userLogic;
+    private final UserDaoInf userDao;
 
     @Override
     public Optional<User> logIn(String email)  {
@@ -34,11 +34,6 @@ public class LoggingLogicImpl implements LoggingLogic {
         }
 
         return toReturn;
-    }
-
-    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
-        this.userLogic = userLogic;
-        this.userDao = userDao;
     }
 
     private String requiredView() throws Exception {
@@ -63,5 +58,11 @@ public class LoggingLogicImpl implements LoggingLogic {
         model.addAttribute("user", user);
 
         return view;
+    }
+
+    @Autowired
+    public LoggingLogicImpl(UserLogic userLogic, UserDaoInf userDao) {
+        this.userLogic = userLogic;
+        this.userDao = userDao;
     }
 }

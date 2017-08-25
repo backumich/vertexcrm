@@ -10,44 +10,32 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.LogInfo;
 
 import java.sql.SQLException;
 
 @Controller
 public class ImageController {
-
-    private final UserLogic userLogic;
-    private final LogInfo logInfo;
-
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
-
     private static final String USER_PROFILE = "userProfile";
     private static final String PAGE_TO_DISPLAY = "pageToDisplay";
     private static final String IMAGE = "image";
     private static final String IMAGE_TYPE = "imageType";
-    private static final String ERROR = "error";
     private static final String USER = "user";
     private static final String IMAGE_ERROR = "imageError";
 
-    @SuppressWarnings("UnusedReturnValue")
-    @RequestMapping(value = "/showImage")
+    private final UserLogic userLogic;
+
+    @GetMapping(value = "/showImage")
     public String showImage(@ModelAttribute(USER) User user,
                             @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
-                            @RequestParam(IMAGE_TYPE) String imageType, Model model) {
+                            @RequestParam(IMAGE_TYPE) String imageType, Model model) throws SQLException {
 
-        LOGGER.debug(logInfo.getId() + pageToDisplay + " page accessed");
-        String view = pageToDisplay;
-        try {
-            encode(model, user.getUserId(), imageType);
-            model.addAttribute(USER, user);
-            LOGGER.debug(logInfo.getId() + "Passing image to JSP");
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
-        }
+        LOGGER.debug(pageToDisplay + " page accessed");
+        encode(model, user.getUserId(), imageType);
+        model.addAttribute(USER, user);
+        LOGGER.debug("Passing image to JSP");
 
-        return view;
+        return pageToDisplay;
     }
 
     private void encode(Model model, int userId, String imageType) throws SQLException {
@@ -55,33 +43,26 @@ public class ImageController {
         model.addAttribute(imageType, encoded);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+    @PostMapping(value = "/uploadImage")
     public String uploadImage(@ModelAttribute(USER) User user,
                               @RequestPart(value = IMAGE, required = false) byte[] image,
                               @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         String view = USER_PROFILE;
-        try {
-            if (image == null) {
-                view = IMAGE_ERROR;
-                LOGGER.debug(logInfo.getId() + "no image selected");
-            } else {
-                userLogic.saveImage(user.getUserId(), image, imageType);
-                model.addAttribute(user);
-            }
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
+        if (image == null) {
+            view = IMAGE_ERROR;
+            LOGGER.debug("no image selected");
+        } else {
+            userLogic.saveImage(user.getUserId(), image, imageType);
+            model.addAttribute(user);
         }
 
         return view;
     }
 
     @Autowired
-    public ImageController(UserLogic userLogic, LogInfo logInfo) {
+    public ImageController(UserLogic userLogic) {
         this.userLogic = userLogic;
-        this.logInfo = logInfo;
     }
 }

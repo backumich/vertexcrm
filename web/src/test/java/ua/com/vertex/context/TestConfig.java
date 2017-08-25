@@ -13,7 +13,7 @@ import javax.validation.Validator;
 @Profile("test")
 public class TestConfig {
 
-    @Bean
+    @Bean(name = "DS")
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder

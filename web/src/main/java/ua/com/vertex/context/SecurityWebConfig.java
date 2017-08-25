@@ -47,7 +47,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                     if (e instanceof BadCredentialsException) {
                         response.sendRedirect("/logIn?error");
                     } else {
-                        response.sendRedirect("/error");
+                        throw new RuntimeException(UNKNOWN_ERROR, e);
                     }
                 })
                 .permitAll()

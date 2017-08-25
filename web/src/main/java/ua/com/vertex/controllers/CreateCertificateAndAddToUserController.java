@@ -38,12 +38,10 @@ public class CreateCertificateAndAddToUserController {
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
 
-
     @Autowired
     public CreateCertificateAndAddToUserController(CertificateLogic certificateLogic, UserLogic userLogic) {
         this.certificateLogic = certificateLogic;
         this.userLogic = userLogic;
-
     }
 
     @PostMapping(value = "/addCertificateWithUserId")

@@ -3,6 +3,8 @@ package ua.com.vertex.logic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.Course;
+import ua.com.vertex.beans.DtoCourseUser;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
@@ -12,7 +14,6 @@ import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
-
     private final CourseDaoInf courseDaoInf;
 
     @Override
@@ -48,6 +49,26 @@ public class CourseLogicImpl implements CourseLogic {
     @Override
     public Optional<Course> getCourseById(int courseId) {
         return courseDaoInf.getCourseById(courseId);
+    }
+
+    @Override
+    public List<User> getUsersAssignedToCourse(int courseId) {
+        return courseDaoInf.getUsersAssignedToCourse(courseId);
+    }
+
+    @Override
+    public void removeUserFromCourse(DtoCourseUser dto) {
+        courseDaoInf.removeUserFromCourse(dto);
+    }
+
+    @Override
+    public void assignUserToCourse(DtoCourseUser dto) {
+        courseDaoInf.assignUserToCourse(dto);
+    }
+
+    @Override
+    public List<User> searchForUsersToAssign(DtoCourseUser dto) {
+        return courseDaoInf.searchForUsersToAssign(dto);
     }
 
     @Autowired

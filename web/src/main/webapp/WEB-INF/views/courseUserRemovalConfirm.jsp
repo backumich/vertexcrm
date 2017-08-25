@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -10,16 +11,6 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
     <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
     <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
@@ -55,6 +46,7 @@
         margin-left: 0 !important;
     }
 
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -84,7 +76,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera === "[object Opera]") {
+        if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -111,76 +103,37 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5">
 
-        <div>
-            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
 
-        <div>
-            <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <div>
-            <span class="formHeaderText1">Create new payment:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="createPayment">
-                <input class="black" type="submit" name="createPayment" value="Create new payment"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+    <span class="fontSize180">Confirm removal?</span><br><br><br>
+    <table>
+        <tr>
+            <td>
+                <sf:form action="removeUserFromCourse" method="post" commandName="dtoCourseUser">
+                    <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+                    <input type="hidden" name="userId" value="${dtoCourseUser.userId}">
+                    <input type="submit" value="Yes" class="buttonWidth black"/>
+                </sf:form>
+            </td>
+            <td>
+                <sf:form action="showCourseAndUsers" method="get" commandName="dtoCourseUser">
+                    <input type="hidden" name="id" value="${dtoCourseUser.courseId}">
+                    <input type="submit" value="No" class="buttonWidth black"/>
+                </sf:form>
+            </td>
+        </tr>
+    </table>
 
-        <div>
-            <span class="formHeaderText1">Add course:</span><br><br>
-            <form:form cssClass="buttonText" method="get" action="/addCourse">
-                <input class="black" type="submit" name="addCourse" value="Add course"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div>
-            <span class="formHeaderText1">Course info:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
-                <input class="black" type="submit" name="courseInfo" value="Course info"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div align="center">
-            <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
-            </c:if>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <div align="center">
-            <div class="hrefText" align="center">
-                <a href="javascript:history.back();">Back</a> |
-                <a href="<c:url value="/" />">Home</a>
-            </div>
-        </div>
+    <br><br>
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
-
 </div>
+
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -235,11 +188,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>

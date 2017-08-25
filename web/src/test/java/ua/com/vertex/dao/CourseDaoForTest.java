@@ -1,6 +1,7 @@
 package ua.com.vertex.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -43,7 +44,7 @@ public class CourseDaoForTest implements ua.com.vertex.dao.interfaces.CourseDaoF
     }
 
     @Autowired
-    public CourseDaoForTest(DataSource dataSource) {
+    public CourseDaoForTest(@Qualifier(value = "DS") DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 }
