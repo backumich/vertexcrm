@@ -11,12 +11,13 @@ import org.springframework.web.context.WebApplicationContext;
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.INTERFACES)
 public class EmailExtractorImpl implements EmailExtractor {
+
     @Override
     public String getEmailFromAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof AnonymousAuthenticationToken) {
-            return null;
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            return authentication.getName();
         }
-        return authentication.getName();
+        return null;
     }
 }

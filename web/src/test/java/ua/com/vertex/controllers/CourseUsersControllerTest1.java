@@ -29,64 +29,49 @@ public class CourseUsersControllerTest1 {
 
     @Mock
     private CourseLogic courseLogic;
-    private CourseUsersController controller;
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new CourseUsersController(courseLogic);
+        CourseUsersController controller = new CourseUsersController(courseLogic);
+        mockMvc = standaloneSetup(controller)
+                .setSingleView(new InternalResourceView(COURSE_USERS))
+                .build();
     }
 
     @Test
     public void showCourseAndUsersPageReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(get("/showCourseAndUsers"))
                 .andExpect(view().name(COURSE_USERS));
     }
 
     @Test
     public void removeUserFromAssignedReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(post("/removeUserFromCourse"))
                 .andExpect(view().name(COURSE_USERS));
     }
 
     @Test
     public void assignUserToCourseReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(post("/assignUser"))
                 .andExpect(view().name(COURSE_USERS));
     }
 
     @Test
     public void searchForUsersToAssignReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(get("/searchForUsersToAssign"))
                 .andExpect(view().name(COURSE_USERS));
     }
 
     @Test
     public void clearSearchResultsReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(get("/clearSearchResults"))
                 .andExpect(view().name(COURSE_USERS));
     }
 
     @Test
     public void confirmUserRemovalFromCourseReturnsCorrectView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView(COURSE_USERS))
-                .build();
         mockMvc.perform(post("/confirmUserRemovalFromCourse"))
                 .andExpect(view().name(REMOVAL_CONFIRM));
     }
