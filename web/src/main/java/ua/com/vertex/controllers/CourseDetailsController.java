@@ -121,6 +121,23 @@ public class CourseDetailsController {
         return result;
     }
 
+    @PostMapping(value = "/teacherCourseDetails")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ModelAndView teacherCourseDetails(@RequestParam(COURSE_ID) int courseId) {
+
+        LOGGER.debug(String.format("Call teacherCourseDetails(%s)", courseId));
+        ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
+
+        LOGGER.debug(String.format("Try add course details by id - (%s).", courseId));
+        result.addObject(courseLogic.getCourseById(courseId));
+
+        LOGGER.debug(String.format("Try add course listeners by id - (%s).", courseId));
+        result.addObject(userLogic.getCourseUsers(courseId));
+
+        LOGGER.debug(String.format("Return new ModelAndView - %s", result));
+        return result;
+    }
+
     @Autowired
     public CourseDetailsController(CourseLogic courseLogic, UserLogic userLogic) {
         this.courseLogic = courseLogic;
