@@ -151,16 +151,16 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public List<Course> searchCourseByNameAndStatus(Course course) {
-        LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s)", course));
+    public List<Course> searchCourseByNameAndStatus(String name, boolean isFinished) {
+        LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s, $s)", name, isFinished));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u ON c.teacher_id = u.user_id " +
                 "WHERE c.finished = :finished AND c.name LIKE :courseName";
-        MapSqlParameterSource source = new MapSqlParameterSource(FINISHED, course.isFinished() ? 1 : 0);
-        source.addValue("courseName", "%" + course.getName() + "%");
+        MapSqlParameterSource source = new MapSqlParameterSource(FINISHED, isFinished ? 1 : 0);
+        source.addValue("courseName", "%" + name + "%");
 
-        LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", course.getName(), course.isFinished()));
+        LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", name, isFinished));
         return jdbcTemplate.query(query, source, (resultSet, i) -> mapCourses(resultSet));
     }
 

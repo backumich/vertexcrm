@@ -23,7 +23,6 @@ import ua.com.vertex.utils.LogInfo;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -223,21 +222,6 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug("Get all users list");
         String query = "SELECT count(*) FROM Users";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
-    }
-
-    @Override
-    public EnumMap<Role, Role> getAllRoles() {
-        LOGGER.debug("Get a list of all users roles");
-
-        String query = "SELECT r.name FROM Roles r";
-        return jdbcTemplate.query(query, rs -> {
-            EnumMap<Role, Role> allRoles = new EnumMap<>(Role.class);
-            while (rs.next()) {
-                allRoles.put(Role.valueOf(rs.getString("name")),
-                        Role.valueOf(rs.getString("name")));
-            }
-            return allRoles;
-        });
     }
 
     @Override

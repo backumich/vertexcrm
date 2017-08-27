@@ -52,8 +52,8 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<Course> searchCourseByNameAndStatus(Course course) {
-        return courseDaoInf.searchCourseByNameAndStatus(course);
+    public List<Course> searchCourseByNameAndStatus(String name, boolean isFinished) {
+        return courseDaoInf.searchCourseByNameAndStatus(name, isFinished);
     }
 
     @Override

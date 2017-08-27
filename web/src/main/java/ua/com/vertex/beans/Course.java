@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Course {
-    private final String COURSE_NAME_MSG = "Course's name must be longer than 5 and less than 256 characters";
+    private final String COURSE_NAME_MSG = "Course's name must be longer than 1 and less than 256 characters";
     private final String SCHEDULE_MSG = "The schedule must be longer than 2 and less than 256 characters";
-    private final String NOTES_MSG = "The schedule must be up to 256 characters long";
+    private final String NOTES_MSG = "The notes must be up to 256 characters long";
 
     private int id;
     private BigDecimal price;

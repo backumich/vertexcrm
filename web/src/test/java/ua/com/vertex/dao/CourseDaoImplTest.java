@@ -85,7 +85,7 @@ public class CourseDaoImplTest {
     @Test
     public void searchCourseByNameAndStatusReturnCorrectData() throws Exception {
         Course courseForSearch = new Course.Builder().setName("ava").setFinished(true).getInstance();
-        List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch);
+        List<Course> courses = courseDaoInf.searchCourseByNameAndStatus(courseForSearch.getName(), courseForSearch.isFinished());
         assertFalse(MSG, courses.isEmpty());
         courses.forEach(course -> assertTrue(course.getName().contains(courseForSearch.getName())
                 && course.isFinished()));
@@ -94,7 +94,7 @@ public class CourseDaoImplTest {
     @Test
     public void searchCourseByNameAndStatusReturnEmptyList() throws Exception {
         Course courseForSearch = new Course.Builder().setName("wwwwwwwwwwww").setFinished(false).getInstance();
-        assertTrue(courseDaoInf.searchCourseByNameAndStatus(courseForSearch).isEmpty());
+        assertTrue(courseDaoInf.searchCourseByNameAndStatus(courseForSearch.getName(), courseForSearch.isFinished()).isEmpty());
     }
 
     @Test

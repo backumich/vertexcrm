@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -47,12 +48,8 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-        try {
-            modelAndView.addObject("allRoles", userLogic.getAllRoles());
+            modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception ignore) {
-            LOGGER.warn("There are problems with access to roles of the system", ignore);
-        }
 
         //  -- Get all user certificate
         try {
@@ -108,13 +105,8 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-        try {
-            modelAndView.addObject("allRoles", userLogic.getAllRoles());
+            modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
-        } catch (Exception e) {
-            modelAndView.setViewName(ERROR_JSP);
-            LOGGER.warn("There are problems with access to roles of the system", e);
-        }
 
         //  -- Get all user certificates
         try {

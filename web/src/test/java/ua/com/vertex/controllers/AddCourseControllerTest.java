@@ -61,8 +61,7 @@ public class AddCourseControllerTest {
         String name = "Test course name";
         String start = "2001-01-01";
         String price = "1";
-        String teacherID = "1";
-        String schedule = "Sat";
+        String userId = "1";
 
         MockMvc mockMvc = standaloneSetup(new AddCourseController(logic, userLogic))
                 .setSingleView(new InternalResourceView("/viewCourses/all"))
@@ -72,8 +71,7 @@ public class AddCourseControllerTest {
                 .param("name", name)
                 .param("start", start)
                 .param("price", price)
-                .param("teacher.userId", teacherID)
-                .param("schedule", schedule)
+                .param("teacher.userId", userId)
                 .sessionAttr("course", new Course()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("redirect:/viewCourses/all"))

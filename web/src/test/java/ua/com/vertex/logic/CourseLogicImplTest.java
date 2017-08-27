@@ -42,9 +42,11 @@ public class CourseLogicImplTest {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void searchCourseByNameAndStatusVerifyCourseDaoAndReturnException() throws Exception {
-        when(courseDaoInf.searchCourseByNameAndStatus(course)).thenThrow(new DataIntegrityViolationException("Test"));
-        courseDaoInf.searchCourseByNameAndStatus(course);
-        verify(courseDaoInf, times(1)).searchCourseByNameAndStatus(course);
+        when(courseDaoInf.searchCourseByNameAndStatus(course.getName(), course.isFinished())).
+                thenThrow(new DataIntegrityViolationException("Test"));
+        courseDaoInf.searchCourseByNameAndStatus(course.getName(), course.isFinished());
+        verify(courseDaoInf, times(1)).searchCourseByNameAndStatus(course.getName(),
+                course.isFinished());
     }
 
     @Test(expected = DataIntegrityViolationException.class)

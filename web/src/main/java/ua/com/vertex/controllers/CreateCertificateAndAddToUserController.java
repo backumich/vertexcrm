@@ -88,7 +88,8 @@ public class CreateCertificateAndAddToUserController {
     @PostMapping(value = "/selectUser")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectUser(@RequestParam(USER_ID) int userId) {
-        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to ", userId) + SELECT_USER_JSP);
+        LOGGER.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to - %s.jsp", userId,
+                SELECT_USER_JSP));
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
         return result;

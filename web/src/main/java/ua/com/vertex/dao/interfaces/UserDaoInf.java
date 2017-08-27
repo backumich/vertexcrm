@@ -1,10 +1,8 @@
 package ua.com.vertex.dao.interfaces;
 
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +23,6 @@ public interface UserDaoInf {
     List<User> getAllUsers();
 
     Optional<User> userForRegistrationCheck(String userEmail);
-
-    EnumMap<Role, Role> getAllRoles();
 
     int saveUserData(User user);
 

@@ -18,10 +18,10 @@ import java.util.List;
 
 @Controller
 @SessionAttributes(value = "viewAllUsers")
-public class ViewAllUsersController {
+public class ViewUsersController {
     private static final String PAGE_JSP = "viewAllUsers";
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewAllUsersController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViewUsersController.class);
 
     private UserLogic userLogic;
 
@@ -48,7 +48,7 @@ public class ViewAllUsersController {
     }
 
     @Autowired
-    public ViewAllUsersController(UserLogic userLogic) {
+    public ViewUsersController(UserLogic userLogic) {
         this.userLogic = userLogic;
     }
 }

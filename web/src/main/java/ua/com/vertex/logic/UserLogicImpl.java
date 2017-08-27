@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,11 +57,6 @@ public class UserLogicImpl implements UserLogic {
         LOGGER.debug("Get part data users list (dataNavigator)");
 
         return userDao.getUsersPerPages(dataNavigator);
-    }
-
-    @Override
-    public EnumMap<Role, Role> getAllRoles() {
-        return userDao.getAllRoles();
     }
 
     @Override

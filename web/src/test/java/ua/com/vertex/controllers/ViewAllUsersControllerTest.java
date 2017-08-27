@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @ContextConfiguration(classes = TestConfig.class)
 @ActiveProfiles("test")
-public class ViewAllUsersControllerTest {
+public class ViewUsersControllerTest {
 
     @Autowired
     private UserLogic logic;
@@ -37,7 +37,7 @@ public class ViewAllUsersControllerTest {
 
     @Test
     public void viewAllUsersControllerReturnedViewTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new ViewAllUsersController(logic))
+        MockMvc mockMvc = standaloneSetup(new ViewUsersController(logic))
                 .setSingleView(new InternalResourceView("viewAllUsers"))
                 .build();
         mockMvc.perform(get("/viewAllUsers"))
@@ -66,7 +66,7 @@ public class ViewAllUsersControllerTest {
 
     @Test
     public void viewAllUsersControllerReloadTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new ViewAllUsersController(logic))
+        MockMvc mockMvc = standaloneSetup(new ViewUsersController(logic))
                 .setSingleView(new InternalResourceView("viewAllUsers"))
                 .build();
         mockMvc.perform(post("/viewAllUsers"))
