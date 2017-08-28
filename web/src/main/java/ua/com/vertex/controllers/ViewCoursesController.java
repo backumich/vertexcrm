@@ -22,17 +22,17 @@ import java.util.List;
 @Controller
 @SessionAttributes(value = "viewCourses")
 @RequestMapping(value = "/viewCourses")
-public class ViewAllCoursesController {
+public class ViewCoursesController {
     private static final String PAGE_JSP = "viewCourses";
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewAllCoursesController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViewCoursesController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
     private final EmailExtractor emailExtractor;
 
     @Autowired
-    public ViewAllCoursesController(CourseLogic courseLogic, UserLogic userLogic, EmailExtractor emailExtractor) {
+    public ViewCoursesController(CourseLogic courseLogic, UserLogic userLogic, EmailExtractor emailExtractor) {
         this.courseLogic = courseLogic;
         this.userLogic = userLogic;
         this.emailExtractor = emailExtractor;
