@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.TreeMap;
 
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @ContextConfiguration(classes = TestConfig.class)
 @ActiveProfiles("test")
-public class ViewAllCoursesControllerTest {
+public class ViewCoursesControllerTest {
     @Autowired
     private CourseLogic logic;
 
@@ -35,7 +35,7 @@ public class ViewAllCoursesControllerTest {
     private UserLogic userLogic;
 
     @Autowired
-    private LogInfo logInfo;
+    private EmailExtractor emailExtractor;
 
     private MockMvc mockMvc;
 
@@ -44,7 +44,7 @@ public class ViewAllCoursesControllerTest {
 
     @Test
     public void viewAllCoursesTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new ViewAllCoursesController(logic, userLogic, logInfo))
+        MockMvc mockMvc = standaloneSetup(new ViewCoursesController(logic, userLogic, emailExtractor))
                 .setSingleView(new InternalResourceView("/viewCourses/all"))
                 .build();
         mockMvc.perform(get("/viewCourses/all"))
@@ -71,7 +71,7 @@ public class ViewAllCoursesControllerTest {
 
     @Test
     public void reloadTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new ViewAllCoursesController(logic, userLogic, logInfo))
+        MockMvc mockMvc = standaloneSetup(new ViewCoursesController(logic, userLogic, emailExtractor))
                 .setSingleView(new InternalResourceView("/viewCourses/all"))
                 .build();
         mockMvc.perform(post("/viewCourses/all"))

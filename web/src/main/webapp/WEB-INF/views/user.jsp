@@ -102,9 +102,6 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="center">
 
-        <form method="get" action="${pageContext.request.contextPath}/getCertificateByUserId">
-            <input type="submit" name="enter" value="Show certificate"/>
-        </form>
         <c:if test="${listCertificatesIsEmpty==true}">
             <h1>You do not have certificates!!!</h1>
         </c:if>
@@ -117,6 +114,8 @@
                     <th>Course Name</th>
                     <th>Details</th>
                 </tr>
+                <tr></tr>
+                <tr></tr>
 
                 <c:forEach items="${certificates}" var="certificate">
                     <tr>

@@ -1,6 +1,7 @@
 package ua.com.vertex.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,7 +25,7 @@ class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    AccountingDaoImplForTestImpl(DataSource dataSource) {
+    AccountingDaoImplForTestImpl(@Qualifier(value = "DS") DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 

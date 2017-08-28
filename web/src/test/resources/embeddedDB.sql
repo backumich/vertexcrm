@@ -61,6 +61,14 @@ CREATE TABLE Courses
   notes      VARCHAR(999)
 );
 
+CREATE TABLE Course_users
+(
+  id         INT(11)      NOT NULL AUTO_INCREMENT,
+  course_id  INT(11)      NOT NULL,
+  user_id    INT(11)      NOT NULL,
+  PRIMARY KEY (id)
+);
+
 INSERT INTO Roles (role_id, name)
 VALUES (1, 'ROLE_ADMIN');
 
@@ -90,6 +98,18 @@ VALUES ('34', '34@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmK
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('44', '44@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
         'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('401', 'user1@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
+        'Name1', 'Surname1', NULL, NULL, '0', '+38050 111 1111', '2');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('402', 'user2@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
+        'Name2', 'Surname2', NULL, NULL, '0', '+38050 222 2222', '2');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('403', 'user3@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
+        'Name3', 'Surname3', NULL, NULL, '0', '+38050 333 3333', '2');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java', '1492779828793891');
@@ -127,3 +147,11 @@ INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, not
   (111, 'Super JAVA', '2017-04-01', 0, 999999.99, 1, 'Sat, Sun', 'Welcome, we don''t expect you (='),
   (222, 'MEGA Java', '2017-02-01', 1, 100.11, 1, 'Sat, Sun', 'Come, the courses are over.');
 
+INSERT INTO Course_users (course_id, user_id)
+VALUES (1, 401);
+
+INSERT INTO Course_users (course_id, user_id)
+VALUES (1, 402);
+
+INSERT INTO Course_users (course_id, user_id)
+VALUES (2, 403)

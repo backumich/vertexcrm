@@ -9,7 +9,6 @@ import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
-import ua.com.vertex.utils.LogInfo;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -31,12 +30,9 @@ public class CertificateLogicImplTest {
     @Mock
     private UserDaoInf userDao;
 
-    @Mock
-    private LogInfo logInfo;
-
     @Before
     public void setUp() throws Exception {
-        certificateLogic = new CertificateLogicImpl(userDao, certificateDao, logInfo);
+        certificateLogic = new CertificateLogicImpl(userDao, certificateDao);
         certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional").setLanguage("Java").getInstance();
         user = new User.Builder().setUserId(1).setEmail("test@mail.ru").setFirstName("test").setLastName("test")

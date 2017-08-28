@@ -48,7 +48,7 @@ public class UserLogicImplTest {
     }
 
     @Test
-    public void getUserByIdInvokesDao() throws SQLException {
+    public void getUserByIdInvokesDao() {
         logic.getUserById(EXISTING_ID);
         verify(dao, times(1)).getUser(EXISTING_ID);
     }

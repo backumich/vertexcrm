@@ -14,7 +14,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,20 +22,20 @@ import java.util.List;
 @Controller
 @SessionAttributes(value = "viewCourses")
 @RequestMapping(value = "/viewCourses")
-public class ViewAllCoursesController {
+public class ViewCoursesController {
     private static final String PAGE_JSP = "viewCourses";
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewAllCoursesController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ViewCoursesController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
-    private final LogInfo logInfo;
+    private final EmailExtractor emailExtractor;
 
     @Autowired
-    public ViewAllCoursesController(CourseLogic courseLogic, UserLogic userLogic, LogInfo logInfo) {
+    public ViewCoursesController(CourseLogic courseLogic, UserLogic userLogic, EmailExtractor emailExtractor) {
         this.courseLogic = courseLogic;
         this.userLogic = userLogic;
-        this.logInfo = logInfo;
+        this.emailExtractor = emailExtractor;
     }
 
     @RequestMapping(value = "/all")
@@ -60,7 +60,7 @@ public class ViewAllCoursesController {
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ModelAndView viewTeacherCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
-        User currentUser = userLogic.getUserByEmail(logInfo.getEmail())
+        User currentUser = userLogic.getUserByEmail(emailExtractor.getEmailFromAuthentication())
                 .orElseThrow(() -> new RuntimeException("Not logged in: failed to get login details"));
         int quantityCourses = courseLogic.getQuantityCourses(currentUser);
 

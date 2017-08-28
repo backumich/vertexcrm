@@ -109,13 +109,13 @@
             </div>
         </main>
 
-        <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <sec:authorize access="hasRole('ADMIN')">
             <sec:authentication property="principal.username" var="admin"/>
         </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_USER')">
+        <sec:authorize access="hasRole('USER')">
             <sec:authentication property="principal.username" var="user"/>
         </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_TEACHER')">
+        <sec:authorize access="hasRole('TEACHER')">
             <sec:authentication property="principal.username" var="teacher"/>
         </sec:authorize>
 
