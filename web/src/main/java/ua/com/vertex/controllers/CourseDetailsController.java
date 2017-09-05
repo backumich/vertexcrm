@@ -28,7 +28,6 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CourseDetailsController {
-
     static final String COURSE_DETAILS_JSP = "courseDetails";
     static final String SEARCH_COURSE_JSP = "searchCourse";
     static final String COURSE_DATA = "courseForInfo";
@@ -36,9 +35,11 @@ public class CourseDetailsController {
     static final String COURSES = "courses";
     private static final String COURSE_ID = "courseId";
     static final String TEACHERS = "teachers";
+    static final String LISTENERS = "listeners";
     static final String LOGGER_SERVER_EXCEPTION = "Problems with the server, try again later.";
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
+
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
@@ -129,10 +130,10 @@ public class CourseDetailsController {
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         LOGGER.debug(String.format("Try add course details by id - (%s).", courseId));
-        result.addObject(courseLogic.getCourseById(courseId));
+        result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow(NoSuchElementException::new));
 
         LOGGER.debug(String.format("Try add course listeners by id - (%s).", courseId));
-        result.addObject(userLogic.getCourseUsers(courseId));
+        result.addObject(LISTENERS, userLogic.getCourseUsers(courseId));
 
         LOGGER.debug(String.format("Return new ModelAndView - %s", result));
         return result;
