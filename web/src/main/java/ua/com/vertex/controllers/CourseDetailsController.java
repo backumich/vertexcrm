@@ -129,7 +129,7 @@ public class CourseDetailsController {
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
         LOGGER.debug(String.format("Try add course details by id - (%s).", courseId));
-        result.addObject(courseLogic.getCourseById(courseId));
+        result.addObject(courseLogic.getCourseById(courseId).orElseThrow(NoSuchElementException::new));
 
         LOGGER.debug(String.format("Try add course listeners by id - (%s).", courseId));
         result.addObject(userLogic.getCourseUsers(courseId));
