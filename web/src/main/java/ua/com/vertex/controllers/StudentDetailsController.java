@@ -20,27 +20,16 @@ public class StudentDetailsController {
 
     private final UserLogic userLogic;
 
+    @PostMapping(value = STUDENT_DETAILS_JSP)
+    @PreAuthorize("hasRole('TEACHER')")
+    public ModelAndView studentDetails(@RequestParam(USER_ID) int userId) {
+        LOGGER.debug(String.format("Call studentDetails(%s)", userId));
+        return new ModelAndView(STUDENT_DETAILS_JSP)
+                .addObject(USER, userLogic.getUserById(userId).orElseThrow(NoSuchElementException::new));
+    }
+
     @Autowired
     public StudentDetailsController(UserLogic userLogic) {
         this.userLogic = userLogic;
     }
-
-    @PostMapping(value = "studentDetails")
-    @PreAuthorize("hasRole('TEACHER')")
-    public ModelAndView studentDetails(@RequestParam(USER_ID) int userId) {
-        LOGGER.debug(String.format("Call studentDetails(%s)", userId));
-        return new ModelAndView(STUDENT_DETAILS_JSP).addObject(USER, userLogic.getUserById(userId)
-                .orElseThrow(NoSuchElementException::new));
-    }
 }
-
-
-/**
- LOGGER.debug(String.format("Call studentDetails(%s)", userId));
- ModelAndView result = new ModelAndView(STUDENT_DETAILS_JSP);
-
- LOGGER.debug(String.format("Try add user details by id - (%s).", userId));
- result.addObject(USER, userLogic.getUserById(userId));
-
- LOGGER.debug(String.format("Return new ModelAndView - %s", result));
- **/

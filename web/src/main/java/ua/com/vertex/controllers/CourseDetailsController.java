@@ -40,7 +40,6 @@ public class CourseDetailsController {
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
 
-
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
 
