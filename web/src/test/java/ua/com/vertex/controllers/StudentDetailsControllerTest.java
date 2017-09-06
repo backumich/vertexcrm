@@ -4,12 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.dao.DataIntegrityViolationException;
-import ua.com.vertex.beans.Role;
-import ua.com.vertex.beans.User;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,9 +23,7 @@ import java.util.Optional;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static ua.com.vertex.controllers.StudentDetailsController.STUDENT_DETAILS_JSP;
 import static ua.com.vertex.controllers.StudentDetailsController.USER;
@@ -78,15 +73,7 @@ public class StudentDetailsControllerTest {
         .andExpect(model().attribute(USER,user));
     }
 }
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.when;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-import static ua.com.vertex.controllers.StudentDetailsController.STUDENT_DETAILS_JSP;
-
-@RunWith(MockitoJUnitRunner.class)
-public class StudentDetailsControllerTest {
+{
     private final String MSG = "Maybe method was changed";
     @Mock
     UserLogic userLogic;
