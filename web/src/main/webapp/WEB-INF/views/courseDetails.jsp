@@ -194,59 +194,80 @@
     </c:if>
 
     <c:if test="${teacher != null}">
-        <table class="active" width="700">
-            <tr>
-                <th>Course Id</th>
-                <th>Course name</th>
-                <th>Start date</th>
-                <th>Is finished</th>
-                <th>Price</th>
-                <th>Teacher</th>
-                <th>Schedule</th>
-                <th>Notes</th>
-            </tr>
-            <tr>
-                <th>${course.id}</th>
-                <th>${course.name}</th>
-                <th>${course.start}</th>
-                <th>${course.finished}</th>
-                <th>${course.price}</th>
-                <th>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</th>
-                <th>${course.schedule}</th>
-                <th>${course.notes}</th>
-            </tr>
-        </table>
+        <div align="center">
+            <table class="active" width="700">
+                <tr>
+                    <th>Course Id</th>
+                    <th>Course name</th>
+                    <th>Start date</th>
+                    <th>Is finished</th>
+                    <th>Price</th>
+                    <th>Teacher</th>
+                    <th>Schedule</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <th>${course.id}</th>
+                    <th>${course.name}</th>
+                    <th>${course.start}</th>
+                    <th>${course.finished}</th>
+                    <th>${course.price}</th>
+                    <th>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</th>
+                    <th>${course.schedule}</th>
+                    <th>${course.notes}</th>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <br>
+        <br>
         <c:if test="${empty listeners}">
-            <tr>
-                <td>There are no listeners!</td>
-            </tr>
+            <div align="center">
+                <tr>
+                    <td>There are no listeners!</td>
+                </tr>
+            </div>
+            <br>
+            <br>
+            <br>
         </c:if>
         <c:if test="${!empty listeners}">
-            <span class="fontSize180 silver">Listeners:</span><br><br><br>
-            <table bordercolor="red" border="2">
-
-                <tr>
-                    <th width="60px">User ID</th>
-                    <th width="150px">E-mail</th>
-                    <th width="150px">Last name</th>
-                    <th width="150px">First name</th>
-                    <th width="150px">Phone</th>
-                    <th width="100px"></th>
-                </tr>
-                <c:forEach var="users" items="${listeners}">
+            <div align="center">
+                <span class="fontSize180 silver">Listeners:</span><br><br><br>
+                <table bordercolor="red" border="2">
                     <tr>
-                        <td>${users.userId} </td>
-                        <td>${users.email} </td>
-                        <td>${users.lastName} </td>
-                        <td>${users.firstName} </td>
-                        <td>${users.phone} </td>
-                        <td>
-                        </td>
+                        <th width="60px">User ID</th>
+                        <th width="150px">E-mail</th>
+                        <th width="150px">Last name</th>
+                        <th width="150px">First name</th>
+                        <th width="150px">Phone</th>
+                        <th width="100px"></th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach var="user" items="${listeners}">
+                        <tr>
+                            <td>${user.userId} </td>
+                            <td>${user.email} </td>
+                            <td>${user.lastName} </td>
+                            <td>${user.firstName} </td>
+                            <td>${user.phone} </td>
+                            <td>
+                                <c:set var="titleURL">
+                                    <c:url value="studentDetails">
+                                        <c:param name="userId" value="${user.userId}"/>
+                                    </c:url>
+                                </c:set>
+                                <a href="${titleURL}">Detail</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <br>
+            <br>
+            <br>
         </c:if>
     </c:if>
+</div>
 
 
     <div align="center">

@@ -14,39 +14,39 @@ import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-import static ua.com.vertex.controllers.StudentDetailsController.STUDENT_DETAILS_JSP;
-import static ua.com.vertex.controllers.StudentDetailsController.USER;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
+import static ua.com.vertex.controllers.StudentDetailsController.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class StudentDetailsControllerTest {
-    private final String MSG = "Maybe method was changed";
 
     @Mock
     private UserLogic userLogic;
 
     private User user;
     private MockMvc mockMvc;
-    private StudentDetailsController underTest;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        underTest = new StudentDetailsController(userLogic);
+        StudentDetailsController underTest = new StudentDetailsController(userLogic);
         mockMvc = standaloneSetup(underTest)
                 .setSingleView(new InternalResourceView(STUDENT_DETAILS_JSP))
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
         user = new User.Builder().setUserId(1).setEmail("test@test.com").setFirstName("testFirstName")
                 .setLastName("testLastName").setIsActive(true).setRole(Role.ROLE_TEACHER).setDiscount(5).getInstance();
@@ -56,26 +56,30 @@ public class StudentDetailsControllerTest {
     public void studentDetailsReturnsCorrectView() throws Exception {
         when(userLogic.getUserById(anyInt())).thenReturn(Optional.ofNullable(user));
 
-        mockMvc.perform(post("/studentDetails"))
+        mockMvc.perform(get("/studentDetails").param(USER_ID, "1"))
                 .andExpect(view().name(STUDENT_DETAILS_JSP))
                 .andExpect(status().isOk());
     }
 
+    @Test()
+    public void studentDetailsReturnsCorrectViewWhenException() throws Exception {
+        when(userLogic.getUserById(anyInt())).thenThrow(new NoSuchElementException());
+
+        mockMvc.perform(get("/studentDetails").param(USER_ID, "1"))
+                .andExpect(view().name(ERROR))
+                .andExpect(status().isOk());
+    }
+
     @Test
-    public void studentDetailsHasCorrectObjectInModel() throws Exception {
+    public void studentDetailsCorrectView() throws Exception {
         when(userLogic.getUserById(anyInt())).thenReturn(Optional.ofNullable(user));
 
-        mockMvc.perform(post("/studentDetails"))
-                .andExpect(status().is(400))
+        mockMvc.perform(get("/studentDetails").param(USER_ID, "1"))
+                .andExpect(status().isOk())
                 .andExpect(model().attributeExists(USER))
                 .andExpect(model().attribute(USER, user));
     }
 
-    @Test
-    public void studentDetailsHasCorrectObjectInModel2() throws Exception {
-        when(userLogic.getUserById(anyInt())).thenReturn(Optional.of(user));
-        assertTrue(MSG, underTest.studentDetails(1).getModel().containsValue(user));
-    }
 }
 
 
