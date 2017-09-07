@@ -44,6 +44,7 @@ public class CourseDaoImplTest {
     private Course course;
     private User user1;
     private User user3;
+    private User teacher;
     private DtoCourseUser dto;
 
     private static final int COURSE_ID = 1;
@@ -62,6 +63,7 @@ public class CourseDaoImplTest {
                 .setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
         user3 = new User.Builder().setUserId(403).setEmail("user3@email.com").setFirstName("Name3")
                 .setLastName("Surname3").setPhone("+38050 333 3333").getInstance();
+        teacher = new User.Builder().setUserId(7).getInstance();
         dto = new DtoCourseUser();
     }
 
@@ -80,11 +82,24 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    public void getAllCourses() throws Exception {
+    public void getAllCoursesTest() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
         List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator);
         assertFalse(MSG, courses.isEmpty());
+
+        courses.forEach(course1 -> {
+            assertTrue(course1.getId() > 0);
+            assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
+        });
+    }
+
+    @Test
+    public void getCoursesPerPageWithParamTest() throws Exception {
+        DataNavigator dataNavigator = new DataNavigator();
+
+        List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator, teacher);
+        assertTrue(MSG, courses.size() == 1);
 
         courses.forEach(course1 -> {
             assertTrue(course1.getId() > 0);
@@ -318,5 +333,12 @@ public class CourseDaoImplTest {
         int result = courseDaoInf.getQuantityCourses();
         //noinspection ObviousNullCheck
         assertNotNull(MSG, result);
+    }
+
+    @Test
+    public void getQuantityCoursesWithParamReturnCorrectData() throws Exception {
+        int result = courseDaoInf.getQuantityCourses(teacher);
+
+        assertTrue(result == 1);
     }
 }

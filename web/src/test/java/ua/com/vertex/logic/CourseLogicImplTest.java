@@ -8,8 +8,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
+import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
+import ua.com.vertex.utils.DataNavigator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -32,6 +34,17 @@ public class CourseLogicImplTest {
         course = new Course.Builder().setId(1).setName("test").setFinished(false).setPrice(new BigDecimal(10000)).
                 setStart(LocalDate.of(2017, 5, 28)).setNotes("test").
                 setNotes("test").getInstance();
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void getCoursesPerPageVerifyCourseDaoAndReturnException() throws Exception {
+        DataNavigator dataNavigator = new DataNavigator();
+        User teacher = new User.Builder().setUserId(7).getInstance();
+
+        when(courseDaoInf.getCoursesPerPage(dataNavigator, teacher))
+                .thenThrow(new DataIntegrityViolationException("Test"));
+        courseLogic.getCoursesPerPage(dataNavigator, teacher);
+        verify(courseDaoInf, times(1)).getCoursesPerPage(dataNavigator, teacher);
     }
 
     @Test(expected = DataIntegrityViolationException.class)

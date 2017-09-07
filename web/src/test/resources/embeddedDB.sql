@@ -154,4 +154,10 @@ INSERT INTO Course_users (course_id, user_id)
 VALUES (1, 402);
 
 INSERT INTO Course_users (course_id, user_id)
-VALUES (2, 403)
+VALUES (2, 403);
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'LastName', NULL, NULL, '0', '38073 777 00 00', '3');
+
+INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
+VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 999999.99, 7, 'Sat, Sun', 'Welcome (=');
