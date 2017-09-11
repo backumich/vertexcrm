@@ -33,7 +33,7 @@ public class CourseDetailsController {
     static final String COURSE_DATA = "courseForInfo";
     static final String COURSE = "course";
     static final String COURSES = "courses";
-    private static final String COURSE_ID = "courseId";
+    static final String COURSE_ID = "courseId";
     static final String TEACHERS = "teachers";
     static final String LISTENERS = "listeners";
     static final String LOGGER_SERVER_EXCEPTION = "Problems with the server, try again later.";

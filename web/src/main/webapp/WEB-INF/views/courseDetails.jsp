@@ -212,7 +212,7 @@
                     <th>${course.start}</th>
                     <th>${course.finished}</th>
                     <th>${course.price}</th>
-                    <th>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</th>
+                    <th>${courses.teacher.firstName} </th>
                     <th>${course.schedule}</th>
                     <th>${course.notes}</th>
                 </tr>
