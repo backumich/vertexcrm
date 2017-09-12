@@ -95,6 +95,10 @@ a img {
     border: none;
 }
 
+.padding-left-15 {
+    padding-left: 15px;
+}
+
 .btn {
     padding: 0 13px;
     height: 39px;

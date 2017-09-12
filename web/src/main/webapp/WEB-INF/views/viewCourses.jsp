@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -161,7 +162,7 @@
                         <td>${courses.name} </td>
                         <td>${courses.start} </td>
                         <c:if test="${courses.finished}">
-                            <td style="font-size:150%; font-weight:bold;">&#10003;</td>
+                            <td class = "padding-left-15">&#10003;</td>
                         </c:if>
                         <c:if test="${!courses.finished}">
                             <td> </td>
