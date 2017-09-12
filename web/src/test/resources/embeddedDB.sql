@@ -160,4 +160,4 @@ INSERT INTO Users (user_id, email, password, first_name, last_name, passport_sca
 VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'LastName', NULL, NULL, '0', '38073 777 00 00', '3');
 
 INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
-VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 999999.99, 7, 'Sat, Sun', 'Welcome (=');
+VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 850.09, 7, 'Sat, Sun', 'Welcome (=');

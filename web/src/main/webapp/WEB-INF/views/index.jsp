@@ -120,13 +120,13 @@
         </sec:authorize>
 
         <div class="href">
-            <c:if test="${user == null && admin == null}">
+            <c:if test="${user == null && admin == null && teacher == null}">
                 <a href="<c:url value="/registration"/>">Register</a> |
                 <a href="<c:url value="/logIn"/>">Log in</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
-            <c:if test="${user != null}">
+            <c:if test="${user != null || teacher != null}">
                 <a href="<c:url value="/logIn"/>">User page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>

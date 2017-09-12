@@ -98,13 +98,23 @@ public class CourseDaoImplTest {
     public void getCoursesPerPageWithParamTest() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
+        Course teacherCourse = new Course.Builder().setId(7)
+                .setName("Teacher JAVA")
+                .setStart(LocalDate.of(2017, 4, 1))
+                .setFinished(false)
+                .setPrice(new BigDecimal("850.09"))
+                .setTeacher(new User.Builder().setUserId(7)
+                        .setEmail("teacher@test.com")
+                        .setFirstName("Teacher")
+                        .setLastName("LastName").getInstance())
+                .setSchedule("Sat, Sun")
+                .setNotes("Welcome (=").getInstance();
+
         List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator, teacher);
         assertTrue(MSG, courses.size() == 1);
 
-        courses.forEach(course1 -> {
-            assertTrue(course1.getId() > 0);
-            assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
-        });
+        assertEquals(teacherCourse, courses.get(0));
+
     }
 
     @Test

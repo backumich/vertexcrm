@@ -8,16 +8,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="${pageContext.request.contextPath}/css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/slick.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="${pageContext.request.contextPath}/javascript/watch.js"></script>
+    <script async="" src="${pageContext.request.contextPath}/javascript/analytics.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <style id="style-1-cropbar-clipper">
         .en-markup-crop-options {
@@ -160,7 +160,12 @@
                         <td>${courses.id} </td>
                         <td>${courses.name} </td>
                         <td>${courses.start} </td>
-                        <td>${courses.finished} </td>
+                        <c:if test="${courses.finished}">
+                            <td style="font-size:150%; font-weight:bold;">&#10003;</td>
+                        </c:if>
+                        <c:if test="${!courses.finished}">
+                            <td> </td>
+                        </c:if>
                         <td>${courses.price} </td>
                         <td>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</td>
                         <td>${courses.schedule} </td>
