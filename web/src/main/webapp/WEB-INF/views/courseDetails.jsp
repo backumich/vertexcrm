@@ -195,26 +195,42 @@
 
     <c:if test="${teacher != null}">
         <div align="center">
-            <table class="active" width="700">
+            <span class="fontSize180 silver">Course details</span><br><br><br>
+            <table class="table fontSize120" cols="2" width="600">
                 <tr>
-                    <th>Course Id</th>
-                    <th>Course name</th>
-                    <th>Start date</th>
-                    <th>Is finished</th>
-                    <th>Price</th>
-                    <th>Teacher</th>
-                    <th>Schedule</th>
-                    <th>Notes</th>
+                    <td>Course Id:</td>
+                    <td>${course.id}</td>
                 </tr>
                 <tr>
-                    <th>${course.id}</th>
-                    <th>${course.name}</th>
-                    <th>${course.start}</th>
-                    <th>${course.finished}</th>
-                    <th>${course.price}</th>
-                    <th>${courses.teacher.firstName} </th>
-                    <th>${course.schedule}</th>
-                    <th>${course.notes}</th>
+                    <td>Course name:</td>
+                    <td>${course.name}</td>
+                </tr>
+                <tr>
+                    <td>Start date:</td>
+                    <td>${course.start}</td>
+                </tr>
+                <tr>
+                    <td>Is finished:</td>
+                    <td><c:choose>
+                        <c:when test="${course.finished}">
+                            Yes
+                        </c:when>
+                        <c:otherwise>
+                            No
+                        </c:otherwise>
+                    </c:choose></td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td>${course.price}</td>
+                </tr>
+                <tr>
+                    <td>Schedule:</td>
+                    <td>${course.schedule}</td>
+                </tr>
+                <tr>
+                    <td>Notes:</td>
+                    <td>${course.notes}</td>
                 </tr>
             </table>
         </div>
@@ -234,13 +250,12 @@
         <c:if test="${!empty listeners}">
             <div align="center">
                 <span class="fontSize180 silver">Listeners:</span><br><br><br>
-                <table bordercolor="red" border="2">
+                <table class="table fontSize120" cols="2" width="600" border="2">
                     <tr>
-                        <th width="60px">User ID</th>
+                        <th width="80px">User ID</th>
                         <th width="150px">E-mail</th>
                         <th width="150px">Last name</th>
-                        <th width="150px">First name</th>
-                        <th width="150px">Phone</th>
+                        <th width="100px">First name</th>
                         <th width="100px"></th>
                     </tr>
                     <c:forEach var="user" items="${listeners}">
@@ -249,7 +264,6 @@
                             <td>${user.email} </td>
                             <td>${user.lastName} </td>
                             <td>${user.firstName} </td>
-                            <td>${user.phone} </td>
                             <td>
                                 <c:set var="titleURL">
                                     <c:url value="studentDetails">
@@ -270,12 +284,12 @@
 </div>
 
 
-    <div align="center">
-        <div class="hrefText" align="center">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
+<div align="center">
+    <div class="hrefText" align="center">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
+</div>
 </div>
 
 <div class="footer">

@@ -141,7 +141,8 @@
             </c:if>
 
             <c:if test="${teacher != null}">
-                <a href="<c:url value="/teacher"/>">Teacher page</a>
+                <a href="<c:url value="/teacher"/>">Teacher page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
             </c:if>
         </div>
     </div>

@@ -117,33 +117,32 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <table bordercolor="red" border="2">
+            <span class="fontSize180 silver">Student details</span><br><br><br>
+
+            <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
+            <table class="table fontSize120" cols="2" width="600">
                 <tr>
-                    <td>user Id</td>
+                    <td>User Id:</td>
                     <td>${user.userId}</td>
                 </tr>
                 <tr>
-                    <td>E-mail</td>
+                    <td>E-mail:</td>
                     <td>${user.email}</td>
                 </tr>
                 <tr>
-                    <td>Last name</td>
+                    <td>Last name:</td>
                     <td>${user.lastName}</td>
                 </tr>
                 <tr>
-                    <td>First name</td>
+                    <td>First name:</td>
                     <td>${user.firstName}</td>
                 </tr>
-                <%--<tr>--%>
-                <%--<td>Photo</td>--%>
-                <%--<td class="block"><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>--%>
-                <%--</tr>--%>
                 <tr>
-                    <td>Discount</td>
+                    <td>Discount:</td>
                     <td>${user.discount}</td>
                 </tr>
                 <tr>
-                    <td>Phone</td>
+                    <td>Phone:</td>
                     <td>${user.phone}</td>
                 </tr>
             </table>
