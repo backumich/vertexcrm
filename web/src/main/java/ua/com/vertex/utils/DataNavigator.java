@@ -61,16 +61,6 @@ public class DataNavigator {
         }
     }
 
-    public MapSqlParameterSource setPagingSQLParameters(MapSqlParameterSource parameters) {
-        parameters.addValue("from", (this.getCurrentNumberPage() - 1) * this.getRowPerPage());
-        parameters.addValue("offset", this.getRowPerPage());
-        return parameters;
-    }
-
-    public String getPagingSQLText() {
-        return "LIMIT :from, :offset";
-    }
-
     public String getCurrentNamePage() {
         return currentNamePage;
     }

@@ -14,6 +14,7 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
+import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
@@ -44,6 +45,8 @@ public class CourseDaoImpl implements CourseDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
 
+    private DaoUtilInf daoUtil;
+
     @Override
     public List<Course> getCoursesPerPage(DataNavigator dataNavigator) {
 
@@ -52,9 +55,9 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email " +
                 "FROM Courses c  INNER JOIN Users u ON u.user_id = c.teacher_id " +
-                dataNavigator.getPagingSQLText();
+                "LIMIT :from, :offset";
 
-        MapSqlParameterSource parameters = dataNavigator.setPagingSQLParameters(new MapSqlParameterSource());
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
 
         List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
 
@@ -73,9 +76,9 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email " +
                 "FROM Courses c INNER JOIN Users u ON c.teacher_id = :teacher_id AND u.user_id = :teacher_id " +
-                dataNavigator.getPagingSQLText();
+                "LIMIT :from, :offset";
 
-        MapSqlParameterSource parameters = dataNavigator.setPagingSQLParameters(new MapSqlParameterSource());
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
         parameters.addValue("teacher_id", teacher.getUserId());
 
         List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
@@ -327,7 +330,8 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Autowired
-    public CourseDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
+    public CourseDaoImpl(@Qualifier(value = "DS") DataSource dataSource, DaoUtilInf daoUtil) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.daoUtil = daoUtil;
     }
 }
