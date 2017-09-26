@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -25,8 +26,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -142,6 +143,19 @@
                         <td><form:errors path="phone"/></td>
                     </tr>
                     <tr>
+                        <td></td>
+                        <td>
+                            <br>
+                            <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
+                            <br>
+                        </td>
+                        <td>
+                            <c:if test="${captcha == false}">
+                                <br><s:message code="reCaptcha.error"/><br>
+                            </c:if>
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2" align="center"><input class="buttonText" type="submit" value="Register"/></td>
                     </tr>
                 </table>
@@ -227,6 +241,7 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 </body>
 </html>

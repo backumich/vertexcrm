@@ -143,32 +143,32 @@ public class UserFormRegistration {
         }
 
 
-        public UserFormRegistration.Builder setEmail(String email) {
+        public Builder setEmail(String email) {
             userFormRegistration.setEmail(email);
             return this;
         }
 
-        public UserFormRegistration.Builder setPassword(String password) {
+        public Builder setPassword(String password) {
             userFormRegistration.setPassword(password);
             return this;
         }
 
-        public UserFormRegistration.Builder setVerifyPassword(String verifyPassword) {
+        public Builder setVerifyPassword(String verifyPassword) {
             userFormRegistration.setVerifyPassword(verifyPassword);
             return this;
         }
 
-        public UserFormRegistration.Builder setFirstName(String firstName) {
+        public Builder setFirstName(String firstName) {
             userFormRegistration.setFirstName(firstName);
             return this;
         }
 
-        public UserFormRegistration.Builder setLastName(String lastName) {
+        public Builder setLastName(String lastName) {
             userFormRegistration.setLastName(lastName);
             return this;
         }
 
-        public UserFormRegistration.Builder setPhone(String phone) {
+        public Builder setPhone(String phone) {
             userFormRegistration.setPhone(phone);
             return this;
         }

@@ -25,8 +25,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -45,6 +45,7 @@
     }
     </style>
 </head>
+<%--suppress Annotator --%>
 <body class="inside footer-under">
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -191,7 +192,6 @@
             <a href="<c:url value="/" />">Home</a>
         </div>
     </div>
-</div>
 </div>
 
 <div class="footer">
