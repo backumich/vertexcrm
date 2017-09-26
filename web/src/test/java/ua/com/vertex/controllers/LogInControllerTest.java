@@ -17,7 +17,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.LoggingLogicImpl;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.Optional;
 
@@ -34,9 +34,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class LogInControllerTest {
 
     @Mock
-    private LogInfo logInfo;
-
-    @Mock
     private UserLogic userLogic;
 
     @InjectMocks
@@ -45,10 +42,11 @@ public class LogInControllerTest {
     @Mock
     private Model model;
 
+    @Mock
+    private EmailExtractor emailExtractor;
     private MockMvc mockMvc;
     private LogInController controller;
     private User user;
-    private Optional<User> optional;
 
     private static final String ADMIN_PAGE = "admin";
     private static final String USER_PAGE = "userProfile";
@@ -56,17 +54,15 @@ public class LogInControllerTest {
 
     @Before
     public void setUp() {
-        controller = new LogInController(logInfo, loggingLogic);
+        controller = new LogInController(loggingLogic, emailExtractor);
         user = new User.Builder().getInstance();
-        optional = Optional.ofNullable(user);
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_USER")
+    @WithMockUser(roles = "USER")
     public void showLogInPageForLoggedInUserReturnsUserView() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn(EMAIL);
-        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn(EMAIL);
+        when(userLogic.getUserByEmail(EMAIL)).thenReturn(Optional.ofNullable(user));
 
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(USER_PAGE))
@@ -76,11 +72,10 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void showLogInPageForLoggedInUserReturnsAdminView() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn(EMAIL);
-        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn(EMAIL);
+        when(userLogic.getUserByEmail(EMAIL)).thenReturn(Optional.ofNullable(user));
 
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(ADMIN_PAGE))
@@ -90,22 +85,20 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_USER")
+    @WithMockUser(roles = "USER")
     public void showLogInPageForLoggedInUserAddsModelAttributes() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn(EMAIL);
-        when(userLogic.getUserByEmail(EMAIL)).thenReturn(optional);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn(EMAIL);
+        when(userLogic.getUserByEmail(EMAIL)).thenReturn(Optional.ofNullable(user));
 
         controller.showLogInPage(model);
         verify(model, times(1)).addAttribute("user", user);
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_USER")
+    @WithMockUser(roles = "USER")
     public void showLoggedInPageForLoggedInUserReturnsUserView() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn("user");
-        when(userLogic.getUserByEmail("user")).thenReturn(optional);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn("user");
+        when(userLogic.getUserByEmail("user")).thenReturn(Optional.ofNullable(user));
 
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(USER_PAGE))
@@ -115,11 +108,10 @@ public class LogInControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ROLE_ADMIN")
+    @WithMockUser(roles = "ADMIN")
     public void showLoggedInPageForLoggedInUserReturnsAdminView() throws Exception {
-
-        when(logInfo.getEmail()).thenReturn("user");
-        when(userLogic.getUserByEmail("user")).thenReturn(optional);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn("user");
+        when(userLogic.getUserByEmail("user")).thenReturn(Optional.ofNullable(user));
 
         mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(ADMIN_PAGE))

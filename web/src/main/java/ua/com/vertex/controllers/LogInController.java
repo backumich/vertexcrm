@@ -1,62 +1,37 @@
 package ua.com.vertex.controllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.utils.EmailExtractor;
 
 @Controller
 public class LogInController {
-
-    private final LogInfo logInfo;
-    private final LoggingLogic loggingLogic;
-
-    private static final Logger LOGGER = LogManager.getLogger(LogInController.class);
-
     private static final String LOGIN = "logIn";
-    private static final String ERROR = "error";
+    private final LoggingLogic loggingLogic;
+    private final EmailExtractor emailExtractor;
 
     @RequestMapping(value = "/logIn")
-    public String showLogInPage(Model model) {
+    public String showLogInPage(Model model) throws Exception {
 
         String view = LOGIN;
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (!(authentication instanceof AnonymousAuthenticationToken)) {
-                view = loggingLogic.setUser(logInfo.getEmail(), model);
-            }
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
+        String email = emailExtractor.getEmailFromAuthentication();
+        if (email != null) {
+            view = loggingLogic.setUser(email, model);
         }
-
         return view;
     }
 
     @RequestMapping(value = "/loggedIn")
-    public String showLoggedIn(Model model) {
-
-        String view;
-        try {
-            view = loggingLogic.setUser(logInfo.getEmail(), model);
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
-            view = ERROR;
-        }
-
-        return view;
+    public String showLoggedIn(Model model) throws Exception {
+        return loggingLogic.setUser(emailExtractor.getEmailFromAuthentication(), model);
     }
 
     @Autowired
-    public LogInController(LogInfo logInfo, LoggingLogic loggingLogic) {
-        this.logInfo = logInfo;
+    public LogInController(LoggingLogic loggingLogic, EmailExtractor emailExtractor) {
         this.loggingLogic = loggingLogic;
+        this.emailExtractor = emailExtractor;
     }
 }

@@ -6,10 +6,9 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import ua.com.vertex.beans.PdfDataTransferObject;
+import ua.com.vertex.beans.PdfDto;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,14 +18,10 @@ import java.util.Locale;
 
 @Component
 public class PdfGenerator {
-
-    private final LogInfo logInfo;
-
     private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy", Locale.US);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
-    public void generatePdf(String pdfFileName, PdfDataTransferObject dto) {
-
+    public void generatePdf(String pdfFileName, PdfDto dto) throws Exception {
         Document document = new Document();
 
         try (FileOutputStream outputStream = new FileOutputStream(pdfFileName)) {
@@ -40,10 +35,7 @@ public class PdfGenerator {
             setText(writer, dto);
             document.close();
 
-            LOGGER.debug(logInfo.getId() + pdfFileName + " file generated");
-
-        } catch (Exception e) {
-            LOGGER.warn(logInfo.getId(), e);
+            LOGGER.debug(pdfFileName + " file generated");
         }
     }
 
@@ -58,10 +50,10 @@ public class PdfGenerator {
         canvas.addImage(image);
     }
 
-    private void setText(PdfWriter writer, PdfDataTransferObject dto) throws IOException, DocumentException {
+    private void setText(PdfWriter writer, PdfDto dto) throws IOException, DocumentException {
 
         String fullName = dto.getFirstName() + " " + dto.getLastName();
-        String date = formatter.format(LocalDate.parse(dto.getCertificationDate()));
+        String date = FORMATTER.format(LocalDate.parse(dto.getCertificationDate()));
 
         setTextRow(writer, "Certificate of Achievement", BaseFont.TIMES_BOLD, 44, 560, 350);
         setTextRow(writer, "This certificate acknowledges that", BaseFont.TIMES_ROMAN, 18, 560, 315);
@@ -86,10 +78,5 @@ public class PdfGenerator {
         cb.showTextAligned(Element.ALIGN_CENTER, parameter, shiftX, shiftY, 0);
         cb.endText();
         cb.restoreState();
-    }
-
-    @Autowired
-    public PdfGenerator(LogInfo logInfo) {
-        this.logInfo = logInfo;
     }
 }

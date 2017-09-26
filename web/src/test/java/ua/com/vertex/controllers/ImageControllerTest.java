@@ -16,7 +16,8 @@ import org.springframework.ui.Model;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.UserLogic;
-import ua.com.vertex.utils.LogInfo;
+
+import java.sql.SQLException;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,9 +30,6 @@ public class ImageControllerTest {
 
     @Autowired
     private UserLogic userLogic;
-
-    @Autowired
-    private LogInfo logInfo;
 
     @Mock
     private Model model;
@@ -47,13 +45,13 @@ public class ImageControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new ImageController(userLogic, logInfo);
+        controller = new ImageController(userLogic);
         user = new User.Builder().setUserId(EXISTING_ID).getInstance();
     }
 
     @Test
     @WithMockUser
-    public void showImageAddsModelAttributePhoto() {
+    public void showImageAddsModelAttributePhoto() throws SQLException {
         controller.showImage(user, PAGE_TO_DISPLAY, PHOTO, model);
         verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(PHOTO_RETRIEVED));
     }

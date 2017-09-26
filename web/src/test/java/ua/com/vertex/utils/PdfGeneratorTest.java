@@ -4,13 +4,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ua.com.vertex.beans.PdfDataTransferObject;
+import ua.com.vertex.beans.PdfDto;
 import ua.com.vertex.context.TestConfig;
 
 import java.io.File;
@@ -24,9 +23,6 @@ import static org.junit.Assert.assertTrue;
 @ActiveProfiles("test")
 public class PdfGeneratorTest {
 
-    @Autowired
-    private LogInfo logInfo;
-
     private PdfGenerator pdfGenerator;
     private final File file = new File(PDF_FILE_NAME);
     private static final String PDF_FILE_NAME = "PdfGeneratorTest.pdf";
@@ -36,7 +32,7 @@ public class PdfGeneratorTest {
         if (file.exists()) {
             file.delete();
         }
-        pdfGenerator = new PdfGenerator(logInfo);
+        pdfGenerator = new PdfGenerator();
     }
 
     @After
@@ -48,14 +44,15 @@ public class PdfGeneratorTest {
 
     @Test
     @WithMockUser
-    public void generatePdfCreatesFileOnDisk() {
+    public void generatePdfCreatesFileOnDisk() throws Exception {
+        final String email = "email";
         final String firstName = "FirstName";
         final String lastName = "LastName";
         final String courseName = "Java Professional";
         final String certificationDate = "2016-12-01";
         final String certificationId = "id";
 
-        PdfDataTransferObject dto = new PdfDataTransferObject(firstName, lastName, courseName,
+        PdfDto dto = new PdfDto(email, firstName, lastName, courseName,
                 certificationDate, certificationId);
 
         pdfGenerator.generatePdf(PDF_FILE_NAME, dto);

@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="с" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page session="false" %>
 <!DOCTYPE html>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -10,16 +11,6 @@
 
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
     <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
     <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
@@ -55,6 +46,7 @@
         margin-left: 0 !important;
     }
 
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -84,7 +76,7 @@
         s.src = "https://mc.yandex.ru/metrika/watch.js";
 
         //noinspection JSValidateTypes
-        if (w.opera === "[object Opera]") {
+        if (w.opera == "[object Opera]") {
             d.addEventListener("DOMContentLoaded", f, false);
         } else {
             f();
@@ -111,76 +103,135 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5">
 
-        <div>
-            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
 
-        <div>
-            <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
-                <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+<div align="center" class="page gray-page mh100 up-padding">
 
-        <div>
-            <span class="formHeaderText1">Create new payment:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="createPayment">
-                <input class="black" type="submit" name="createPayment" value="Create new payment"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+    <div class="fontSize180">Assigned users:</div>
+    <br>
+    <table class="tableSpacing">
+        <tr class="fontSize125 tableHeader">
+            <td class="labelWidth200">Email</td>
+            <td class="labelWidth150">First Name</td>
+            <td class="labelWidth150">Last Name</td>
+            <td class="labelWidth150">Phone</td>
+            <td class="labelWidth150">Remove from course</td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <c:forEach items="${assignedUsers}" var="assignedUser">
+            <sf:form action="confirmUserRemovalFromCourse" method="post" commandName="dtoCourseUser">
+                <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+                <input type="hidden" name="userId" value="${assignedUser.userId}">
+                <tr>
+                    <td>${assignedUser.email}</td>
+                    <td>${assignedUser.firstName}</td>
+                    <td>${assignedUser.lastName}</td>
+                    <td>${assignedUser.phone}</td>
+                    <td><input type="submit" value="Remove" class="black"/></td>
+                </tr>
+            </sf:form>
+        </c:forEach>
+    </table>
+    <br><br><br>
 
-        <div>
-            <span class="formHeaderText1">Add course:</span><br><br>
-            <form:form cssClass="buttonText" method="get" action="/addCourse">
-                <input class="black" type="submit" name="addCourse" value="Add course"/>
-            </form:form>
-        </div>
-        <br>
-        <br>
-        <br>
+    <div class="fontSize180">Search for a user to assign (by name or email):</div>
+    <br>
+    <sf:form action="searchForUsersToAssign" method="get" commandName="dtoCourseUser">
+        <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+        <table>
+            <tr>
+                <td><label for="searchParam" class="fontSize125 labelWidth300">
+                    Enter first name, or last name, or email:</label></td>
+                <td><input type="text" name="searchParam" id="searchParam" maxlength="255"
+                           placeholder="First name, or last name, or email" class="labelWidth200 black"/></td>
+            </tr>
+            <tr>
+                <td><span class="fontSize125">Select type of search:</span></td>
+                <td>
+                    <label class="black">
+                        <select name="searchType">
+                            <option selected value="first_name">By first name</option>
+                            <option value="last_name">By last name</option>
+                            <option value="email">By email</option>
+                        </select>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="buttonPaddingTop fontSize125"><input type="submit" value="Search" class="black"></td>
+            </tr>
+        </table>
+    </sf:form>
 
-        <div>
-            <span class="formHeaderText1">Course info:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
-                <input class="black" type="submit" name="courseInfo" value="Course info"/>
-            </form:form>
-        </div>
+    <c:if test="${!empty search}">
         <br>
-        <br>
-        <br>
-        <div align="center">
-            <c:if test="${!empty msg}">
-                <h3><span class="alert-success">${msg}</span></h3>
-            </c:if>
-        </div>
-        <br>
-        <br>
-        <br>
+        <sf:form action="clearSearchResults" method="get" commandName="dtoCourseUser">
+            <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+            <table>
+                <tr>
+                    <td class="buttonPaddingTop fontSize125">
+                        <input type="submit" value="Clear search results" class="black"></td>
+                </tr>
+            </table>
+        </sf:form>
+    </c:if>
+    <br><br>
 
-        <div align="center">
-            <div class="hrefText" align="center">
-                <a href="javascript:history.back();">Back</a> |
-                <a href="<c:url value="/" />">Home</a>
-            </div>
-        </div>
+    <c:if test="${!empty freeUsers and !empty search}">
+        <div class="fontSize180">Search results:</div>
+        <br>
+        <table class="tableSpacing">
+            <tr class="fontSize125 tableHeader">
+                <td class="labelWidth200">Email</td>
+                <td class="labelWidth150">First Name</td>
+                <td class="labelWidth150">Last Name</td>
+                <td class="labelWidth150">Phone</td>
+                <td class="labelWidth150">Assign to course</td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <c:forEach items="${freeUsers}" var="freeUser">
+                <sf:form action="assignUser" method="post" commandName="dtoCourseUser">
+                    <input type="hidden" name="searchType" value="${dtoCourseUser.searchType}">
+                    <input type="hidden" name="searchParam" value="${dtoCourseUser.searchParam}">
+                    <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+                    <input type="hidden" name="userId" value="${freeUser.userId}">
+                    <input type="hidden" name="email" value="${freeUser.email}">
+                    <input type="hidden" name="firstName" value="${freeUser.firstName}">
+                    <input type="hidden" name="lastName" value="${freeUser.lastName}">
+                    <input type="hidden" name="phone" value="${freeUser.phone}">
+                    <tr>
+                        <td>${freeUser.email}</td>
+                        <td>${freeUser.firstName}</td>
+                        <td>${freeUser.lastName}</td>
+                        <td>${freeUser.phone}</td>
+                        <td><input type="submit" value="Assign" class="black"/></td>
+                    </tr>
+                </sf:form>
+            </c:forEach>
+        </table>
+    </c:if>
+    <c:if test="${empty freeUsers and !empty search}">
+        <div class="fontSize180">Search results:</div>
+        <br>
+        <span class="fontSize140">No users found</span>
+    </c:if><br><br><br>
+
+    <sf:form action="courseDetails" method="get">
+        <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}"/>
+        <input type="submit" value="Back to course details" class="black fontSize125"/>
+    </sf:form>
+
+    <br><br><br>
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
-
+    <br><br>
 </div>
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -235,11 +286,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+<script src="./javascript/typed.js"></script>
+<script src="javascript/slick.min.js"></script>
+<script type="text/javascript" src="javascript/main.js"></script>
 
 </body>
 </html>

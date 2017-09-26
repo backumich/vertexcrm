@@ -6,21 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.mock.web.MockHttpServletResponse;
-import ua.com.vertex.beans.PdfDataTransferObject;
-import ua.com.vertex.utils.LogInfo;
+import ua.com.vertex.beans.PdfDto;
+import ua.com.vertex.utils.EmailExtractor;
 import ua.com.vertex.utils.PdfDownloader;
 import ua.com.vertex.utils.PdfGenerator;
 
-import java.io.IOException;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PdfControllerTest {
-
-    @Mock
-    private LogInfo logInfo;
+    private static final String PDF_FILE_NAME = "null_certificate.pdf";
 
     @Mock
     private PdfGenerator pdfGenerator;
@@ -28,16 +23,18 @@ public class PdfControllerTest {
     @Mock
     private PdfDownloader pdfDownloader;
 
+    @Mock
+    private EmailExtractor emailExtractor;
     private PdfController pdfController;
-    private static final String PDF_FILE_NAME = "null_certificate.pdf";
 
     @Before
     public void setUp() {
-        pdfController = new PdfController(pdfGenerator, pdfDownloader, logInfo);
+        pdfController = new PdfController(pdfGenerator, pdfDownloader, emailExtractor);
     }
 
     @Test
-    public void generatePdfInvokesPdfGenerator() throws IOException {
+    public void generatePdfInvokesPdfGenerator() throws Exception {
+        final String email = "";
         final String firstName = "";
         final String lastName = "";
         final String courseName = "";
@@ -45,8 +42,9 @@ public class PdfControllerTest {
         final String certificationId = "";
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        PdfDataTransferObject dto = new PdfDataTransferObject(firstName, lastName, courseName, certificationDate,
-                certificationId);
+        PdfDto dto = new PdfDto(email, firstName, lastName, courseName, certificationDate, certificationId);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn(null);
+
         pdfController.generatePdf(dto, response);
 
         verify(pdfGenerator, times(1)).generatePdf(PDF_FILE_NAME, dto);
