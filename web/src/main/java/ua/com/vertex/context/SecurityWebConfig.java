@@ -1,7 +1,6 @@
 package ua.com.vertex.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,18 +23,21 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
     private static final int VALIDITY_SECONDS = 604800;
 
+    private final SpringDataUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginBruteForceDefender defender;
 
     @Autowired
-    public SecurityWebConfig(BCryptPasswordEncoder passwordEncoder, LoginBruteForceDefender defender) {
+    public SecurityWebConfig(SpringDataUserDetailsService userDetailsService,
+                             BCryptPasswordEncoder passwordEncoder, LoginBruteForceDefender defender) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.defender = defender;
     }
 
-    @Bean
-    public SpringDataUserDetailsService springDataUserDetailsService() {
-        return new SpringDataUserDetailsService();
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -83,11 +85,5 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder);
     }
 }
