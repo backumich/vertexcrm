@@ -152,12 +152,11 @@
             <version>5.5.11</version>
         </dependency>
 
-        <!--Lombok-->
+        <!--Guava-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.16</version>
-            <scope>provided</scope>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
         </dependency>
 
         <!--Json-->
