@@ -2,7 +2,9 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import static ua.com.vertex.context.SecurityWebConfig.*;
 
 @Controller
+@PropertySource("classpath:reCaptcha.properties")
 public class AppErrorController implements ErrorController {
     private static final Logger LOGGER = LogManager.getLogger(AppErrorController.class);
     private static final String ERROR = "error";
@@ -22,7 +25,9 @@ public class AppErrorController implements ErrorController {
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
-    private static final String USER_BLOCKED = " The username has been blocked for a period of time!";
+
+    @Value("${login.blocking.time}")
+    private int blockingPeriod;
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -38,7 +43,8 @@ public class AppErrorController implements ErrorController {
 
         } else if (LOGIN_ATTEMPTS.equals(throwable.getMessage())) {
             LOGGER.debug(LOGIN_ATTEMPTS);
-            model.addAttribute(ERROR_MESSAGE, LOGIN_ATTEMPTS + USER_BLOCKED);
+            model.addAttribute(ERROR_MESSAGE, LOGIN_ATTEMPTS +
+                    String.format(" The username has been blocked for %d minutes!", blockingPeriod));
 
         } else if (RE_CAPTCHA.equals(throwable.getMessage())) {
             LOGGER.debug(RE_CAPTCHA);
