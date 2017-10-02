@@ -33,32 +33,28 @@ public class LoginBruteForceDefender {
                 );
     }
 
-    public int increment(String username) {
+    public synchronized int increment(String username) {
         if (loginAttempts == null) {
             loginAttempts = setLoadingCache();
         }
-        synchronized (this) {
-            int counter = 0;
-            if (loginAttempts.asMap().containsKey(username)) {
-                counter = loginAttempts.asMap().get(username);
-                if (++counter < maxAttempts) {
-                    loginAttempts.put(username, counter);
-                } else {
-                    counter = BLOCKED_NUMBER;
-                }
+        int counter = 0;
+        if (loginAttempts.asMap().containsKey(username)) {
+            counter = loginAttempts.asMap().get(username);
+            if (++counter < maxAttempts) {
+                loginAttempts.put(username, counter);
             } else {
-                loginAttempts.put(username, 1);
+                counter = BLOCKED_NUMBER;
             }
-            return counter;
+        } else {
+            loginAttempts.put(username, 1);
         }
+        return counter;
     }
 
-    public void clearEntry(String username) {
+    public synchronized void clearEntry(String username) {
         if (loginAttempts == null) {
             loginAttempts = setLoadingCache();
         }
-        synchronized (this) {
-            loginAttempts.asMap().remove(username);
-        }
+        loginAttempts.asMap().remove(username);
     }
 }
