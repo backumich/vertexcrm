@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.GlobalException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -60,7 +61,7 @@ public class UserDaoImpl implements UserDaoInf {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
             LOGGER.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No user id=" + userId);
+            throw new GlobalException(e, "No user id = " + userId);
         }
 
         return Optional.ofNullable(user);

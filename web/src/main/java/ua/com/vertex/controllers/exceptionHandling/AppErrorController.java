@@ -26,7 +26,6 @@ public class AppErrorController implements ErrorController {
         Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 
         if (response.getStatus() == HttpStatus.NOT_FOUND.value()) {
-            LOGGER.debug(NOT_FOUND);
             model.addAttribute(ERROR_MESSAGE, NOT_FOUND);
 
         } else if (UNKNOWN_ERROR.equals(throwable.getMessage())) {

@@ -16,8 +16,6 @@ import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.List;
 
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-
 @Controller
 public class UserController {
     static final String CERTIFICATES = "certificates";
@@ -44,7 +42,7 @@ public class UserController {
 
         LOGGER.debug(LOG_REQ_IN);
         String view;
-        try {
+//        try {
             String email = emailExtractor.getEmailFromAuthentication();
             LOGGER.debug(LOG_GET_EMAIL + email);
             List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(email);
@@ -53,9 +51,9 @@ public class UserController {
             model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
 
             view = USER_JSP;
-        } catch (Exception e) {
-            view = ERROR;
-        }
+//        } catch (Exception e) {
+//            view = ERROR;
+//        }
 
         LOGGER.debug(String.format(LOG_REQ_OUT, view));
         return view;

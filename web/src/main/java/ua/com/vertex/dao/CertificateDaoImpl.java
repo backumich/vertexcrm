@@ -78,7 +78,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
 
     @Override
     public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
-
+//----
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:user_id";
 

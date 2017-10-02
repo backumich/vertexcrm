@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
-
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
@@ -30,7 +27,7 @@ public class RegistrationController {
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
-    static final String CAPTCHA = "captcha";
+    private static final String CAPTCHA = "captcha";
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
     private final MailService mailService;
@@ -58,18 +55,11 @@ public class RegistrationController {
 
         modelAndView.setViewName(REGISTRATION_PAGE);
         if (isVerified && !bindingResult.hasErrors()) {
-            try {
-                if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
-                    modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
-                            emailLogic.createRegistrationMessage(userFormRegistration));
-                }
-            } catch (DataAccessException e) {
-                modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
-                LOGGER.warn(e);
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR);
-                LOGGER.warn(e);
+            if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
+                modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                LOGGER.debug("Sending a message to the user - " + userFormRegistration.getEmail());
+                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
+                        emailLogic.createRegistrationMessage(userFormRegistration));
             }
         }
         modelAndView.addObject(CAPTCHA, isVerified);

@@ -33,28 +33,21 @@ public class UserDetailsController {
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
 
-        // -- Get user data by ID
-        try {
-            Optional<User> optionalUser = userLogic.getUserById(userId);
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
-                modelAndView.setViewName(PAGE_JSP);
-                modelAndView.addObject("user", user);
-            }
-            LOGGER.debug("Get full data for user ID - " + userId);
-        } catch (Exception e) {
-            LOGGER.warn("During preparation the all data for user ID - " + userId + " there was a database error", e);
-            modelAndView.setViewName(ERROR_JSP);
+        Optional<User> optionalUser = userLogic.getUserById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            modelAndView.setViewName(PAGE_JSP);
+            modelAndView.addObject("user", user);
         }
+        LOGGER.debug("Get full data for user ID - " + userId);
 
-        //  -- Get all system roles
         modelAndView.addObject("allRoles", Role.values());
-            LOGGER.debug("We received all the roles of the system");
+        LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificate
         try {
             modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
-            LOGGER.debug("We received all the roles of the system");
+            LOGGER.debug("Get all user certificates by userID - " + userId);
         } catch (Exception ignore) {
             LOGGER.warn("There are problems with access to roles of the system", ignore);
         }
@@ -106,7 +99,7 @@ public class UserDetailsController {
 
         //  -- Get all system roles
         modelAndView.addObject("allRoles", Role.values());
-            LOGGER.debug("We received all the roles of the system");
+        LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificates
         try {

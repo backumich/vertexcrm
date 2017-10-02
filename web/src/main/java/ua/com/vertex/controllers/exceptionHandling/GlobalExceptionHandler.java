@@ -2,6 +2,7 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,10 +30,16 @@ public class GlobalExceptionHandler {
         return CERTIFICATE_DETAILS;
     }
 
-    @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class})
+    @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class, DataAccessException.class})
     public String handleCannotGetJdbcConnectionException(Exception e, Model model) {
         LOGGER.warn(e, e);
-        model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
+        model.addAttribute(ERROR_MESSAGE, "Oops, something went wrong. Try in a minute please.");
+        return ERROR;
+    }
+
+    @ExceptionHandler(GlobalException.class)
+    public String handleGlobalException(GlobalException e) {
+        LOGGER.debug(e, e);
         return ERROR;
     }
 }
