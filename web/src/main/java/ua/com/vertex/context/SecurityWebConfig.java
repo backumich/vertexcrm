@@ -63,8 +63,6 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                             throw new RuntimeException(LOGIN_ATTEMPTS);
                         }
                         response.sendRedirect("/logIn?error");
-                    } else if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
-                        throw new RuntimeException(LOGIN_ATTEMPTS);
                     } else if (e.getMessage().equals(RE_CAPTCHA)) {
                         throw new RuntimeException(RE_CAPTCHA, e);
                     } else {
