@@ -21,7 +21,7 @@ public class LoginBruteForceDefender {
     private LoadingCache<String, Integer> loginAttempts;
 
     public LoginBruteForceDefender(@Value("${login.attempts}") int maxAttempts,
-                                   @Value("${login.blocking.time}") int loginBlockingTime) {
+                                   @Value("${login.blocking.time.seconds}") int loginBlockingTime) {
         this.maxAttempts = maxAttempts;
         this.loginBlockingTime = loginBlockingTime;
         loginAttempts = initializeLoadingCache();
@@ -29,7 +29,7 @@ public class LoginBruteForceDefender {
 
     private LoadingCache<String, Integer> initializeLoadingCache() {
         return CacheBuilder.newBuilder()
-                .expireAfterWrite(loginBlockingTime, TimeUnit.MINUTES).build(
+                .expireAfterWrite(loginBlockingTime, TimeUnit.SECONDS).build(
                         new CacheLoader<String, Integer>() {
                             @Override
                             public Integer load(String s) throws Exception {

@@ -1,8 +1,10 @@
 package ua.com.vertex.context;
 
+import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.sql.DataSource;
 import javax.validation.Validator;
@@ -24,8 +26,11 @@ public class TestConfig {
 
     @Bean
     public Validator validator() {
-
         return new org.springframework.validation.beanvalidation.LocalValidatorFactoryBean();
+    }
 
+    @Bean
+    public ReCaptchaService reCaptchaService() {
+        return Mockito.mock(ReCaptchaService.class);
     }
 }

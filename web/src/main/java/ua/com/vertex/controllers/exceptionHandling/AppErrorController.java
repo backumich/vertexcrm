@@ -26,7 +26,7 @@ public class AppErrorController implements ErrorController {
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
 
-    @Value("${login.blocking.time}")
+    @Value("${login.blocking.time.seconds}")
     private int blockingPeriod;
 
     @RequestMapping(value = "/error")
@@ -44,7 +44,7 @@ public class AppErrorController implements ErrorController {
         } else if (LOGIN_ATTEMPTS.equals(throwable.getMessage())) {
             LOGGER.debug(LOGIN_ATTEMPTS);
             model.addAttribute(ERROR_MESSAGE, LOGIN_ATTEMPTS +
-                    String.format(" The username has been blocked for %d minutes!", blockingPeriod));
+                    String.format(" The username has been blocked for %d minutes!", blockingPeriod / 60));
 
         } else if (RE_CAPTCHA.equals(throwable.getMessage())) {
             LOGGER.debug(RE_CAPTCHA);
