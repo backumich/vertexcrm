@@ -45,21 +45,23 @@ public class UserDetailsController {
         LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificate
-        try {
-            modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
-            LOGGER.debug("Get all user certificates by userID - " + userId);
-        } catch (Exception ignore) {
-            LOGGER.warn("There are problems with access to roles of the system", ignore);
-        }
+//        try {
+        modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
+        LOGGER.debug("Get all user certificates by userID - " + userId);
+//        } catch (Exception ignore) {
+//            LOGGER.warn("There are problems with access to roles of the system", ignore);
+//        }
         return modelAndView;
     }
 
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView saveUserData(@RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
-                                     @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
-                                     @Valid @ModelAttribute(USERDATA_MODEL) User user,
-                                     BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView saveUserData(
+            @RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
+            @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
+            @Valid @ModelAttribute(USERDATA_MODEL) User user,
+            BindingResult bindingResult, ModelAndView modelAndView) {
+
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg", "WARNING!!! User data is updated, but not saved");

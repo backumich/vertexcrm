@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.GlobalException;
+import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -61,7 +61,7 @@ public class UserDaoImpl implements UserDaoInf {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
             LOGGER.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            throw new GlobalException(e, "No user id = " + userId);
+            throw new ServiceException("No user id = " + userId, e);
         }
 
         return Optional.ofNullable(user);
@@ -69,7 +69,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        LOGGER.debug(String.format("Call -  getUserByEmail(%s) ;", email));
+        LOGGER.debug(String.format("Call - getUserByEmail(%s);", email));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +

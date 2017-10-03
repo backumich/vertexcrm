@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
         return ERROR;
     }
 
-    @ExceptionHandler(GlobalException.class)
-    public String handleGlobalException(GlobalException e) {
+    @ExceptionHandler(ServiceException.class)
+    public String handleGlobalException(ServiceException e) {
         LOGGER.debug(e, e);
         return ERROR;
     }
