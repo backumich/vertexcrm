@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 @PropertySource("classpath:reCaptcha.properties")
 public class LoginBruteForceDefender {
     public static final int BLOCKED_NUMBER = -1;
+    private final int maxAttempts;
+    private final int loginBlockingTime;
     private LoadingCache<String, Integer> loginAttempts;
-    private int maxAttempts;
-    private int loginBlockingTime;
 
     public LoginBruteForceDefender(@Value("${login.attempts}") int maxAttempts,
                                    @Value("${login.blocking.time}") int loginBlockingTime) {
