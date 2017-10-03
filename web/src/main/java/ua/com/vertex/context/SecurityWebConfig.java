@@ -59,7 +59,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 }))
                 .failureHandler((request, response, e) -> {
                     if (e instanceof BadCredentialsException) {
-                        if (defender.increment(request.getParameter("username")) == BLOCKED_NUMBER) {
+                        if (defender.verifyUsername(request.getParameter("username")) == BLOCKED_NUMBER) {
                             throw new RuntimeException(LOGIN_ATTEMPTS);
                         }
                         response.sendRedirect("/logIn?error");
