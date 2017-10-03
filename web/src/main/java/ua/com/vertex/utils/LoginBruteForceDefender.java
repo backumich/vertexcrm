@@ -14,14 +14,17 @@ import java.util.concurrent.TimeUnit;
 public class LoginBruteForceDefender {
     public static final int BLOCKED_NUMBER = -1;
     private LoadingCache<String, Integer> loginAttempts;
-
-    @Value("${login.attempts}")
     private int maxAttempts;
-
-    @Value("${login.blocking.time}")
     private int loginBlockingTime;
 
-    private LoadingCache<String, Integer> setLoadingCache() {
+    public LoginBruteForceDefender(@Value("${login.attempts}") int maxAttempts,
+                                   @Value("${login.blocking.time}") int loginBlockingTime) {
+        this.maxAttempts = maxAttempts;
+        this.loginBlockingTime = loginBlockingTime;
+        loginAttempts = initializeLoadingCache();
+    }
+
+    private LoadingCache<String, Integer> initializeLoadingCache() {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(loginBlockingTime, TimeUnit.MINUTES).build(
                         new CacheLoader<String, Integer>() {
@@ -34,9 +37,6 @@ public class LoginBruteForceDefender {
     }
 
     public synchronized int increment(String username) {
-        if (loginAttempts == null) {
-            loginAttempts = setLoadingCache();
-        }
         int counter = 0;
         if (loginAttempts.asMap().containsKey(username)) {
             counter = loginAttempts.asMap().get(username);
@@ -52,9 +52,6 @@ public class LoginBruteForceDefender {
     }
 
     public synchronized void clearEntry(String username) {
-        if (loginAttempts == null) {
-            loginAttempts = setLoadingCache();
-        }
         loginAttempts.asMap().remove(username);
     }
 }
