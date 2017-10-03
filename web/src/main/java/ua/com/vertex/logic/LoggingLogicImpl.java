@@ -24,7 +24,7 @@ public class LoggingLogicImpl implements LoggingLogic {
     private final UserDaoInf userDao;
 
     @Override
-    public Optional<User> logIn(String email)  {
+    public Optional<User> logIn(String email) {
         Optional<User> toReturn;
 
         if (email.isEmpty()) {

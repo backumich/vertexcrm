@@ -48,7 +48,7 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-            modelAndView.addObject("allRoles", Role.values());
+        modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificate
@@ -105,7 +105,7 @@ public class UserDetailsController {
         }
 
         //  -- Get all system roles
-            modelAndView.addObject("allRoles", Role.values());
+        modelAndView.addObject("allRoles", Role.values());
             LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificates
