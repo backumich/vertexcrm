@@ -1,4 +1,3 @@
-
 package ua.com.vertex.context;
 
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +13,11 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+        return new Class<?>[]{};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{MainContext.class};
+        return new Class<?>[]{WebConfig.class};
     }
 }

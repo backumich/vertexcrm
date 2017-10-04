@@ -11,71 +11,77 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
+import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
+import ua.com.vertex.utils.MailService;
+import ua.com.vertex.utils.ReCaptchaService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
+
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
 @RequestMapping(value = "/registration")
 public class RegistrationController {
-
     static final String REGISTRATION_PAGE = "registration";
-    private static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
-    private static final String REGISTRATION_ERROR_PAGE = "registrationError";
-    private static final String NAME_USER_MODEL_FOR_REGISTRATION_PAGE = "userFormRegistration";
-
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
-
+    static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
+    static final String REGISTRATION_ERROR_PAGE = "registrationError";
+    static final String NAME_MODEL = "userFormRegistration";
+    static final String CAPTCHA = "captcha";
+    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
+    private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
+    private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
-
-    @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic) {
-        this.registrationUserLogic = registrationUserLogic;
-    }
+    private EmailLogic emailLogic;
+    private ReCaptchaService reCaptchaService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
-        LOGGER.info("First request to " + REGISTRATION_PAGE);
-        return new ModelAndView(REGISTRATION_PAGE, NAME_USER_MODEL_FOR_REGISTRATION_PAGE, new UserFormRegistration());
+        LOGGER.info("Get page - " + REGISTRATION_PAGE);
+        return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 
     @PostMapping
-    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_USER_MODEL_FOR_REGISTRATION_PAGE)
-                                                    UserFormRegistration userFormRegistration, BindingResult bindingResult, ModelAndView modelAndView) {
+    public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
+                                                    UserFormRegistration userFormRegistration,
+                                            BindingResult bindingResult, ModelAndView modelAndView,
+                                            HttpServletRequest request) throws IOException {
 
-        isMatchPassword(userFormRegistration, bindingResult);
-        checkEmailAlreadyExists(userFormRegistration.getEmail(), bindingResult);
+        LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
 
-        if (bindingResult.hasErrors()) {
-            LOGGER.info("There are errors in filling in the form " + REGISTRATION_PAGE);
-            modelAndView.setViewName(REGISTRATION_PAGE);
-        } else {
+        String reCaptchaResponse = request.getParameter("g-recaptcha-response");
+        String reCaptchaRemoteAddr = request.getRemoteAddr();
+        Boolean isVerified = reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr);
+
+        modelAndView.setViewName(REGISTRATION_PAGE);
+        if (isVerified && !bindingResult.hasErrors()) {
             try {
-                int userID = registrationUserLogic.registrationUser(new User(userFormRegistration));
-                modelAndView.addObject("userID", userID);
-                modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
+                    modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
+                    mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
+                            emailLogic.createRegistrationMessage(userFormRegistration));
+                }
             } catch (DataAccessException e) {
                 modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
+                LOGGER.warn(e);
+            } catch (Exception e) {
+                modelAndView.setViewName(ERROR);
+                LOGGER.warn(e);
             }
         }
-        modelAndView.addObject(NAME_USER_MODEL_FOR_REGISTRATION_PAGE, userFormRegistration);
+        modelAndView.addObject(CAPTCHA, isVerified);
         return modelAndView;
     }
 
-    private void isMatchPassword(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
-        if (!registrationUserLogic.isMatchPassword(userFormRegistration)) {
-            LOGGER.debug("when a user registration " + userFormRegistration.getEmail() + " were entered passwords do not match");
-            bindingResult.rejectValue("verifyPassword", "error.verifyPassword", "Passwords do not match!");
-        }
-    }
-
-    private void checkEmailAlreadyExists(String email, BindingResult bindingResult) {
-        if (registrationUserLogic.checkEmailAlreadyExists(email)) {
-            LOGGER.debug("That email |" + email + "| is already registered");
-            bindingResult.rejectValue("email", "error.email", "User with that email is already registered!");
-        }
+    @Autowired
+    public RegistrationController(RegistrationUserLogic registrationUserLogic,
+                                  EmailLogic emailLogic, MailService mailService, ReCaptchaService reCaptchaService) {
+        this.registrationUserLogic = registrationUserLogic;
+        this.emailLogic = emailLogic;
+        this.mailService = mailService;
+        this.reCaptchaService = reCaptchaService;
     }
 }
-

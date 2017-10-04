@@ -105,13 +105,14 @@
             <h1>No certificate with going !!!</h1>
         </c:if>
         <c:if test="${!empty certificate}">
-            <table class="active" width="500">
+            <table class="active" width="700">
                 <tr>
                     <th>Certification Id</th>
                     <th>User Id</th>
                     <th>Certification Date</th>
                     <th>Course Name</th>
                     <th>Language</th>
+                    <th>Certificate Link</th>
                 </tr>
                 <tr>
                     <td>${certificate.certificationId}</td>
@@ -119,6 +120,7 @@
                     <td>${certificate.certificationDate}</td>
                     <td>${certificate.courseName}</td>
                     <td>${certificate.language}</td>
+                    <td>localhost:8080/processCertificateDetails/${certificate.certificationId}</td>
                 </tr>
             </table>
         </c:if>

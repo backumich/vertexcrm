@@ -112,22 +112,15 @@
                 <tr>
                     <td colspan="2" align="center"><h2>I'm sorry, something went wrong. Try to register later.</h2></td>
                 </tr>
-                <tr>
-                    <td colspan="2" align="center"><h2>${userFormRegistration.email}</h2></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center"><h2>${userFormRegistration.lastName}</h2></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center"><h2>${userFormRegistration.firstName}</h2></td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center"><h2>${userFormRegistration.phone}</h2></td>
-                </tr>
             </table>
-
         </div>
-
+        <br>
+        <br>
+        <br>
+        <div class="hrefText" align="center">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/" />">Home</a>
+        </div>
     </div>
 </div>
 <div class="footer">

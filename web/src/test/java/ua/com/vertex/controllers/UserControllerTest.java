@@ -2,23 +2,28 @@ package ua.com.vertex.controllers;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.UserController.CERTIFICATES;
+import static ua.com.vertex.controllers.UserController.USER_JSP;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
 
     private UserController underTest;
@@ -27,34 +32,48 @@ public class UserControllerTest {
 
     @Mock
     private CertificateLogic certificateLogic;
+    @Mock
+    private EmailExtractor emailExtractor;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        underTest = new UserController(certificateLogic);
+        underTest = new UserController(certificateLogic, emailExtractor);
         model = new ExtendedModelMap();
     }
 
     @Test
-    public void getAllCertificateByUserIdIsCalledOnUserLogic() throws Exception {
-        underTest.getAllCertificatesByUserId(111, model);
-        verify(certificateLogic).getAllCertificatesByUserId(anyInt());
+    public void userHasCorrectDataInModel() throws Exception {
+        ModelAndView result = underTest.user();
+        assertEquals("Have wrong viewName in ModelAndView", result.getViewName(), USER_JSP);
     }
 
     @Test
-    public void getAllCertificateByUserIdShouldReturnAppropriateString() {
-        String result = underTest.getAllCertificatesByUserId(222, model);
-        assertEquals("Maybe mapping for this method was changed", "user", result);
+    public void getAllCertificateByUserEmailIsCalledOnUserLogic() throws Exception {
+        underTest.getAllCertificatesByUserEmail(model);
+        verify(certificateLogic).getAllCertificatesByUserEmail(anyString());
     }
 
     @Test
-    public void getAllCertificateByUserIdShouldInsertCertificatesIntoModel() {
+    public void getAllCertificateByUserEmailShouldReturnAppropriateString() {
+        assertEquals("Return wrong view", "user", underTest.getAllCertificatesByUserEmail(model));
+    }
+
+    @Test
+    public void getAllCertificateByUserEmailShouldReturnAppropriateStringWhenException() {
+        //noinspection unchecked
+        when(emailExtractor.getEmailFromAuthentication()).thenThrow(Exception.class);
+        assertEquals("Return wrong view", ERROR, underTest.getAllCertificatesByUserEmail(model));
+    }
+
+    @Test
+    public void getAllCertificateByUserEmailShouldInsertCertificatesIntoModel() {
         ArrayList<Certificate> certificates = new ArrayList<>();
         certificates.add(new Certificate.Builder().getInstance());
 
-        when(certificateLogic.getAllCertificatesByUserId(333)).thenReturn(certificates);
+        when(certificateLogic.getAllCertificatesByUserEmail("test")).thenReturn(certificates);
+        when(emailExtractor.getEmailFromAuthentication()).thenReturn("test");
 
-        underTest.getAllCertificatesByUserId(333, model);
+        underTest.getAllCertificatesByUserEmail(model);
 
         Object actualResult = model.asMap().get(CERTIFICATES);
 

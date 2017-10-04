@@ -1,10 +1,12 @@
 package ua.com.vertex.beans;
 
 import org.hibernate.validator.constraints.Email;
+import ua.com.vertex.validators.interfaces.PasswordVerification;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@PasswordVerification(message = "Password and password confirmation fields don't match!!!")
 public class UserFormRegistration {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
@@ -22,7 +24,7 @@ public class UserFormRegistration {
     @Size(min = 1, max = 256, message = "This field must be longer than 1 and less than  256 characters")
     private String lastName;
 
-    @Size(min = 1, max = 256, message = "This field should not be longer than 10 characters")
+    @Size(min = 1, max = 15, message = "This field should not be longer than 15 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
             message = "Invalid telephone number format!")
     /* regex to validate phone numbers   ^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
@@ -102,13 +104,12 @@ public class UserFormRegistration {
 
         UserFormRegistration that = (UserFormRegistration) o;
 
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (verifyPassword != null ? !verifyPassword.equals(that.verifyPassword) : that.verifyPassword != null)
-            return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        return phone != null ? phone.equals(that.phone) : that.phone == null;
+        return (email != null ? email.equals(that.email) : that.email == null)
+                && (password != null ? password.equals(that.password) : that.password == null)
+                && (verifyPassword != null ? verifyPassword.equals(that.verifyPassword) : that.verifyPassword == null)
+                && (firstName != null ? firstName.equals(that.firstName) : that.firstName == null)
+                && (lastName != null ? lastName.equals(that.lastName) : that.lastName == null)
+                && (phone != null ? phone.equals(that.phone) : that.phone == null);
     }
 
     @Override
@@ -132,5 +133,48 @@ public class UserFormRegistration {
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        private final UserFormRegistration userFormRegistration;
+
+        public Builder() {
+            userFormRegistration = new UserFormRegistration();
+        }
+
+
+        public Builder setEmail(String email) {
+            userFormRegistration.setEmail(email);
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            userFormRegistration.setPassword(password);
+            return this;
+        }
+
+        public Builder setVerifyPassword(String verifyPassword) {
+            userFormRegistration.setVerifyPassword(verifyPassword);
+            return this;
+        }
+
+        public Builder setFirstName(String firstName) {
+            userFormRegistration.setFirstName(firstName);
+            return this;
+        }
+
+        public Builder setLastName(String lastName) {
+            userFormRegistration.setLastName(lastName);
+            return this;
+        }
+
+        public Builder setPhone(String phone) {
+            userFormRegistration.setPhone(phone);
+            return this;
+        }
+
+        public UserFormRegistration getInstance() {
+            return userFormRegistration;
+        }
     }
 }

@@ -2,25 +2,47 @@ package ua.com.vertex.logic;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import ua.com.vertex.dao.CertificateDaoImpl;
+import org.mockito.runners.MockitoJUnitRunner;
+import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.User;
+import ua.com.vertex.dao.interfaces.CertificateDaoInf;
+import ua.com.vertex.dao.interfaces.UserDaoInf;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.verify;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Optional;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
 public class CertificateLogicImplTest {
 
+    private final String MSG = "Maybe method was changed";
     private CertificateLogicImpl certificateLogic;
+    private Certificate certificate;
+    private User user;
+    @Mock
+    private CertificateDaoInf certificateDao;
 
     @Mock
-    private CertificateDaoImpl certificateDao;
+    private UserDaoInf userDao;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        certificateLogic = new CertificateLogicImpl(certificateDao);
+        certificateLogic = new CertificateLogicImpl(userDao, certificateDao);
+        certificate = new Certificate.Builder().setUserId(1).setCertificationDate(LocalDate.parse("2016-12-01"))
+                .setCourseName("Java Professional").setLanguage("Java").getInstance();
+        user = new User.Builder().setUserId(1).setEmail("test@mail.ru").setFirstName("test").setLastName("test")
+                .getInstance();
+    }
+
+    @Test
+    public void daoNotBeNull() throws Exception {
+        assertNotNull(userDao);
+        assertNotNull(certificateDao);
     }
 
     @Test
@@ -31,19 +53,46 @@ public class CertificateLogicImplTest {
 
     @Test
     public void getCertificateByIdReturnNull() throws Exception {
-        assertNull("Maybe method was changed", certificateLogic.getCertificateById(1));
+        assertNull(MSG, certificateLogic.getCertificateById(1));
     }
 
     @Test
-    public void getAllCertificateByUserIdIsCalledOnCertificateDao() throws Exception {
-        certificateLogic.getAllCertificatesByUserId(1);
-        verify(certificateDao).getAllCertificatesByUserId(1);
+    public void getAllCertificateByUserEmailIsCalledOnCertificateDao() throws Exception {
+        certificateLogic.getAllCertificatesByUserEmail("test");
+        verify(certificateDao).getAllCertificatesByUserEmail("test");
     }
 
     @Test
-    public void getAllCertificateByUserIdNeverReturnNull() throws Exception {
-        assertNotNull("Maybe method was changed", certificateLogic.getAllCertificatesByUserId(-1));
+    public void getAllCertificateByUserEmailNeverReturnNull() throws Exception {
+        assertNotNull(MSG, certificateLogic.getAllCertificatesByUserEmail("test"));
     }
 
+    @Test
+    public void addCertificateIsCalledInCertificateDao() throws Exception {
+        certificateLogic.addCertificate(certificate);
+        verify(certificateDao).addCertificate(certificate);
+    }
 
+    @Test
+    public void addCertificateAndCreateUser() throws Exception {
+        certificateLogic.addCertificateAndCreateUser(certificate, user);
+        verify(certificateDao).addCertificate(certificate);
+        verify(userDao).addUserForCreateCertificate(user);
+    }
+
+    @Test
+    public void setUserAndCertificateInvokesDao() throws SQLException {
+        when(certificateDao.getCertificateByUid("1492779828793888"))
+                .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
+        when(userDao.getUser(22)).thenReturn(Optional.of(new User()));
+
+        certificateLogic.getUserAndCertificate("1492779828793888");
+        verify(certificateDao, times(1)).getCertificateByUid("1492779828793888");
+        verify(userDao, times(1)).getUser(22);
+    }
+
+    @Test
+    public void generateCertificateUid() {
+        assertTrue(certificateLogic.generateCertificateUid().length() == 16);
+    }
 }

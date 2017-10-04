@@ -1,6 +1,5 @@
 package ua.com.vertex.dao.interfaces;
 
-
 import ua.com.vertex.beans.Certificate;
 
 import java.util.List;
@@ -10,6 +9,12 @@ public interface CertificateDaoInf {
 
     Optional<Certificate> getCertificateById(int certificateId);
 
-    List<Certificate> getAllCertificatesByUserId(int userId);
+    Optional<Certificate> getCertificateByUid(String certificateUid);
+
+    List<Certificate> getAllCertificatesByUserEmail(String eMail);
+
+    int addCertificate(Certificate certificate);
+
+    List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 
 }

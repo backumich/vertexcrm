@@ -1,201 +1,198 @@
 package ua.com.vertex.controllers;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.logic.interfaces.CertDetailsPageLogic;
-import ua.com.vertex.utils.Storage;
+import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler;
+import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
+import ua.com.vertex.logic.interfaces.CertificateLogic;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+@SuppressWarnings("Duplicates")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@WebAppConfiguration
+@ActiveProfiles("test")
 public class CertificateDetailsPageControllerTest {
 
-    @Mock
-    private CertDetailsPageLogic logic;
-
-    @Mock
-    private Storage storage;
+    @Autowired
+    private CertificateLogic certLogic;
 
     @Mock
     private Model model;
 
-    @Mock
-    private BindingResult result;
-
-    @Mock
     private Certificate certificate;
+    private User user;
+    private Map<String, Object> attributes;
+    private MockMvc mockMvc;
 
     private CertificateDetailsPageController controller;
+
+    private static final int EXISTING_USER_ID = 22;
+    private static final int EXISTING_CERT_ID = 222;
+    private static final String EXISTING_CERT_UID = "1492779828793888";
+    private static final String EXISTING_CERT_UID_DASHES = "1492-7798-2879-3888";
+    private static final String CERTIFICATE = "certificate";
+    private static final String CERTIFICATE_DETAILS = "certificateDetails";
+    private static final String USER = "user";
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new CertificateDetailsPageController(logic, storage);
-    }
-
-    @Test
-    public void certificateDetailsWebMvcShouldReturnPageView() throws Exception {
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateDetails"))
+        controller = new CertificateDetailsPageController(certLogic);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
-        mockMvc.perform(get("/certificateDetails"))
-                .andExpect(view().name("certificateDetails"));
-    }
-
-    @Test
-    public void ProcessFormWebMvcShouldReturnPageView() throws Exception {
-        Optional<Certificate> optionalC = Optional.of(new Certificate());
-        Optional<User> optionalU = Optional.of(new User());
-
-        when(result.hasErrors()).thenReturn(false);
-        when(certificate.getCertificationId()).thenReturn(222);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(certificate.getUserId()).thenReturn(22);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
-
-        MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateDetails"))
-                .build();
-        mockMvc.perform(get("/processCertificateDetails"))
-                .andExpect(view().name("certificateDetails"));
-    }
-
-    @Test
-    public void addErrorAttributeAfterRequestingInvalidId() {
-        when(result.hasErrors()).thenReturn(true);
-
-        controller.processCertificateDetails(certificate, result, model);
-        verify(model).addAttribute("error", "Entered value must be a positive integer!");
-    }
-
-    @Test
-    public void addCertificateAttributeAfterRetrievingNotEmptyOptional() {
-        Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
-                .setCertificationDate(LocalDate.now())
+        certificate = new Certificate.Builder()
+                .setCertificationId(EXISTING_CERT_ID)
+                .setUserId(EXISTING_USER_ID)
+                .setCertificationDate(LocalDate.parse("2016-12-01"))
                 .setCourseName("Java Professional")
                 .setLanguage("Java")
+                .setCertificateUid(EXISTING_CERT_UID)
                 .getInstance();
-        User user = new User.Builder()
-                .setUserId(22)
+
+        user = new User.Builder()
+                .setUserId(EXISTING_USER_ID)
+                .setEmail("22@test.com")
+                .setPassword("password")
+                .setFirstName("FirstName")
+                .setLastName("LastName")
+                .setDiscount(0)
+                .setPhoto(new byte[]{100})
+                .setPassportScan(new byte[]{100})
+                .setPhone("38066 000 00 00")
+                .setRole(Role.ROLE_USER)
                 .getInstance();
-        Optional<Certificate> optionalC = Optional.of(certificate);
-        Optional<User> optionalU = Optional.of(user);
 
-        when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
-
-        controller.processCertificateDetails(certificate, result, model);
-        verify(model).addAttribute("certificate", certificate);
+        attributes = new HashMap<>();
     }
 
     @Test
-    public void addUserAttributeAfterRetrievingNotEmptyOptional() {
-        Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
-                .setCertificationDate(LocalDate.now())
-                .setCourseName("Java Professional")
-                .setLanguage("Java")
-                .getInstance();
-        User user = new User.Builder()
-                .setUserId(22)
-                .getInstance();
-        Optional<Certificate> optionalC = Optional.of(certificate);
-        Optional<User> optionalU = Optional.of(user);
-
-        when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
-
-        controller.processCertificateDetails(certificate, result, model);
-        verify(model).addAttribute("user", user);
-    }
-
-    @Test
-    public void addErrorAttributeAfterRetrievingEmptyCertificateOptional() {
-        Certificate certificate = new Certificate.Builder()
-                .setCertificationId(55555)
-                .getInstance();
-        Optional<Certificate> optionalC = Optional.empty();
-
-        when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(55555)).thenReturn(optionalC);
-
-        controller.processCertificateDetails(certificate, result, model);
-        verify(model).addAttribute("error", "No certificate with this ID!");
-    }
-
-    @Test
-    public void setUserPhotoAfterRetrievingNotEmptyOptional() {
-        byte[] photo = {(byte) 1};
-        Certificate certificate = new Certificate.Builder()
-                .setCertificationId(222)
-                .setUserId(22)
-                .setCertificationDate(LocalDate.now())
-                .setCourseName("Java Professional")
-                .setLanguage("Java")
-                .getInstance();
-        User user = new User.Builder()
-                .setUserId(22)
-                .setPhoto(photo)
-                .getInstance();
-        Optional<Certificate> optionalC = Optional.of(certificate);
-        Optional<User> optionalU = Optional.of(user);
-
-        when(result.hasErrors()).thenReturn(false);
-        when(logic.getCertificateDetails(222)).thenReturn(optionalC);
-        when(logic.getUserDetails(22)).thenReturn(optionalU);
-
-        controller.processCertificateDetails(certificate, result, model);
-        verify(storage).setPhoto(photo);
-    }
-
-    @Test
-    public void photoWebMvcShouldReturnCorrectView() throws Exception {
+    public void showCertificateDetailsPageReturnsPageView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateHolderPhoto"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
                 .build();
-        mockMvc.perform(get("/certificateHolderPhoto"))
-                .andExpect(view().name("certificateHolderPhoto"));
+        mockMvc.perform(get("/" + CERTIFICATE_DETAILS))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
-    public void photoWebMvcShouldReturnErrorViewAfterUncheckedException() throws Exception {
-        when(storage.getPhoto()).thenThrow(new RuntimeException());
+    @WithAnonymousUser
+    public void getCertificateReturnsPageView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
-                .setSingleView(new InternalResourceView("certificateHolderPhoto"))
+                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
                 .build();
-        mockMvc.perform(get("/certificateHolderPhoto"))
-                .andExpect(view().name("error"));
+        mockMvc.perform(get("/getCertificate").param("certificateUid", EXISTING_CERT_UID))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
-    public void addModelAttributeAfterRetrievingPhoto() throws IOException {
-        byte[] data = {(byte) 1};
+    @WithAnonymousUser
+    public void getCertificateByCertificateUidReturnsPageView() throws Exception {
+        MockMvc mockMvc = standaloneSetup(controller)
+                .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
+                .build();
+        mockMvc.perform(get("/getCertificate/" + EXISTING_CERT_UID))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
+    }
 
-        when(storage.getPhoto()).thenReturn(data);
-        String encodedImage = Base64.encode(data);
+    @Test(expected = NoCertificateException.class)
+    @WithAnonymousUser
+    public void getCertificateAddsErrorAttributeAfterRequestingInvalidUid() {
+        controller.getCertificate("invalid data", model);
+    }
 
-        controller.showUserPhoto(model);
-        verify(model).addAttribute("image", encodedImage);
+    @Test(expected = NoCertificateException.class)
+    @WithAnonymousUser
+    public void getCertificateByCertificateUidAddsErrorAttributeAfterRequestingInvalidUid() {
+        controller.getCertificateByCertificateUid("invalid data", model);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void globalExceptionHandlerCatchesNoCertificateExceptionAfterEmptyUid() throws Exception {
+        mockMvc.perform(get("/getCertificate").param("certificateUid", ""))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void globalExceptionHandlerCatchesNoCertificateExceptionAfterIncorrectUid() throws Exception {
+        mockMvc.perform(get("/getCertificate").param("certificateUid", "incorrectUid"))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void globalExceptionHandlerCatchesNoCertificateExceptionAfterIncorrectUid1() throws Exception {
+        mockMvc.perform(get("/getCertificate").param("certificateUid", EXISTING_CERT_UID))
+                .andExpect(view().name(CERTIFICATE_DETAILS));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateAddsCertificateAttributesAfterRequestingValidUid() {
+        String view = controller.getCertificate(EXISTING_CERT_UID, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
+        assertEquals(CERTIFICATE_DETAILS, view);
+        verify(model, times(1)).addAllAttributes(attributes);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUid() {
+        String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
+        assertEquals(CERTIFICATE_DETAILS, view);
+        verify(model, times(1)).addAllAttributes(attributes);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
+        String view = controller.getCertificate(EXISTING_CERT_UID_DASHES, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
+        assertEquals(CERTIFICATE_DETAILS, view);
+        verify(model, times(1)).addAllAttributes(attributes);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
+        String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID_DASHES, model);
+        attributes.put(CERTIFICATE, certificate);
+        attributes.put(USER, user);
+        assertEquals(CERTIFICATE_DETAILS, view);
+        verify(model, times(1)).addAllAttributes(attributes);
     }
 }

@@ -1,101 +1,80 @@
 package ua.com.vertex.logic;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.context.MainTestContext;
-import ua.com.vertex.dao.UserDaoRealization;
+import ua.com.vertex.logic.interfaces.UserLogic;
 
-import static org.junit.Assert.*;
+import java.util.Optional;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("Duplicates")
-@ContextConfiguration(classes = MainTestContext.class)
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationUserLogicImplTest {
 
-    @Mock
-    private UserFormRegistration userFormRegistration;
+    private final String MSG = "Maybe method was changed";
+    private final String EMAIL = "test@test.com";
 
-    @InjectMocks
     private RegistrationUserLogicImpl registrationUserLogic;
 
+    private UserFormRegistration userFormRegistrationCorrect, userFormRegistrationIncorrect;
+
     @Mock
-    private UserDaoRealization userDaoRealization;
+    private BindingResult bindingResult;
 
-    @Test
-    public void isMatchPassword_True() {
-        UserFormRegistration userFormRegistration = new UserFormRegistration();
-        userFormRegistration.setPassword("1");
-        userFormRegistration.setVerifyPassword("1");
-        Boolean result = registrationUserLogic.isMatchPassword(userFormRegistration);
-        assertTrue("Result is (" + result + ")", result);
-    }
+    @Mock
+    private UserLogic userLogic;
 
-    @Test
-    public void isMatchPassword_False() {
-        UserFormRegistration userFormRegistration = new UserFormRegistration();
-        userFormRegistration.setPassword("1");
-        userFormRegistration.setVerifyPassword("2");
-        Boolean result = registrationUserLogic.isMatchPassword(userFormRegistration);
-        assertTrue("Result is (" + result + ")", !result);
-    }
-
-    @Test
-    public void convertUserFormRegistrationToUser_True() {
-        UserFormRegistration userFormRegistration = new UserFormRegistration();
-
-        userFormRegistration.setEmail("email");
-        userFormRegistration.setPassword("password");
-        userFormRegistration.setVerifyPassword("verify password");
-        userFormRegistration.setFirstName("first name");
-        userFormRegistration.setLastName("last name");
-        userFormRegistration.setPhone("phone");
-
-        User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
-
-        assertEquals("email", user.getEmail());
-        assertEquals("password", user.getPassword());
-        assertEquals("first name", user.getFirstName());
-        assertEquals("last name", user.getLastName());
-        assertEquals("phone", user.getPhone());
+    @Before
+    public void setUp() throws Exception {
+        registrationUserLogic = new RegistrationUserLogicImpl(userLogic);
+        userFormRegistrationCorrect = new UserFormRegistration();
+        userFormRegistrationCorrect.setEmail(EMAIL);
+        String PASSWORD = "111111";
+        userFormRegistrationCorrect.setPassword(PASSWORD);
+        userFormRegistrationCorrect.setVerifyPassword(PASSWORD);
+        userFormRegistrationIncorrect = new UserFormRegistration();
+        userFormRegistrationIncorrect.setEmail(EMAIL);
+        userFormRegistrationIncorrect.setPassword(PASSWORD);
+        userFormRegistrationIncorrect.setVerifyPassword(PASSWORD + "1");
 
     }
 
     @Test
-    public void convertUserFormRegistrationToUser_False() {
-        UserFormRegistration userFormRegistration = new UserFormRegistration();
-
-        userFormRegistration.setEmail("email");
-        userFormRegistration.setPassword("password");
-        userFormRegistration.setVerifyPassword("verify password");
-        userFormRegistration.setFirstName("first name");
-        userFormRegistration.setLastName("last name");
-        userFormRegistration.setPhone("phone");
-
-        User user = registrationUserLogic.userFormRegistrationToUser(userFormRegistration);
-
-        assertNotEquals("", user.getEmail());
-        assertNotEquals("", user.getPassword());
-        assertNotEquals("", user.getFirstName());
-        assertNotEquals("", user.getLastName());
-        assertNotEquals("", user.getPhone());
+    public void isEmailAlreadyExists() throws Exception {
+        assertTrue(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
+                .setIsActive(true).getInstance())));
+        assertFalse(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
+                .setIsActive(false).getInstance())));
     }
 
     @Test
-    public void checkEmailAlreadyExists_True() {
-        when(userFormRegistration.getEmail()).thenReturn("chewed.mole@gmail.com");
-        when(userDaoRealization.isRegisteredEmail(userFormRegistration.getEmail())).thenReturn(true);
+    public void isRegisteredUserEmailAlreadyExists() throws Exception {
+        when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
+                .setIsActive(true).getInstance()));
+        assertFalse(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationIncorrect, bindingResult));
+    }
 
-        userDaoRealization.isRegisteredEmail("chewed.mole@gmail.com");
+    @Test
+    public void isRegisteredUserEmailAlreadyExistsButNotActive() throws Exception {
+        when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
+                .setIsActive(false).getInstance()));
+        assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));
+        verify(userLogic).registrationUserUpdate(new User(userFormRegistrationCorrect));
+    }
 
-        verify(userFormRegistration).getEmail();
-        verify(userDaoRealization).isRegisteredEmail("chewed.mole@gmail.com");
+    @Test
+    public void isRegisteredUserWhenEmailNotExists() throws Exception {
+        when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.empty());
+        assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));
+        verify(userLogic).registrationUserInsert(new User(userFormRegistrationCorrect));
     }
 }
