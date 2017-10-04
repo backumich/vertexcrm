@@ -1,7 +1,6 @@
 package ua.com.vertex.controllers;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -86,10 +85,10 @@ public class RegistrationControllerTest {
         assertEquals(MSG, RegistrationController.REGISTRATION_ERROR_PAGE, modelAndView.getViewName());
     }
 
-    @Ignore
     @Test
     public void processRegistrationReturnCorrectViewWhenException() throws Exception {
-        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)).thenThrow(new Exception(NAME));
+        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult))
+                .thenThrow(new RuntimeException(NAME));
         String reCaptchaResponse = httpServletRequest.getParameter("g-recaptcha-response");
         String reCaptchaRemoteAddr = httpServletRequest.getRemoteAddr();
         when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);

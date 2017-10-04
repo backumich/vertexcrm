@@ -2,6 +2,8 @@ package ua.com.vertex.utils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -11,13 +13,19 @@ import ua.com.vertex.context.TestConfig;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+@PropertySource("classpath:reCaptcha.properties")
 public class LoginBruteForceDefenderTest {
+
+    @Value("${login.attempts}")
+    private int propertiesLoginAttemptsValue;
+    private static final int MIN_ALLOWED = 2;
 
     private LoginBruteForceDefender defender;
     private int maxAttempts;
@@ -96,5 +104,10 @@ public class LoginBruteForceDefenderTest {
         TimeUnit.SECONDS.sleep(2);
         count = defender.verifyUsername("username");
         assertEquals(1, count);
+    }
+
+    @Test
+    public void checkPropertiesLoginAttemptsValue() {
+        assertTrue(propertiesLoginAttemptsValue >= MIN_ALLOWED);
     }
 }
