@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -178,7 +179,8 @@ public class CourseDaoImpl implements CourseDaoInf {
                             .setSchedule(resultSet.getString(SCHEDULE))
                             .setNotes(resultSet.getString(NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
+//            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
+            throw new ServiceException("The course with id - " + courseId + " was not found.", e);
         }
 
         return Optional.ofNullable(course);

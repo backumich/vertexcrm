@@ -49,14 +49,14 @@ public class AddCourseController {
             LOGGER.debug("The user entered incorrect course data -" + course);
             modelAndView.setViewName(PAGE_JSP);
         } else {
-            try {
+//            try {
                 course.setId(courseLogic.addCourse(course));
                 LOGGER.debug("Added a new course into DB" + course);
                 modelAndView.setViewName(ALL_COURSE_PAGE_JSP);
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.warn("Could not save data to database", e);
-            }
+//            } catch (Exception e) {
+//                modelAndView.setViewName(ERROR_JSP);
+//                LOGGER.warn("Could not save data to database", e);
+//            }
         }
         return modelAndView;
     }

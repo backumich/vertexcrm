@@ -80,7 +80,8 @@ public class UserDaoImpl implements UserDaoInf {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
             LOGGER.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No user email=" + email);
+            throw new ServiceException("No user email = " + email, e);
+//            LOGGER.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -104,7 +105,8 @@ public class UserDaoImpl implements UserDaoInf {
                     .getInstance());
             LOGGER.debug("Retrieved user password, role, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No email=" + email);
+            throw new ServiceException("No user email = " + email, e);
+//            LOGGER.warn("No email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -175,7 +177,8 @@ public class UserDaoImpl implements UserDaoInf {
                             .getInstance()));
             LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("isRegisteredEmail(%s) return empty user");
+            throw new ServiceException("isRegisteredEmail(" + userEmail + ") return empty user", e);
+//            LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
 
         return Optional.ofNullable(user);

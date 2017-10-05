@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
@@ -56,10 +54,10 @@ public class CourseDetailsController {
                                BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
                 course.getName(), course.isFinished()));
-        String result = SEARCH_COURSE_JSP;
+//        String result = SEARCH_COURSE_JSP;
 
         if (!bindingResult.hasErrors()) {
-            try {
+//            try {
                 List<Course> courses = courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished());
                 if (courses.isEmpty()) {
                     model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
@@ -67,16 +65,16 @@ public class CourseDetailsController {
                 } else {
                     model.addAttribute("courses", courses);
                 }
-            } catch (DataAccessException e) {
-                LOGGER.warn(e);
-                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
-            } catch (Exception e) {
-                LOGGER.warn(e);
-                result = ERROR;
-            }
+//            } catch (DataAccessException e) {
+//                LOGGER.warn(e);
+//                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
+//            } catch (Exception e) {
+//                LOGGER.warn(e);
+//                result = ERROR;
+//            }
         }
 
-        return result;
+        return SEARCH_COURSE_JSP;
     }
 
     @GetMapping(value = "/courseDetails")
@@ -86,13 +84,13 @@ public class CourseDetailsController {
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
-        try {
+//        try {
             result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
             result.addObject(TEACHERS, userLogic.getTeachers());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result.setViewName(ERROR);
-        }
+//        } catch (Exception e) {
+//            LOGGER.warn(e);
+//            result.setViewName(ERROR);
+//        }
 
         return result;
     }
@@ -103,17 +101,17 @@ public class CourseDetailsController {
         LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
-            try {
+//            try {
                 model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
                         courseLogic.updateCourseExceptPrice(course)));
-            } catch (DataAccessException e) {
-                LOGGER.warn(e);
-                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
-                result = SEARCH_COURSE_JSP;
-            } catch (Exception e) {
-                LOGGER.warn(e);
-                result = ERROR;
-            }
+//            } catch (DataAccessException e) {
+//                LOGGER.warn(e);
+//                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
+//                result = SEARCH_COURSE_JSP;
+//            } catch (Exception e) {
+//                LOGGER.warn(e);
+//                result = ERROR;
+//            }
         } else {
             result = COURSE_DETAILS_JSP;
             model.addAttribute(TEACHERS, userLogic.getTeachers());

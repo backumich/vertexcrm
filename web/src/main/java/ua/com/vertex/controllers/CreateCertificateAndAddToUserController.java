@@ -20,7 +20,6 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import java.util.List;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
@@ -64,7 +63,7 @@ public class CreateCertificateAndAddToUserController {
             result = SELECT_USER_JSP;
             LOGGER.info(String.format("Call - userLogic.searchUser(%s);", userData) + "The data have not been validated!!!");
         } else {
-            try {
+//            try {
                 List<User> users = userLogic.searchUser(userData);
                 model.addAttribute(USERS, users);
                 LOGGER.debug(String.format("Call - userLogic.searchUser(%s);", userData));
@@ -73,10 +72,10 @@ public class CreateCertificateAndAddToUserController {
                     LOGGER.debug("User not found, try again.");
                 }
                 result = SELECT_USER_JSP;
-            } catch (Exception e) {
-                result = ERROR;
-                LOGGER.warn(e);
-            }
+//            } catch (Exception e) {
+//                result = ERROR;
+//                LOGGER.warn(e);
+//            }
         }
 
         LOGGER.debug("Request to '/selectUser' redirect to page - " + result);
@@ -98,23 +97,23 @@ public class CreateCertificateAndAddToUserController {
     public String checkCertificateWithUserId(@Validated @ModelAttribute(CERTIFICATE) Certificate certificate,
                                              BindingResult bindingResult, Model model) {
 
-        String returnPage;
+        String returnPage = ADD_CERTIFICATE_WITH_USER_ID_JSP;
         LOGGER.debug("Request to '/addCertificateWithUserId' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
-            returnPage = ADD_CERTIFICATE_WITH_USER_ID_JSP;
+//            returnPage = ADD_CERTIFICATE_WITH_USER_ID_JSP;
             LOGGER.warn("The data have not been validated!!!");
         } else {
-            try {
+//            try {
                 int result = certificateLogic.addCertificate(certificate);
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
                 LOGGER.info("Certificate added. Certificate id = " + result);
-            } catch (Exception e) {
-                returnPage = ERROR;
-                LOGGER.warn(e);
-            }
+//            } catch (Exception e) {
+//                returnPage = ERROR;
+//                LOGGER.warn(e);
+//            }
         }
 
         LOGGER.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));

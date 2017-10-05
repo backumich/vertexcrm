@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Payment;
+import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.PaymentDaoInf;
 
 import javax.sql.DataSource;
@@ -65,7 +66,8 @@ public class PaymentDaoImpl implements PaymentDaoInf {
                             .setAmount(BigDecimal.valueOf(resultSet.getDouble(AMOUNT))).getInstance());
             LOGGER.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
+            throw new ServiceException("No payment in DB, where id =" + paymentId, e);
+//            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
         }
 
         return Optional.ofNullable(result);
