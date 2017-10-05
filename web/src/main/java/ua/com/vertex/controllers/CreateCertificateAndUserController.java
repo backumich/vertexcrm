@@ -51,6 +51,7 @@ public class CreateCertificateAndUserController {
             returnPage = ADD_CERTIFICATE_AND_USER_JSP;
             LOGGER.warn("The data have not been validated!!!");
         } else {
+            //todo:---
             try {
                 int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
                         , certificateWithUserForm.getUser());

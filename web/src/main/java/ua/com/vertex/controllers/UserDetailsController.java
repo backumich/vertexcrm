@@ -15,6 +15,7 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Optional;
 
 @Controller
@@ -81,11 +82,11 @@ public class UserDetailsController {
                 } else {
                     LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 LOGGER.warn("An error occurred when working with image for user ID - " + user.getUserId(), e);
             }
             // -- check correct update user data
-            try {
+//            try {
                 if (userLogic.saveUserData(user) == 1) {
                     modelAndView.addObject("msg", "Congratulations! Your data is saved!");
                     LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
@@ -93,10 +94,10 @@ public class UserDetailsController {
                     modelAndView.setViewName(ERROR_JSP);
                     LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
                 }
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.warn("Update user data failed for user ID - " + user.getUserId(), e);
-            }
+//            } catch (Exception e) {
+//                modelAndView.setViewName(ERROR_JSP);
+//                LOGGER.warn("Update user data failed for user ID - " + user.getUserId(), e);
+//            }
         }
 
         //  -- Get all system roles
@@ -104,13 +105,13 @@ public class UserDetailsController {
         LOGGER.debug("We received all the roles of the system");
 
         //  -- Get all user certificates
-        try {
+//        try {
             modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
             LOGGER.debug("Received all roles");
-        } catch (Exception e) {
-            modelAndView.setViewName(ERROR_JSP);
-            LOGGER.warn("There are problems with access to roles of the system", e);
-        }
+//        } catch (Exception e) {
+//            modelAndView.setViewName(ERROR_JSP);
+//            LOGGER.warn("There are problems with access to roles of the system", e);
+//        }
         return modelAndView;
     }
 

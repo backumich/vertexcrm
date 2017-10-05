@@ -48,12 +48,12 @@ public class CreateNewPaymentController {
     public ModelAndView selectCourseForPayment() {
         LOGGER.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
         ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
-        try {
+//        try {
             result.addObject(COURSES, courseLogic.getAllCoursesWithDept());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result.setViewName(ERROR);
-        }
+//        } catch (Exception e) {
+//            LOGGER.warn(e);
+//            result.setViewName(ERROR);
+//        }
         return result;
     }
 
@@ -63,15 +63,15 @@ public class CreateNewPaymentController {
                                       BindingResult bindingResult, ModelAndView modelAndView) {
         modelAndView.setViewName(SELECT_USER_FOR_PAYMENT_JSP);
         if (!bindingResult.hasErrors()) {
-            try {
+//            try {
                 int paymentId = paymentLogic.createNewPaymentAndUpdateAccounting(payment);
                 modelAndView.setViewName(ADMIN_JSP);
                 modelAndView.addObject(MSG, "Payment create successful!!!");
                 LOGGER.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
-            } catch (Exception e) {
-                LOGGER.warn(e);
-                modelAndView.setViewName(ERROR);
-            }
+//            } catch (Exception e) {
+//                LOGGER.warn(e);
+//                modelAndView.setViewName(ERROR);
+//            }
         } else {
             modelAndView.addObject(COURSE_ID_FOR_PAY, payment.getCourseId());
             modelAndView.addObject(USER_ID_FOR_PAY, payment.getUserID());
@@ -83,14 +83,14 @@ public class CreateNewPaymentController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
-        try {
+//        try {
             result.addObject(USERS, userLogic.getCourseUsers(courseId));
             result.addObject(COURSE_ID_FOR_PAY, courseId);
             result.addObject(PAYMENT, new PaymentForm());
-        } catch (Exception e) {
-            LOGGER.warn(e);
-            result.setViewName(ERROR);
-        }
+//        } catch (Exception e) {
+//            LOGGER.warn(e);
+//            result.setViewName(ERROR);
+//        }
         return result;
     }
 }
