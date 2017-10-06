@@ -102,7 +102,7 @@
                 <span class="fontSize180 silver">Search user:</span><br><br><br>
                 <table class="active">
                     <tr>
-                        <td style="color: black"><input placeholder="User name" type="text" name="userDataForSearch"/>
+                        <td style="color: black"><input placeholder="E-mail" type="text" name="userDataForSearch"/>
                         </td>
                     </tr>
                 </table>
