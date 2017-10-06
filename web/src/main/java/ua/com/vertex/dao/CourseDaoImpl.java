@@ -164,7 +164,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
-        Course course = null;
+        Course course;
 
         LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
         try {
@@ -179,7 +179,6 @@ public class CourseDaoImpl implements CourseDaoInf {
                             .setSchedule(resultSet.getString(SCHEDULE))
                             .setNotes(resultSet.getString(NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
-//            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
             throw new ServiceException("The course with id - " + courseId + " was not found.", e);
         }
 

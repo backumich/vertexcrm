@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
 import javax.sql.DataSource;
@@ -98,11 +99,10 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATION_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            certificate = null;
+            throw new ServiceException("No certificate in DB, ID = " + certificateId, e);
         }
-//todo:
-        LOGGER.debug((certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
 
+        LOGGER.debug("Retrieved certificate ID = " + certificateId);
         return Optional.ofNullable(certificate);
     }
 
@@ -117,12 +117,10 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_UID, certificateUid), new CertificateRowMapper());
         } catch (IncorrectResultSizeDataAccessException | DataIntegrityViolationException e) {
-            certificate = null;
+            throw new ServiceException("No certificate in DB, UID = " + certificateUid, e);
         }
 
-        LOGGER.debug((certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=")
-                + certificateUid);
-
+        LOGGER.debug("Retrieved certificate UID = " + certificateUid);
         return Optional.ofNullable(certificate);
     }
 

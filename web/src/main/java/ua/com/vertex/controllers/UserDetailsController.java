@@ -45,13 +45,8 @@ public class UserDetailsController {
         modelAndView.addObject("allRoles", Role.values());
         LOGGER.debug("We received all the roles of the system");
 
-        //  -- Get all user certificate
-//        try {
         modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
         LOGGER.debug("Get all user certificates by userID - " + userId);
-//        } catch (Exception ignore) {
-//            LOGGER.warn("There are problems with access to roles of the system", ignore);
-//        }
         return modelAndView;
     }
 
@@ -68,7 +63,6 @@ public class UserDetailsController {
             modelAndView.addObject("msg", "WARNING!!! User data is updated, but not saved");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
-            // -- check image files
             try {
                 if (checkImageFile(imagePassportScan)) {
                     user.setPassportScan(imagePassportScan.getBytes());
@@ -85,33 +79,21 @@ public class UserDetailsController {
             } catch (IOException e) {
                 LOGGER.warn("An error occurred when working with image for user ID - " + user.getUserId(), e);
             }
-            // -- check correct update user data
-//            try {
-                if (userLogic.saveUserData(user) == 1) {
-                    modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-                } else {
-                    modelAndView.setViewName(ERROR_JSP);
-                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
-                }
-//            } catch (Exception e) {
-//                modelAndView.setViewName(ERROR_JSP);
-//                LOGGER.warn("Update user data failed for user ID - " + user.getUserId(), e);
-//            }
+
+            if (userLogic.saveUserData(user) == 1) {
+                modelAndView.addObject("msg", "Congratulations! Your data is saved!");
+                LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+            } else {
+                modelAndView.setViewName(ERROR_JSP);
+                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+            }
         }
 
-        //  -- Get all system roles
         modelAndView.addObject("allRoles", Role.values());
         LOGGER.debug("We received all the roles of the system");
 
-        //  -- Get all user certificates
-//        try {
-            modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
-            LOGGER.debug("Received all roles");
-//        } catch (Exception e) {
-//            modelAndView.setViewName(ERROR_JSP);
-//            LOGGER.warn("There are problems with access to roles of the system", e);
-//        }
+        modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
+        LOGGER.debug("Received all roles");
         return modelAndView;
     }
 

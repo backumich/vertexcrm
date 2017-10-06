@@ -47,10 +47,8 @@ public class CreateCertificateAndUserController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
-//            returnPage = ADD_CERTIFICATE_AND_USER_JSP;
             LOGGER.warn("The data have not been validated!!!");
         } else {
-            //todo:---
             try {
                 int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
                         , certificateWithUserForm.getUser());
@@ -59,13 +57,8 @@ public class CreateCertificateAndUserController {
                 returnPage = ADMIN_JSP;
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(MSG, "A person with this e-mail already exists, try again.");
-//                returnPage = ADD_CERTIFICATE_AND_USER_JSP;
                 LOGGER.warn(e);
             }
-//            catch (Exception e) {
-//                returnPage = ERROR;
-//                LOGGER.warn(e);
-//            }
         }
 
         LOGGER.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));

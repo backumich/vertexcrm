@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE user_id=:user_id";
-        User user = null;
+        User user;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
@@ -74,14 +74,13 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE email=:email";
-        User user = null;
+        User user;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
             LOGGER.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
             throw new ServiceException("No user email = " + email, e);
-//            LOGGER.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -95,7 +94,7 @@ public class UserDaoImpl implements UserDaoInf {
                 "WHERE u.email=:email";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
-        User user = null;
+        User user;
 
         try {
             user = jdbcTemplate.queryForObject(query, parameters, (resultSet, i) -> new User.Builder()
@@ -106,7 +105,6 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.debug("Retrieved user password, role, email=" + email);
         } catch (EmptyResultDataAccessException e) {
             throw new ServiceException("No user email = " + email, e);
-//            LOGGER.warn("No email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -156,9 +154,7 @@ public class UserDaoImpl implements UserDaoInf {
         }
 
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
-
         LOGGER.debug("Image of userId=" + userId + " retrieved");
-
         return Optional.ofNullable(image);
     }
 
@@ -167,7 +163,7 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
 
         String query = "SELECT email, is_active FROM Users WHERE email =:email";
-        User user = null;
+        User user;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
@@ -178,7 +174,6 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         } catch (EmptyResultDataAccessException e) {
             throw new ServiceException("isRegisteredEmail(" + userEmail + ") return empty user", e);
-//            LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
 
         return Optional.ofNullable(user);
@@ -239,8 +234,19 @@ public class UserDaoImpl implements UserDaoInf {
                 "photo = :photo, " +
                 "discount = :discount, " +
                 "phone = :phone, " +
-                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name= :role)" +
-                " WHERE user_id = :user_id";
+                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name= :name) " +
+                "WHERE user_id = :user_id";
+
+//        String query = "UPDATE Users " +
+//                "SET email = :email , " +
+//                "first_name = :first_name, " +
+//                "last_name = :last_name, " +
+//                "passport_scan = :passport_scan, " +
+//                "photo = :photo, " +
+//                "discount = :discount, " +
+//                "phone = :phone, " +
+//                "role_id = 2 " +
+//                "WHERE user_id = :user_id";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(EMAIL, user.getEmail());

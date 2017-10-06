@@ -56,7 +56,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     public Optional<Payment> getPaymentByIdWithOutDate(int paymentId) {
         LOGGER.debug(String.format("Call - paymentDaoInf.getPaymentByIdWithOutDate(%s) ;", paymentId));
         String query = "SELECT payment_id, deal_id, amount FROM Payments WHERE payment_id = :payment_id";
-        Payment result = null;
+        Payment result;
 
         LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
         try {
@@ -67,7 +67,6 @@ public class PaymentDaoImpl implements PaymentDaoInf {
             LOGGER.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
         } catch (EmptyResultDataAccessException e) {
             throw new ServiceException("No payment in DB, where id =" + paymentId, e);
-//            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
         }
 
         return Optional.ofNullable(result);

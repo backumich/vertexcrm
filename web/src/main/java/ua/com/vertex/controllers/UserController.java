@@ -41,22 +41,17 @@ public class UserController {
     public String getAllCertificatesByUserEmail(Model model) {
 
         LOGGER.debug(LOG_REQ_IN);
-        String view;
-//        try {
-            String email = emailExtractor.getEmailFromAuthentication();
-            LOGGER.debug(LOG_GET_EMAIL + email);
-            List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(email);
-            model.addAttribute(PDF_DTO, new PdfDto());
-            model.addAttribute(CERTIFICATES, result);
-            model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
+        String email = emailExtractor.getEmailFromAuthentication();
+        LOGGER.debug(LOG_GET_EMAIL + email);
 
-            view = USER_JSP;
-//        } catch (Exception e) {
-//            view = ERROR;
-//        }
+        List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(email);
 
-        LOGGER.debug(String.format(LOG_REQ_OUT, view));
-        return view;
+        model.addAttribute(PDF_DTO, new PdfDto());
+        model.addAttribute(CERTIFICATES, result);
+        model.addAttribute(LIST_CERTIFICATE_IS_EMPTY, result.isEmpty());
+
+        LOGGER.debug(String.format(LOG_REQ_OUT, USER_JSP));
+        return USER_JSP;
     }
 
     @Autowired

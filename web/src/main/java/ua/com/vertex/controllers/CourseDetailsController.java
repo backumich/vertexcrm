@@ -54,24 +54,15 @@ public class CourseDetailsController {
                                BindingResult bindingResult, Model model) {
         LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
                 course.getName(), course.isFinished()));
-//        String result = SEARCH_COURSE_JSP;
 
         if (!bindingResult.hasErrors()) {
-//            try {
-                List<Course> courses = courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished());
-                if (courses.isEmpty()) {
-                    model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
-                            "Please check the data and try it again.", course.getName()));
-                } else {
-                    model.addAttribute("courses", courses);
-                }
-//            } catch (DataAccessException e) {
-//                LOGGER.warn(e);
-//                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
-//            } catch (Exception e) {
-//                LOGGER.warn(e);
-//                result = ERROR;
-//            }
+            List<Course> courses = courseLogic.searchCourseByNameAndStatus(course.getName(), course.isFinished());
+            if (courses.isEmpty()) {
+                model.addAttribute(MSG, String.format("Course with name - '(%s)' not found. " +
+                        "Please check the data and try it again.", course.getName()));
+            } else {
+                model.addAttribute("courses", courses);
+            }
         }
 
         return SEARCH_COURSE_JSP;
@@ -84,13 +75,8 @@ public class CourseDetailsController {
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
-//        try {
-            result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
-            result.addObject(TEACHERS, userLogic.getTeachers());
-//        } catch (Exception e) {
-//            LOGGER.warn(e);
-//            result.setViewName(ERROR);
-//        }
+        result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
+        result.addObject(TEACHERS, userLogic.getTeachers());
 
         return result;
     }
@@ -101,17 +87,8 @@ public class CourseDetailsController {
         LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
-//            try {
-                model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
-                        courseLogic.updateCourseExceptPrice(course)));
-//            } catch (DataAccessException e) {
-//                LOGGER.warn(e);
-//                model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
-//                result = SEARCH_COURSE_JSP;
-//            } catch (Exception e) {
-//                LOGGER.warn(e);
-//                result = ERROR;
-//            }
+            model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
+                    courseLogic.updateCourseExceptPrice(course)));
         } else {
             result = COURSE_DETAILS_JSP;
             model.addAttribute(TEACHERS, userLogic.getTeachers());

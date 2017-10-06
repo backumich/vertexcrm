@@ -57,7 +57,6 @@ public class ImageController {
             userLogic.saveImage(user.getUserId(), image, imageType);
             model.addAttribute(user);
         }
-
         return view;
     }
 

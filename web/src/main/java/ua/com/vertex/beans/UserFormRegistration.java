@@ -6,7 +6,7 @@ import ua.com.vertex.validators.interfaces.PasswordVerification;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@PasswordVerification(message = "Password and password confirmation fields don't match!!!")
+@PasswordVerification(message = "Password and password confirmation fields don't match")
 public class UserFormRegistration {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
