@@ -24,7 +24,7 @@ public class RootConfig {
         return new BasicDataSource();
     }
 
-    @Bean
+    @Bean(name = "mailSender")
     @ConfigurationProperties(prefix = "spring.mail")
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
