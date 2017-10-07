@@ -349,6 +349,7 @@ public class CourseDaoImplTest {
     public void getQuantityCoursesWithParamReturnCorrectData() throws Exception {
         int result = courseDaoInf.getQuantityCourses(teacher);
 
-        assertTrue(result == 1);
+        assertEquals("In test DB quantity of courses, where teacher is a user with id = 7, is not 1",
+                1, result );
     }
 }

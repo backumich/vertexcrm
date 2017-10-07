@@ -16,10 +16,13 @@ import ua.com.vertex.utils.DataNavigator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CourseLogicImplTest {
+
+    private final String EXCEPTION_MSG = "Course logic didn't call corresponding course dao method";
 
     @Mock
     private CourseDaoInf courseDaoInf;
@@ -44,14 +47,14 @@ public class CourseLogicImplTest {
         when(courseDaoInf.getCoursesPerPage(dataNavigator, teacher))
                 .thenThrow(new DataIntegrityViolationException("Test"));
         courseLogic.getCoursesPerPage(dataNavigator, teacher);
-        verify(courseDaoInf, times(1)).getCoursesPerPage(dataNavigator, teacher);
+        fail(EXCEPTION_MSG);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void getAllCoursesWithDeptVerifyCourseDaoAndReturnException() throws Exception {
         when(courseDaoInf.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
         courseLogic.getAllCoursesWithDept();
-        verify(courseDaoInf, times(1)).getAllCoursesWithDept();
+        fail(EXCEPTION_MSG);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -59,22 +62,21 @@ public class CourseLogicImplTest {
         when(courseDaoInf.searchCourseByNameAndStatus(course.getName(), course.isFinished())).
                 thenThrow(new DataIntegrityViolationException("Test"));
         courseDaoInf.searchCourseByNameAndStatus(course.getName(), course.isFinished());
-        verify(courseDaoInf, times(1)).searchCourseByNameAndStatus(course.getName(),
-                course.isFinished());
+        fail(EXCEPTION_MSG);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void updateCourseExceptPriceVerifyCourseDaoAndReturnException() throws Exception {
         when(courseDaoInf.updateCourseExceptPrice(course)).thenThrow(new DataIntegrityViolationException("Test"));
         courseDaoInf.updateCourseExceptPrice(course);
-        verify(courseDaoInf, times(1)).updateCourseExceptPrice(course);
+        fail(EXCEPTION_MSG);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void getCourseByIdVerifyCourseDaoAndReturnException() throws Exception {
         when(courseDaoInf.getCourseById(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
         courseDaoInf.getCourseById(anyInt());
-        verify(courseDaoInf, times(1)).getCourseById(anyInt());
+        fail(EXCEPTION_MSG);
     }
 
     @Test

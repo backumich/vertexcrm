@@ -4,7 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -38,40 +40,36 @@ public class ViewCoursesController {
         this.emailExtractor = emailExtractor;
     }
 
-    @RequestMapping(value = "/all")
+    @GetMapping(value = "/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView viewAllCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
-        ModelAndView modelAndView = new ModelAndView();
         int quantityCourses = courseLogic.getQuantityCourses();
 
         dataNavigator.updateDataNavigator(quantityCourses);
         dataNavigator.setCurrentNamePage("viewCourses/all");
         List<Course> courses = courseLogic.getCoursesPerPage(dataNavigator);
 
-        modelAndView.addObject("viewCourses", dataNavigator);
-        modelAndView.addObject("courses", courses);
-        modelAndView.setViewName(PAGE_JSP);
+        ModelAndView modelAndView = getModelAndViewForCourses(dataNavigator, courses);
+
         LOGGER.debug("Received a list of all courses and transferred to the model");
 
         return modelAndView;
     }
 
-    @RequestMapping(value = "/teacher")
+    @GetMapping(value = "/teacher")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ModelAndView viewTeacherCourses(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
-        ModelAndView modelAndView = new ModelAndView();
         User currentUser = userLogic.getUserByEmail(emailExtractor.getEmailFromAuthentication())
-                .orElseThrow(() -> new RuntimeException("Not logged in: failed to get login details"));
+                .orElseThrow(() -> new PreAuthenticatedCredentialsNotFoundException("Not logged in: failed to get login details"));
         int quantityCourses = courseLogic.getQuantityCourses(currentUser);
 
         dataNavigator.updateDataNavigator(quantityCourses);
         dataNavigator.setCurrentNamePage("viewCourses/teacher");
         List<Course> courses = courseLogic.getCoursesPerPage(dataNavigator, currentUser);
 
-        modelAndView.addObject("viewCourses", dataNavigator);
-        modelAndView.addObject("courses", courses);
-        modelAndView.setViewName(PAGE_JSP);
-        LOGGER.debug("Received a list of all courses and transferred to the model");
+        ModelAndView modelAndView = getModelAndViewForCourses(dataNavigator, courses);
+
+        LOGGER.debug(String.format("Received a list of teacher %s courses and transferred to the model", currentUser));
 
         return modelAndView;
     }
@@ -79,6 +77,16 @@ public class ViewCoursesController {
     @ModelAttribute
     public DataNavigator createDataNavigator() {
         return new DataNavigator("viewCourses");
+    }
+
+    private ModelAndView getModelAndViewForCourses(DataNavigator dataNavigator, List<Course> courses) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("viewCourses", dataNavigator);
+        modelAndView.addObject("courses", courses);
+        modelAndView.setViewName(PAGE_JSP);
+
+        return modelAndView;
     }
 }
 

@@ -20,29 +20,6 @@
     <script type="text/javascript" async="" src="${pageContext.request.contextPath}/javascript/watch.js"></script>
     <script async="" src="${pageContext.request.contextPath}/javascript/analytics.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style id="style-1-cropbar-clipper">
-        .en-markup-crop-options {
-            top: 18px !important;
-            left: 50% !important;
-            margin-left: -100px !important;
-            width: 200px !important;
-            border: 2px rgba(255, 255, 255, .38) solid !important;
-            border-radius: 4px !important;
-        }
-
-        .en-markup-crop-options div div:first-of-type {
-            margin-left: 0px !important;
-        }
-
-        .colortext {
-            background-color: #ffe; /* Цвет фона */
-            color: black; /* Цвет текста */
-        }
-
-        .buttonText {
-            color: black;
-        }
-    </style>
 </head>
 <body class="inside footer-under">
 <script type="text/javascript">
