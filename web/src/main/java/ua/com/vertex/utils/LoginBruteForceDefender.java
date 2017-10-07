@@ -58,13 +58,13 @@ public class LoginBruteForceDefender {
             LOGGER.debug(String.format("Login defender incremented for username=%s, counter=%d", username, counter));
         } else {
             counter = BLOCKED_NUMBER;
-            LOGGER.debug(String.format("Login defender blocked username=%s", username));
+            LOGGER.debug(String.format("Username=%s is being blocked by login defender", username));
         }
         return counter;
     }
 
     public synchronized void clearEntry(String username) {
         loginAttempts.asMap().remove(username);
-        LOGGER.debug("Login defender was cleared for username=" + username);
+        LOGGER.debug("Login defender cleared username=" + username);
     }
 }
