@@ -72,33 +72,6 @@ public class ViewCoursesControllerTest {
     }
 
     @Test
-    public void reloadTest() throws Exception {
-        MockMvc mockMvc = standaloneSetup(new ViewCoursesController(logic, userLogic, emailExtractor))
-                .setSingleView(new InternalResourceView("viewCourses"))
-                .build();
-        mockMvc.perform(post("/viewCourses/all"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("viewCourses"))
-                //.andExpect(forwardedUrl("/viewCourses/all"))
-                .andExpect(model().attributeExists("courses"))
-                .andExpect(model().attribute("courses", hasItem(hasProperty("id", is(111)))))
-                .andExpect(model().attribute("courses", hasItem(hasProperty("id", is(222)))))
-
-                .andExpect(model().attributeExists("viewCourses"))
-                .andExpect(model().attribute("viewCourses", hasProperty("currentNamePage", is("viewCourses/all"))))
-                .andExpect(model().attribute("viewCourses", hasProperty("currentNumberPage", is(1))))
-                .andExpect(model().attribute("viewCourses", hasProperty("nextPage", is(1))))
-                .andExpect(model().attribute("viewCourses", hasProperty("lastPage", is(1))))
-                .andExpect(model().attribute("viewCourses", hasProperty("rowPerPage", is(25))))
-                .andExpect(model().attribute("viewCourses", hasProperty("totalPages", is(1))))
-                .andExpect(model().attribute("viewCourses", hasProperty("countRowPerPage", is(new TreeMap<Integer, Integer>() {{
-                    put(25, 25);
-                    put(50, 50);
-                    put(100, 100);
-                }}))));
-    }
-
-    @Test
     public void viewTeacherCoursesTest() throws Exception {
         //when(certificateLogic.getAllCertificatesByUserEmail("test")).thenReturn(certificates);
         when(emailExtractor.getEmailFromAuthentication()).thenReturn("teacher@test.com");
