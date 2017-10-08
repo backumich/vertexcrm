@@ -25,10 +25,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String reCaptchaResponse = request.getParameter("g-recaptcha-response");
-        String reCaptchaRemoteAddr = request.getRemoteAddr();
-
-        if (reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)) {
+        if (reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
             User user = loggingLogic.logIn(username)
                     .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
             List<GrantedAuthority> authorities = new ArrayList<>();
