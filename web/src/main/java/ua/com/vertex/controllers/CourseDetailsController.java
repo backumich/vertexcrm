@@ -43,7 +43,7 @@ public class CourseDetailsController {
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
 
-    @PostMapping(value = "/searchCourseJsp")
+    @GetMapping(value = "/searchCourseJsp")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView searchCourseJsp() {
         LOGGER.debug("Show search page for courses");

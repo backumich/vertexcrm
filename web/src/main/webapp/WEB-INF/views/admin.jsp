@@ -156,7 +156,7 @@
 
         <div>
             <span class="formHeaderText1">Course info:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
+            <form:form cssClass="buttonText" method="get" action="/searchCourseJsp">
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>
             </form:form>
         </div>
