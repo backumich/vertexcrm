@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,6 +52,23 @@ public class UserLogicImpl implements UserLogic {
 
     public int getQuantityUsers() {
         return userDao.getQuantityUsers();
+    }
+
+    @Override
+    public int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        return userDao.setParamsToRestorePassword(email, uuid, creationTime);
+    }
+
+    @Override
+    public String getEmailByUuid(int id, String uuid) {
+        PasswordResetDto dto = userDao.getEmailByUuid(id, uuid);
+        LOGGER.debug("Checking if link to restore password has expired");
+        return dto.getCreationTime().plusHours(3).isAfter(LocalDateTime.now()) ? dto.getEmail() : "";
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        userDao.savePassword(email, password);
     }
 
     @Override

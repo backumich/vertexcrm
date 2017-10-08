@@ -3,6 +3,7 @@ package ua.com.vertex.logic.interfaces;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,4 +41,10 @@ public interface UserLogic {
     List<User> getCourseUsers(int courseId);
 
     int getQuantityUsers();
+
+    int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime);
+
+    String getEmailByUuid(int id, String uuid);
+
+    void savePassword(String email, String password);
 }
