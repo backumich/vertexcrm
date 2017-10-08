@@ -139,7 +139,7 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><form:input class="buttonText" placeholder="Phone (123)456-78-90" path="phone"/></td>
+                        <td><form:input class="buttonText" placeholder="Phone (123)456-7890" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
                     <tr>

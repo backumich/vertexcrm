@@ -249,6 +249,7 @@ public class CourseDetailsControllerTest {
     @Test
     public void updateCourseReturnCorrectViewWhenDataAcesException() throws Exception {
         when(bindingResult.hasErrors()).thenReturn(false);
+//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
         when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
                 SEARCH_COURSE_JSP);
