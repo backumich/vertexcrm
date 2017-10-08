@@ -15,9 +15,7 @@ public class EmailExtractorImpl implements EmailExtractor {
     @Override
     public String getEmailFromAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) {
-            return authentication.getName();
-        }
-        return null;
+        return (!(authentication instanceof AnonymousAuthenticationToken) && authentication != null) ?
+                authentication.getName() : null;
     }
 }
