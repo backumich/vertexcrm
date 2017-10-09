@@ -136,7 +136,8 @@
         <table>
             <tr>
                 <td><span class="fontSize140 bold silver">
-                        Enter your email address and we will send you a link to reset your password</span><br><br></td>
+                        Enter your email address and we will send you the link to reset your password</span><br><br>
+                </td>
             </tr>
             <tr>
                 <td><input type="text" name="email" value="${email}"
