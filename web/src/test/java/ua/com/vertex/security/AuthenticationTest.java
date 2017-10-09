@@ -15,7 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.context.TestConfigWithMockBeans;
 import ua.com.vertex.utils.ReCaptchaService;
 
 import java.util.Collection;
@@ -32,9 +32,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = TestConfigWithMockBeans.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles("withMockBeans")
 public class AuthenticationTest {
     private static final String CORRECT_PASSWORD = "123456";
     private static final String EXISTING_EMAIL = "44@test.com";

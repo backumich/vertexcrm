@@ -11,16 +11,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.vertex.beans.Role;
-import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.context.TestConfigWithMockBeans;
 import ua.com.vertex.utils.ReCaptchaService;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = TestConfigWithMockBeans.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles("withMockBeans")
 public class SpringDataUserDetailsServiceTest {
     private static final String RE_CAPTCHA_RESPONSE = null;
     private static final String RE_CAPTCHA_REMOTE_ADDRESS = "127.0.0.1";
