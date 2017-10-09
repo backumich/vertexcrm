@@ -16,13 +16,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.controllers.exceptionHandling.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -259,5 +262,65 @@ public class UserDaoTest {
             System.out.println(teacher1);
             assertTrue(teacher1.getRole().equals(Role.ROLE_TEACHER) && teacher1.isActive());
         });
+    }
+
+    @Test
+    @Transactional
+    @WithAnonymousUser
+    public void setParamsToRestorePasswordReturnsGeneratedId() {
+        final String email = "email@email.com";
+        final String uuid = "uuid";
+        final LocalDateTime dateTime = LocalDateTime.now();
+
+        int result = userDao.setParamsToRestorePassword(email, uuid, dateTime);
+        assertTrue(result > 2);
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void getEmailByUuidReturnsPasswordResetDto() {
+        final int id = 1;
+        final String email = "email1@email.com";
+        final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
+        final LocalDateTime dateTime = LocalDateTime.of(2017, 10, 9, 0, 0, 0);
+        final PasswordResetDto dto = passwordResetDtoHelper(email, dateTime);
+
+        PasswordResetDto result = userDao.getEmailByUuid(id, uuid);
+        assertEquals(dto, result);
+    }
+
+    private PasswordResetDto passwordResetDtoHelper(String email, LocalDateTime dateTime) {
+        return PasswordResetDto.builder()
+                .email(email)
+                .creationTime(dateTime)
+                .build();
+    }
+
+    @Test(expected = RuntimeException.class)
+    @WithAnonymousUser
+    public void getEmailByUuidThrowsException() {
+        final int notExistingId = 100;
+        final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
+
+        userDao.getEmailByUuid(notExistingId, uuid);
+    }
+
+    @Test
+    @Transactional
+    @WithAnonymousUser
+    public void savePasswordDoesNotThrowException() {
+        final String email = "email1";
+        final String password = "new password";
+
+        userDao.savePassword(email, password);
+    }
+
+    @Test(expected = UpdatedPasswordNotSaved.class)
+    @WithAnonymousUser
+    public void savePasswordThrowsException() {
+        final String email = "not existing email";
+        final String password = "new password";
+
+        userDao.savePassword(email, password);
     }
 }

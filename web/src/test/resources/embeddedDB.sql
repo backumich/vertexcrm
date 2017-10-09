@@ -18,7 +18,7 @@ CREATE TABLE Users
   phone         VARCHAR(25),
   role_id       INT(11),
   is_active     TINYINT(1) DEFAULT '0' NOT NULL,
-  FOREIGN KEY (role_id) REFERENCES Roles(role_id)
+  FOREIGN KEY (role_id) REFERENCES Roles (role_id)
 );
 
 CREATE TABLE Certificate
@@ -63,9 +63,18 @@ CREATE TABLE Courses
 
 CREATE TABLE Course_users
 (
-  id         INT(11)      NOT NULL AUTO_INCREMENT,
-  course_id  INT(11)      NOT NULL,
-  user_id    INT(11)      NOT NULL,
+  id        INT(11) NOT NULL AUTO_INCREMENT,
+  course_id INT(11) NOT NULL,
+  user_id   INT(11) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE Password_reset
+(
+  id            INT(11)      NOT NULL AUTO_INCREMENT,
+  email         VARCHAR(255) NOT NULL,
+  uuid          VARCHAR(50)  NOT NULL,
+  creation_time TIMESTAMP    NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -154,4 +163,10 @@ INSERT INTO Course_users (course_id, user_id)
 VALUES (1, 402);
 
 INSERT INTO Course_users (course_id, user_id)
-VALUES (2, 403)
+VALUES (2, 403);
+
+INSERT INTO Password_reset (id, email, uuid, creation_time)
+VALUES ('1', 'email1@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c5', '2017-10-09 00:00:00');
+
+INSERT INTO Password_reset (id, email, uuid, creation_time)
+VALUES ('2', 'email2@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c6', '2017-10-09 11:00:00')
