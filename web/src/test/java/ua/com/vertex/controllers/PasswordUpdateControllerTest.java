@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.PasswordResetDto;
-import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.context.TestConfigWithMockBeans;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.ReCaptchaService;
 
@@ -28,9 +28,9 @@ import static ua.com.vertex.controllers.PasswordResetEmailController.CAPTCHA_MIS
 import static ua.com.vertex.controllers.PasswordUpdateController.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = TestConfigWithMockBeans.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles("withMockBeans")
 @Transactional
 public class PasswordUpdateControllerTest {
     private static final String RE_CAPTCHA_RESPONSE = null;

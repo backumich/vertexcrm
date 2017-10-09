@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.context.TestConfigWithMockBeans;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.utils.MailService;
 import ua.com.vertex.utils.ReCaptchaService;
@@ -25,9 +25,9 @@ import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.PasswordResetEmailController.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = TestConfigWithMockBeans.class)
 @WebAppConfiguration
-@ActiveProfiles("test")
+@ActiveProfiles("withMockBeans")
 @Transactional
 public class PasswordResetEmailControllerTest {
     private static final String RE_CAPTCHA_RESPONSE = null;
