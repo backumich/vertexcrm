@@ -21,7 +21,6 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ua.com.vertex.dao.UserDaoImpl.*;
@@ -159,7 +158,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public Optional<Course> getCourseById(int courseId) {
+    public Course getCourseById(int courseId) {
         LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)", courseId));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
@@ -174,15 +173,14 @@ public class CourseDaoImpl implements CourseDaoInf {
                             .setStart(resultSet.getDate(START).toLocalDate())
                             .setFinished((resultSet.getInt(FINISHED) == 1))
                             .setPrice(resultSet.getBigDecimal(PRICE))
-                            .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
-                                    .getInstance())
+                            .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID)).getInstance())
                             .setSchedule(resultSet.getString(SCHEDULE))
                             .setNotes(resultSet.getString(NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
             throw new ServiceException("The course with id - " + courseId + " was not found.", e);
         }
 
-        return Optional.ofNullable(course);
+        return course;
     }
 
     private Course mapCourses(ResultSet resultSet) throws SQLException {

@@ -82,8 +82,12 @@ public class CertificateLogicImplTest {
 
     @Test
     public void setUserAndCertificateInvokesDao() throws SQLException {
+//        when(certificateDao.getCertificateByUid("1492779828793888"))
+//                .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
+
         when(certificateDao.getCertificateByUid("1492779828793888"))
-                .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
+                .thenReturn(new Certificate.Builder().setUserId(22).getInstance());
+
         when(userDao.getUser(22)).thenReturn(Optional.of(new User()));
 
         certificateLogic.getUserAndCertificate("1492779828793888");

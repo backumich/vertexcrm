@@ -9,7 +9,7 @@ public interface CertificateDaoInf {
 
     Optional<Certificate> getCertificateById(int certificateId);
 
-    Optional<Certificate> getCertificateByUid(String certificateUid);
+    Certificate getCertificateByUid(String certificateUid);
 
     List<Certificate> getAllCertificatesByUserEmail(String eMail);
 

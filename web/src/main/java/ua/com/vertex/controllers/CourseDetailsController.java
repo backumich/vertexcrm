@@ -19,7 +19,6 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
@@ -75,7 +74,7 @@ public class CourseDetailsController {
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
-        result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
+        result.addObject(COURSE, courseLogic.getCourseById(courseId));
         result.addObject(TEACHERS, userLogic.getTeachers());
 
         return result;
@@ -84,7 +83,7 @@ public class CourseDetailsController {
     @PostMapping(value = "/updateCourse")
     @PreAuthorize("hasRole('ADMIN')")
     public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
-        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
+        LOGGER.debug(String.format("Update course with course ID: (%s). Course details: (%s)", course.getId(), course));
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             model.addAttribute(MSG, String.format("Course with id - (%s) updated.",

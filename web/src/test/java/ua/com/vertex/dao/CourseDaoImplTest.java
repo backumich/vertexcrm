@@ -69,14 +69,14 @@ public class CourseDaoImplTest {
     public void addCourseCorrectInsert() throws Exception {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);
-        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId), course);
     }
 
     @Test
     public void addCourseIncorrectInsert() throws Exception {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);
-        assertNotEquals(MSG, courseDaoInf.getCourseById(-1).orElse(new Course()), course);
+        assertNotEquals(MSG, courseDaoInf.getCourseById(-1), course);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class CourseDaoImplTest {
                 .setNotes("After update").getInstance();
 
         courseDaoInf.updateCourseExceptPrice(courseForUpdate);
-        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
+        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()));
 
     }
 
@@ -130,13 +130,14 @@ public class CourseDaoImplTest {
     public void getCourseByIdReturnCorrectData() throws Exception {
         int courseId = courseDaoForTest.insertCourse(course);
         course.setId(courseId);
-        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId), course);
     }
 
-    @Test
-    public void getCourseByIdReturnEmptyOptional() throws Exception {
-        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
-    }
+//? Лишние тесты?
+//    @Test
+//    public void getCourseByIdReturnEmptyOptional() throws Exception {
+//        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
+//    }
 
     @Test
     @WithAnonymousUser
@@ -299,7 +300,7 @@ public class CourseDaoImplTest {
 
     @Test
     public void getCoursesById() throws Exception {
-        if (courseDaoInf.getCourseById(111).isPresent()) {
+        if (courseDaoInf.getCourseById(111) != null) {
             assertEquals(MSG, new Course.Builder()
                     .setId(111)
                     .setName("Super JAVA")
@@ -309,7 +310,7 @@ public class CourseDaoImplTest {
                     .setTeacher(new User.Builder().setUserId(1).getInstance())
                     .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
-                    .getInstance(), courseDaoInf.getCourseById(111).get());
+                    .getInstance(), courseDaoInf.getCourseById(111));
         }
     }
 

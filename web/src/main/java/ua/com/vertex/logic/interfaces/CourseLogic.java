@@ -6,7 +6,6 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CourseLogic {
 
@@ -22,7 +21,7 @@ public interface CourseLogic {
 
     int updateCourseExceptPrice(Course course);
 
-    Optional<Course> getCourseById(int courseId);
+    Course getCourseById(int courseId);
 
     List<User> getUsersAssignedToCourse(int courseId);
 

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.*;
@@ -23,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.USERS;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 import static ua.com.vertex.controllers.CreateNewPaymentController.*;
@@ -68,11 +66,12 @@ public class CreateNewPaymentControllerTest {
 
     }
 
-    @Test
-    public void selectCourseForPaymentReturnCorrectViewWhenException() throws Exception {
-        when(courseLogic.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.selectCourseForPayment().getViewName(), ERROR);
-    }
+//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
+//    @Test
+//    public void selectCourseForPaymentReturnCorrectViewWhenException() throws Exception {
+//        when(courseLogic.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
+//        assertEquals(MSG_INVALID_VIEW, underTest.selectCourseForPayment().getViewName(), ERROR);
+//    }
 
     @Test
     public void selectCourseForPaymentReturnCorrectViewAndDataInModel() throws Exception {
@@ -85,11 +84,12 @@ public class CreateNewPaymentControllerTest {
         assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES), Collections.singletonList(course));
     }
 
-    @Test
-    public void selectUserForPaymentReturnCorrectViewWhenException() throws Exception {
-        when(userLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.selectUserForPayment(1).getViewName(), ERROR);
-    }
+    //todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
+//    @Test
+//    public void selectUserForPaymentReturnCorrectViewWhenException() throws Exception {
+//        when(userLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
+//        assertEquals(MSG_INVALID_VIEW, underTest.selectUserForPayment(1).getViewName(), ERROR);
+//    }
 
     @Test
     public void selectUserForPaymentReturnCorrectViewAndDataInModel() throws Exception {
@@ -117,13 +117,14 @@ public class CreateNewPaymentControllerTest {
         assertEquals(MSG_INVALID_DATA, result.getModel().get(USER_ID_FOR_PAY), 1);
     }
 
-    @Test
-    public void createPaymentReturnCorrectViewWhenException() throws Exception {
-        when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm))
-                .thenThrow(new DataIntegrityViolationException("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.createPayment(paymentForm, bindingResult, new ModelAndView())
-                .getViewName(), ERROR);
-    }
+//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
+//    @Test
+//    public void createPaymentReturnCorrectViewWhenException() throws Exception {
+//        when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm))
+//                .thenThrow(new DataIntegrityViolationException("Test"));
+//        assertEquals(MSG_INVALID_VIEW, underTest.createPayment(paymentForm, bindingResult, new ModelAndView())
+//                .getViewName(), ERROR);
+//    }
 
     @Test
     public void createPaymentReturnCorrectViewAndDataInModel() throws Exception {

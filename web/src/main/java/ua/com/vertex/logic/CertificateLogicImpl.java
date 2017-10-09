@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
@@ -72,8 +71,11 @@ public class CertificateLogicImpl implements CertificateLogic {
         LOGGER.debug("Processing request with certificateId=" + certificateUid);
 
         Map<String, Object> attributes = new HashMap<>();
-        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
-                .orElseThrow(NoCertificateException::new);
+//        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
+//                .orElseThrow(NoCertificateException::new);
+
+        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid);
+
         User user = userDaoInf.getUser(certificate.getUserId()).orElse(new User());
         attributes.put(CERTIFICATE, certificate);
         attributes.put(USER, user);

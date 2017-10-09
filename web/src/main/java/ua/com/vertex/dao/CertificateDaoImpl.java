@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Certificate;
+import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 
@@ -107,7 +108,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     }
 
     @Override
-    public Optional<Certificate> getCertificateByUid(String certificateUid) {
+    public Certificate getCertificateByUid(String certificateUid) {
 
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certificate_uid =:certificate_uid";
@@ -117,11 +118,12 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_UID, certificateUid), new CertificateRowMapper());
         } catch (IncorrectResultSizeDataAccessException | DataIntegrityViolationException e) {
-            throw new ServiceException("No certificate in DB, UID = " + certificateUid, e);
+//            throw new ServiceException("No certificate in DB, UID = " + certificateUid, e);
+            throw new NoCertificateException("No certificate in DB, UID = " + certificateUid, e);
         }
 
         LOGGER.debug("Retrieved certificate UID = " + certificateUid);
-        return Optional.ofNullable(certificate);
+        return certificate;
     }
 
     private static final class CertificateRowMapper implements RowMapper<Certificate> {
