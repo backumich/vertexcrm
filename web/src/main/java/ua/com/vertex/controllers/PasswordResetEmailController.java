@@ -53,16 +53,16 @@ public class PasswordResetEmailController {
                 LOGGER.debug("Email to change the password was sent to " + email);
             } else {
                 view = PASSWORD_RESET;
-                emailNotValidated(email, CAPTCHA_MISSED, "", model);
+                emailNotValidatedOrCaptchaMissed(email, CAPTCHA_MISSED, "", model);
             }
         } else {
             view = PASSWORD_RESET;
-            emailNotValidated(email, EMAIL_INVALID, "Email to change the password was invalid", model);
+            emailNotValidatedOrCaptchaMissed(email, EMAIL_INVALID, "Email to change the password was invalid", model);
         }
         return view;
     }
 
-    private void emailNotValidated(String email, String attrName, String log, Model model) {
+    private void emailNotValidatedOrCaptchaMissed(String email, String attrName, String log, Model model) {
         model.addAttribute(EMAIL, email);
         model.addAttribute(attrName, true);
         if (!log.isEmpty()) {

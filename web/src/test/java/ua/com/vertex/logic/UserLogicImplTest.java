@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -149,6 +150,24 @@ public class UserLogicImplTest {
     public void getTeachersReturnException() throws SQLException {
         when(dao.getTeachers()).thenThrow(new DataIntegrityViolationException("test"));
         logic.getTeachers();
+    }
+
+    @Test
+    public void isUserRegisteredAndActiveReturnsTrue() {
+        when(dao.userForRegistrationCheck(EMAIL))
+                .thenReturn(Optional.of(new User.Builder().setIsActive(true).getInstance()));
+        boolean result = logic.isUserRegisteredAndActive(EMAIL);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void isUserRegisteredAndActiveReturnsFalse() {
+        when(dao.userForRegistrationCheck(EMAIL))
+                .thenReturn(Optional.of(new User.Builder().setIsActive(false).getInstance()));
+        boolean result = logic.isUserRegisteredAndActive(EMAIL);
+
+        assertEquals(false, result);
     }
 
     @Test

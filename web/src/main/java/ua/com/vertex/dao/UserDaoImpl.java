@@ -182,6 +182,8 @@ public class UserDaoImpl implements UserDaoInf {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
 
+        System.out.println(user);
+
         return Optional.ofNullable(user);
     }
 

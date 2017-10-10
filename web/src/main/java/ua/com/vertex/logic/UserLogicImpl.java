@@ -55,6 +55,12 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
+    public boolean isUserRegisteredAndActive(String email) {
+        User user = userDao.userForRegistrationCheck(email).orElse(User.EMPTY_USER);
+        return user.isActive();
+    }
+
+    @Override
     public int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
         return userDao.setParamsToRestorePassword(email, uuid, creationTime);
     }

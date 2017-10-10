@@ -42,6 +42,8 @@ public interface UserLogic {
 
     int getQuantityUsers();
 
+    boolean isUserRegisteredAndActive(String email);
+
     int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime);
 
     String getEmailByUuid(int id, String uuid);

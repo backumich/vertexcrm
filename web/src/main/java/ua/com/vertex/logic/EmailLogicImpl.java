@@ -81,9 +81,8 @@ class EmailLogicImpl implements EmailLogic {
         } catch (AddressException e) {
             result = false;
         }
-        if (!userLogic.userForRegistrationCheck(email).isPresent()) {
-            throw new PasswordResetEmailNotFound(String.format("Email to reset the password %s not found in database",
-                    email));
+        if (!userLogic.isUserRegisteredAndActive(email)) {
+            throw new PasswordResetEmailNotFound("This email is not registered or not activated yet");
         }
         return result;
     }
