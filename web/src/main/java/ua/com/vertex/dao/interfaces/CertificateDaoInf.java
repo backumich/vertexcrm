@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CertificateDaoInf {
 
-//    Optional<Certificate> getCertificateById(int certificateId);
+    Certificate getCertificateById(int certificateId);
 
     Certificate getCertificateByUid(String certificateUid);
 
