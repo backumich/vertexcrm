@@ -36,8 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles("withMockBeans")
 public class AuthenticationTest {
+    private static final String USER_EMAIL = "44@test.com";
     private static final String CORRECT_PASSWORD = "123456";
-    private static final String EXISTING_EMAIL = "44@test.com";
     private static final String INCORRECT_DATA = "incorrect";
     private static final String ADMIN_EMAIL = "33@test.com";
     private static final String RE_CAPTCHA_RESPONSE = null;
@@ -65,10 +65,10 @@ public class AuthenticationTest {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         Collection<? extends GrantedAuthority> authorities = Collections
                 .singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(CORRECT_PASSWORD))
+        mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(CORRECT_PASSWORD))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/loggedIn"))
-                .andExpect(authenticated().withUsername(EXISTING_EMAIL))
+                .andExpect(authenticated().withUsername(USER_EMAIL))
                 .andExpect(authenticated().withAuthorities(authorities));
     }
 
@@ -89,7 +89,7 @@ public class AuthenticationTest {
     @WithAnonymousUser
     public void testFormLoginWithIncorrectPassword() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
-        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(INCORRECT_DATA))
+        mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(INCORRECT_DATA))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
                 .andExpect(unauthenticated());
@@ -110,7 +110,7 @@ public class AuthenticationTest {
     public void missedReCaptcha() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(false);
         mockMvc.perform(post("/logIn")
-                .param("username", EXISTING_EMAIL)
+                .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
                 .with(csrf()));
     }
@@ -120,7 +120,7 @@ public class AuthenticationTest {
     public void loginWithValidCsrf() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(post("/logIn")
-                .param("username", EXISTING_EMAIL)
+                .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
                 .with(csrf()))
                 .andExpect(status().isFound())
@@ -132,7 +132,7 @@ public class AuthenticationTest {
     @WithAnonymousUser
     public void loginWithInvalidCsrf() throws Exception {
         mockMvc.perform(post("/logIn")
-                .param("username", EXISTING_EMAIL)
+                .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
                 .with(csrf().useInvalidToken()))
                 .andExpect(status().isForbidden())

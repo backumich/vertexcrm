@@ -24,9 +24,9 @@ import static org.mockito.Mockito.when;
 public class SpringDataUserDetailsServiceTest {
     private static final String RE_CAPTCHA_RESPONSE = null;
     private static final String RE_CAPTCHA_REMOTE_ADDRESS = "127.0.0.1";
-    private static final String USERNAME = "email1";
+    private static final String USERNAME = "email1@test.com";
     private static final String PASSWORD = "password";
-    private static final String ROLE = Role.ROLE_ADMIN.toString();
+    private static final String ROLE = Role.ROLE_TEACHER.toString();
 
     @Autowired
     private SpringDataUserDetailsService service;
