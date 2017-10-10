@@ -67,7 +67,7 @@ class EmailLogicImpl implements EmailLogic {
         String passwordResetPage = "http://localhost:8080/resetPassword";
         LOGGER.debug("Message to reset password was compiled");
 
-        return String.format("You can use the following link to reset your password:\n\n%s\n\n" +
+        return String.format("You can use the following link to reset your password:%n%n%s%n%n" +
                 "If you don’t use this link within 3 hours, it will expire. " +
                 "To get a new password reset link, visit %s", passwordResetLink, passwordResetPage);
     }

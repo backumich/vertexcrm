@@ -366,7 +366,7 @@ public class UserDaoImpl implements UserDaoInf {
             dto = jdbcTemplate.queryForObject(query, source, this::mapPasswordResetDto);
             LOGGER.debug(String.format("Password reset email %s was retrieved from DB", dto.getEmail()));
         } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("Password reset email was not found by ID and UUID");
+            throw new RuntimeException("Password reset email address was not found by ID and UUID");
         }
         return dto;
     }
