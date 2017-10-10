@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class LoggingLogicImplTest {
-    private static final String USERNAME_USER = "22@test.com";
+    private static final String USERNAME_USER = "email1@test.com";
     private static final String USERNAME_ADMIN = "email1";
     private static final String USER_PAGE = "userProfile";
     private static final String ADMIN_PAGE = "admin";
