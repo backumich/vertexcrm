@@ -14,6 +14,7 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CourseDaoForTest;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
@@ -72,7 +73,7 @@ public class CourseDaoImplTest {
         assertEquals(MSG, courseDaoInf.getCourseById(courseId), course);
     }
 
-    @Test
+    @Test(expected = ServiceException.class)
     public void addCourseIncorrectInsert() throws Exception {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);

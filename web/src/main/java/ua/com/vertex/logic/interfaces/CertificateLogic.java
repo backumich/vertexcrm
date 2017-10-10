@@ -5,7 +5,6 @@ import ua.com.vertex.beans.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface CertificateLogic {
 
@@ -13,7 +12,7 @@ public interface CertificateLogic {
 
     List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 
-    Optional<Certificate> getCertificateById(int certificateId);
+//    Optional<Certificate> getCertificateById(int certificateId);
 
     int addCertificate(Certificate certificate);
 

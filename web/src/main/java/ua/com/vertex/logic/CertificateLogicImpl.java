@@ -12,7 +12,10 @@ import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
@@ -36,10 +39,10 @@ public class CertificateLogicImpl implements CertificateLogic {
         return certificateDaoInf.getAllCertificatesByUserIdFullData(userId);
     }
 
-    public Optional<Certificate> getCertificateById(int certificateId) {
-        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
-        return certificateDaoInf.getCertificateById(certificateId);
-    }
+//    public Optional<Certificate> getCertificateById(int certificateId) {
+//        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
+//        return certificateDaoInf.getCertificateById(certificateId);
+//    }
 
     public int addCertificate(Certificate certificate) {
         LOGGER.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));

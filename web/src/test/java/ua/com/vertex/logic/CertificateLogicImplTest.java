@@ -14,7 +14,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,16 +46,16 @@ public class CertificateLogicImplTest {
         assertNotNull(certificateDao);
     }
 
-    @Test
-    public void getCertificateByIdIsCalledOnCertificateDao() throws Exception {
-        certificateLogic.getCertificateById(1);
-        verify(certificateDao).getCertificateById(1);
-    }
+//    @Test
+//    public void getCertificateByIdIsCalledOnCertificateDao() throws Exception {
+//        certificateLogic.getCertificateById(1);
+//        verify(certificateDao).getCertificateById(1);
+//    }
 
-    @Test
-    public void getCertificateByIdReturnNull() throws Exception {
-        assertNull(MSG, certificateLogic.getCertificateById(1));
-    }
+//    @Test
+//    public void getCertificateByIdReturnNull() throws Exception {
+//        assertNull(MSG, certificateLogic.getCertificateById(1));
+//    }
 
     @Test
     public void getAllCertificateByUserEmailIsCalledOnCertificateDao() throws Exception {
