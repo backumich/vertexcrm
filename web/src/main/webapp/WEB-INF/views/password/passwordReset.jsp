@@ -127,7 +127,7 @@
 
     <c:if test="${emailNotFound == true}">
         <div class="red fontSize180">
-            Email you entered is not registered. Make sure you enter the correct email!
+            This email is not registered or has not been activated yet. Make sure you enter the correct email!
         </div>
         <br><br>
     </c:if>
