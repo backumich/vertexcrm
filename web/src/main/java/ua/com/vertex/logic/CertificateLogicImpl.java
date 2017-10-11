@@ -8,14 +8,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
@@ -39,10 +37,10 @@ public class CertificateLogicImpl implements CertificateLogic {
         return certificateDaoInf.getAllCertificatesByUserIdFullData(userId);
     }
 
-//    public Optional<Certificate> getCertificateById(int certificateId) {
-//        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
-//        return certificateDaoInf.getCertificateById(certificateId);
-//    }
+    public Optional<Certificate> getCertificateById(int certificateId) {
+        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
+        return certificateDaoInf.getCertificateById(certificateId);
+    }
 
     public int addCertificate(Certificate certificate) {
         LOGGER.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
@@ -74,11 +72,8 @@ public class CertificateLogicImpl implements CertificateLogic {
         LOGGER.debug("Processing request with certificateId=" + certificateUid);
 
         Map<String, Object> attributes = new HashMap<>();
-//        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
-//                .orElseThrow(NoCertificateException::new);
-
-        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid);
-
+        Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)
+                .orElseThrow(NoCertificateException::new);
         User user = userDaoInf.getUser(certificate.getUserId()).orElse(new User());
         attributes.put(CERTIFICATE, certificate);
         attributes.put(USER, user);

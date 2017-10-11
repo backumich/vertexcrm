@@ -14,7 +14,6 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
-import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CourseDaoForTest;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
@@ -70,14 +69,14 @@ public class CourseDaoImplTest {
     public void addCourseCorrectInsert() throws Exception {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);
-        assertEquals(MSG, courseDaoInf.getCourseById(courseId), course);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }
 
-    @Test(expected = ServiceException.class)
+    @Test
     public void addCourseIncorrectInsert() throws Exception {
         int courseId = courseDaoInf.addCourse(course);
         course.setId(courseId);
-        assertNotEquals(MSG, courseDaoInf.getCourseById(-1), course);
+        assertNotEquals(MSG, courseDaoInf.getCourseById(-1).orElse(new Course()), course);
     }
 
     @Test
@@ -123,7 +122,7 @@ public class CourseDaoImplTest {
                 .setNotes("After update").getInstance();
 
         courseDaoInf.updateCourseExceptPrice(courseForUpdate);
-        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()));
+        assertEquals(MSG, courseForUpdate, courseDaoInf.getCourseById(courseForUpdate.getId()).orElse(new Course()));
 
     }
 
@@ -131,14 +130,13 @@ public class CourseDaoImplTest {
     public void getCourseByIdReturnCorrectData() throws Exception {
         int courseId = courseDaoForTest.insertCourse(course);
         course.setId(courseId);
-        assertEquals(MSG, courseDaoInf.getCourseById(courseId), course);
+        assertEquals(MSG, courseDaoInf.getCourseById(courseId).orElse(new Course()), course);
     }
 
-//? Лишние тесты?
-//    @Test
-//    public void getCourseByIdReturnEmptyOptional() throws Exception {
-//        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
-//    }
+    @Test
+    public void getCourseByIdReturnEmptyOptional() throws Exception {
+        assertFalse(MSG, courseDaoInf.getCourseById(33333).isPresent());
+    }
 
     @Test
     @WithAnonymousUser
@@ -301,7 +299,7 @@ public class CourseDaoImplTest {
 
     @Test
     public void getCoursesById() throws Exception {
-        if (courseDaoInf.getCourseById(111) != null) {
+        if (courseDaoInf.getCourseById(111).isPresent()) {
             assertEquals(MSG, new Course.Builder()
                     .setId(111)
                     .setName("Super JAVA")
@@ -311,7 +309,7 @@ public class CourseDaoImplTest {
                     .setTeacher(new User.Builder().setUserId(1).getInstance())
                     .setSchedule("Sat, Sun")
                     .setNotes("Welcome, we don't expect you (=")
-                    .getInstance(), courseDaoInf.getCourseById(111));
+                    .getInstance(), courseDaoInf.getCourseById(111).get());
         }
     }
 

@@ -14,8 +14,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,16 +45,16 @@ public class CertificateLogicImplTest {
         assertNotNull(certificateDao);
     }
 
-//    @Test
-//    public void getCertificateByIdIsCalledOnCertificateDao() throws Exception {
-//        certificateLogic.getCertificateById(1);
-//        verify(certificateDao).getCertificateById(1);
-//    }
+    @Test
+    public void getCertificateByIdIsCalledOnCertificateDao() throws Exception {
+        certificateLogic.getCertificateById(1);
+        verify(certificateDao).getCertificateById(1);
+    }
 
-//    @Test
-//    public void getCertificateByIdReturnNull() throws Exception {
-//        assertNull(MSG, certificateLogic.getCertificateById(1));
-//    }
+    @Test
+    public void getCertificateByIdReturnNull() throws Exception {
+        assertNull(MSG, certificateLogic.getCertificateById(1));
+    }
 
     @Test
     public void getAllCertificateByUserEmailIsCalledOnCertificateDao() throws Exception {
@@ -83,12 +82,8 @@ public class CertificateLogicImplTest {
 
     @Test
     public void setUserAndCertificateInvokesDao() throws SQLException {
-//        when(certificateDao.getCertificateByUid("1492779828793888"))
-//                .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
-
         when(certificateDao.getCertificateByUid("1492779828793888"))
-                .thenReturn(new Certificate.Builder().setUserId(22).getInstance());
-
+                .thenReturn(Optional.of(new Certificate.Builder().setUserId(22).getInstance()));
         when(userDao.getUser(22)).thenReturn(Optional.of(new User()));
 
         certificateLogic.getUserAndCertificate("1492779828793888");

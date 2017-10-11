@@ -6,25 +6,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.Course;
-import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
+import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CourseDetailsController.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
@@ -129,26 +125,30 @@ public class CourseDetailsControllerTest {
                 , SEARCH_COURSE_JSP);
     }
 
-    @Test(expected = DataAccessException.class)
-    public void searchCourseHasCorrectDataInModelWhenDataAcesExceptionZZZ() throws Exception {
-        when(courseLogic.searchCourseByNameAndStatus("test", true)).thenThrow(new DataIntegrityViolationException("t"));
-        when(bindingResult.hasErrors()).thenReturn(false);
-        courseDetailsController.searchCourse(
-                new Course.Builder().setName("test").setFinished(true).getInstance(), bindingResult, model);
-    }
+//todo: при DataAccessException нет модели сразу в САД
+//    @Test
+//    public void searchCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
+//        when(courseLogic.searchCourseByNameAndStatus("test", true)).
+//                thenThrow(new DataIntegrityViolationException("t"));
+//        when(bindingResult.hasErrors()).thenReturn(false);
+//        courseDetailsController.searchCourse(new Course.Builder().setName("test").
+//                setFinished(true).getInstance(), bindingResult, model);
+//        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+//        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
+//    }
 
-    //todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
+//todo: при DataAccessException нет модели сразу в САД
 //    @Test
 //    public void searchCourseReturnCorrectViewWhenException() throws Exception {
 //        when(courseLogic.searchCourseByNameAndStatus("test", true)).thenThrow(new RuntimeException("test"));
 //        when(bindingResult.hasErrors()).thenReturn(false);
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(new Course.Builder().setName("test").
-//                setFinished(true).getInstance(), bindingResult, model), ERROR);
+//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(
+//                new Course.Builder().setName("test").setFinished(true).getInstance(), bindingResult, model), ERROR);
 //    }
 
     @Test
     public void courseDetailsReturnCorrectView() throws Exception {
-        when(courseLogic.getCourseById(1)).thenReturn(new Course());
+        when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
         when(userLogic.getTeachers()).thenReturn(new HashMap<>());
 
         assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName()
@@ -157,7 +157,7 @@ public class CourseDetailsControllerTest {
 
     @Test
     public void courseDetailsHasCorrectDataInModel() throws Exception {
-        when(courseLogic.getCourseById(1)).thenReturn(new Course());
+        when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
         HashMap<Integer, String> teachers = new HashMap<Integer, String>() {
             {
                 put(1, "test test 'test@test.com'");
@@ -172,13 +172,14 @@ public class CourseDetailsControllerTest {
         assertEquals(MSG_INVALID_DATA, result.get(TEACHERS), teachers);
     }
 
-//todo: Лишние тесты?
-//    @Test
-//    public void courseDetailsReturnCorrectViewWhenEmptyCourse() throws Exception {
-//        when(courseLogic.getCourseById(1)).thenReturn(Optional.empty());
+    @Test(expected = NoSuchElementException.class)
+    public void courseDetailsReturnCorrectViewWhenEmptyCourse() throws Exception {
+        when(courseLogic.getCourseById(1)).thenReturn(Optional.empty());
+        courseDetailsController.courseDetails(1);
 //        assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
-//    }
-//
+    }
+
+
 //    @Test
 //    public void courseDetailsHasCorrectDataInModelWhenEmptyCourse() throws Exception {
 //        when(courseLogic.getCourseById(1)).thenReturn(Optional.empty());
@@ -188,18 +189,24 @@ public class CourseDetailsControllerTest {
 //        assertFalse(MSG_INVALID_DATA, result.containsAttribute(TEACHERS));
 //        assertFalse(MSG_INVALID_DATA, result.containsAttribute(MSG));
 //    }
-//
-//    @Test
-//    public void courseDetailsReturnCorrectViewWhenException() throws Exception {
-//        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
-//    }
 
-    @Test(expected = ServiceException.class)
-    public void courseDetailsHasCorrectDataInModelWhenException() {
-        when(courseLogic.getCourseById(-777)).thenThrow(new ServiceException("test", new EmptyResultDataAccessException(1)));
-        courseDetailsController.courseDetails(-777);
+    @Test(expected = RuntimeException.class)
+    public void courseDetailsReturnCorrectViewWhenException() throws Exception {
+        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
+//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
+        courseDetailsController.courseDetails(1);
     }
+
+//todo: при DataAccessException нет модели сразу в САД
+//    @Test
+//    public void courseDetailsHasCorrectDataInModelWhenException() throws Exception {
+//        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
+//        ModelMap result = courseDetailsController.courseDetails(1).getModelMap();
+//
+//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
+//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(TEACHERS));
+//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(MSG));
+//    }
 
     @Test
     public void updateCourseReturnCorrectView() throws Exception {
@@ -241,31 +248,28 @@ public class CourseDetailsControllerTest {
         assertEquals(MSG_INVALID_DATA, model.asMap().get(TEACHERS), teachers);
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void updateCourseReturnCorrectViewWhenDataAcesException() throws Exception {
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
-//                SEARCH_COURSE_JSP);
-//    }
+    @Test
+    public void updateCourseReturnCorrectViewWhenDataAcesException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
+                SEARCH_COURSE_JSP);
+    }
 
-//todo: нужен ли тест? нет смысла проверять модели в котроллере поскольку мы падаем на еррорпейдж
-//    @Test
-//    public void updateCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
-//        courseDetailsController.updateCourse(new Course(), bindingResult, model);
-//        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-//        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
-//    }
+    @Test
+    public void updateCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
+        courseDetailsController.updateCourse(new Course(), bindingResult, model);
+        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
+        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
+    }
 
-//todo: нужен ли тест? таже бедося что и у теста выше
-//    @Test
-//    public void updateCourseReturnCorrectViewWhenException() throws Exception {
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new RuntimeException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
-//                ERROR);
-//    }
+    @Test
+    public void updateCourseReturnCorrectViewWhenException() throws Exception {
+        when(bindingResult.hasErrors()).thenReturn(false);
+        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new RuntimeException("test"));
+        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
+                ERROR);
+    }
 }

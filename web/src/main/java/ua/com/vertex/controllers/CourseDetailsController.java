@@ -19,6 +19,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
@@ -70,11 +71,11 @@ public class CourseDetailsController {
     @GetMapping(value = "/courseDetails")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
-        LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
+        LOGGER.debug(String.format("Go to the course information page. Course ID - (%s)", courseId));
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
-        result.addObject(COURSE, courseLogic.getCourseById(courseId));
+        result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
         result.addObject(TEACHERS, userLogic.getTeachers());
 
         return result;

@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -55,13 +54,13 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE user_id=:user_id";
-        User user;
+        User user = null;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
             LOGGER.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            throw new ServiceException("No user id = " + userId, e);
+            LOGGER.warn("No user id=" + userId);
         }
 
         return Optional.ofNullable(user);
@@ -69,18 +68,18 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        LOGGER.debug(String.format("Call - getUserByEmail(%s);", email));
+        LOGGER.debug(String.format("Call -  getUserByEmail(%s) ;", email));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
                 " WHERE email=:email";
-        User user;
+        User user = null;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
             LOGGER.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            throw new ServiceException("No user email = " + email, e);
+            LOGGER.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -94,7 +93,7 @@ public class UserDaoImpl implements UserDaoInf {
                 "WHERE u.email=:email";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
-        User user;
+        User user = null;
 
         try {
             user = jdbcTemplate.queryForObject(query, parameters, (resultSet, i) -> new User.Builder()
@@ -104,7 +103,7 @@ public class UserDaoImpl implements UserDaoInf {
                     .getInstance());
             LOGGER.debug("Retrieved user password, role, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            throw new ServiceException("No user email = " + email, e);
+            LOGGER.warn("No email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -163,7 +162,7 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
 
         String query = "SELECT email, is_active FROM Users WHERE email =:email";
-        User user;
+        User user = null;
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, userEmail),
@@ -173,7 +172,7 @@ public class UserDaoImpl implements UserDaoInf {
                             .getInstance()));
             LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         } catch (EmptyResultDataAccessException e) {
-            throw new ServiceException("isRegisteredEmail(" + userEmail + ") return empty user", e);
+            LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
 
         return Optional.ofNullable(user);

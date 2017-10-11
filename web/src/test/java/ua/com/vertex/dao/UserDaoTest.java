@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
-import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -108,11 +107,10 @@ public class UserDaoTest {
                 .getEmail());
     }
 
-    @Test(expected = ServiceException.class)
+    @Test
     public void logInReturnsNullUserOptionalForUserNotExistingInDatabase() {
-       /* User user = */
-        userDao.logIn(NOT_EXISTING_EMAIL);
-//        assertEquals(new User(), user.orElse(new User()));
+        Optional<User> optional = userDao.logIn(NOT_EXISTING_EMAIL);
+        assertEquals(new User(), optional.orElse(new User()));
     }
 
     @Test

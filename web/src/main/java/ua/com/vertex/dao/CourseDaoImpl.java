@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.ServiceException;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -21,6 +20,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ua.com.vertex.dao.UserDaoImpl.*;
@@ -158,12 +158,12 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
-    public Course getCourseById(int courseId) {
+    public Optional<Course> getCourseById(int courseId) {
         LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)", courseId));
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
-        Course course;
+        Course course = null;
 
         LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
         try {
@@ -173,14 +173,15 @@ public class CourseDaoImpl implements CourseDaoInf {
                             .setStart(resultSet.getDate(START).toLocalDate())
                             .setFinished((resultSet.getInt(FINISHED) == 1))
                             .setPrice(resultSet.getBigDecimal(PRICE))
-                            .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID)).getInstance())
+                            .setTeacher(new User.Builder().setUserId(resultSet.getInt(TEACHER_ID))
+                                    .getInstance())
                             .setSchedule(resultSet.getString(SCHEDULE))
                             .setNotes(resultSet.getString(NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
-            throw new ServiceException("The course with id - " + courseId + " was not found.", e);
+            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
         }
 
-        return course;
+        return Optional.ofNullable(course);
     }
 
     private Course mapCourses(ResultSet resultSet) throws SQLException {

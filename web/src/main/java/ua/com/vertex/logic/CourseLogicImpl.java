@@ -10,6 +10,7 @@ import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
@@ -46,7 +47,7 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public Course getCourseById(int courseId) {
+    public Optional<Course> getCourseById(int courseId) {
         return courseDaoInf.getCourseById(courseId);
     }
 
