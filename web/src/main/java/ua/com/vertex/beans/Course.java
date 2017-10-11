@@ -13,6 +13,11 @@ public class Course {
     private final String NOTES_MSG = "The notes must be up to 256 characters long";
 
     private int id;
+
+    //    @Digits(message = "Incorrect price. Must be like '99,99'.", integer = 19, fraction = 2)
+//    @DecimalMin(message = "Incorrect price. The price should be greater than or equal to zero", value = "0.00")
+//    @DecimalMax(message = "Incorrect price. The price should be less than 99999999.00.", value = "99999999.00")
+//    @NotNull
     private BigDecimal price;
 
     @Size(min = 1, max = 256, message = COURSE_NAME_MSG)
