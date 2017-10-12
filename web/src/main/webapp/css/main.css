@@ -95,6 +95,14 @@ a img {
     border: none;
 }
 
+.buttonText {
+    color: black;
+}
+
+.padding-left-15 {
+    padding-left: 15px;
+}
+
 .btn {
     padding: 0 13px;
     height: 39px;

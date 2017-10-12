@@ -1,46 +1,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
 <html lang="en" charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vertex Crm</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href="./css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="css/slick.css">
-<link rel="stylesheet" href="css/main.css">
-<link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-<script type="text/javascript" async="" src="javascript/watch.js"></script>
-<script async="" src="javascript/analytics.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style id="style-1-cropbar-clipper">
-    .en-markup-crop-options {
-        top: 18px !important;
-        left: 50% !important;
-        margin-left: -100px !important;
-        width: 200px !important;
-        border: 2px rgba(255, 255, 255, .38) solid !important;
-        border-radius: 4px !important;
-    }
-
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0px !important;
-    }
-
-    .colortext {
-        background-color: #ffe; /* Цвет фона */
-        color: black; /* Цвет текста */
-    }
-
-    .buttonText {
-        color: black;
-    }
-</style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Vertex Crm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="${pageContext.request.contextPath}/css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/slick.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
+    <script type="text/javascript" async="" src="${pageContext.request.contextPath}/javascript/watch.js"></script>
+    <script async="" src="${pageContext.request.contextPath}/javascript/analytics.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body class="inside footer-under">
 <script type="text/javascript">
@@ -77,14 +56,21 @@
 </div>
 <div class="page gray-page mh100">
     <div class="container pt1_5">
+
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <sec:authentication property="principal.username" var="admin"/>
+        </sec:authorize>
+
         <div align="center">
-            <br/>
-            <br/>
-            <br/>
-            <a href="<c:url value="/addCourse"/>">Add course</a>
-            <br/>
-            <br/>
-            <br/>
+            <c:if test="${admin != null}">
+                <br/>
+                <br/>
+                <br/>
+                <a href="<c:url value="/addCourse"/>">Add course</a>
+                <br/>
+                <br/>
+                <br/>
+            </c:if>
             <c:if test="${dataNavigator.currentNumberPage!=1}">
                 <a id="1" class="page" style="cursor: pointer;">&lt;&lt;</a>
             </c:if>
@@ -109,7 +95,7 @@
             </c:if>
             <br/>
             <br/>
-            <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
+            <form:form servletRelativeAction="" method="post" modelAttribute="dataNavigator">
                 <form:select id="perPage" class="buttonText" path="rowPerPage"
                              items="${dataNavigator.countRowPerPage}"/>
 
@@ -152,7 +138,12 @@
                         <td>${courses.id} </td>
                         <td>${courses.name} </td>
                         <td>${courses.start} </td>
-                        <td>${courses.finished} </td>
+                        <c:if test="${courses.finished}">
+                            <td class = "padding-left-15">&#10003;</td>
+                        </c:if>
+                        <c:if test="${!courses.finished}">
+                            <td> </td>
+                        </c:if>
                         <td>${courses.price} </td>
                         <td>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</td>
                         <td>${courses.schedule} </td>

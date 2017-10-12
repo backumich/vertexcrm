@@ -44,6 +44,7 @@ public class CourseDaoImplTest {
     private Course course;
     private User user1;
     private User user3;
+    private User teacher;
     private DtoCourseUser dto;
 
     private static final int COURSE_ID = 1;
@@ -62,6 +63,7 @@ public class CourseDaoImplTest {
                 .setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
         user3 = new User.Builder().setUserId(403).setEmail("user3@email.com").setFirstName("Name3")
                 .setLastName("Surname3").setPhone("+38050 333 3333").getInstance();
+        teacher = new User.Builder().setUserId(7).getInstance();
         dto = new DtoCourseUser();
     }
 
@@ -80,16 +82,39 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    public void getAllCourses() throws Exception {
+    public void getAllCoursesTest() throws Exception {
         DataNavigator dataNavigator = new DataNavigator();
 
-        List<Course> courses = courseDaoInf.getAllCourses(dataNavigator);
+        List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator);
         assertFalse(MSG, courses.isEmpty());
 
         courses.forEach(course1 -> {
             assertTrue(course1.getId() > 0);
             assertTrue(course1.getName().length() > 5 && course1.getName().length() < 256);
         });
+    }
+
+    @Test
+    public void getCoursesPerPageWithParamTest() throws Exception {
+        DataNavigator dataNavigator = new DataNavigator();
+
+        Course teacherCourse = new Course.Builder().setId(7)
+                .setName("Teacher JAVA")
+                .setStart(LocalDate.of(2017, 4, 1))
+                .setFinished(false)
+                .setPrice(new BigDecimal("850.09"))
+                .setTeacher(new User.Builder().setUserId(7)
+                        .setEmail("teacher@test.com")
+                        .setFirstName("Teacher")
+                        .setLastName("LastName").getInstance())
+                .setSchedule("Sat, Sun")
+                .setNotes("Welcome (=").getInstance();
+
+        List<Course> courses = courseDaoInf.getCoursesPerPage(dataNavigator, teacher);
+        assertTrue(MSG, courses.size() == 1);
+
+        assertEquals(teacherCourse, courses.get(0));
+
     }
 
     @Test
@@ -318,5 +343,13 @@ public class CourseDaoImplTest {
         int result = courseDaoInf.getQuantityCourses();
         //noinspection ObviousNullCheck
         assertNotNull(MSG, result);
+    }
+
+    @Test
+    public void getQuantityCoursesWithParamReturnCorrectData() throws Exception {
+        int result = courseDaoInf.getQuantityCourses(teacher);
+
+        assertEquals("In test DB quantity of courses, where teacher is a user with id = 7, is not 1",
+                1, result );
     }
 }
