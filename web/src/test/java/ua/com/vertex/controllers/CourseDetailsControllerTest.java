@@ -124,27 +124,6 @@ public class CourseDetailsControllerTest {
                 , SEARCH_COURSE_JSP);
     }
 
-//todo: при DataAccessException нет модели сразу в САД
-//    @Test
-//    public void searchCourseHasCorrectDataInModelWhenDataAcesException() throws Exception {
-//        when(courseLogic.searchCourseByNameAndStatus("test", true)).
-//                thenThrow(new DataIntegrityViolationException("t"));
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        courseDetailsController.searchCourse(new Course.Builder().setName("test").
-//                setFinished(true).getInstance(), bindingResult, model);
-//        assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
-//        assertEquals(MSG_INVALID_DATA, model.asMap().get(MSG), LOGGER_SERVER_EXCEPTION);
-//    }
-
-//todo: при DataAccessException нет модели сразу в САД
-//    @Test
-//    public void searchCourseReturnCorrectViewWhenException() throws Exception {
-//        when(courseLogic.searchCourseByNameAndStatus("test", true)).thenThrow(new RuntimeException("test"));
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.searchCourse(
-//                new Course.Builder().setName("test").setFinished(true).getInstance(), bindingResult, model), ERROR);
-//    }
-
     @Test
     public void courseDetailsReturnCorrectView() throws Exception {
         when(courseLogic.getCourseById(1)).thenReturn(Optional.of(new Course()));
@@ -175,37 +154,13 @@ public class CourseDetailsControllerTest {
     public void courseDetailsReturnCorrectViewWhenEmptyCourse() throws Exception {
         when(courseLogic.getCourseById(1)).thenReturn(Optional.empty());
         courseDetailsController.courseDetails(1);
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
     }
-
-
-//    @Test
-//    public void courseDetailsHasCorrectDataInModelWhenEmptyCourse() throws Exception {
-//        when(courseLogic.getCourseById(1)).thenReturn(Optional.empty());
-//        ModelMap result = courseDetailsController.courseDetails(1).getModelMap();
-//
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(TEACHERS));
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(MSG));
-//    }
 
     @Test(expected = RuntimeException.class)
     public void courseDetailsReturnCorrectViewWhenException() throws Exception {
         when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.courseDetails(1).getViewName(), ERROR);
         courseDetailsController.courseDetails(1);
     }
-
-//todo: при DataAccessException нет модели сразу в САД
-//    @Test
-//    public void courseDetailsHasCorrectDataInModelWhenException() throws Exception {
-//        when(courseLogic.getCourseById(1)).thenThrow(new RuntimeException("test"));
-//        ModelMap result = courseDetailsController.courseDetails(1).getModelMap();
-//
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(COURSE));
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(TEACHERS));
-//        assertFalse(MSG_INVALID_DATA, result.containsAttribute(MSG));
-//    }
 
     @Test
     public void updateCourseReturnCorrectView() throws Exception {
@@ -247,27 +202,9 @@ public class CourseDetailsControllerTest {
         assertEquals(MSG_INVALID_DATA, model.asMap().get(TEACHERS), teachers);
     }
 
-//todo: при DataAccessException нет модели сразу в САД
-//    @Test
-//    public void updateCourseReturnCorrectViewWhenDataAccessException() throws Exception {
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
-//                SEARCH_COURSE_JSP);
-//    }
-
     @Test(expected = DataIntegrityViolationException.class)
     public void updateCourseWhenDataAccessException() throws Exception {
         when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new DataIntegrityViolationException("test"));
         courseDetailsController.updateCourse(new Course(), bindingResult, model);
     }
-
-//todo: при DataAccessException нет модели сразу в САД
-//    @Test
-//    public void updateCourseReturnCorrectViewWhenException() throws Exception {
-//        when(bindingResult.hasErrors()).thenReturn(false);
-//        when(courseLogic.updateCourseExceptPrice(new Course())).thenThrow(new RuntimeException("test"));
-//        assertEquals(MSG_INVALID_VIEW, courseDetailsController.updateCourse(new Course(), bindingResult, model),
-//                ERROR);
-//    }
 }

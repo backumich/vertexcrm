@@ -57,14 +57,6 @@ public class UserControllerTest {
         assertEquals("Return wrong view", "user", underTest.getAllCertificatesByUserEmail(model));
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void getAllCertificateByUserEmailShouldReturnAppropriateStringWhenException() {
-//        //noinspection unchecked
-//        when(emailExtractor.getEmailFromAuthentication()).thenThrow(Exception.class);
-//        assertEquals("Return wrong view", ERROR, underTest.getAllCertificatesByUserEmail(model));
-//    }
-
     @Test
     public void getAllCertificateByUserEmailShouldInsertCertificatesIntoModel() {
         ArrayList<Certificate> certificates = new ArrayList<>();

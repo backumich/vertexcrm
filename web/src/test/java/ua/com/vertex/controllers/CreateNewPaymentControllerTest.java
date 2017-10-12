@@ -66,13 +66,6 @@ public class CreateNewPaymentControllerTest {
 
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void selectCourseForPaymentReturnCorrectViewWhenException() throws Exception {
-//        when(courseLogic.getAllCoursesWithDept()).thenThrow(new DataIntegrityViolationException("Test"));
-//        assertEquals(MSG_INVALID_VIEW, underTest.selectCourseForPayment().getViewName(), ERROR);
-//    }
-
     @Test
     public void selectCourseForPaymentReturnCorrectViewAndDataInModel() throws Exception {
         when(courseLogic.getAllCoursesWithDept()).thenReturn(Collections.singletonList(course));
@@ -83,13 +76,6 @@ public class CreateNewPaymentControllerTest {
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), SELECT_COURSE_FOR_PAYMENT_JSP);
         assertEquals(MSG_INVALID_DATA, result.getModel().get(COURSES), Collections.singletonList(course));
     }
-
-    //todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void selectUserForPaymentReturnCorrectViewWhenException() throws Exception {
-//        when(userLogic.getCourseUsers(anyInt())).thenThrow(new DataIntegrityViolationException("Test"));
-//        assertEquals(MSG_INVALID_VIEW, underTest.selectUserForPayment(1).getViewName(), ERROR);
-//    }
 
     @Test
     public void selectUserForPaymentReturnCorrectViewAndDataInModel() throws Exception {
@@ -117,15 +103,6 @@ public class CreateNewPaymentControllerTest {
         assertEquals(MSG_INVALID_DATA, result.getModel().get(USER_ID_FOR_PAY), 1);
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void createPaymentReturnCorrectViewWhenException() throws Exception {
-//        when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm))
-//                .thenThrow(new DataIntegrityViolationException("Test"));
-//        assertEquals(MSG_INVALID_VIEW, underTest.createPayment(paymentForm, bindingResult, new ModelAndView())
-//                .getViewName(), ERROR);
-//    }
-
     @Test
     public void createPaymentReturnCorrectViewAndDataInModel() throws Exception {
         when(paymentLogic.createNewPaymentAndUpdateAccounting(paymentForm)).thenReturn(1);
@@ -136,6 +113,5 @@ public class CreateNewPaymentControllerTest {
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADMIN_JSP);
         assertTrue(MSG_INVALID_DATA, result.getModel().containsKey(MSG));
         assertEquals(MSG, result.getModel().get(MSG), "Payment create successful!!!");
-
     }
 }

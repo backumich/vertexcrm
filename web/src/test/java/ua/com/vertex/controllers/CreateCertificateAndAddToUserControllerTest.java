@@ -103,13 +103,6 @@ public class CreateCertificateAndAddToUserControllerTest {
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("The data have not been validated!!!"));
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void searchUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-//        when(userLogic.searchUser("Test")).thenThrow(new RuntimeException("Test"));
-//        assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR);
-//    }
-
     @Test
     public void selectUserHasCorrectDataInModelAndView() throws Exception {
         ModelAndView result = underTest.selectUser(333);
@@ -131,13 +124,6 @@ public class CreateCertificateAndAddToUserControllerTest {
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("Certificate added. Certificate id = " + "333"));
     }
-
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void checkCertificateWithUserIdReturnCorrectViewWhenException() throws Exception {
-//        when(certificateLogic.addCertificate(certificate)).thenThrow(new RuntimeException("Test"));
-//        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model), ERROR);
-//    }
 
     @Test
     public void checkCertificateWithUserIdHasCorrectDataInModelAndReturnCorrectViewWhenBindingResultHasError()

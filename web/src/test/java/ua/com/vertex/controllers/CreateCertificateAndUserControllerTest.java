@@ -94,16 +94,6 @@ public class CreateCertificateAndUserControllerTest {
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("A person with this e-mail already exists, try again."));
     }
 
-//todo: нужен ли тест? мы не возвращаем еррорпейджев из контроллеров
-//    @Test
-//    public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-//        when(certificateLogic.addCertificateAndCreateUser(certificate
-//                , user)).thenThrow(new RuntimeException("Test"));
-//
-//        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
-//                , ERROR);
-//    }
-
     @Test
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenBindingResultHasError()
             throws Exception {
@@ -114,5 +104,4 @@ public class CreateCertificateAndUserControllerTest {
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("The data have not been validated!!!"));
     }
-
 }

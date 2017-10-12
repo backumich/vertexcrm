@@ -36,10 +36,4 @@ public class GlobalExceptionHandler {
         model.addAttribute(ERROR_MESSAGE, "Oops, something went wrong. Try in a minute please.");
         return ERROR;
     }
-
-//    @ExceptionHandler(ServiceException.class)
-//    public String handleGlobalException(ServiceException e) {
-//        LOGGER.debug(e, e);
-//        return ERROR;
-//    }
 }

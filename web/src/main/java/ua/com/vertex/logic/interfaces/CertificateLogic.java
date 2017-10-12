@@ -12,8 +12,6 @@ public interface CertificateLogic {
 
     List<Certificate> getAllCertificatesByUserIdFullData(int userId);
 
-    //Optional<Certificate> getCertificateById(int certificateId);
-
     int addCertificate(Certificate certificate);
 
     int addCertificateAndCreateUser(Certificate certificate, User user);
