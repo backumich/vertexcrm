@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,13 +39,11 @@ public class LoggingLogicImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void logInForEmptyUsernameReturnsEmptyOptional() {
         assertEquals(Optional.empty(), loggingLogic.logIn(""));
     }
 
     @Test
-    @WithAnonymousUser
     public void logInForNotEmptyUsernameReturnsNotEmptyOptional() {
         assertTrue(loggingLogic.logIn(USERNAME_USER).isPresent());
     }

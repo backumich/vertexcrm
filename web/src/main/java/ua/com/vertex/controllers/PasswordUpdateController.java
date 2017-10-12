@@ -3,7 +3,6 @@ package ua.com.vertex.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,14 +31,11 @@ public class PasswordUpdateController {
 
     private final ReCaptchaService reCaptchaService;
     private final UserLogic userLogic;
-    private final BCryptPasswordEncoder encoder;
 
     @Autowired
-    public PasswordUpdateController(ReCaptchaService reCaptchaService,
-                                    UserLogic userLogic, BCryptPasswordEncoder encoder) {
+    public PasswordUpdateController(ReCaptchaService reCaptchaService, UserLogic userLogic) {
         this.reCaptchaService = reCaptchaService;
         this.userLogic = userLogic;
-        this.encoder = encoder;
     }
 
     @GetMapping(value = "/passwordEnterNew")
@@ -70,7 +66,7 @@ public class PasswordUpdateController {
 
         } else {
             if (reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
-                userLogic.savePassword(passwordDto.getEmail(), encoder.encode(passwordDto.getRawPassword()));
+                userLogic.savePassword(passwordDto.getEmail(), passwordDto.getRawPassword());
             } else {
                 view = PASSWORD_ENTER_NEW;
                 passwordNotValidated(email, CAPTCHA_MISSED, "", model);

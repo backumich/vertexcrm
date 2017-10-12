@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -57,7 +56,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordEnterNewWithExpiredLinkReturnsCorrectView() throws Exception {
         final String id = "1";
         final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
@@ -69,7 +67,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordEnterNewWithActiveLinkReturnsCorrectView() throws Exception {
         final String id = "3";
         final String email = "email";
@@ -87,7 +84,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordSaveNewReturnsCorrectView() throws Exception {
         final String email = "email1";
         final String password = "password";
@@ -108,7 +104,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordSaveNewMissedReCaptchaReturnsCorrectView() throws Exception {
         final String email = "email1";
         final String password = "password";
@@ -123,7 +118,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordSaveNewWithBindingResultErrorsReturnsCorrectView() throws Exception {
         final String email = "email1";
         final String password = "password";
@@ -138,7 +132,6 @@ public class PasswordUpdateControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void passwordSaveNewWithPasswordMismatchReturnsCorrectView() throws Exception {
         final String email = "email1";
         final String rawPassword = "password1";

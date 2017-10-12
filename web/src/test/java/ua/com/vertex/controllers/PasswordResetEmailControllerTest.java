@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import ua.com.vertex.context.TestConfigWithMockBeans;
 import ua.com.vertex.logic.interfaces.EmailLogic;
-import ua.com.vertex.utils.MailService;
 import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,9 +41,6 @@ public class PasswordResetEmailControllerTest {
     @Autowired
     private EmailLogic emailLogic;
 
-    @Autowired
-    private MailService mailService;
-
     private Model model;
     private HttpServletRequest request;
 
@@ -56,13 +51,11 @@ public class PasswordResetEmailControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void resetPasswordReturnsCorrectView() {
         assertEquals(PASSWORD_RESET, controller.resetPassword());
     }
 
     @Test
-    @WithAnonymousUser
     public void sendEmailReturnsCorrectView() {
         when(emailLogic.verifyEmail(EXISTING_EMAIL)).thenReturn(true);
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
@@ -72,7 +65,6 @@ public class PasswordResetEmailControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void sendEmailNotVerifiedReturnsCorrectView() {
         when(emailLogic.verifyEmail(EXISTING_EMAIL)).thenReturn(false);
         String view = controller.sendEmail(EXISTING_EMAIL, request, model);
@@ -83,7 +75,6 @@ public class PasswordResetEmailControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void missedReCaptchaReturnsCorrectView() {
         when(emailLogic.verifyEmail(EXISTING_EMAIL)).thenReturn(true);
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(false);

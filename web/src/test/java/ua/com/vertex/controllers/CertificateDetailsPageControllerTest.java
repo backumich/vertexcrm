@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -104,7 +103,6 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateReturnsPageView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
@@ -114,7 +112,6 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByCertificateUidReturnsPageView() throws Exception {
         MockMvc mockMvc = standaloneSetup(controller)
                 .setSingleView(new InternalResourceView(CERTIFICATE_DETAILS))
@@ -124,40 +121,34 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test(expected = NoCertificateException.class)
-    @WithAnonymousUser
     public void getCertificateAddsErrorAttributeAfterRequestingInvalidUid() {
         controller.getCertificate("invalid data", model);
     }
 
     @Test(expected = NoCertificateException.class)
-    @WithAnonymousUser
     public void getCertificateByCertificateUidAddsErrorAttributeAfterRequestingInvalidUid() {
         controller.getCertificateByCertificateUid("invalid data", model);
     }
 
     @Test
-    @WithAnonymousUser
     public void globalExceptionHandlerCatchesNoCertificateExceptionAfterEmptyUid() throws Exception {
         mockMvc.perform(get("/getCertificate").param("certificateUid", ""))
                 .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
-    @WithAnonymousUser
     public void globalExceptionHandlerCatchesNoCertificateExceptionAfterIncorrectUid() throws Exception {
         mockMvc.perform(get("/getCertificate").param("certificateUid", "incorrectUid"))
                 .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
-    @WithAnonymousUser
     public void globalExceptionHandlerCatchesNoCertificateExceptionAfterIncorrectUid1() throws Exception {
         mockMvc.perform(get("/getCertificate").param("certificateUid", EXISTING_CERT_UID))
                 .andExpect(view().name(CERTIFICATE_DETAILS));
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateAddsCertificateAttributesAfterRequestingValidUid() {
         String view = controller.getCertificate(EXISTING_CERT_UID, model);
         attributes.put(CERTIFICATE, certificate);
@@ -167,7 +158,6 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUid() {
         String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID, model);
         attributes.put(CERTIFICATE, certificate);
@@ -177,7 +167,6 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
         String view = controller.getCertificate(EXISTING_CERT_UID_DASHES, model);
         attributes.put(CERTIFICATE, certificate);
@@ -187,7 +176,6 @@ public class CertificateDetailsPageControllerTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByCertificateUidAddsCertificateAttributesAfterRequestingValidUidWithDashes() {
         String view = controller.getCertificateByCertificateUid(EXISTING_CERT_UID_DASHES, model);
         attributes.put(CERTIFICATE, certificate);

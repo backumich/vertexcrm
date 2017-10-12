@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -35,14 +34,12 @@ public class SpringDataUserDetailsServiceTest {
     private ReCaptchaService reCaptchaService;
 
     @Test(expected = RuntimeException.class)
-    @WithAnonymousUser
     public void missedReCaptchaThrowsException() {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(false);
         service.loadUserByUsername("");
     }
 
     @Test
-    @WithAnonymousUser
     public void userDetailsReturnedForExistingUser() {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         UserDetails userdetails = service.loadUserByUsername(USERNAME);
@@ -53,7 +50,6 @@ public class SpringDataUserDetailsServiceTest {
     }
 
     @Test(expected = UsernameNotFoundException.class)
-    @WithAnonymousUser
     public void exceptionIsThrownForNotExistingUser() {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         service.loadUserByUsername("");

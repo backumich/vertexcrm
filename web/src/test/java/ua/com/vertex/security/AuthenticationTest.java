@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,7 +59,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void userTestFormLoginWithCorrectLoginAndPassword() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         Collection<? extends GrantedAuthority> authorities = Collections
@@ -73,7 +71,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void adminTestFormLoginWithCorrectLoginAndPassword() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         Collection<? extends GrantedAuthority> authorities = Collections
@@ -86,7 +83,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void testFormLoginWithIncorrectPassword() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(INCORRECT_DATA))
@@ -96,7 +92,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void testFormLoginWithIncorrectLogin() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(formLogin("/logIn").user(INCORRECT_DATA).password(CORRECT_PASSWORD))
@@ -106,7 +101,6 @@ public class AuthenticationTest {
     }
 
     @Test(expected = RuntimeException.class)
-    @WithAnonymousUser
     public void missedReCaptcha() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(false);
         mockMvc.perform(post("/logIn")
@@ -116,7 +110,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void loginWithValidCsrf() throws Exception {
         when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(post("/logIn")
@@ -129,7 +122,6 @@ public class AuthenticationTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void loginWithInvalidCsrf() throws Exception {
         mockMvc.perform(post("/logIn")
                 .param("username", USER_EMAIL)

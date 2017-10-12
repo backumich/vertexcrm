@@ -3,7 +3,6 @@ package ua.com.vertex.dao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,7 +37,6 @@ public class CertificateDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByIdReturnsCertificateOptionalForCertificateExistingInDatabase() {
         Optional<Certificate> optional = certificateDao.getCertificateById(EXISTING_ID);
         assertNotNull(optional);
@@ -81,14 +79,12 @@ public class CertificateDaoTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    @WithAnonymousUser
     public void getCertificateByIdReturnNull() throws Exception {
 
         certificateDao.getCertificateById(-1).get();
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByIdReturnReturnsCorrectData() throws Exception {
         if (certificateDao.getCertificateById(1).isPresent()) {
             assertEquals(MSG, new Builder()
@@ -103,7 +99,6 @@ public class CertificateDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void addCertificateReturnCorrectCertificationId() throws Exception {
 
         Certificate certificate = new Certificate.Builder()
@@ -120,7 +115,6 @@ public class CertificateDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByUidReturnsCertificate() {
         assertEquals(new Builder()
                 .setCertificationId(222)
@@ -133,7 +127,6 @@ public class CertificateDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getCertificateByNonExistingUidReturnsEmptyOptional() {
         assertEquals(EMPTY_CERTIFICATE, certificateDao.getCertificateByUid("0").orElse(EMPTY_CERTIFICATE));
     }

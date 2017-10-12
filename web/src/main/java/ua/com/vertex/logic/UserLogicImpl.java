@@ -74,7 +74,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void savePassword(String email, String password) {
-        userDao.savePassword(email, password);
+        userDao.savePassword(email, bCryptPasswordEncoder.encode(password));
     }
 
     @Override

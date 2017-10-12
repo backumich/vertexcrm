@@ -212,13 +212,4 @@ public class UserLogicImplTest {
         String result = logic.getEmailByUuid(id, uuid);
         assertEquals("", result);
     }
-
-    @Test
-    public void savePasswordInvokesDao() {
-        final String email = "email";
-        final String password = "password";
-
-        logic.savePassword(email, password);
-        verify(dao, times(1)).savePassword(email, password);
-    }
 }

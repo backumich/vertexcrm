@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -78,7 +77,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void showCourseAndUsersPageFillsModelAttributes() {
         Course course = new Course.Builder().setId(COURSE_ID).getInstance();
         assignedUsers = Arrays.asList(user1, user2);
@@ -92,7 +90,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void removeUserFromAssignedFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         assignedUsers = Arrays.asList(user1, user2);
@@ -104,7 +101,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void assignUserToCourseFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setUserId(user3.getUserId());
@@ -120,7 +116,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchForUsersByFirstNameToAssignFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
@@ -137,7 +132,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchForUsersByLastNameToAssignFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
@@ -154,7 +148,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchForUsersByEmailToAssignFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         dto.setSearchType(SEARCH_TYPE_EMAIL);
@@ -171,7 +164,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void clearSearchResultsFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
         assignedUsers = Arrays.asList(user1, user2);
@@ -183,7 +175,6 @@ public class CourseUsersControllerTest2 {
     }
 
     @Test
-    @WithAnonymousUser
     public void confirmUserRemovalFromCourseFillsModelAttributes() {
         dto.setCourseId(COURSE_ID);
 

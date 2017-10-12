@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -225,7 +224,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void registrationUserInsertCorrectInsert() throws Exception {
         User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
@@ -238,7 +236,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.ROLE_USER).setIsActive(false).getInstance();
@@ -256,7 +253,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getTeachersReturnCorrectData() throws Exception {
         List<User> teachers = userDao.getTeachers();
         assertFalse(MSG, teachers.isEmpty());
@@ -268,7 +264,6 @@ public class UserDaoTest {
 
     @Test
     @Transactional
-    @WithAnonymousUser
     public void setParamsToRestorePasswordReturnsGeneratedId() {
         final String email = "email@email.com";
         final String uuid = "uuid";
@@ -279,7 +274,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getEmailByUuidReturnsPasswordResetDto() {
         final int id = 1;
         final String email = "email1@email.com";
@@ -299,7 +293,6 @@ public class UserDaoTest {
     }
 
     @Test(expected = RuntimeException.class)
-    @WithAnonymousUser
     public void getEmailByUuidThrowsException() {
         final int notExistingId = 100;
         final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
@@ -309,8 +302,7 @@ public class UserDaoTest {
 
     @Test
     @Transactional
-    @WithAnonymousUser
-    public void savePasswordDoesNotThrowException() {
+    public void savePasswordOk() {
         final String email = "email1";
         final String password = "new password";
 
@@ -318,7 +310,6 @@ public class UserDaoTest {
     }
 
     @Test(expected = UpdatedPasswordNotSaved.class)
-    @WithAnonymousUser
     public void savePasswordThrowsException() {
         final String email = "not existing email";
         final String password = "new password";
