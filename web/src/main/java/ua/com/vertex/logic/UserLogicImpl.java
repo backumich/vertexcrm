@@ -39,13 +39,13 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) {
-        userDao.saveImage(userId, image, imageType);
+    public void saveImage(String email, byte[] image, String imageType) {
+        userDao.saveImage(email, image, imageType);
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) {
-        return userDao.getImage(userId, imageType);
+    public Optional<byte[]> getImage(String email, String imageType) {
+        return userDao.getImage(email, imageType);
     }
 
     public int getQuantityUsers() {

@@ -162,8 +162,8 @@
         </table>
         <br>
 
-        <sf:form method="get" action="/showImage" commandName="user">
-            <input type="hidden" name="userId" value="${user.userId}"/>
+        <sf:form method="post" action="/showImagePhoto" commandName="user">
+            <input type="hidden" name="email" value="${user.email}"/>
             <input type="hidden" name="pageToDisplay" value="image"/>
             <input type="hidden" name="imageType" value="photo"/>
             <input class="black" type="submit" value="Show Certificate Holder Photo">

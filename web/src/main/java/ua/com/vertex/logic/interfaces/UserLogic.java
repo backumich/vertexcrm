@@ -15,9 +15,9 @@ public interface UserLogic {
 
     Optional<User> getUserByEmail(String email);
 
-    void saveImage(int userId, byte[] image, String imageType);
+    void saveImage(String email, byte[] image, String imageType);
 
-    Optional<byte[]> getImage(int userId, String imageType);
+    Optional<byte[]> getImage(String email, String imageType);
 
     List<User> getUsersPerPages(DataNavigator dataNavigator);
 

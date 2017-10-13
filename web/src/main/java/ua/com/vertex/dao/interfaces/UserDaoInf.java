@@ -26,9 +26,9 @@ public interface UserDaoInf {
 
     int saveUserData(User user);
 
-    void saveImage(int userId, byte[] image, String imageType);
+    void saveImage(String email, byte[] image, String imageType);
 
-    Optional<byte[]> getImage(int userId, String imageType);
+    Optional<byte[]> getImage(String email, String imageType);
 
     int activateUser(String email);
 
