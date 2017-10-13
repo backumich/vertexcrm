@@ -20,6 +20,7 @@ public class GlobalExceptionHandler {
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String LOGIN = "logIn";
+    private static final String ACCESS_DENIED = "403";
 
     private final EmailExtractor emailExtractor;
 
@@ -48,8 +49,20 @@ public class GlobalExceptionHandler {
         return ERROR;
     }
 
-    @ExceptionHandler({AccessDeniedException.class, HttpRequestMethodNotSupportedException.class})
-    public String handleAccessDeniedException(Exception e) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessDeniedException(AccessDeniedException e) {
+        String view;
+        if (emailExtractor.getEmailFromAuthentication() == null) {
+            view = LOGIN;
+        } else {
+            view = ACCESS_DENIED;
+            LOGGER.warn(e, e);
+        }
+        return view;
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public String handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         String view;
         if (emailExtractor.getEmailFromAuthentication() == null) {
             view = LOGIN;
