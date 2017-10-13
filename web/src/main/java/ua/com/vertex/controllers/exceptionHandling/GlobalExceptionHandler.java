@@ -2,10 +2,14 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.net.SocketTimeoutException;
 
@@ -15,6 +19,14 @@ public class GlobalExceptionHandler {
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
+    private static final String LOGIN = "logIn";
+
+    private final EmailExtractor emailExtractor;
+
+    @Autowired
+    public GlobalExceptionHandler(EmailExtractor emailExtractor) {
+        this.emailExtractor = emailExtractor;
+    }
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e) {
@@ -34,5 +46,17 @@ public class GlobalExceptionHandler {
         LOGGER.warn(e, e);
         model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
         return ERROR;
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, HttpRequestMethodNotSupportedException.class})
+    public String handleAccessDeniedException(Exception e) {
+        String view;
+        if (emailExtractor.getEmailFromAuthentication() == null) {
+            view = LOGIN;
+        } else {
+            view = ERROR;
+            LOGGER.warn(e, e);
+        }
+        return view;
     }
 }
