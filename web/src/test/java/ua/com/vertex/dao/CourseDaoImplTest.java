@@ -106,7 +106,7 @@ public class CourseDaoImplTest {
                 .setTeacher(new User.Builder().setUserId(7)
                         .setEmail("teacher@test.com")
                         .setFirstName("Teacher")
-                        .setLastName("LastName").getInstance())
+                        .setLastName("Goodman").getInstance())
                 .setSchedule("Sat, Sun")
                 .setNotes("Welcome (=").getInstance();
 
