@@ -140,7 +140,7 @@
 
 
     <div class="href">
-        <a href="<c:url value="/logIn"/>">Back</a> |
+        <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
 
