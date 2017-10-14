@@ -24,9 +24,9 @@ public class UserController {
     static final String USER_JSP = "user";
     private static final String PDF_DTO = "dto";
     private static final String LIST_CERTIFICATE_IS_EMPTY = "listCertificatesIsEmpty";
-    private static final String LOG_REQ_IN = "Request to '/getCertificateByUserEmail' ";
-    private static final String LOG_GET_EMAIL = "Request to '/getCertificateByUserEmail' with userEmail=";
-    private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserEmail' return '%s.jsp' ";
+    private static final String LOG_REQ_IN = "Request to '/getCertificatesByUserEmail' ";
+    private static final String LOG_GET_EMAIL = "Request to '/getCertificatesByUserEmail' with userEmail=";
+    private static final String LOG_REQ_OUT = "Request to '/getCertificateBsyUserEmail' return '%s.jsp' ";
 
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
