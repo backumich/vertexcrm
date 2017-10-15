@@ -133,7 +133,7 @@ public class UserDaoImpl implements UserDaoInf {
             query = "UPDATE Users SET passport_scan=:passport_scan WHERE email=:email";
             parameters.addValue(PASSPORT_SCAN, image);
         } else {
-            throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
+            throw new RuntimeException("Image was not saved: wrong image type description = " + imageType);
         }
 
         LOGGER.debug("Image saved");
