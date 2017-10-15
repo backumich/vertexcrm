@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class, DataAccessException.class})
-    public String handleCannotGetJdbcConnectionException(Exception e, Model model) {
+    public String handleConnectionException(Exception e, Model model) {
         LOGGER.warn(e, e);
         model.addAttribute(ERROR_MESSAGE, "Oops, something went wrong. Try in a minute please.");
         return ERROR;
