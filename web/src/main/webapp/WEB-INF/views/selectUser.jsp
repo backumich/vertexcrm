@@ -25,8 +25,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -102,7 +102,8 @@
                 <span class="fontSize180 silver">Search user:</span><br><br><br>
                 <table class="active">
                     <tr>
-                        <td style="color: black"><input placeholder="User name" type="text" name="userDataForSearch"/>
+                        <td style="color: black"><input placeholder="E-mail or phone or first name or last name"
+                                                        type="text" name="userDataForSearch" size="50"/>
                         </td>
                     </tr>
                 </table>
@@ -120,7 +121,7 @@
         <c:if test="${!empty users}">
             <form:form method="post" commandName="userIdForCertificate"
                        action="selectUser">
-                <span class="fontSize180 silver">Select user:</span><br><br><br>
+                <span class="fontSize180 black">Select user:</span><br><br><br>
                 <table class="active" cols="5" width="500">
                     <tr style="color: #2aabd2">
                         <th>Select user</th>
