@@ -285,8 +285,8 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> searchUser(String userData) {
         LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
 
-        String query = "SELECT user_id, email, first_name, last_name FROM Users WHERE email LIKE :userData " +
-                "OR first_name LIKE :userData OR last_name LIKE :userData";
+        String query = "SELECT user_id, email, first_name, last_name, phone FROM Users WHERE email LIKE :userData " +
+                "OR first_name LIKE :userData OR last_name LIKE :userData OR phone LIKE :userData";
 
         LOGGER.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "%" + userData + "%"),
@@ -294,6 +294,7 @@ public class UserDaoImpl implements UserDaoInf {
                         .setEmail(rs.getString(EMAIL))
                         .setFirstName(rs.getString(FIRST_NAME))
                         .setLastName(rs.getString(LAST_NAME))
+                        .setPhone(rs.getString(PHONE))
                         .getInstance());
     }
 
