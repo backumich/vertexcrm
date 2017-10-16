@@ -18,7 +18,7 @@ import java.util.Locale;
 
 @Component
 public class PdfGenerator {
-    private static final Logger LOGGER = LogManager.getLogger(PdfGenerator.class);
+    private static final Logger Logger = LogManager.getLogger(PdfGenerator.class);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.US);
 
     public void generatePdf(String pdfFileName, PdfDto dto) throws Exception {
@@ -35,7 +35,7 @@ public class PdfGenerator {
             setText(writer, dto);
             document.close();
 
-            LOGGER.debug(pdfFileName + " file generated");
+            Logger.debug(pdfFileName + " file generated");
         }
     }
 

@@ -35,7 +35,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
     private static final String LANGUAGE = "language";
     private static final String CERTIFICATE_UID = "certificate_uid";
 
-    private static final Logger LOGGER = LogManager.getLogger(CertificateDaoImpl.class);
+    private static final Logger Logger = LogManager.getLogger(CertificateDaoImpl.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
@@ -44,7 +44,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT c.certification_id, c.certificate_uid, c.user_id, c.certification_date, c.course_name " +
                 "FROM Certificate c INNER JOIN  Users u ON c.user_id = u.user_id WHERE email = :email";
 
-        LOGGER.debug("Retrieved all certificates by eMail=" + eMail);
+        Logger.debug("Retrieved all certificates by eMail=" + eMail);
 
         return jdbcTemplate.query(query, new MapSqlParameterSource(EMAIL, eMail),
                 (resultSet, i) -> new Certificate.Builder()
@@ -82,7 +82,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE user_id =:user_id";
 
-        LOGGER.debug("Retrieved all certificates by id=" + userId);
+        Logger.debug("Retrieved all certificates by id=" + userId);
 
         return jdbcTemplate.query(query, new MapSqlParameterSource(USER_ID, userId), new CertificateRowMapper());
     }
@@ -101,7 +101,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = null;
         }
 
-        LOGGER.debug((certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
+        Logger.debug((certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
 
         return Optional.ofNullable(certificate);
     }
@@ -120,7 +120,7 @@ public class CertificateDaoImpl implements CertificateDaoInf {
             certificate = null;
         }
 
-        LOGGER.debug((certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=")
+        Logger.debug((certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=")
                 + certificateUid);
 
         return Optional.ofNullable(certificate);

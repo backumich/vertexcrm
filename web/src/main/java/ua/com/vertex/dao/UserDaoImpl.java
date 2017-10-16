@@ -33,7 +33,7 @@ import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 @Repository
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
+    private static final Logger Logger = LogManager.getLogger(UserDaoImpl.class);
 
     static final String EMAIL = "email";
     static final String FIRST_NAME = "first_name";
@@ -52,7 +52,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        LOGGER.debug(String.format("Call -  getUser(%s) ;", userId));
+        Logger.debug(String.format("Call -  getUser(%s) ;", userId));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
@@ -61,9 +61,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
-            LOGGER.debug("Retrieved user, id=" + userId);
+            Logger.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No user id=" + userId);
+            Logger.warn("No user id=" + userId);
         }
 
         return Optional.ofNullable(user);
@@ -71,7 +71,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        LOGGER.debug(String.format("Call -  getUserByEmail(%s) ;", email));
+        Logger.debug(String.format("Call -  getUserByEmail(%s) ;", email));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
@@ -80,9 +80,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
-            LOGGER.debug("Retrieved user, email=" + email);
+            Logger.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No user email=" + email);
+            Logger.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -90,7 +90,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> logIn(String email) {
-        LOGGER.debug(String.format("Call -  logIn(%s) ;", email));
+        Logger.debug(String.format("Call -  logIn(%s) ;", email));
 
         String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id " +
                 "WHERE u.email=:email";
@@ -104,9 +104,9 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPassword(resultSet.getString(PASSWORD))
                     .setRole(Role.valueOf(resultSet.getString(ROLE_NAME)))
                     .getInstance());
-            LOGGER.debug("Retrieved user password, role, email=" + email);
+            Logger.debug("Retrieved user password, role, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn("No email=" + email);
+            Logger.warn("No email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -114,7 +114,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<Integer> getAllUserIds() {
-        LOGGER.debug("Call - userDao.getAllUserIds() ;");
+        Logger.debug("Call - userDao.getAllUserIds() ;");
         String query = "SELECT user_id FROM Users ORDER BY user_id";
         return jdbcTemplate.query(query, new MapSqlParameterSource(),
                 (resultSet, i) -> resultSet.getInt(USER_ID));
@@ -136,7 +136,7 @@ public class UserDaoImpl implements UserDaoInf {
             throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
         }
 
-        LOGGER.debug("Image saved");
+        Logger.debug("Image saved");
         jdbcTemplate.update(query, parameters);
     }
 
@@ -157,14 +157,14 @@ public class UserDaoImpl implements UserDaoInf {
 
         image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
 
-        LOGGER.debug("Image of userId=" + userId + " retrieved");
+        Logger.debug("Image of userId=" + userId + " retrieved");
 
         return Optional.ofNullable(image);
     }
 
     @Override
     public Optional<User> userForRegistrationCheck(String userEmail) {
-        LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
+        Logger.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
 
         String query = "SELECT email, is_active FROM Users WHERE email =:email";
         User user = null;
@@ -175,9 +175,9 @@ public class UserDaoImpl implements UserDaoInf {
                             .setEmail(resultSet.getString(EMAIL))
                             .setIsActive(resultSet.getInt(IS_ACTIVE) == 1)
                             .getInstance()));
-            LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
+            Logger.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.debug("isRegisteredEmail(%s) return empty user");
+            Logger.debug("isRegisteredEmail(%s) return empty user");
         }
 
         return Optional.ofNullable(user);
@@ -185,7 +185,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getAllUsers() {
-        LOGGER.debug("Get a list of all users");
+        Logger.debug("Get a list of all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
@@ -198,7 +198,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
-        LOGGER.debug("Get all user list");
+        Logger.debug("Get all user list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                 "LIMIT :from, :offset";
@@ -213,15 +213,15 @@ public class UserDaoImpl implements UserDaoInf {
                 setPhone(resultSet.getString(PHONE)).getInstance());
 
         String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
-        LOGGER.debug("Quantity users -" + users.size());
-        LOGGER.debug("All users list -" + allUsersEmail);
+        Logger.debug("Quantity users -" + users.size());
+        Logger.debug("All users list -" + allUsersEmail);
 
         return users;
     }
 
     @Override
     public int getQuantityUsers() {
-        LOGGER.debug("Get all users list");
+        Logger.debug("Get all users list");
         String query = "SELECT count(*) FROM Users";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
@@ -267,7 +267,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "INSERT INTO Users  (email, first_name, last_name, role_id) " +
                 "VALUES (:email, :first_name, :last_name, (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER'))";
 
-        LOGGER.debug(String.format("Try add user -(%s) ;", user));
+        Logger.debug(String.format("Try add user -(%s) ;", user));
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(EMAIL, user.getEmail());
@@ -276,19 +276,19 @@ public class UserDaoImpl implements UserDaoInf {
 
         jdbcTemplate.update(query, source, keyHolder);
 
-        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
+        Logger.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
     }
 
 
     @Override
     public List<User> searchUser(String userData) {
-        LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
+        Logger.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
 
         String query = "SELECT user_id, email, first_name, last_name FROM Users WHERE email LIKE :userData " +
                 "OR first_name LIKE :userData OR last_name LIKE :userData";
 
-        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
+        Logger.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "%" + userData + "%"),
                 (rs, i) -> new User.Builder().setUserId(rs.getInt(USER_ID))
                         .setEmail(rs.getString(EMAIL))
@@ -299,7 +299,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public void registrationUserInsert(User user) {
-        LOGGER.info("Adding a new user into database");
+        Logger.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
                 "VALUES (:email, :password, :first_name, :last_name, :phone, " +
@@ -310,7 +310,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public void registrationUserUpdate(User user) {
-        LOGGER.info("Update not active user .");
+        Logger.info("Update not active user .");
 
         String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
                 "phone =:phone, role_id = (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER') WHERE email =:email";
@@ -320,7 +320,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getTeachers() {
-        LOGGER.debug("Trying to pull out all users with the role is a teacher.");
+        Logger.debug("Trying to pull out all users with the role is a teacher.");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name,u.is_active, r.name FROM Users u " +
                 "INNER JOIN Roles r  ON u.role_id = r.role_id WHERE r.name='ROLE_TEACHER' AND is_active=1";
@@ -347,7 +347,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getCourseUsers(int courseId) {
-        LOGGER.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
+        Logger.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name FROM Users u" +
                 "  INNER JOIN Accounting a ON u.user_id = a.user_id WHERE course_id = :course_id";

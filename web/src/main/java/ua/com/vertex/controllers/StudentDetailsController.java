@@ -18,14 +18,14 @@ public class StudentDetailsController {
     static final String USER_ID = "userId";
     static final String USER = "user";
 
-    private static final Logger LOGGER = LogManager.getLogger(StudentDetailsController.class);
+    private static final Logger Logger = LogManager.getLogger(StudentDetailsController.class);
 
     private final UserLogic userLogic;
 
     @GetMapping(value = "/studentDetails")
     @PreAuthorize("hasRole('TEACHER')")
     public ModelAndView getStudentDetails(@RequestParam(USER_ID) int userId) {
-        LOGGER.debug(String.format("Call studentDetails(%s)", userId));
+        Logger.debug(String.format("Call studentDetails(%s)", userId));
         return new ModelAndView(STUDENT_DETAILS_JSP)
                 .addObject(USER, userLogic.getUserById(userId).orElseThrow(NoSuchElementException::new));
     }

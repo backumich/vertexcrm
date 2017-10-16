@@ -150,7 +150,7 @@
                         <td>${courses.notes} </td>
                         <td>
                             <c:set var="titleURL">
-                                <c:url value="/courseDetails">
+                                <c:url value="/teacherCourseDetails">
                                     <c:param name="courseId" value="${courses.id}"/>
                                 </c:url>
                             </c:set>

@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.User;
@@ -21,11 +21,11 @@ import java.util.List;
 public class ViewAllUsersController {
     private static final String PAGE_JSP = "viewAllUsers";
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewAllUsersController.class);
+    private static final Logger Logger = LogManager.getLogger(ViewAllUsersController.class);
 
     private UserLogic userLogic;
 
-    @RequestMapping(value = "/viewAllUsers")
+    @GetMapping(value = "/viewAllUsers")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView viewAllUsers(@ModelAttribute DataNavigator dataNavigator) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
@@ -37,7 +37,7 @@ public class ViewAllUsersController {
         modelAndView.addObject("viewAllUsers", dataNavigator);
         modelAndView.addObject("users", users);
         modelAndView.setViewName(PAGE_JSP);
-        LOGGER.debug("Received a list of all users and transferred to the model");
+        Logger.debug("Received a list of all users and transferred to the model");
 
         return modelAndView;
     }

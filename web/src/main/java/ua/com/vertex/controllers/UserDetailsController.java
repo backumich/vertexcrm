@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.Role;
@@ -26,9 +29,9 @@ public class UserDetailsController {
     private UserLogic userLogic;
     private CertificateLogic certificateLogic;
 
-    private static final Logger LOGGER = LogManager.getLogger(UserDetailsController.class);
+    private static final Logger Logger = LogManager.getLogger(UserDetailsController.class);
 
-    @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
+    @GetMapping(value = "/userDetails")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
@@ -41,27 +44,27 @@ public class UserDetailsController {
                 modelAndView.setViewName(PAGE_JSP);
                 modelAndView.addObject("user", user);
             }
-            LOGGER.debug("Get full data for user ID - " + userId);
+            Logger.debug("Get full data for user ID - " + userId);
         } catch (Exception e) {
-            LOGGER.warn("During preparation the all data for user ID - " + userId + " there was a database error", e);
+            Logger.warn("During preparation the all data for user ID - " + userId + " there was a database error", e);
             modelAndView.setViewName(ERROR_JSP);
         }
 
         //  -- Get all system roles
         modelAndView.addObject("allRoles", Role.values());
-            LOGGER.debug("We received all the roles of the system");
+        Logger.debug("We received all the roles of the system");
 
         //  -- Get all user certificate
         try {
             modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(userId));
-            LOGGER.debug("We received all the roles of the system");
+            Logger.debug("We received all the roles of the system");
         } catch (Exception ignore) {
-            LOGGER.warn("There are problems with access to roles of the system", ignore);
+            Logger.warn("There are problems with access to roles of the system", ignore);
         }
         return modelAndView;
     }
 
-    @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
+    @GetMapping(value = "/saveUserData")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView saveUserData(@RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
                                      @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
@@ -70,51 +73,51 @@ public class UserDetailsController {
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg", "WARNING!!! User data is updated, but not saved");
-            LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
+            Logger.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
             // -- check image files
             try {
                 if (checkImageFile(imagePassportScan)) {
                     user.setPassportScan(imagePassportScan.getBytes());
-                    LOGGER.debug("Checked passportScan file for user ID - " + user.getUserId());
+                    Logger.debug("Checked passportScan file for user ID - " + user.getUserId());
                 } else {
-                    LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
+                    Logger.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
                 }
                 if (checkImageFile(imagePhoto)) {
                     user.setPhoto(imagePhoto.getBytes());
-                    LOGGER.debug("Checked photo file for user ID - " + user.getUserId());
+                    Logger.debug("Checked photo file for user ID - " + user.getUserId());
                 } else {
-                    LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
+                    Logger.debug("Checked photo file is not image for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
-                LOGGER.warn("An error occurred when working with image for user ID - " + user.getUserId(), e);
+                Logger.warn("An error occurred when working with image for user ID - " + user.getUserId(), e);
             }
             // -- check correct update user data
             try {
                 if (userLogic.saveUserData(user) == 1) {
                     modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+                    Logger.debug("Update user data successful for user ID - " + user.getUserId());
                 } else {
                     modelAndView.setViewName(ERROR_JSP);
-                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+                    Logger.debug("Update user data failed for user ID - " + user.getUserId());
                 }
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR_JSP);
-                LOGGER.warn("Update user data failed for user ID - " + user.getUserId(), e);
+                Logger.warn("Update user data failed for user ID - " + user.getUserId(), e);
             }
         }
 
         //  -- Get all system roles
         modelAndView.addObject("allRoles", Role.values());
-            LOGGER.debug("We received all the roles of the system");
+        Logger.debug("We received all the roles of the system");
 
         //  -- Get all user certificates
         try {
             modelAndView.addObject("certificates", certificateLogic.getAllCertificatesByUserIdFullData(user.getUserId()));
-            LOGGER.debug("Received all roles");
+            Logger.debug("Received all roles");
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
-            LOGGER.warn("There are problems with access to roles of the system", e);
+            Logger.warn("There are problems with access to roles of the system", e);
         }
         return modelAndView;
     }

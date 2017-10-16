@@ -15,24 +15,24 @@ import java.util.Optional;
 @Component
 public class RegistrationUserLogicImpl implements RegistrationUserLogic {
 
-    private static final Logger LOGGER = LogManager.getLogger(RegistrationUserLogicImpl.class);
+    private static final Logger Logger = LogManager.getLogger(RegistrationUserLogicImpl.class);
 
     private final UserLogic userLogic;
 
     @Override
     public boolean isEmailAlreadyExists(Optional<User> user) {
-        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));
+        Logger.debug(String.format("Call - RegistrationUserLogicImpl.checkEmailAlreadyExists(%s) ;", user));
         return user.isPresent() && user.get().isActive();
     }
 
     @Override
     public boolean isRegisteredUser(UserFormRegistration userFormRegistration, BindingResult bindingResult) {
-        LOGGER.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
+        Logger.debug(String.format("Call - RegistrationUserLogicImpl.registrationUser(%s) ;", userFormRegistration));
 
         boolean result = false;
         Optional<User> user = userLogic.userForRegistrationCheck(userFormRegistration.getEmail());
         if (isEmailAlreadyExists(user)) {
-            LOGGER.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
+            Logger.warn("That email |" + userFormRegistration.getEmail() + "| is already registered");
             bindingResult.rejectValue("email", "error.email",
                     "User with that email is already registered!");
         } else {

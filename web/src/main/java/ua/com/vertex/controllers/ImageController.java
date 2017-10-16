@@ -15,7 +15,8 @@ import java.sql.SQLException;
 
 @Controller
 public class ImageController {
-    private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
+    private static final Logger Logger = LogManager.getLogger(ImageController.class);
+
     private static final String USER_PROFILE = "userProfile";
     private static final String PAGE_TO_DISPLAY = "pageToDisplay";
     private static final String IMAGE = "image";
@@ -30,10 +31,10 @@ public class ImageController {
                             @RequestParam(PAGE_TO_DISPLAY) String pageToDisplay,
                             @RequestParam(IMAGE_TYPE) String imageType, Model model) throws SQLException {
 
-        LOGGER.debug(pageToDisplay + " page accessed");
+        Logger.debug(pageToDisplay + " page accessed");
         encode(model, user.getUserId(), imageType);
         model.addAttribute(USER, user);
-        LOGGER.debug("Passing image to JSP");
+        Logger.debug("Passing image to JSP");
 
         return pageToDisplay;
     }
@@ -52,7 +53,7 @@ public class ImageController {
         String view = USER_PROFILE;
         if (image == null) {
             view = IMAGE_ERROR;
-            LOGGER.debug("no image selected");
+            Logger.debug("no image selected");
         } else {
             userLogic.saveImage(user.getUserId(), image, imageType);
             model.addAttribute(user);

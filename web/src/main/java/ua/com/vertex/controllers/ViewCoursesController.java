@@ -27,7 +27,7 @@ import java.util.List;
 public class ViewCoursesController {
     private static final String PAGE_JSP = "viewCourses";
 
-    private static final Logger LOGGER = LogManager.getLogger(ViewCoursesController.class);
+    private static final Logger Logger = LogManager.getLogger(ViewCoursesController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
@@ -51,7 +51,7 @@ public class ViewCoursesController {
 
         ModelAndView modelAndView = getModelAndViewForCourses(dataNavigator, courses);
 
-        LOGGER.debug("Received a list of all courses and transferred to the model");
+        Logger.debug("Received a list of all courses and transferred to the model");
 
         return modelAndView;
     }
@@ -69,7 +69,7 @@ public class ViewCoursesController {
 
         ModelAndView modelAndView = getModelAndViewForCourses(dataNavigator, courses);
 
-        LOGGER.debug(String.format("Received a list of teacher %s courses and transferred to the model", currentUser));
+        Logger.debug(String.format("Received a list of teacher %s courses and transferred to the model", currentUser));
 
         return modelAndView;
     }
