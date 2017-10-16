@@ -10,9 +10,13 @@ import java.util.Optional;
 
 public interface CourseDaoInf {
 
-    List<Course> getAllCourses(DataNavigator dataNavigator);
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator);
+
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher);
 
     int getQuantityCourses();
+
+    int getQuantityCourses(User teacher);
 
     int addCourse(Course course);
 
