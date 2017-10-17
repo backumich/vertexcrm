@@ -28,13 +28,13 @@ public class CreateCertificateAndUserController {
     static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     static final String MSG = "msg";
 
-    private static final Logger Logger = LogManager.getLogger(CreateCertificateAndUserController.class);
+    private static final Logger logger = LogManager.getLogger(CreateCertificateAndUserController.class);
     private final CertificateLogic certificateLogic;
 
     @GetMapping(value = "/addCertificateAndCreateUser")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCertificateAndCreateUser() {
-        Logger.debug("Request to '/addCertificateAndCreateUser' " + ADD_CERTIFICATE_AND_USER_JSP);
+        logger.debug("Request to '/addCertificateAndCreateUser' " + ADD_CERTIFICATE_AND_USER_JSP);
         return new ModelAndView(ADD_CERTIFICATE_AND_USER_JSP, CERTIFICATE_WITH_USER_FORM, new CertificateWithUserForm());
     }
 
@@ -45,30 +45,30 @@ public class CreateCertificateAndUserController {
                                           BindingResult bindingResult, @Valid Model model) {
 
         String returnPage;
-        Logger.debug("Request to '/addCertificateAndCreateUser' ");
+        logger.debug("Request to '/addCertificateAndCreateUser' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             returnPage = ADD_CERTIFICATE_AND_USER_JSP;
-            Logger.warn("The data have not been validated!!!");
+            logger.warn("The data have not been validated!!!");
         } else {
             try {
                 int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
                         , certificateWithUserForm.getUser());
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
-                Logger.info("Certificate added. Certificate id = " + result);
+                logger.info("Certificate added. Certificate id = " + result);
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(MSG, "A person with this e-mail already exists, try again.");
                 returnPage = ADD_CERTIFICATE_AND_USER_JSP;
-                Logger.warn(e);
+                logger.warn(e);
             } catch (Exception e) {
                 returnPage = ERROR;
-                Logger.warn(e);
+                logger.warn(e);
             }
         }
 
-        Logger.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));
+        logger.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));
         return returnPage;
     }
 

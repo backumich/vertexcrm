@@ -24,7 +24,7 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 @Controller
 public class CreateNewPaymentController {
 
-    private static final Logger Logger = LogManager.getLogger(CreateNewPaymentController.class);
+    private static final Logger logger = LogManager.getLogger(CreateNewPaymentController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
@@ -47,12 +47,12 @@ public class CreateNewPaymentController {
     @GetMapping(value = "/createPayment")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectCourseForPayment() {
-        Logger.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
+        logger.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
         ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
         try {
             result.addObject(COURSES, courseLogic.getAllCoursesWithDept());
         } catch (Exception e) {
-            Logger.warn(e);
+            logger.warn(e);
             result.setViewName(ERROR);
         }
         return result;
@@ -68,9 +68,9 @@ public class CreateNewPaymentController {
                 int paymentId = paymentLogic.createNewPaymentAndUpdateAccounting(payment);
                 modelAndView.setViewName(ADMIN_JSP);
                 modelAndView.addObject(MSG, "Payment create successful!!!");
-                Logger.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
+                logger.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
             } catch (Exception e) {
-                Logger.warn(e);
+                logger.warn(e);
                 modelAndView.setViewName(ERROR);
             }
         } else {
@@ -89,7 +89,7 @@ public class CreateNewPaymentController {
             result.addObject(COURSE_ID_FOR_PAY, courseId);
             result.addObject(PAYMENT, new PaymentForm());
         } catch (Exception e) {
-            Logger.warn(e);
+            logger.warn(e);
             result.setViewName(ERROR);
         }
         return result;

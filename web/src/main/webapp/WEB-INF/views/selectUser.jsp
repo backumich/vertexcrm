@@ -97,7 +97,7 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="center">
         <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
+            <form:form cssClass="buttonText" method="get" commandName="userDataForSearch"
                        action="searchUser">
                 <span class="fontSize180 silver">Search user:</span><br><br><br>
                 <table class="active">

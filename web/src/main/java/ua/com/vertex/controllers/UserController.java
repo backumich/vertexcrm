@@ -27,7 +27,7 @@ public class UserController {
     private static final String LOG_GET_EMAIL = "Request to '/getCertificateByUserId' with userEmail=";
     private static final String LOG_REQ_OUT = "Request to '/getCertificateByUserId' return '%s.jsp' ";
 
-    private static final Logger Logger = LogManager.getLogger(UserController.class);
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     private final CertificateLogic certificateLogic;
     private final EmailExtractor emailExtractor;
@@ -41,11 +41,11 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public String getAllCertificatesByUserEmail(Model model) {
 
-        Logger.debug(LOG_REQ_IN);
+        logger.debug(LOG_REQ_IN);
         String view;
         try {
             String email = emailExtractor.getEmailFromAuthentication();
-            Logger.debug(LOG_GET_EMAIL + email);
+            logger.debug(LOG_GET_EMAIL + email);
             List<Certificate> result = certificateLogic.getAllCertificatesByUserEmail(email);
             model.addAttribute(PDF_DTO, new PdfDto());
             model.addAttribute(CERTIFICATES, result);
@@ -56,7 +56,7 @@ public class UserController {
             view = ERROR;
         }
 
-        Logger.debug(String.format(LOG_REQ_OUT, view));
+        logger.debug(String.format(LOG_REQ_OUT, view));
         return view;
     }
 

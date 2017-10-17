@@ -12,12 +12,12 @@ public class AdminController {
 
     static final String ADMIN_JSP = "admin";
 
-    private static final Logger Logger = LogManager.getLogger(AdminController.class);
+    private static final Logger logger = LogManager.getLogger(AdminController.class);
 
     @GetMapping(value = "/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView admin() {
-        Logger.debug("Request to '/admin' redirect to page - " + ADMIN_JSP);
+        logger.debug("Request to '/admin' redirect to page - " + ADMIN_JSP);
         return new ModelAndView(ADMIN_JSP);
     }
 

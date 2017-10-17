@@ -27,14 +27,14 @@ public class ReCaptchaService {
     @Value("${reCaptcha.siteKey}")
     private String siteKey;
 
-    private static final Logger Logger = LogManager.getLogger(ReCaptchaService.class);
+    private static final Logger logger = LogManager.getLogger(ReCaptchaService.class);
 
     public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddr) throws IOException {
         Boolean verified = false;
         HttpsURLConnection connection = null;
 
         try {
-            Logger.debug("Trying to verify the validity of the captcha");
+            logger.debug("Trying to verify the validity of the captcha");
             URL url = new URL(reCaptchaUrl);
             String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse + "&remoteip=" + reCaptchaRemoteAddr;
 
@@ -44,7 +44,7 @@ public class ReCaptchaService {
             Captcha captcha = new Gson().fromJson(outputString.toString(), Captcha.class);
             verified = captcha.isSuccess();
         } catch (IOException e) {
-            Logger.warn(e);
+            logger.warn(e);
         } finally {
             if (connection != null) {
                 connection.disconnect();

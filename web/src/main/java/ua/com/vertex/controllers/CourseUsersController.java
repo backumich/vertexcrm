@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 public class CourseUsersController {
-    private static final Logger Logger = LogManager.getLogger(CourseUsersController.class);
+    private static final Logger logger = LogManager.getLogger(CourseUsersController.class);
 
     private static final String COURSE_USERS = "courseUsers";
     private static final String ASSIGNED_USERS = "assignedUsers";
@@ -33,7 +33,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {
 
-        Logger.debug("Show users assigned to course id=" + course.getId());
+        logger.debug("Show users assigned to course id=" + course.getId());
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
         DtoCourseUser dtoCourseUser = new DtoCourseUser();
@@ -50,7 +50,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String removeUserFromAssigned(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        Logger.debug(String.format("Remove user=%d from course id=%d", dtoCourseUser.getUserId(),
+        logger.debug(String.format("Remove user=%d from course id=%d", dtoCourseUser.getUserId(),
                 dtoCourseUser.getCourseId()));
 
         courseLogic.removeUserFromCourse(dtoCourseUser);
@@ -65,7 +65,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String assignUserToCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        Logger.debug(String.format("Assign user=%d to course id=%d", dtoCourseUser.getUserId(),
+        logger.debug(String.format("Assign user=%d to course id=%d", dtoCourseUser.getUserId(),
                 dtoCourseUser.getCourseId()));
 
         courseLogic.assignUserToCourse(dtoCourseUser);
@@ -84,7 +84,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String searchForUsersToAssign(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        Logger.debug(String.format("Search for users that can be assigned to course id=%d" +
+        logger.debug(String.format("Search for users that can be assigned to course id=%d" +
                         "by searchType=%s and searchParam=%s", dtoCourseUser.getCourseId(), dtoCourseUser.getSearchType(),
                 dtoCourseUser.getSearchParam()));
 
@@ -103,7 +103,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String clearSearchResults(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        Logger.debug("Clear free users search results");
+        logger.debug("Clear free users search results");
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
@@ -116,7 +116,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String confirmUserRemovalFromCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        Logger.debug(String.format("Confirm removing user id=%d from course id=%d",
+        logger.debug(String.format("Confirm removing user id=%d from course id=%d",
                 dtoCourseUser.getUserId(), dtoCourseUser.getCourseId()));
 
         model.addAttribute(new Course());

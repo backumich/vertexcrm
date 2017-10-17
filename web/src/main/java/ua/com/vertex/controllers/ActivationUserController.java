@@ -20,7 +20,7 @@ public class ActivationUserController {
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
 
-    private static final Logger Logger = LogManager.getLogger(ActivationUserController.class);
+    private static final Logger logger = LogManager.getLogger(ActivationUserController.class);
 
     private UserLogic userLogic;
 
@@ -37,22 +37,22 @@ public class ActivationUserController {
 
         try {
             email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
-            Logger.debug("Encrypted email " + encodedEmail);
+            logger.debug("Encrypted email " + encodedEmail);
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Your link is not correct");
             modelAndView.setViewName(ERROR_JSP);
-            Logger.debug("Decrypt email failed", e);
+            logger.debug("Decrypt email failed", e);
         }
 
         try {
             if (userLogic.activateUser(email) != 1) {
                 modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
-                Logger.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
+                logger.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
                 modelAndView.setViewName(ERROR_JSP);
             }
         } catch (Exception e) {
             modelAndView.setViewName(ERROR_JSP);
-            Logger.debug("Activate user failed", e);
+            logger.debug("Activate user failed", e);
         }
         return modelAndView;
     }

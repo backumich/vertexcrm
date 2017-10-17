@@ -32,7 +32,7 @@ public class RegistrationController {
     static final String NAME_MODEL = "userFormRegistration";
     static final String CAPTCHA = "captcha";
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
-    private static final Logger Logger = LogManager.getLogger(RegistrationController.class);
+    private static final Logger logger = LogManager.getLogger(RegistrationController.class);
     private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
     private EmailLogic emailLogic;
@@ -40,7 +40,7 @@ public class RegistrationController {
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
-        Logger.info("Get page - " + REGISTRATION_PAGE);
+        logger.info("Get page - " + REGISTRATION_PAGE);
         return new ModelAndView(REGISTRATION_PAGE, NAME_MODEL, new UserFormRegistration());
     }
 
@@ -50,7 +50,7 @@ public class RegistrationController {
                                             BindingResult bindingResult, ModelAndView modelAndView,
                                             HttpServletRequest request) throws IOException {
 
-        Logger.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
+        logger.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
 
         String reCaptchaResponse = request.getParameter("g-recaptcha-response");
         String reCaptchaRemoteAddr = request.getRemoteAddr();
@@ -66,10 +66,10 @@ public class RegistrationController {
                 }
             } catch (DataAccessException e) {
                 modelAndView.setViewName(REGISTRATION_ERROR_PAGE);
-                Logger.warn(e);
+                logger.warn(e);
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR);
-                Logger.warn(e);
+                logger.warn(e);
             }
         }
         modelAndView.addObject(CAPTCHA, isVerified);

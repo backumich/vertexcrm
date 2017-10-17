@@ -19,22 +19,22 @@ public class AppErrorController implements ErrorController {
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
-    private static final Logger LOGGER = LogManager.getLogger(AppErrorController.class);
+    private static final Logger logger = LogManager.getLogger(AppErrorController.class);
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, HttpServletResponse response, Model model) {
         Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 
         if (response.getStatus() == HttpStatus.NOT_FOUND.value()) {
-            LOGGER.debug(NOT_FOUND);
+            logger.debug(NOT_FOUND);
             model.addAttribute(ERROR_MESSAGE, NOT_FOUND);
 
         } else if (UNKNOWN_ERROR.equals(throwable.getMessage())) {
-            LOGGER.warn(UNKNOWN_ERROR, throwable);
+            logger.warn(UNKNOWN_ERROR, throwable);
             model.addAttribute(ERROR_MESSAGE, UNKNOWN_ERROR);
 
         } else {
-            LOGGER.warn(INTERNAL_SERVER_ERROR, throwable);
+            logger.warn(INTERNAL_SERVER_ERROR, throwable);
             model.addAttribute(ERROR_MESSAGE, INTERNAL_SERVER_ERROR);
         }
         return ERROR;

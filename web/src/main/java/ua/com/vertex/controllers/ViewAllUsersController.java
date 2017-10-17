@@ -21,7 +21,7 @@ import java.util.List;
 public class ViewAllUsersController {
     private static final String PAGE_JSP = "viewAllUsers";
 
-    private static final Logger Logger = LogManager.getLogger(ViewAllUsersController.class);
+    private static final Logger logger = LogManager.getLogger(ViewAllUsersController.class);
 
     private UserLogic userLogic;
 
@@ -37,7 +37,7 @@ public class ViewAllUsersController {
         modelAndView.addObject("viewAllUsers", dataNavigator);
         modelAndView.addObject("users", users);
         modelAndView.setViewName(PAGE_JSP);
-        Logger.debug("Received a list of all users and transferred to the model");
+        logger.debug("Received a list of all users and transferred to the model");
 
         return modelAndView;
     }

@@ -34,7 +34,7 @@ public class CreateCertificateAndAddToUserController {
     static final String USERS = "users";
     private final String USER_DATA = "userDataForSearch";
 
-    private static final Logger Logger = LogManager.getLogger(CreateCertificateAndAddToUserController.class);
+    private static final Logger logger = LogManager.getLogger(CreateCertificateAndAddToUserController.class);
 
     private final CertificateLogic certificateLogic;
     private final UserLogic userLogic;
@@ -48,7 +48,7 @@ public class CreateCertificateAndAddToUserController {
     @GetMapping(value = "/addCertificateWithUserId")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCertificateWithUserId() {
-        Logger.debug("Request to '/addCertificateWithUserId' . Redirect to " + SELECT_USER_JSP);
+        logger.debug("Request to '/addCertificateWithUserId' . Redirect to " + SELECT_USER_JSP);
         return new ModelAndView(SELECT_USER_JSP);
     }
 
@@ -56,38 +56,38 @@ public class CreateCertificateAndAddToUserController {
     @PreAuthorize("hasRole('ADMIN')")
     public String searchUser(@ModelAttribute(USER_DATA) String userData, Model model) {
 
-        Logger.debug(String.format("Call - userLogic.searchUser(%s);", userData));
+        logger.debug(String.format("Call - userLogic.searchUser(%s);", userData));
 
         String result;
 
         if (userData.isEmpty()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             result = SELECT_USER_JSP;
-            Logger.info(String.format("Call - userLogic.searchUser(%s);", userData) + "The data have not been validated!!!");
+            logger.info(String.format("Call - userLogic.searchUser(%s);", userData) + "The data have not been validated!!!");
         } else {
             try {
                 List<User> users = userLogic.searchUser(userData);
                 model.addAttribute(USERS, users);
-                Logger.debug(String.format("Call - userLogic.searchUser(%s);", userData));
+                logger.debug(String.format("Call - userLogic.searchUser(%s);", userData));
                 if (users.isEmpty()) {
                     model.addAttribute(MSG, "User not found, try again.");
-                    Logger.debug("User not found, try again.");
+                    logger.debug("User not found, try again.");
                 }
                 result = SELECT_USER_JSP;
             } catch (Exception e) {
                 result = ERROR;
-                Logger.warn(e);
+                logger.warn(e);
             }
         }
 
-        Logger.debug("Request to '/selectUser' redirect to page - " + result);
+        logger.debug("Request to '/selectUser' redirect to page - " + result);
         return result;
     }
 
     @GetMapping(value = "/selectUser")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectUser(@RequestParam(USER_ID) int userId) {
-        Logger.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to - %s.jsp", userId,
+        logger.debug(String.format("Request to '/selectUser' with user id = (%s). Redirect to - %s.jsp", userId,
                 SELECT_USER_JSP));
         ModelAndView result = new ModelAndView(ADD_CERTIFICATE_WITH_USER_ID_JSP, CERTIFICATE, new Certificate());
         result.addObject(USER_ID, userId);
@@ -100,25 +100,25 @@ public class CreateCertificateAndAddToUserController {
                                              BindingResult bindingResult, Model model) {
 
         String returnPage;
-        Logger.debug("Request to '/addCertificateWithUserId' ");
+        logger.debug("Request to '/addCertificateWithUserId' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             returnPage = ADD_CERTIFICATE_WITH_USER_ID_JSP;
-            Logger.warn("The data have not been validated!!!");
+            logger.warn("The data have not been validated!!!");
         } else {
             try {
                 int result = certificateLogic.addCertificate(certificate);
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
-                Logger.info("Certificate added. Certificate id = " + result);
+                logger.info("Certificate added. Certificate id = " + result);
             } catch (Exception e) {
                 returnPage = ERROR;
-                Logger.warn(e);
+                logger.warn(e);
             }
         }
 
-        Logger.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
+        logger.debug(String.format("Request to '/addCertificateWithUserId' return (%s).jsp", returnPage));
         return returnPage;
     }
 }

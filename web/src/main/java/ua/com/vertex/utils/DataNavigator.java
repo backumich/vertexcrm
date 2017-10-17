@@ -11,7 +11,7 @@ import java.util.TreeMap;
 @Component
 @Scope("session")
 public class DataNavigator {
-    private static final Logger Logger = LogManager.getLogger(DataNavigator.class);
+    private static final Logger logger = LogManager.getLogger(DataNavigator.class);
     private String currentNamePage = "";
     private int currentNumberPage = 1;
     private int nextPage = 1;
@@ -40,7 +40,7 @@ public class DataNavigator {
     }
 
     public void updateDataNavigator(int dataSize) {
-        Logger.debug("Update dataNavigator");
+        logger.debug("Update dataNavigator");
         int totalPages = (int) Math.ceil((double) dataSize / this.rowPerPage);
 
         this.dataSize = dataSize;

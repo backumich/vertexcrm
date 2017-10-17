@@ -28,14 +28,14 @@ public class AddCourseController {
     private static final String ERROR_JSP = "error";
     private static final String COURSE = "course";
 
-    private static final Logger Logger = LogManager.getLogger(AddCourseController.class);
+    private static final Logger logger = LogManager.getLogger(AddCourseController.class);
 
     private CourseLogic courseLogic;
     private UserLogic userLogic;
 
     @GetMapping
     public ModelAndView viewAddCourseForm() {
-        Logger.debug("Get page -" + PAGE_JSP);
+        logger.debug("Get page -" + PAGE_JSP);
         ModelAndView result = new ModelAndView(PAGE_JSP, COURSE, new Course());
         result.addObject(TEACHERS, userLogic.getTeachers());
         return result;
@@ -46,16 +46,16 @@ public class AddCourseController {
                                   BindingResult bindingResult, ModelAndView modelAndView) {
 
         if (bindingResult.hasErrors()) {
-            Logger.debug("The user entered incorrect course data -" + course);
+            logger.debug("The user entered incorrect course data -" + course);
             modelAndView.setViewName(PAGE_JSP);
         } else {
             try {
                 course.setId(courseLogic.addCourse(course));
-                Logger.debug("Added a new course into DB" + course);
+                logger.debug("Added a new course into DB" + course);
                 modelAndView.setViewName(ALL_COURSE_PAGE_JSP);
             } catch (Exception e) {
                 modelAndView.setViewName(ERROR_JSP);
-                Logger.warn("Could not save data to database", e);
+                logger.warn("Could not save data to database", e);
             }
         }
         return modelAndView;
