@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.net.SocketTimeoutException;
 
-import static ua.com.vertex.controllers.PasswordResetEmailController.PASSWORD_RESET;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
@@ -37,13 +35,6 @@ public class GlobalExceptionHandler {
         LOGGER.warn(e, e);
         model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
         return ERROR;
-    }
-
-    @ExceptionHandler(PasswordResetEmailNotFound.class)
-    public String handlePasswordResetEmailNotFound(PasswordResetEmailNotFound e, Model model) {
-        LOGGER.debug(e, e);
-        model.addAttribute(EMAIL_NOT_FOUND, true);
-        return PASSWORD_RESET;
     }
 
     @ExceptionHandler(UpdatedPasswordNotSaved.class)
