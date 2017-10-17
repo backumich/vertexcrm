@@ -1,25 +1,32 @@
 package ua.com.vertex.logic;
 
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.Accounting;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
 
     private final CourseDaoInf courseDaoInf;
+    private final AccountingDaoInf accountingDaoInf;
 
     @Autowired
-    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
+    public CourseLogicImpl(CourseDaoInf courseDaoInf, AccountingDaoInf accountingDaoInf) {
         this.courseDaoInf = courseDaoInf;
+        this.accountingDaoInf = accountingDaoInf;
     }
 
     @Override
@@ -78,8 +85,14 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
+    @Transactional
     public void assignUserToCourse(DtoCourseUser dto) {
         courseDaoInf.assignUserToCourse(dto);
+        Course course = courseDaoInf.getCourseById(dto.getCourseId())
+                .orElseThrow(() -> new NoSuchElementException("No course with selected id"));
+        Accounting accounting = new Accounting(0, dto.getUserId(), course.getId(),
+                course.getPrice().doubleValue(), course.getPrice().doubleValue());
+        accountingDaoInf.insertAccountingRow(accounting);
     }
 
     @Override

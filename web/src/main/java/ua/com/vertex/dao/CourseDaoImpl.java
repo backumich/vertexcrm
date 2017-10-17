@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
@@ -276,6 +277,7 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
+    @Transactional
     public void assignUserToCourse(DtoCourseUser dto) {
         LOGGER.debug("Assigning the user id=%d to the course id={}",
                 dto.getUserId(), dto.getCourseId());

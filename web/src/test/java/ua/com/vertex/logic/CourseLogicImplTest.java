@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.dao.interfaces.AccountingDaoInf;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
 import ua.com.vertex.logic.interfaces.CourseLogic;
 import ua.com.vertex.utils.DataNavigator;
@@ -27,13 +28,16 @@ public class CourseLogicImplTest {
     @Mock
     private CourseDaoInf courseDaoInf;
 
+    @Mock
+    private AccountingDaoInf accountingDaoInf;
+
     private CourseLogic courseLogic;
 
     private Course course;
 
     @Before
     public void setUp() {
-        courseLogic = new CourseLogicImpl(courseDaoInf);
+        courseLogic = new CourseLogicImpl(courseDaoInf, accountingDaoInf);
         course = new Course.Builder().setId(1).setName("test").setFinished(false).setPrice(new BigDecimal(10000)).
                 setStart(LocalDate.of(2017, 5, 28)).setNotes("test").
                 setNotes("test").getInstance();
