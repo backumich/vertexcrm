@@ -19,9 +19,9 @@ import static ua.com.vertex.controllers.RegistrationController.OUR_EMAIL;
 public class PasswordResetEmailController {
     private static final Logger LOGGER = LogManager.getLogger(PasswordResetEmailController.class);
     public static final String PASSWORD_RESET = "password/passwordReset";
-    public static final String EMAIL_SENT = "password/passwordResetEmailSent";
-    public static final String EMAIL_INVALID = "emailInvalid";
-    public static final String EMAIL = "email";
+    static final String EMAIL_SENT = "password/passwordResetEmailSent";
+    static final String EMAIL_INVALID = "emailInvalid";
+    static final String EMAIL = "email";
     static final String CAPTCHA_MISSED = "captcha";
 
     private final ReCaptchaService reCaptchaService;

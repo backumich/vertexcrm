@@ -22,12 +22,12 @@ import static ua.com.vertex.controllers.PasswordResetEmailController.CAPTCHA_MIS
 @Controller
 public class PasswordUpdateController {
     private static final Logger LOGGER = LogManager.getLogger(PasswordUpdateController.class);
-    public static final String PASSWORD_ENTER_NEW = "password/passwordEnterNew";
-    public static final String PASSWORD_SAVED = "password/passwordSaved";
-    public static final String PASSWORD_INVALID = "passwordInvalid";
-    public static final String PASSWORD_MISMATCH = "passwordMismatch";
-    public static final String EXPIRED = "expired";
-    public static final String DTO = "passwordDto";
+    static final String PASSWORD_ENTER_NEW = "password/passwordEnterNew";
+    static final String PASSWORD_SAVED = "password/passwordSaved";
+    static final String PASSWORD_INVALID = "passwordInvalid";
+    static final String PASSWORD_MISMATCH = "passwordMismatch";
+    static final String EXPIRED = "expired";
+    static final String DTO = "passwordDto";
 
     private final ReCaptchaService reCaptchaService;
     private final UserLogic userLogic;

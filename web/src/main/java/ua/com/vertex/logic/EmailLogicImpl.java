@@ -82,11 +82,11 @@ class EmailLogicImpl implements EmailLogic {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
+            if (!userLogic.isUserRegisteredAndActive(email)) {
+                throw new PasswordResetEmailNotFound("This email is not registered or not activated yet");
+            }
         } catch (AddressException e) {
             result = false;
-        }
-        if (!userLogic.isUserRegisteredAndActive(email)) {
-            throw new PasswordResetEmailNotFound("This email is not registered or not activated yet");
         }
         return result;
     }
