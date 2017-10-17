@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
-    private static final String EMAIL_NOT_FOUND = "emailNotFound";
+    public static final String EMAIL_NOT_FOUND = "emailNotFound";
 
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e) {

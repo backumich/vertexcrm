@@ -132,7 +132,7 @@
         <br><br>
     </c:if>
 
-    <sf:form action="sendEmail" method="get">
+    <sf:form action="sendEmail" method="get" commandName="passwordResetDto">
         <table>
             <tr>
                 <td><span class="fontSize140 bold silver">

@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.controllers.exceptionHandling.PasswordResetEmailNotFound;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.Aes;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -74,20 +71,5 @@ class EmailLogicImpl implements EmailLogic {
         return String.format("You can use the following link to reset your password:%n%n%s%n%n" +
                 "If you don’t use this link within %d minutes, it will expire. " +
                 "To get a new password reset link, visit %s", passwordResetLink, passwordLinkExpire, passwordResetPage);
-    }
-
-    @Override
-    public boolean verifyEmail(String email) {
-        boolean result = true;
-        try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
-            if (!userLogic.isUserRegisteredAndActive(email)) {
-                throw new PasswordResetEmailNotFound("This email is not registered or not activated yet");
-            }
-        } catch (AddressException e) {
-            result = false;
-        }
-        return result;
     }
 }
