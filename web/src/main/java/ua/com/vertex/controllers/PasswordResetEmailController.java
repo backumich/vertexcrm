@@ -44,20 +44,18 @@ public class PasswordResetEmailController {
 
     @GetMapping(value = "/sendEmail")
     public String sendEmail(@RequestParam String email, HttpServletRequest request, Model model) {
-        String view = EMAIL_SENT;
+        String view = PASSWORD_RESET;
 
-        if (emailLogic.verifyEmail(email)) {
-            if (reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
-                mailService.sendMail(OUR_EMAIL, email, "Reset Your Password",
-                        emailLogic.createPasswordResetMessage(email));
-                LOGGER.debug("Email to change the password was sent to " + email);
-            } else {
-                view = PASSWORD_RESET;
-                emailNotValidatedOrCaptchaMissed(email, CAPTCHA_MISSED, "", model);
-            }
-        } else {
-            view = PASSWORD_RESET;
+        if (!emailLogic.verifyEmail(email)) {
             emailNotValidatedOrCaptchaMissed(email, EMAIL_INVALID, "Email to change the password was invalid", model);
+
+        } else if (!reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
+            emailNotValidatedOrCaptchaMissed(email, CAPTCHA_MISSED, "", model);
+
+        } else {
+            mailService.sendMail(OUR_EMAIL, email, "Reset Your Password", emailLogic.createPasswordResetMessage(email));
+            view = EMAIL_SENT;
+            LOGGER.debug("Email to change the password was sent to " + email);
         }
         return view;
     }

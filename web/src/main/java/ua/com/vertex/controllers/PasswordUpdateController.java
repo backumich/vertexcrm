@@ -53,24 +53,21 @@ public class PasswordUpdateController {
     @PostMapping(value = "/passwordSaveNew")
     public String passwordSaveNew(@Valid @ModelAttribute PasswordResetDto passwordDto,
                                   BindingResult result, HttpServletRequest request, Model model) {
-        String view = PASSWORD_SAVED;
+        String view = PASSWORD_ENTER_NEW;
         String email = passwordDto.getEmail();
 
         if (result.hasErrors()) {
-            view = PASSWORD_ENTER_NEW;
             passwordNotValidated(email, PASSWORD_INVALID, "New password validation error", model);
 
         } else if (!passwordDto.getRawPassword().equals(passwordDto.getRepeatPassword())) {
-            view = PASSWORD_ENTER_NEW;
             passwordNotValidated(email, PASSWORD_MISMATCH, "Mismatching passwords", model);
 
+        } else if (!reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
+            passwordNotValidated(email, CAPTCHA_MISSED, "", model);
+
         } else {
-            if (reCaptchaService.verify(request.getParameter("g-recaptcha-response"), request.getRemoteAddr())) {
-                userLogic.savePassword(passwordDto.getEmail(), passwordDto.getRawPassword());
-            } else {
-                view = PASSWORD_ENTER_NEW;
-                passwordNotValidated(email, CAPTCHA_MISSED, "", model);
-            }
+            userLogic.savePassword(passwordDto.getEmail(), passwordDto.getRawPassword());
+            view = PASSWORD_SAVED;
         }
         return view;
     }
