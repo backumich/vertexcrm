@@ -181,9 +181,6 @@ public class UserDaoImpl implements UserDaoInf {
         } catch (EmptyResultDataAccessException e) {
             LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
-
-        System.out.println(user);
-
         return Optional.ofNullable(user);
     }
 
