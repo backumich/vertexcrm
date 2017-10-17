@@ -71,7 +71,7 @@ CREATE TABLE Course_users
 
 CREATE TABLE Password_reset
 (
-  id            INT(11)      NOT NULL AUTO_INCREMENT,
+  id            BIGINT(20)   NOT NULL AUTO_INCREMENT,
   email         VARCHAR(255) NOT NULL,
   uuid          VARCHAR(50)  NOT NULL,
   creation_time TIMESTAMP    NOT NULL,

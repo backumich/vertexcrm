@@ -19,6 +19,7 @@ import java.util.UUID;
 
 @Configuration
 @PropertySource("classpath:emailMessages.properties")
+@PropertySource("classpath:application.properties")
 class EmailLogicImpl implements EmailLogic {
     private static final Logger LOGGER = LogManager.getLogger(EmailLogicImpl.class);
     private static final String ENCRYPT_KEY = "VeRtEx AcAdeMy";
@@ -35,6 +36,9 @@ class EmailLogicImpl implements EmailLogic {
 
     @Value("${registration.footer}")
     private String footer;
+
+    @Value("${passwordLinkExpire}")
+    private int passwordLinkExpire;
 
     @Autowired
     public EmailLogicImpl(UserLogic userLogic) {
@@ -68,8 +72,8 @@ class EmailLogicImpl implements EmailLogic {
         LOGGER.debug("Message to reset password was compiled");
 
         return String.format("You can use the following link to reset your password:%n%n%s%n%n" +
-                "If you don’t use this link within 3 hours, it will expire. " +
-                "To get a new password reset link, visit %s", passwordResetLink, passwordResetPage);
+                "If you don’t use this link within %d minutes, it will expire. " +
+                "To get a new password reset link, visit %s", passwordResetLink, passwordLinkExpire, passwordResetPage);
     }
 
     @Override

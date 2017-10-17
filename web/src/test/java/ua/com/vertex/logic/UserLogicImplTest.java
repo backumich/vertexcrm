@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
@@ -178,38 +177,5 @@ public class UserLogicImplTest {
 
         logic.setParamsToRestorePassword(email, uuid, dateTime);
         verify(dao, times(1)).setParamsToRestorePassword(email, uuid, dateTime);
-    }
-
-    @Test
-    public void getEmailByUuidReturnsEmailIfNotExpired() {
-        final String email = "email";
-        final String uuid = "uuid";
-        final int id = 1;
-        final int hours = 1;
-        PasswordResetDto dto = passwordResetDtoHelper(hours, email);
-        when(dao.getEmailByUuid(id, uuid)).thenReturn(dto);
-
-        String result = logic.getEmailByUuid(id, uuid);
-        assertEquals(email, result);
-    }
-
-    private PasswordResetDto passwordResetDtoHelper(int hours, String email) {
-        return PasswordResetDto.builder()
-                .creationTime(LocalDateTime.now().minusHours(hours))
-                .email(email)
-                .build();
-    }
-
-    @Test
-    public void getEmailByUuidReturnsEmptyStringIfExpired() {
-        final String email = "email";
-        final String uuid = "uuid";
-        final int id = 1;
-        final int hours = 4;
-        PasswordResetDto dto = passwordResetDtoHelper(hours, email);
-        when(dao.getEmailByUuid(id, uuid)).thenReturn(dto);
-
-        String result = logic.getEmailByUuid(id, uuid);
-        assertEquals("", result);
     }
 }

@@ -40,7 +40,7 @@ public class PasswordUpdateController {
 
     @GetMapping(value = "/passwordEnterNew")
     public String passwordEnterNew(@RequestParam String id, @RequestParam String uuid, Model model) {
-        String email = userLogic.getEmailByUuid(Integer.parseInt(id), uuid);
+        String email = userLogic.getEmailByUuid(Long.parseLong(id), uuid);
         if (!email.isEmpty()) {
             model.addAttribute(DTO, PasswordResetDto.builder().email(email).build());
         } else {

@@ -46,9 +46,9 @@ public interface UserDaoInf {
 
     List<User> getTeachers();
 
-    int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime);
+    long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime);
 
-    PasswordResetDto getEmailByUuid(int id, String uuid);
+    PasswordResetDto getEmailByUuid(long id, String uuid);
 
     void savePassword(String email, String password);
 

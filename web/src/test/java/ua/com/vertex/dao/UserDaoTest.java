@@ -269,7 +269,7 @@ public class UserDaoTest {
         final String uuid = "uuid";
         final LocalDateTime dateTime = LocalDateTime.now();
 
-        int result = userDao.setParamsToRestorePassword(email, uuid, dateTime);
+        long result = userDao.setParamsToRestorePassword(email, uuid, dateTime);
         assertTrue(result > 2);
     }
 

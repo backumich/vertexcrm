@@ -342,7 +342,7 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public int setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
         String query = "INSERT INTO Password_reset (email, uuid, creation_time) VALUES (:email, :uuid, :creationTime)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -354,11 +354,11 @@ public class UserDaoImpl implements UserDaoInf {
         jdbcTemplate.update(query, source, keyHolder);
         LOGGER.debug(String.format("Params to restore password for email=%s were saved", email));
 
-        return keyHolder.getKey().intValue();
+        return keyHolder.getKey().longValue();
     }
 
     @Override
-    public PasswordResetDto getEmailByUuid(int id, String uuid) {
+    public PasswordResetDto getEmailByUuid(long id, String uuid) {
         String query = "SELECT email, creation_time FROM Password_reset WHERE id =:id AND uuid =:uuid";
 
         MapSqlParameterSource source = new MapSqlParameterSource();

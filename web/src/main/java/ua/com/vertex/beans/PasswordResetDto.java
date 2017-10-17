@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PasswordResetDto {
-    private int id;
+    private long id;
     private String email;
     private String uuid;
     private LocalDateTime creationTime;
