@@ -10,5 +10,5 @@ public interface AccountingDaoInf {
 
     void updateUserDept(int courseId, int userId, double amount);
 
-    void insertAccountingRow(Accounting accounting);
+    int insertAccountingRow(Accounting accounting);
 }

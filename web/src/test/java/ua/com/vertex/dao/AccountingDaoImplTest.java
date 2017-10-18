@@ -29,16 +29,26 @@ public class AccountingDaoImplTest {
     private AccountingDaoImplForTest accountingDaoImplForTest;
 
     @Test
+    public void insertAccountingRowCorrectInsert() throws Exception {
+
+        Accounting accounting = new Accounting.Builder().setUserId(22).setCourseId(2).setCourseCoast(8000d)
+                .setDept(8000d).getInstance();
+        accounting.setDealId(accountingDaoInf.insertAccountingRow(accounting));
+        assertEquals("Maybe method was changed", accounting,
+                accountingDaoImplForTest.getAccountingByCourseIdAndUserId(2, 22).orElse(new Accounting()));
+    }
+
+    @Test
     public void updateUserDeptCorrectUpdate() throws Exception {
 
         Accounting accounting = new Accounting.Builder().setUserId(2).setCourseId(2).setCourseCoast(8000d).
                 setDept(8000d).getInstance();
         double amount = 3000d;
-        accounting.setDealId(accountingDaoImplForTest.createAccounting(accounting));
+        accounting.setDealId(accountingDaoInf.insertAccountingRow(accounting));
         accountingDaoInf.updateUserDept(2, 2, amount);
         accounting.setDebt(accounting.getDebt() - amount);
-        assertEquals("Maybe method was changed", accountingDaoImplForTest.
-                getAccountingByCourseIdAndUserId(2, 2).orElse(new Accounting()), accounting);
+        assertEquals("Maybe method was changed", accounting,
+                accountingDaoImplForTest.getAccountingByCourseIdAndUserId(2, 2).orElse(new Accounting()));
     }
 
 }

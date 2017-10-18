@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
+import ua.com.vertex.beans.Accounting;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
@@ -16,6 +17,8 @@ import ua.com.vertex.utils.DataNavigator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
@@ -24,6 +27,9 @@ import static org.mockito.Mockito.*;
 public class CourseLogicImplTest {
 
     private final String EXCEPTION_MSG = "Course logic didn't call corresponding course dao method";
+
+    private final int COURSE_ID = 2;
+    private final int USER_ID = 3;
 
     @Mock
     private CourseDaoInf courseDaoInf;
@@ -34,6 +40,8 @@ public class CourseLogicImplTest {
     private CourseLogic courseLogic;
 
     private Course course;
+    private DtoCourseUser dto;
+    private Accounting accounting;
 
     @Before
     public void setUp() {
@@ -41,6 +49,11 @@ public class CourseLogicImplTest {
         course = new Course.Builder().setId(1).setName("test").setFinished(false).setPrice(new BigDecimal(10000)).
                 setStart(LocalDate.of(2017, 5, 28)).setNotes("test").
                 setNotes("test").getInstance();
+        dto = new DtoCourseUser();
+        dto.setCourseId(COURSE_ID);
+        dto.setUserId(USER_ID);
+        accounting = new Accounting.Builder().setUserId(USER_ID).setCourseId(COURSE_ID).setCourseCoast(8000d)
+                .setDept(8000d).getInstance();
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -91,16 +104,26 @@ public class CourseLogicImplTest {
 
     @Test
     public void removeUserFromCourseInvokesDao() {
-        DtoCourseUser dto = new DtoCourseUser();
         courseLogic.removeUserFromCourse(dto);
         verify(courseDaoInf, times(1)).removeUserFromCourse(dto);
     }
 
     @Test
     public void assignUserToCourseInvokesDao() {
-        DtoCourseUser dto = new DtoCourseUser();
+        when(courseDaoInf.getCourseById(COURSE_ID)).thenReturn(Optional.ofNullable(
+                new Course.Builder().setId(COURSE_ID).setPrice(new BigDecimal(8000)).getInstance()));
+
         courseLogic.assignUserToCourse(dto);
         verify(courseDaoInf, times(1)).assignUserToCourse(dto);
+        verify(accountingDaoInf, times(1)).insertAccountingRow(accounting);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void assignUserToCourseReturnException() {
+        when(courseDaoInf.getCourseById(anyInt())).thenReturn(Optional.empty());
+
+        courseLogic.assignUserToCourse(dto);
+        fail("We found course with id = 0!");
     }
 
     @Test

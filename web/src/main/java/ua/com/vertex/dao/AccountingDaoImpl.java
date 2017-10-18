@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,12 +66,13 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public void insertAccountingRow(Accounting accounting) {
+    public int insertAccountingRow(Accounting accounting) {
         LOGGER.debug("Call - accountingDaoInf.insertAccountingRow({});", accounting);
 
         String query = "INSERT INTO  Accounting (user_id, course_id, course_coast, debt) " +
-                "VALUES (:user_id, :course_id, :courseCoast, :debt)";
+                "VALUES (:user_id, :course_id, :course_coast, :debt)";
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource(DEBT, accounting.getCourseCoast());
         source.addValue(COURSE_COAST, accounting.getCourseCoast());
         source.addValue(COURSE_ID, accounting.getCourseId());
@@ -77,7 +80,9 @@ public class AccountingDaoImpl implements AccountingDaoInf {
 
         LOGGER.debug("Try to create accounting row with course id = ({}), user id = ({}), course coast and debt({})",
                 accounting.getCourseId(), accounting.getUserId(), accounting.getCourseCoast());
-        jdbcTemplate.update(query, source);
+        jdbcTemplate.update(query, source, keyHolder);
+
+        return keyHolder.getKey().intValue();
     }
 
     @Autowired

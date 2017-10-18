@@ -29,21 +29,6 @@ class AccountingDaoImplForTestImpl implements AccountingDaoImplForTest {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public int createAccounting(Accounting accounting) {
-        String query = "INSERT INTO  Accounting (user_id, course_id, course_coast, debt) " +
-                "VALUES (:user_id, :course_id, :course_coast, :debt) ";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource source = new MapSqlParameterSource("user_id", accounting.getUserId());
-        source.addValue("course_id", accounting.getCourseId());
-        source.addValue("course_coast", accounting.getCourseCoast());
-        source.addValue("debt", accounting.getDebt());
-
-
-        jdbcTemplate.update(query, source, keyHolder);
-        return keyHolder.getKey().intValue();
-    }
-
     @SuppressWarnings("SameParameterValue")
     public Optional<Accounting> getAccountingByCourseIdAndUserId(int courseId, int userId) {
         String query = "SELECT deal_id, user_id, course_id, course_coast,debt FROM Accounting " +
