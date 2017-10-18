@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function ($) {
 
 
     var $page = $('html, body');
@@ -40,170 +40,14 @@ $(document).ready(function () {
         $("#allowedit").fadeOut();
     });
 
-    $(".typing").typed({
-        strings: ["Стань IT-специалистом", "И открой для себя весь мир"],
-        typeSpeed: 1,
-        backSpeed: 1,
-        startDelay: 0,
-        backDelay: 2000,
-        loop: true
-    });
 
     $(window).scroll(function () {
         showNavbar();
     });
 
-    $('.slider-logo').slick({
-        infinite: true,
-        speed: 300,
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 1100,
-                settings: {
-                    slidesToShow: 5
-                }
-            },
-            {
-                breakpoint: 925,
-                settings: {
-                    slidesToShow: 4,
-                }
-            },
-            {
-                breakpoint: 725,
-                settings: {
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 525,
-                settings: {
-                    slidesToShow: 2
-                }
-            },
-            {
-                breakpoint: 400,
-                settings: {
-                    slidesToShow: 1
-                }
-            }
-        ]
-    });
-
-
-    $('.slider-post').slick({
-        infinite: true,
-        speed: 300,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 1100,
-                settings: {
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 725,
-                settings: {
-                    slidesToShow: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1
-                }
-            }
-        ]
-    });
-
-
-    $('.slider-person').slick({
-        infinite: true,
-        speed: 300,
-        slidesToShow: 6,
-        slidesToScroll: 1,
-        responsive: [
-            {
-                breakpoint: 1100,
-                settings: {
-                    slidesToShow: 4
-                }
-            },
-            {
-                breakpoint: 725,
-                settings: {
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 2
-                }
-            }
-        ]
-    });
-
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         $('.slider-person').slick('setPosition');
     });
-
-
-    $('.c-a-slider').slick({
-        centerMode: true,
-
-        slidesToShow: 3,
-        responsive: [
-            {
-                breakpoint: 800,
-                settings: {
-                    centerMode: true,
-
-                    slidesToShow: 3
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    centerMode: true,
-
-                    slidesToShow: 1
-                }
-            }
-        ]
-    });
-
-    // $('.c-a-slider').slick({
-    // 	infinite: true,
-    // 	slidesToShow: 3,
-    // 	slidesToScroll: 1,
-    // 	dots: true,
-    // 	arrows: true,
-    // 	speed: 300,
-    // 	autoplaySpeed: 0,
-    // 	adaptiveHeight: true,
-    // 	responsive: [
-    // 		{
-    // 			breakpoint: 768,
-    // 			settings: {
-    // 				slidesToShow: 1,
-    // 				slidesToScroll: 1,
-    // 				infinite: true,
-    // 				dots: true,
-    // 				arrows: false
-    //         	}
-    // 		}
-    // 	]
-
-    // });
-
-
-    Toggle({container: '.js-toggle'});
-
 
     if (!$("body").hasClass("inside")) {
         $(".navbar-nav li a,.btn-more-slide").on("click", "a", function (event) {

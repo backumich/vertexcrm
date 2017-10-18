@@ -1,46 +1,18 @@
-.fontSize70 {
-    font-size: 70%;
-}
 
-.fontSize125 {
-    font-size: 125%;
-}
-
-.fontSize140 {
-    font-size: 140%;
-}
-
-.fontSize180 {
-    font-size: 180%;
-}
-
-.fontSize200 {
-    font-size: 200%;
-}
 
 .red {
-    color: red;
+    color: #ff0000;
 }
 
 .black {
     color: black;
 }
 
-.silver {
-    color: silver;
-}
 
-.bold {
-    font-weight: bold;
-}
 
 .tableHeader {
     font-weight: bold;
     color: #9acfea;
-}
-
-.href {
-    font-size: 120%;
 }
 
 .errorField {

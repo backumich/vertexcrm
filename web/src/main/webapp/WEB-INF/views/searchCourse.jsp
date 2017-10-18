@@ -3,257 +3,111 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-    <title>Vertex Crm</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../../css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/slick.css">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
-    <%--suppress CommaExpressionJS --%>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+<mt:header title="Search Course"> </mt:header>
 
-        ga('create', 'UA-62731553-2', 'auto');
-        ga('send', 'pageview');
+<div class="page mh100">
 
-    </script>
-    <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
 
-    .en-markup-crop-options div div:first-of-type {
-        margin-left: 0 !important;
-    }
-    </style>
-</head>
-<%--suppress Annotator --%>
-<body class="inside footer-under">
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function (d, w, c) {
-        (w[c] = w[c] || []).push(function () {
-            try {
-                w.yaCounter37563830 = new Ya.Metrika({
-                    id: 37563830,
-                    clickmap: true,
-                    trackLinks: true,
-                    accurateTrackBounce: true,
-                    webvisor: true
-                });
-            } catch (e) {
-            }
-        });
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <sec:authentication property="principal.username" var="admin"/>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_USER')">
+        <sec:authentication property="principal.username" var="user"/>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_TEACHER')">
+        <sec:authentication property="principal.username" var="teacher"/>
+    </sec:authorize>
 
-        var n = d.getElementsByTagName("script")[0],
-            s = d.createElement("script"),
-            f = function () {
-                n.parentNode.insertBefore(s, n);
-            };
-        s.type = "text/javascript";
-        s.async = true;
-        s.src = "https://mc.yandex.ru/metrika/watch.js";
+    <c:if test="${admin != null}">
 
-        //noinspection JSValidateTypes
-        if (w.opera === "[object Opera]") {
-            d.addEventListener("DOMContentLoaded", f, false);
-        } else {
-            f();
-        }
-    })(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
-<!-- /Yandex.Metrika counter -->
-<div class="nav navbar navbar-fixed-top navbar-hide">
-    <div class="container"><a href="https://vertex-academy.com/index.html" class="logo pull-left"></a>
-        <button data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span
-                class="glyphicon glyphicon-align-justify"></span></button>
-        <div class="collapse navbar-collapse navbar-responsive-collapse">
-            <ul class="navbar-nav">
-                <li><a href="https://vertex-academy.com/index.html#courses">Курсы</a></li>
-                <li><a href="https://vertex-academy.com/index.html#about">о нас</a></li>
-                <li><a href="https://vertex-academy.com/index.html#faq">FAQ</a></li>
-                <li><a href="https://vertex-academy.com/index.html#feedback">Отзывы</a></li>
-                <li><a href="https://vertex-academy.com/index.html#lecturers">Преподаватели</a></li>
-                <li><a href="https://vertex-academy.com/tutorials/index.php" class="link">Блог</a></li>
-                <li><a href="https://vertex-academy.com/index.html#contacts">Контакты</a></li>
-                <li><a href="https://vertex-academy.com/tutorials/en/login/">Войти </a></li>
-            </ul>
+    <c:if test="${empty courses}">
+        <div class="container pt1_5" align="center">
+            <div class="crm-form mt60 full-width">
+                <form:form cssClass="buttonText" method="post" commandName="courseForInfo" action="searchCourse">
+                    <h1>Search Course</h1>
+
+                    <form:hidden path="start" value="2011-12-03"/>
+
+                    <div class="row d-flex align-middle">
+                        <div class="col-xs-3 d-flex align-middle"><p>Course name:</p></div>
+                        <div class="col-xs-9 d-flex align-middle">
+                            <form:input path="name" placeholder="Course name" type="text" class="form-control"/>
+                        </div>
+                        <div class="col-xs-12"><form:errors path="name"/></div>
+                    </div>
+
+                    <div class="row d-flex align-middle">
+                        <div class="col-xs-3 d-flex align-middle"><p>Is the course finished?</p></div>
+                        <div class="col-xs-9 d-flex align-middle">
+                            <form:checkbox path="finished"/>
+                        </div>
+                        <div class="col-xs-12"><form:errors path="finished"/></div>
+                    </div>
+                    <input type="submit" class="submit-link" value="Search">
+
+
+                </form:form>
+            </div>
         </div>
-    </div>
-</div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5" align="center">
+    </c:if>
 
-        <sec:authorize access="hasRole('ROLE_ADMIN')">
-            <sec:authentication property="principal.username" var="admin"/>
-        </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_USER')">
-            <sec:authentication property="principal.username" var="user"/>
-        </sec:authorize>
-        <sec:authorize access="hasRole('ROLE_TEACHER')">
-            <sec:authentication property="principal.username" var="teacher"/>
-        </sec:authorize>
 
-        <c:if test="${admin != null}">
+    <c:if test="${!empty courses}">
+        <div class="container pt1_5" align="center">
+            <div class="crm-form mt60 full-width">
+                <form:form cssClass="buttonText" method="get" commandName="courseId" action="/courseDetails">
+                    <h1>Select Course:</h1>
 
-        <c:if test="${empty courses}">
-            <form:form cssClass="buttonText" method="post" commandName="courseForInfo"
-                       action="searchCourse">
-                <span class="fontSize180 silver">Search course :</span><br><br><br>
-                <table class="active" width="500">
-                    <tr>
-                        <td><form:label path="name" size="100">Course name:</form:label></td>
-                        <td style="color: black"><form:input path="name" placeholder="Course name:"
-                                                             type="text"/></td>
-                        <td><form:errors path="name"/></td>
-                    </tr>
-                    <tr>
-                        <td><form:hidden path="start" value="2011-12-03"/></td>
-                    </tr>
-                    <tr>
-                        <td><form:label path="finished">Course is finished? </form:label></td>
-                        <td><form:checkbox path="finished"/></td>
-                        <td><form:errors path="finished"/></td>
-                    </tr>
-                </table
-                <br>
-                <input style="color: black" type="submit" value="Search"/>
-            </form:form>
-        </c:if>
-    </div>
-    <div class="container pt1_5" align="center">
-        <c:if test="${!empty courses}">
-            <form:form cssClass="buttonText" method="get" commandName="courseId" action="/courseDetails">
-                <span class="fontSize180 silver">Select course :</span><br><br><br>
-                <table class="active" width="1200" cols="7">
-                    <tr style="color: #2aabd2">
-                        <th>Select course</th>
-                        <th>Course name</th>
-                        <th>Course start date</th>
-                        <th>Course is finished</th>
-                        <th>Course price</th>
-                        <th>Course teacher</th>
-                        <th>Course schedule</th>
-                    </tr>
-                    <c:forEach items="${courses}" var="course">
+                    <table class="courses-result full-width">
                         <tr>
-                            <td><input type="radio" name="courseId" checked="true" value=${course.id}>
-                            </td>
-                            <td>${course.name}</td>
-                            <td>${course.start}</td>
-                            <td>${course.finished}</td>
-                            <td>${course.price}</td>
-                            <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
-                            <td>${course.schedule}</td>
-                            <td>
-                            </td>
+                            <th></th>
+                            <th>Course Name</th>
+                            <th>Course Start Date</th>
+                            <th>Finished State</th>
+                            <th>Course Price</th>
+                            <th>Course Teacher</th>
+                            <th>Course Schedule</th>
                         </tr>
-                    </c:forEach>
-                </table>
-                <br>
-                <input style="color: black" type="submit" value="Select"/>
-            </form:form>
-        </c:if>
-    </div>
-    <br>
-    <br>
-    <br>
-    <div class="container pt1_5" align="center">
+                        <c:forEach items="${courses}" var="course">
+
+                            <tr>
+                                <td><input type="radio" name="courseId" id="course-${course.id}" checked="true" value=${course.id}>
+                                </td>
+                                <td>${course.name}</td>
+                                <td>${course.start}</td>
+                                <td>${course.finished}</td>
+                                <td>${course.price}</td>
+                                <td>${course.teacher.firstName}; ${course.teacher.lastName}; ${course.teacher.email}</td>
+                                <td>${course.schedule}</td>
+                                <td>
+                                </td>
+                            </tr>
+
+                        </c:forEach>
+                    </table>
+
+                    <input type="submit" class="submit-link" value="Show details">
+                </form:form>
+            </div>
+        </div>
+    </c:if>
+
+
+    <div class="container" align="center">
         <c:if test="${!empty msg}">
-            <h3><span class="errorText250">${msg}</span></h3>
+            <p class="error-text">${msg}</p>
         </c:if>
     </div>
     </c:if>
-    <br>
-    <br>
-    <br>
-    <div class="container pt1_5" align="center">
-        <div class="hrefText" align="center">
+    <div class="container mb-20" align="center">
+        <div class="links">
             <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+            <a href="<c:url value="/"/>">Home</a>
         </div>
     </div>
+
 </div>
 
-<div class="footer">
-    <div class="container">
-        <div class="right">
-            <div class="social-block"><a href="https://www.facebook.com/vertex.academy" class="fb"></a><a
-                    href="https://vk.com/vertex_academy" class="vk"></a><a href="https://twitter.com/vertex_academy"
-                                                                           class="tw"></a><a
-                    href="https://vertex-academy.com/lecturer-bakumov.html#" class="gp"></a><a
-                    href="https://vertex-academy.com/lecturer-bakumov.html#" class="in"></a></div>
-        </div>
-        <div class="left">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="copyright"><a href="https://vertex-academy.com/lecturer-bakumov.html#"
-                                              class="logo"></a>©
-                        2015, Все права защищены
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="cont"><span>г. Киев, ул. Мечникова, 16, оф. 4-1</span>|<span>(050) 205 77 99, (098) 205 77 99</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="myModal" class="modal modal-gray">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="send-mail">
-                    <form id="sendmessage">
-                        <div class="title">Записаться на курс</div>
-                        <div class="desc">Оставьте Ваши контакты<br>и мы свяжемся с Вами в течение 24 часов</div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <input type="text" placeholder="Имя" name="fmail[name]" class="form-control"
-                                       required="">
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="text" placeholder="Телефон" name="fmail[phone]" class="form-control"
-                                       required="" pattern="[0-9]{6,}">
-                            </div>
-                        </div>
-                        <textarea placeholder="Комментарий" name="fmail[text]" class="form-control"
-                                  required=""></textarea>
-                        <input type="submit" value="Записаться на курс" class="btn btn--v1 btn-block">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
-
-</body>
-</html>
+<mt:footer> </mt:footer>
