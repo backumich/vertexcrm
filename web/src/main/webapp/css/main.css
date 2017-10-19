@@ -977,6 +977,9 @@ body {
 .mb-20 {
     margin-bottom: 20px !important;
 }
+.mt-30{
+    margin-top:30px !important;
+}
 .mbt-20{
     margin-top: 20px !important;
     margin-bottom: 20px !important;
@@ -2289,11 +2292,13 @@ body.desct .home-page {
 }
 .crm .error-box {
     width: 50%;
-    border: 4px solid #f44336;
     padding: 50px;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 0 20px #ccc;
+}
+.crm .error-box h1:after{
+    display: none;
+}
+.crm .error-box h1{
+    margin-bottom: 70px;
 }
 .crm .error-box.small {
     padding: 20px 50px;
