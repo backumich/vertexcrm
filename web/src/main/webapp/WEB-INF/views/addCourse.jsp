@@ -52,8 +52,12 @@
                 <input type="submit" class="submit-link" value="Add Course">
             </form:form>
         </div>
-
-
+    </div>
+    <div class="container mb-20" align="center">
+        <div class="links">
+            <a href="javascript:history.back();">Back</a> |
+            <a href="<c:url value="/"/>">Home</a>
+        </div>
     </div>
 </div>
 

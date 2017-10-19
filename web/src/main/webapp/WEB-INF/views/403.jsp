@@ -7,7 +7,7 @@
 
 <div align="center" class="page mh100">
     <div class="container pt1_5">
-        <div class="error-box mt60">
+        <div class="error-box">
             <h1>Error: 403 - access is denied</h1><br><br>
             <div class="links">
                 <a href="<c:url value="/" />">Home</a>

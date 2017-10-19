@@ -977,7 +977,13 @@ body {
 .mb-20 {
     margin-bottom: 20px !important;
 }
-
+.mbt-20{
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}
+.ac{
+    text-align: center;
+}
 .pt {
     padding-top: 98px;
 }
@@ -2140,7 +2146,7 @@ body.desct .home-page {
     margin: 20px 0;
 }
 .mt60 {
-    margin-top: 60px;
+    margin-top: 60px !important;
 }
 .js-tg-sl-join--hid {
     display: none;
@@ -2264,6 +2270,7 @@ body.desct .home-page {
     font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 16px;
     color: #666;
+    margin: 0;
 }
 .t-row {
     display: flex;
@@ -2274,13 +2281,13 @@ body.desct .home-page {
     margin-right: 3%;
 }
 
-.error-text{
+.crm .error-text{
     color: #ff0000;
 }
-.error-field{
+.crm .error-field{
     border: 1px solid #ff0000;
 }
-.error-box {
+.crm .error-box {
     width: 50%;
     border: 4px solid #f44336;
     padding: 50px;
@@ -2288,11 +2295,15 @@ body.desct .home-page {
     background: #fff;
     box-shadow: 0 0 20px #ccc;
 }
-.error-box h1 {
+.crm .error-box.small {
+    padding: 20px 50px;
+    margin: 0 auto;
+}
+.crm .error-box h1 {
     color: #f44336;
     text-transform: capitalize;
 }
-.error-box h1:after{
+.crm .error-box h1:after{
     margin: 60px 0 40px;
 }
 .d-flex{
@@ -2331,6 +2342,33 @@ body.desct .home-page {
 }
 .courses-result tr>td:first-of-type{
     width: 30px;
+}
+.certificate-details .courses-result tr>td:first-of-type{
+    width: 40%;
+    font-weight: bold;
+}
+.certificate-details .courses-result tr:hover{
+    background: #efefef;
+}
+.course-users .courses-result tr>td:first-of-type{
+    width: 20%;
+}
+.course-users .course-users-table tr:hover{
+    background: none;
+}
+.course-users .course-users-table td{
+    border-bottom: none;
+}
+.course-users .course-users-table tr>td:first-of-type{
+    width: 30%;
+}
+.plane-link{
+    color: #337ab7;
+    background: none;
+    border: none;
+}
+.plane-link:hover{
+    text-decoration: underline;
 }
 @-webkit-keyframes blink {
     0% {

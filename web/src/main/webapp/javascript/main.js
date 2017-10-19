@@ -171,6 +171,26 @@ $(document).ready(function ($) {
         });
         return false;
     });
+    
+    // Search certificate field
+    $('#show-certificate').on('keypress', function () {
+        let content = $(this).val();
+        let clean = content.replace(/-/g,'');
+
+        if(clean.length>11){
+            clean = clean.substr(0, 12)+'-'+clean.substr(12, clean.length-12);
+            clean = clean.substr(0, 8)+'-'+clean.substr(8, clean.length-8);
+            clean = clean.substr(0, 4)+'-'+clean.substr(4, clean.length-4);
+        }else if(clean.length>7){
+            clean = clean.substr(0, 8)+'-'+clean.substr(8, clean.length-8);
+            clean = clean.substr(0, 4)+'-'+clean.substr(4, clean.length-4);
+        }else if(clean.length>3){
+
+            clean = clean.substr(0, 4)+'-'+clean.substr(4, clean.length-4);
+        }
+
+        $(this).val(clean);
+    })
 
 });
 
