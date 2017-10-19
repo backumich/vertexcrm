@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,8 +50,9 @@ public class GlobalExceptionHandler {
         return ERROR;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public String handleAccessDeniedException(AccessDeniedException e) {
+
+    @ExceptionHandler({AccessDeniedException.class, PreAuthenticatedCredentialsNotFoundException.class})
+    public String handleAccessOrAuthenticationException(AccessDeniedException e) {
         String view;
         if (emailExtractor.getEmailFromAuthentication() == null) {
             view = LOGIN;
