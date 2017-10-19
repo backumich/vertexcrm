@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.controllers.exceptionHandling.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
@@ -49,6 +50,8 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String DISCOUNT = "discount";
     private static final String ROLE_NAME = "name";
     private static final String IS_ACTIVE = "is_active";
+
+    private DaoUtilInf daoUtil;
 
     @Override
     public Optional<User> getUser(int userId) {
@@ -201,12 +204,10 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get all user list");
 
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                "LIMIT :from, :offset";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1)
-                * dataNavigator.getRowPerPage());
-        parameters.addValue("offset", dataNavigator.getRowPerPage());
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
 
         List<User> users = jdbcTemplate.query(query, parameters, (resultSet, i) -> new User.Builder().
                 setUserId(resultSet.getInt(USER_ID)).
@@ -434,7 +435,8 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Autowired
-    public UserDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
+    public UserDaoImpl(@Qualifier(value = "DS") DataSource dataSource, DaoUtilInf daoUtil) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.daoUtil = daoUtil;
     }
 }

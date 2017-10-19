@@ -37,10 +37,14 @@ CREATE TABLE Courses (
   start        TIMESTAMP    NULL     DEFAULT NULL,
   finished     TINYINT(1)            DEFAULT NULL,
   price        DECIMAL(19, 2)        DEFAULT NULL,
-  teacher_name VARCHAR(255)          DEFAULT NULL,
+  teacher_id   INT(11)               DEFAULT NULL,
   schedule     VARCHAR(255)          DEFAULT NULL,
   notes        VARCHAR(999)          DEFAULT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  CONSTRAINT FK_Courses_teacher_id FOREIGN KEY (teacher_id)
+  REFERENCES Users (user_id)
+    ON DELETE SET NULL
+    ON UPDATE RESTRICT
 )
   ENGINE = INNODB
   AUTO_INCREMENT = 3
@@ -172,8 +176,8 @@ CREATE TABLE Payments (
 -- Вывод данных для таблицы Courses
 --
 INSERT INTO Courses VALUES
-  (1, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.00, 'Yo Ho Ho', 'Sat, Sun', 'Welcome, we don''t expect you (='),
-  (2, 'MEGA Java', '2017-02-01 00:00:00', 1, 0.11, 'Capt. Jack Sparrow', 'Sat, Sun', 'Come, the courses are over.');
+  (1, 'Super JAVA', '2017-04-01 00:00:00', 0, 999999.00, 12, 'Sat, Sun', 'Welcome, we don''t expect you (='),
+  (2, 'MEGA Java', '2017-02-01 00:00:00', 1, 0.11, 100, 'Sat, Sun', 'Come, the courses are over.');
 
 --
 -- Вывод данных для таблицы Roles

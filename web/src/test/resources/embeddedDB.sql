@@ -63,9 +63,9 @@ CREATE TABLE Courses
 
 CREATE TABLE Course_users
 (
-  id        INT(11) NOT NULL AUTO_INCREMENT,
-  course_id INT(11) NOT NULL,
-  user_id   INT(11) NOT NULL,
+  id         INT(11)      NOT NULL AUTO_INCREMENT,
+  course_id  INT(11)      NOT NULL,
+  user_id    INT(11)      NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -169,4 +169,10 @@ INSERT INTO Password_reset (id, email, uuid, creation_time)
 VALUES ('1', 'email1@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c5', '2017-10-09 00:00:00');
 
 INSERT INTO Password_reset (id, email, uuid, creation_time)
-VALUES ('2', 'email2@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c6', '2017-10-09 11:00:00')
+VALUES ('2', 'email2@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c6', '2017-10-09 11:00:00');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'Goodman', NULL, NULL, '0', '38073 777 00 00', '3');
+
+INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
+VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 850.09, 7, 'Sat, Sun', 'Welcome (=');

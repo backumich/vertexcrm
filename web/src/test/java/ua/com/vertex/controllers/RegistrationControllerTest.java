@@ -87,8 +87,7 @@ public class RegistrationControllerTest {
 
     @Test
     public void processRegistrationReturnCorrectViewWhenException() throws Exception {
-        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult))
-                .thenThrow(new RuntimeException(NAME));
+        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)).thenThrow(new RuntimeException(NAME));
         String reCaptchaResponse = httpServletRequest.getParameter("g-recaptcha-response");
         String reCaptchaRemoteAddr = httpServletRequest.getRemoteAddr();
         when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);
