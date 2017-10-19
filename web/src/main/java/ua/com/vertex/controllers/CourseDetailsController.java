@@ -34,7 +34,6 @@ public class CourseDetailsController {
     static final String COURSES = "courses";
     private static final String COURSE_ID = "courseId";
     static final String TEACHERS = "teachers";
-    static final String LOGGER_SERVER_EXCEPTION = "Problems with the server, try again later.";
 
     private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
 

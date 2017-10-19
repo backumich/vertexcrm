@@ -25,7 +25,6 @@ import java.io.IOException;
 public class RegistrationController {
     static final String REGISTRATION_PAGE = "registration";
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
-    static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
     private static final String CAPTCHA = "captcha";
     private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
