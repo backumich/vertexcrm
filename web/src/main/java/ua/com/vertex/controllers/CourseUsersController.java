@@ -32,7 +32,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {
 
-        LOGGER.debug("Show users assigned to course id=" + course.getId());
+        LOGGER.debug(String.format("Show users assigned to course id=%d", course.getId()));
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
         DtoCourseUser dtoCourseUser = new DtoCourseUser();

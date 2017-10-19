@@ -61,8 +61,9 @@ public class RegistrationController {
                 mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
                         emailLogic.createRegistrationMessage(userFormRegistration));
             }
+        } else {
+            modelAndView.addObject(CAPTCHA, isVerified);
         }
-        modelAndView.addObject(CAPTCHA, isVerified);
         return modelAndView;
     }
 

@@ -31,8 +31,7 @@ public class ActivationUserController {
 
     @GetMapping
     public ModelAndView activateUser(@RequestParam("activeUser") String encodedEmail) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(PAGE_JSP);
+        ModelAndView modelAndView = new ModelAndView(PAGE_JSP);
 
         String email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
         LOGGER.debug("Encrypted email " + encodedEmail);
