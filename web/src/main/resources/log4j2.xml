@@ -19,7 +19,15 @@
         <!--  -->
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Logger name="org.springframework.jdbc" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="ua.com.vertex" level="DEBUG" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Root level="INFO">
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="CONSOLE"/>
         </Root>

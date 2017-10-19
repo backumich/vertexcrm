@@ -12,7 +12,11 @@ public interface CourseLogic {
 
     int getQuantityCourses();
 
-    List<Course> getCoursesPerPages(DataNavigator dataNavigator);
+    int getQuantityCourses(User teacher);
+
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator);
+
+    List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher);
 
     int addCourse(Course course);
 
