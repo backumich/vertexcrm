@@ -45,7 +45,7 @@ public class RootConfig {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "bcrypt")
+    @ConfigurationProperties(prefix = "encryption.strength")
     public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
         return new BCryptPasswordEncoder();
     }

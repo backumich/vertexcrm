@@ -1,8 +1,9 @@
 package ua.com.vertex.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,18 +16,25 @@ import ua.com.vertex.logic.SpringDataUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    private BCryptPasswordEncoder passwordEncoder;
-    private static final int VALIDITY_SECONDS = 604800;
     public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
-    @Bean
-    public SpringDataUserDetailsService springDataUserDetailsService() {
-        return new SpringDataUserDetailsService();
-    }
+    private final SpringDataUserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    @Value("${remember.me.validity.seconds}")
+    private int validityTime;
 
     @Autowired
-    public SecurityWebConfig(BCryptPasswordEncoder passwordEncoder) {
+    public SecurityWebConfig(SpringDataUserDetailsService userDetailsService,
+                             BCryptPasswordEncoder passwordEncoder) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -36,7 +44,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .anyRequest().permitAll()
 
                 .and()
@@ -59,16 +68,10 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .rememberMe()
-                .tokenValiditySeconds(VALIDITY_SECONDS)
+                .tokenValiditySeconds(validityTime)
 
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder);
     }
 }

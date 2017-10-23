@@ -15,8 +15,10 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
@@ -24,6 +26,7 @@ import ua.com.vertex.utils.DataNavigator;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -333,6 +336,60 @@ public class UserDaoImpl implements UserDaoInf {
                 .setRole(Role.valueOf(resultSet.getString(ROLE_NAME)))
                 .setIsActive(resultSet.getInt(IS_ACTIVE) == 1)
                 .getInstance());
+    }
+
+    @Override
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        String query = "INSERT INTO Password_reset (email, uuid, creation_time) VALUES (:email, :uuid, :creationTime)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("uuid", uuid);
+        source.addValue("creationTime", creationTime);
+
+        jdbcTemplate.update(query, source, keyHolder);
+        LOGGER.debug(String.format("Params to restore password for email=%s were saved", email));
+
+        return keyHolder.getKey().longValue();
+    }
+
+    @Override
+    public PasswordResetDto getEmailByUuid(long id, String uuid) {
+        String query = "SELECT email, creation_time FROM Password_reset WHERE id =:id AND uuid =:uuid";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("id", id);
+        source.addValue("uuid", uuid);
+        PasswordResetDto dto;
+
+        try {
+            dto = jdbcTemplate.queryForObject(query, source, this::mapPasswordResetDto);
+            LOGGER.debug(String.format("Password reset email %s was retrieved from DB", dto.getEmail()));
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("Password reset email address was not found by ID and UUID");
+        }
+        return dto;
+    }
+
+    private PasswordResetDto mapPasswordResetDto(ResultSet resultSet, int i) throws SQLException {
+        return PasswordResetDto.builder()
+                .email(resultSet.getString("email"))
+                .creationTime(resultSet.getTimestamp("creation_time").toLocalDateTime())
+                .build();
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        String query = "UPDATE Users SET password =:password WHERE email=:email";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("password", password);
+
+        int count = jdbcTemplate.update(query, source);
+        if (count == 0) throw new UpdatedPasswordNotSaved("Updated password was not saved");
+        LOGGER.debug(String.format("New password for email=%s was saved", email));
     }
 
     private MapSqlParameterSource getRegistrationParameters(User user) {
