@@ -1,7 +1,9 @@
 package ua.com.vertex.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,15 +19,18 @@ import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Configuration
 @EnableWebSecurity
+@PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
     public static final String RE_CAPTCHA = "ReCaptcha on logging in was missed";
     public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
-    private static final int VALIDITY_SECONDS = 604800;
 
     private final SpringDataUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginBruteForceDefender defender;
+
+    @Value("${remember.me.validity.seconds}")
+    private int validityTime;
 
     @Autowired
     public SecurityWebConfig(SpringDataUserDetailsService userDetailsService,
@@ -47,7 +52,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .anyRequest().permitAll()
 
                 .and()
@@ -64,7 +70,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                         }
                         response.sendRedirect("/logIn?error");
                     } else if (e.getMessage().equals(RE_CAPTCHA)) {
-                        throw new RuntimeException(RE_CAPTCHA, e);
+                        throw new RuntimeException(RE_CAPTCHA);
                     } else {
                         throw new RuntimeException(UNKNOWN_ERROR, e);
                     }
@@ -78,7 +84,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .rememberMe()
-                .tokenValiditySeconds(VALIDITY_SECONDS)
+                .tokenValiditySeconds(validityTime)
 
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
