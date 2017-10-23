@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -164,7 +163,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getUsersAssignedToCourse1ReturnsNotEmptyListOfUsers() {
         final int numberOfUsersAssigned = 2;
 
@@ -176,7 +174,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getUsersAssignedToCourse5ReturnsEmptyListOfUsers() {
         final int notExistingCourseId = 5;
 
@@ -186,7 +183,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void removeUserFromCourse() {
         dto.setCourseId(COURSE_ID);
         dto.setUserId(user1.getUserId());
@@ -197,7 +193,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void assignUserToCourse() {
         dto.setCourseId(COURSE_ID);
         dto.setUserId(user3.getUserId());
@@ -208,7 +203,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByFirstNameFullMatch() {
         final String fullMatchingName = "FirstName";
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
@@ -220,7 +214,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByFirstNamePartialMatch() {
         final String partialMatchingName = "F";
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
@@ -232,7 +225,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByFirstNameNonMatch() {
         final String nonMatchingName = "notExistingFirstName";
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
@@ -244,7 +236,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByLastNameFullMatch() {
         final String fullMatchingName = "LastName";
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
@@ -256,7 +247,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByLastNamePartialMatch() {
         final String partialMatchingName = "L";
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
@@ -268,7 +258,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByLastNameNonMatch() {
         final String nonMatchingName = "notExistingLastName";
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
@@ -280,7 +269,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByEmailFullMatch() {
         final String fullMatchingEmail = "22@test.com";
         dto.setSearchType(SEARCH_TYPE_EMAIL);
@@ -292,7 +280,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByEmailPartialMatch() {
         final String partialMatchingEmail = "@";
         dto.setSearchType(SEARCH_TYPE_EMAIL);
@@ -304,7 +291,6 @@ public class CourseDaoImplTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void searchUsersByEmailNotMatch() {
         final String nonMatchingEmail = "notExistingEmail";
         final User teacher = new User.Builder().setUserId(1).setEmail("email1")

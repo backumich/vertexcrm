@@ -1,8 +1,10 @@
 package ua.com.vertex.dao.interfaces;
 
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,5 +45,11 @@ public interface UserDaoInf {
     List<User> getCourseUsers(int courseId);
 
     List<User> getTeachers();
+
+    long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime);
+
+    PasswordResetDto getEmailByUuid(long id, String uuid);
+
+    void savePassword(String email, String password);
 
 }

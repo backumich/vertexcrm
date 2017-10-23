@@ -1,7 +1,6 @@
 package ua.com.vertex.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,21 +11,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
+import ua.com.vertex.utils.LoginBruteForceDefender;
+
+import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    private BCryptPasswordEncoder passwordEncoder;
-    private static final int VALIDITY_SECONDS = 604800;
     public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
-    @Bean
-    public SpringDataUserDetailsService springDataUserDetailsService() {
-        return new SpringDataUserDetailsService();
-    }
+    public static final String RE_CAPTCHA = "ReCaptcha on logging in was missed";
+    public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
+    private static final int VALIDITY_SECONDS = 604800;
+
+    private final SpringDataUserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final LoginBruteForceDefender defender;
 
     @Autowired
-    public SecurityWebConfig(BCryptPasswordEncoder passwordEncoder) {
+    public SecurityWebConfig(SpringDataUserDetailsService userDetailsService,
+                             BCryptPasswordEncoder passwordEncoder, LoginBruteForceDefender defender) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.defender = defender;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -42,10 +53,18 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/logIn")
-                .successForwardUrl("/loggedIn")
+                .successHandler(((request, response, authentication) -> {
+                    defender.clearEntry(authentication.getName());
+                    response.sendRedirect("/loggedIn");
+                }))
                 .failureHandler((request, response, e) -> {
                     if (e instanceof BadCredentialsException) {
+                        if (defender.verifyUsername(request.getParameter("username")) == BLOCKED_NUMBER) {
+                            throw new RuntimeException(LOGIN_ATTEMPTS);
+                        }
                         response.sendRedirect("/logIn?error");
+                    } else if (e.getMessage().equals(RE_CAPTCHA)) {
+                        throw new RuntimeException(RE_CAPTCHA, e);
                     } else {
                         throw new RuntimeException(UNKNOWN_ERROR, e);
                     }
@@ -64,11 +83,5 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder);
     }
 }

@@ -3,25 +3,32 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
-
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${passwordLinkExpire}")
+    private int passwordLinkExpire;
 
     @Override
     public List<String> getAllUserIds() {
@@ -50,6 +57,29 @@ public class UserLogicImpl implements UserLogic {
 
     public int getQuantityUsers() {
         return userDao.getQuantityUsers();
+    }
+
+    @Override
+    public boolean isUserRegisteredAndActive(String email) {
+        User user = userDao.userForRegistrationCheck(email).orElse(User.EMPTY_USER);
+        return user.isActive();
+    }
+
+    @Override
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        return userDao.setParamsToRestorePassword(email, uuid, creationTime);
+    }
+
+    @Override
+    public String getEmailByUuid(long id, String uuid) {
+        PasswordResetDto dto = userDao.getEmailByUuid(id, uuid);
+        LOGGER.debug("Checking if link to restore password has expired");
+        return dto.getCreationTime().plusMinutes(passwordLinkExpire).isAfter(LocalDateTime.now()) ? dto.getEmail() : "";
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        userDao.savePassword(email, bCryptPasswordEncoder.encode(password));
     }
 
     @Override

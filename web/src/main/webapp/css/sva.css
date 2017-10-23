@@ -34,6 +34,18 @@
     font-weight: bold;
 }
 
+.width300 {
+    width: 300px;
+}
+
+.width400 {
+    width: 400px;
+}
+
+.width600 {
+    width: 600px;
+}
+
 .tableHeader {
     font-weight: bold;
     color: #9acfea;

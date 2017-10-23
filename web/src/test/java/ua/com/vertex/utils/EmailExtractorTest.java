@@ -3,7 +3,6 @@ package ua.com.vertex.utils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,7 +25,6 @@ public class EmailExtractorTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void nullIsReturnedForAnonymousUser() {
         String email = emailExtractor.getEmailFromAuthentication();
         assertTrue(email == null);

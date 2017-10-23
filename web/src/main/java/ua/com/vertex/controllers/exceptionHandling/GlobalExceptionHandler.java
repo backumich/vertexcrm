@@ -35,4 +35,11 @@ public class GlobalExceptionHandler {
         model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
         return ERROR;
     }
+
+    @ExceptionHandler(UpdatedPasswordNotSaved.class)
+    public String handleUpdatedPasswordNotSaved(UpdatedPasswordNotSaved e, Model model) {
+        LOGGER.debug(e, e);
+        model.addAttribute(ERROR_MESSAGE, "The new password was not saved. Please, try again");
+        return ERROR;
+    }
 }

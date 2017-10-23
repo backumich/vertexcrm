@@ -25,38 +25,28 @@ public class LoggingLogicImpl implements LoggingLogic {
 
     @Override
     public Optional<User> logIn(String email) {
-        Optional<User> toReturn;
-
-        if (email.isEmpty()) {
-            toReturn = Optional.empty();
-        } else {
-            toReturn = userDao.logIn(email);
-        }
-
-        return toReturn;
-    }
-
-    private String requiredView() throws Exception {
-        String view = USER_PAGE;
-        Collection authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        if (authorities.size() != 1) {
-            throw new Exception(AUTHORITIES_ERROR);
-        }
-        if (ADMIN.equals(authorities.iterator().next().toString())) {
-            view = ADMIN_PAGE;
-        }
-
-        return view;
+        return email.isEmpty() ? Optional.empty() : userDao.logIn(email);
     }
 
     @Override
-    public String setUser(String email, Model model) throws Exception {
-        String view = requiredView();
+    public String setUser(String email, Model model) {
         User user = userLogic.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Not logged in: failed to fetch login details"));
         model.addAttribute("user", user);
 
+        return requiredView();
+    }
+
+    private String requiredView() {
+        String view = USER_PAGE;
+        Collection authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+
+        if (authorities.size() != 1) {
+            throw new RuntimeException(AUTHORITIES_ERROR);
+        }
+        if (ADMIN.equals(authorities.iterator().next().toString())) {
+            view = ADMIN_PAGE;
+        }
         return view;
     }
 
