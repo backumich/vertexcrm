@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static ua.com.vertex.controllers.RegistrationController.OUR_EMAIL;
-import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.EMAIL_NOT_FOUND;
 
 @Controller
 public class PasswordResetEmailController {
@@ -27,6 +26,7 @@ public class PasswordResetEmailController {
     static final String EMAIL_SENT = "password/passwordResetEmailSent";
     static final String EMAIL_INVALID = "emailInvalid";
     static final String EMAIL = "email";
+    static final String EMAIL_NOT_FOUND = "emailNotFound";
     static final String CAPTCHA_MISSED = "captcha";
 
     private final ReCaptchaService reCaptchaService;

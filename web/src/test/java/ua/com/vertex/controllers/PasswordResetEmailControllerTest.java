@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static ua.com.vertex.controllers.PasswordResetEmailController.*;
-import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.EMAIL_NOT_FOUND;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfigWithMockBeans.class)
