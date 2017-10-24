@@ -115,10 +115,6 @@
         <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
     </c:if>
 
-    <c:if test="${captcha == true}">
-        <p><span class="fontSize140 red">You missed captcha</span></p>
-    </c:if>
-
     <sf:form action="logIn" method="post">
         <table>
             <tr>
@@ -145,11 +141,6 @@
             </tr>
             <tr>
                 <td><br><br></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
-                </td>
             </tr>
             <tr>
                 <td class="buttonPaddingTop"><input type="submit" value="Log in" class="black"></td>

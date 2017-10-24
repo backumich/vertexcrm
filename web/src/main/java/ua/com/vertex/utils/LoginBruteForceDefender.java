@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@PropertySource("classpath:reCaptcha.properties")
+@PropertySource("classpath:application.properties")
 public class LoginBruteForceDefender {
     private static final Logger LOGGER = LogManager.getLogger(LoginBruteForceDefender.class);
     public static final int BLOCKED_NUMBER = -1;

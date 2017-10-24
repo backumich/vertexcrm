@@ -20,7 +20,7 @@ import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-@PropertySource("classpath:reCaptcha.properties")
+@PropertySource("classpath:application.properties")
 public class LoginBruteForceDefenderTest {
 
     @Value("${login.attempts}")

@@ -15,13 +15,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import ua.com.vertex.context.TestConfigWithMockBeans;
-import ua.com.vertex.utils.ReCaptchaService;
+import ua.com.vertex.context.TestConfig;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -32,22 +30,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfigWithMockBeans.class)
+@ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
-@ActiveProfiles("withMockBeans")
+@ActiveProfiles("test")
 public class AuthenticationTest {
     private static final String USER_EMAIL = "44@test.com";
     private static final String CORRECT_PASSWORD = "123456";
     private static final String INCORRECT_DATA = "incorrect";
     private static final String ADMIN_EMAIL = "33@test.com";
-    private static final String RE_CAPTCHA_RESPONSE = null;
-    private static final String RE_CAPTCHA_REMOTE_ADDRESS = "127.0.0.1";
 
     @Autowired
     private WebApplicationContext context;
-
-    @Autowired
-    private ReCaptchaService reCaptchaService;
 
     private MockMvc mockMvc;
 
@@ -62,7 +55,6 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void userTestFormLoginWithCorrectLoginAndPassword() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         Collection<? extends GrantedAuthority> authorities = Collections
                 .singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(CORRECT_PASSWORD))
@@ -75,7 +67,6 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void adminTestFormLoginWithCorrectLoginAndPassword() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         Collection<? extends GrantedAuthority> authorities = Collections
                 .singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         mockMvc.perform(formLogin("/logIn").user(ADMIN_EMAIL).password(CORRECT_PASSWORD))
@@ -88,7 +79,6 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void testFormLoginWithIncorrectPassword() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(INCORRECT_DATA))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
@@ -98,27 +88,15 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void testFormLoginWithIncorrectLogin() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(formLogin("/logIn").user(INCORRECT_DATA).password(CORRECT_PASSWORD))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
                 .andExpect(unauthenticated());
     }
 
-    @Test(expected = RuntimeException.class)
-    @WithAnonymousUser
-    public void missedReCaptcha() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(false);
-        mockMvc.perform(post("/logIn")
-                .param("username", USER_EMAIL)
-                .param("password", CORRECT_PASSWORD)
-                .with(csrf()));
-    }
-
     @Test
     @WithAnonymousUser
     public void loginWithValidCsrf() throws Exception {
-        when(reCaptchaService.verify(RE_CAPTCHA_RESPONSE, RE_CAPTCHA_REMOTE_ADDRESS)).thenReturn(true);
         mockMvc.perform(post("/logIn")
                 .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
