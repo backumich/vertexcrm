@@ -32,19 +32,19 @@ import static org.junit.Assert.*;
 public class TransactionsInLogicTest {
 
     @Autowired
-    private TransactionProvider<CourseLogic, DtoCourseUser, Object, Object> transactionProviderCourseLogic;
+    private TransactionProvider<CourseLogic, DtoCourseUser, Object> transactionProviderCourseLogic;
     @Autowired
     private CourseLogic courseLogic;
 
     @Autowired
-    private TransactionProvider<CertificateLogic, Certificate, User, Object> transactionProviderCertificateLogic;
+    private TransactionProvider<CertificateLogic, Certificate, User> transactionProviderCertificateLogic;
     @Autowired
     private CertificateLogic certificateLogic;
     @Autowired
     private UserDaoInf userDao;
 
     @Autowired
-    private TransactionProvider<PaymentLogic, PaymentForm, Object, Object> transactionProviderPaymentLogic;
+    private TransactionProvider<PaymentLogic, PaymentForm, Object> transactionProviderPaymentLogic;
     @Autowired
     private PaymentLogic paymentLogic;
     @Autowired
@@ -65,16 +65,16 @@ public class TransactionsInLogicTest {
 
         assertFalse(String.format("user with id = %d should not be assigned to the course with id = %d before test!",
                 userId, courseId),
-                courseLogic.getUsersAssignedToCourse(courseId).stream().anyMatch((u) -> u.getUserId() == userId));
+                courseLogic.getUsersAssignedToCourse(courseId).stream().anyMatch(u -> u.getUserId() == userId));
 
         try {
-            transactionProviderCourseLogic.withPropagationRequiresNew(CourseLogic::assignUserToCourse,
-                    courseLogic, dto, true);
+            transactionProviderCourseLogic.withPropagationRequiresNewAndException(
+                    CourseLogic::assignUserToCourse, courseLogic, dto);
         } catch (RuntimeException ignored) {}
 
         assertFalse(String.format("user with id = %d is still assigned to course with id = %d ! " +
                 "Rollback failed or method was changed!", userId, courseId),
-                courseLogic.getUsersAssignedToCourse(courseId).stream().anyMatch((u) -> u.getUserId() == userId));
+                courseLogic.getUsersAssignedToCourse(courseId).stream().anyMatch(u -> u.getUserId() == userId));
 
     }
 
@@ -90,8 +90,8 @@ public class TransactionsInLogicTest {
                 userDao.getUserByEmail(userEmail).isPresent());
 
         try {
-            transactionProviderCertificateLogic.withPropagationRequiresNew(CertificateLogic::addCertificateAndCreateUser,
-                    certificateLogic, certificate, user, true);
+            transactionProviderCertificateLogic.withPropagationRequiresNewAndException(
+                    CertificateLogic::addCertificateAndCreateUser, certificateLogic, certificate, user);
         } catch (RuntimeException ignored) {}
 
         assertFalse(String.format("no user with email = %s should exist! " +
@@ -117,8 +117,8 @@ public class TransactionsInLogicTest {
                 4000d, accounting.get().getDebt(), 0);
 
         try {
-            transactionProviderPaymentLogic.withPropagationRequiresNew(PaymentLogic::createNewPaymentAndUpdateAccounting,
-                    paymentLogic, paymentForm, true);
+            transactionProviderPaymentLogic.withPropagationRequiresNewAndException(
+                    PaymentLogic::createNewPaymentAndUpdateAccounting, paymentLogic, paymentForm);
         } catch (RuntimeException ignored) {}
 
         accounting = accountingDaoImplForTest.getAccountingByCourseIdAndUserId(courseId, userId);
