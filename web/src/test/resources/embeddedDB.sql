@@ -134,6 +134,8 @@ VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1
 
 INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (1, 1, 1, 4000, 4000);
 
+INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (2, 2, 1, 4000, 4000);
+
 INSERT INTO Courses (id, name, start, finished, price, teacher_id, notes)
 VALUES (1, 'JavaPro', '2017-02-01', 0, 4000, 1, 'Test');
 

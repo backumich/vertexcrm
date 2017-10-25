@@ -41,7 +41,6 @@ public class CourseLogicImplTest {
 
     private Course course;
     private DtoCourseUser dto;
-    private Accounting accounting;
 
     @Before
     public void setUp() {
@@ -52,8 +51,6 @@ public class CourseLogicImplTest {
         dto = new DtoCourseUser();
         dto.setCourseId(COURSE_ID);
         dto.setUserId(USER_ID);
-        accounting = new Accounting.Builder().setUserId(USER_ID).setCourseId(COURSE_ID).setCourseCoast(8000d)
-                .setDept(8000d).getInstance();
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -110,6 +107,9 @@ public class CourseLogicImplTest {
 
     @Test
     public void assignUserToCourseInvokesDao() {
+        Accounting accounting = new Accounting.Builder().setUserId(USER_ID).setCourseId(COURSE_ID)
+                .setCourseCoast(8000d).setDept(8000d).getInstance();
+
         when(courseDaoInf.getCourseById(COURSE_ID)).thenReturn(Optional.ofNullable(
                 new Course.Builder().setId(COURSE_ID).setPrice(new BigDecimal(8000)).getInstance()));
 
@@ -123,7 +123,7 @@ public class CourseLogicImplTest {
         when(courseDaoInf.getCourseById(anyInt())).thenReturn(Optional.empty());
 
         courseLogic.assignUserToCourse(dto);
-        fail("We found course with id = 0!");
+        fail("We throw no exception when cannot find course!");
     }
 
     @Test
