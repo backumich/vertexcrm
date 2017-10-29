@@ -152,7 +152,7 @@
                 <td>
                     <label class="black">
                         <select name="searchType" id="searchType">
-                            <option value="first_name">By first name</option>
+                            <option selected value="first_name">By first name</option>
                             <option value="last_name">By last name</option>
                             <option value="email">By email</option>
                         </select>
