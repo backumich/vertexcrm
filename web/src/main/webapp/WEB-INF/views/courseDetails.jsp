@@ -104,9 +104,16 @@
     </div>
 </div>
 
+<sec:authorize access="hasRole('ADMIN')">
+    <sec:authentication property="principal.username" var="admin"/>
+</sec:authorize>
+<sec:authorize access="hasRole('TEACHER')">
+    <sec:authentication property="principal.username" var="teacher"/>
+</sec:authorize>
 
 <div align="center" class="page gray-page mh100 up-padding">
     <div align="center">
+        <c:if test="${admin != null}">
         <form:form commandName="course" action="updateCourse" cssClass="buttonText" method="post">
             <span class="fontSize180 silver">Course details</span><br><br><br>
             <table class="table fontSize140" cols="2" width="600">
@@ -184,14 +191,105 @@
         </c:if>
         <br>
     </div>
+    </c:if>
 
-
-    <div align="center">
-        <div class="hrefText" align="center">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
+    <c:if test="${teacher != null}">
+        <div align="center">
+            <span class="fontSize180 silver">Course details</span><br><br><br>
+            <table class="table fontSize120" cols="2" width="600">
+                <tr>
+                    <td>Course Id:</td>
+                    <td>${course.id}</td>
+                </tr>
+                <tr>
+                    <td>Course name:</td>
+                    <td>${course.name}</td>
+                </tr>
+                <tr>
+                    <td>Start date:</td>
+                    <td>${course.start}</td>
+                </tr>
+                <tr>
+                    <td>Is finished:</td>
+                    <td><c:choose>
+                        <c:when test="${course.finished}">
+                            Yes
+                        </c:when>
+                        <c:otherwise>
+                            No
+                        </c:otherwise>
+                    </c:choose></td>
+                </tr>
+                <tr>
+                    <td>Price:</td>
+                    <td>${course.price}</td>
+                </tr>
+                <tr>
+                    <td>Schedule:</td>
+                    <td>${course.schedule}</td>
+                </tr>
+                <tr>
+                    <td>Notes:</td>
+                    <td>${course.notes}</td>
+                </tr>
+            </table>
         </div>
+        <br>
+        <br>
+        <br>
+        <c:if test="${empty listeners}">
+            <div align="center">
+                <tr>
+                    <td>There are no listeners!</td>
+                </tr>
+            </div>
+            <br>
+            <br>
+            <br>
+        </c:if>
+        <c:if test="${!empty listeners}">
+            <div align="center">
+                <span class="fontSize180 silver">Listeners:</span><br><br><br>
+                <table class="table fontSize120" cols="2" width="600" border="2">
+                    <tr>
+                        <th width="80px">User ID</th>
+                        <th width="150px">E-mail</th>
+                        <th width="150px">Last name</th>
+                        <th width="100px">First name</th>
+                        <th width="100px"></th>
+                    </tr>
+                    <c:forEach var="user" items="${listeners}">
+                        <tr>
+                            <td>${user.userId} </td>
+                            <td>${user.email} </td>
+                            <td>${user.lastName} </td>
+                            <td>${user.firstName} </td>
+                            <td>
+                                <c:set var="titleURL">
+                                    <c:url value="studentDetails">
+                                        <c:param name="userId" value="${user.userId}"/>
+                                    </c:url>
+                                </c:set>
+                                <a href="${titleURL}">Detail</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <br>
+            <br>
+            <br>
+        </c:if>
+    </c:if>
+</div>
+
+
+<div align="center">
+    <div class="hrefText" align="center">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/" />">Home</a>
     </div>
+</div>
 </div>
 
 <div class="footer">

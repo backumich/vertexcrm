@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserLogicImpl implements UserLogic {
 
-    private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+    private static final Logger logger = LogManager.getLogger(UserLogicImpl.class);
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -54,7 +54,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
-        LOGGER.debug("Get part data users list (dataNavigator)");
+        logger.debug("Get part data users list (dataNavigator)");
 
         return userDao.getUsersPerPages(dataNavigator);
     }
@@ -81,21 +81,21 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public void registrationUserInsert(User user) {
-        LOGGER.debug(String.format("Call - userDao.registrationUserInsert(%s) ;", user));
+        logger.debug(String.format("Call - userDao.registrationUserInsert(%s) ;", user));
         user.setPassword(encryptPassword(user.getPassword()));
         userDao.registrationUserInsert(user);
     }
 
     @Override
     public void registrationUserUpdate(User user) throws DataAccessException {
-        LOGGER.debug(String.format("Call - userDao.registrationUserUpdate(%s) ;", user));
+        logger.debug(String.format("Call - userDao.registrationUserUpdate(%s) ;", user));
         user.setPassword(encryptPassword(user.getPassword()));
         userDao.registrationUserUpdate(user);
     }
 
     @Override
     public Map<Integer, String> getTeachers() throws DataAccessException {
-        LOGGER.debug("Call - userDao.getTeachers()");
+        logger.debug("Call - userDao.getTeachers()");
 
         return userDao.getTeachers().stream().collect(Collectors.toMap(User::getUserId,
                 x -> x.getFirstName() + " " + x.getLastName() + " \'" + x.getEmail() + "\'"));
@@ -103,7 +103,7 @@ public class UserLogicImpl implements UserLogic {
 
     @Override
     public String encryptPassword(String password) {
-        LOGGER.debug("Password encryption");
+        logger.debug("Password encryption");
         return bCryptPasswordEncoder.encode(password);
     }
 
@@ -116,7 +116,7 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public List<User> getCourseUsers(int courseId) {
 
-        LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
+        logger.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
         return userDao.getCourseUsers(courseId);
     }
 }

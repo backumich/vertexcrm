@@ -1,24 +1,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
 <html lang="en" charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Vertex Crm</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href="./css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<link rel="stylesheet" href="css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="css/slick.css">
-<link rel="stylesheet" href="css/main.css">
-<link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
-<link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-<script type="text/javascript" async="" src="javascript/watch.js"></script>
-<script async="" src="javascript/analytics.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style id="style-1-cropbar-clipper">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Vertex Crm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="./css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sva.css">
+    <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
+    <script type="text/javascript" async="" src="javascript/watch.js"></script>
+    <script async="" src="javascript/analytics.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-62731553-2', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
     .en-markup-crop-options {
         top: 18px !important;
         left: 50% !important;
@@ -40,23 +59,43 @@
     .buttonText {
         color: black;
     }
-</style>
+    </style>
 </head>
 <body class="inside footer-under">
+<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#perPage').change(function () {
-            $('#submit').click();
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+            try {
+                w.yaCounter37563830 = new Ya.Metrika({
+                    id: 37563830,
+                    clickmap: true,
+                    trackLinks: true,
+                    accurateTrackBounce: true,
+                    webvisor: true
+                });
+            } catch (e) {
+            }
         });
 
-        $('a.page').click(function () {
-            var id = $(this).attr('id');
-            $('#nextPage').val(id);
-            $('#submit').click();
-        });
-    });
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () {
+                n.parentNode.insertBefore(s, n);
+            };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+            f();
+        }
+    })(document, window, "yandex_metrika_callbacks");
 </script>
 <noscript>&lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/37563830" style="position:absolute; left:-9999px;" alt="" /&gt;&lt;/div&gt;</noscript>
+<!-- /Yandex.Metrika counter -->
 <div class="nav navbar navbar-fixed-top navbar-hide">
     <div class="container"><a href="https://vertex-academy.com/index.html" class="logo pull-left"></a>
         <button data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span
@@ -78,95 +117,34 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5">
         <div align="center">
-            <br/>
-            <br/>
-            <br/>
-            <a href="<c:url value="/addCourse"/>">Add course</a>
-            <br/>
-            <br/>
-            <br/>
-            <c:if test="${dataNavigator.currentNumberPage!=1}">
-                <a id="1" class="page" style="cursor: pointer;">&lt;&lt;</a>
-            </c:if>
-            <c:if test="${dataNavigator.currentNumberPage>1}">
-                <a id="${dataNavigator.currentNumberPage-1}" class="page" style="cursor: pointer;">Prev</a>
-            </c:if>
+            <span class="fontSize180 silver">Student details</span><br><br><br>
 
-            <c:forEach begin="1" end="${dataNavigator.totalPages}" var="val">
-                <c:if test="${val==dataNavigator.currentNumberPage}">
-                    <a style="color: #ffffff" id="${val}" class="page" style="cursor: pointer;">${val}</a>
-                </c:if>
-                <c:if test="${val!=dataNavigator.currentNumberPage}">
-                    <a id="${val}" class="page" style="cursor: pointer;">${val}</a>
-                </c:if>
-            </c:forEach>
-
-            <c:if test="${dataNavigator.currentNumberPage<dataNavigator.lastPage}">
-                <a id="${dataNavigator.currentNumberPage+1}" class="page" style="cursor: pointer;">Next</a>
-            </c:if>
-            <c:if test="${dataNavigator.lastPage!=dataNavigator.currentNumberPage}">
-                <a id="${dataNavigator.lastPage}" class="page" style="cursor: pointer;">&gt;&gt;</a>
-            </c:if>
-            <br/>
-            <br/>
-            <form:form action="viewAllCourses" method="post" commandName="dataNavigator">
-                <form:select id="perPage" class="buttonText" path="rowPerPage"
-                             items="${dataNavigator.countRowPerPage}"/>
-
-                <input id="currentNamePage" type="hidden" name="currentNamePage"
-                       value="${dataNavigator.currentNamePage}">
-                <input id="currentNumberPage" type="hidden" name="currentNumberPage"
-                       value="${dataNavigator.currentNumberPage}">
-                <input id="nextPage" type="hidden" name="nextPage" value="${dataNavigator.nextPage}">
-                <input id="lastPage" type="hidden" name="lastPage" value="${dataNavigator.lastPage}">
-                <input id="rowPerPage" type="hidden" name="rowPerPage"
-                       value="${dataNavigator.rowPerPage}">
-                <input id="totalPages" type="hidden" name="totalPages" value="${dataNavigator.totalPages}">
-                <input id="dataSize" type="hidden" name="dataSize" value="${dataNavigator.dataSize}">
-
-                <input value="Submit" id="submit" class="buttonText" type="submit" style="display:none;"/>
-            </form:form>
-            <br/>
-            <br/>
-            <br/>
-
-            <table bordercolor="red" border="2">
+            <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
+            <table class="table fontSize120" cols="2" width="600">
                 <tr>
-                    <th width="60px">Course ID</th>
-                    <th width="150px">Course name</th>
-                    <th width="150px">Start course</th>
-                    <th width="100px">Finished</th>
-                    <th width="100px">Price</th>
-                    <th width="300px">Teacher name</th>
-                    <th width="150px">Schedule</th>
-                    <th width="300px">Notes</th>
-                    <th width="100px"></th>
+                    <td>User Id:</td>
+                    <td>${user.userId}</td>
                 </tr>
-                <c:if test="${empty courses}">
-                    <tr>
-                        <td>There are no courses!</td>
-                    </tr>
-                </c:if>
-                <c:forEach var="courses" items="${courses}">
-                    <tr>
-                        <td>${courses.id} </td>
-                        <td>${courses.name} </td>
-                        <td>${courses.start} </td>
-                        <td>${courses.finished} </td>
-                        <td>${courses.price} </td>
-                        <td>${courses.teacher.firstName} ${courses.teacher.lastName} '${courses.teacher.email}'</td>
-                        <td>${courses.schedule} </td>
-                        <td>${courses.notes} </td>
-                        <td>
-                            <c:set var="titleURL">
-                                <c:url value="/courseDetails">
-                                    <c:param name="courseId" value="${courses.id}"/>
-                                </c:url>
-                            </c:set>
-                            <a href="${titleURL}">Detail</a>
-                        </td>
-                    </tr>
-                </c:forEach>
+                <tr>
+                    <td>E-mail:</td>
+                    <td>${user.email}</td>
+                </tr>
+                <tr>
+                    <td>Last name:</td>
+                    <td>${user.lastName}</td>
+                </tr>
+                <tr>
+                    <td>First name:</td>
+                    <td>${user.firstName}</td>
+                </tr>
+                <tr>
+                    <td>Discount:</td>
+                    <td>${user.discount}</td>
+                </tr>
+                <tr>
+                    <td>Phone:</td>
+                    <td>${user.phone}</td>
+                </tr>
             </table>
             <br/>
             <br/>
@@ -176,6 +154,7 @@
                 <a href="<c:url value="/" />">Home</a>
             </div>
         </div>
+
     </div>
 </div>
 <div class="footer">
@@ -237,5 +216,6 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
+
 </body>
 </html>

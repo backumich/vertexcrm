@@ -14,7 +14,13 @@ import java.util.Optional;
 
 @Service
 public class CourseLogicImpl implements CourseLogic {
+
     private final CourseDaoInf courseDaoInf;
+
+    @Autowired
+    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
+        this.courseDaoInf = courseDaoInf;
+    }
 
     @Override
     public int getQuantityCourses() {
@@ -22,8 +28,18 @@ public class CourseLogicImpl implements CourseLogic {
     }
 
     @Override
-    public List<Course> getCoursesPerPages(DataNavigator dataNavigator) {
-        return courseDaoInf.getAllCourses(dataNavigator);
+    public int getQuantityCourses(User teacher) {
+        return courseDaoInf.getQuantityCourses(teacher);
+    }
+
+    @Override
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator) {
+        return courseDaoInf.getCoursesPerPage(dataNavigator);
+    }
+
+    @Override
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher) {
+        return courseDaoInf.getCoursesPerPage(dataNavigator, teacher);
     }
 
     @Override
@@ -71,8 +87,4 @@ public class CourseLogicImpl implements CourseLogic {
         return courseDaoInf.searchForUsersToAssign(dto);
     }
 
-    @Autowired
-    public CourseLogicImpl(CourseDaoInf courseDaoInf) {
-        this.courseDaoInf = courseDaoInf;
-    }
 }

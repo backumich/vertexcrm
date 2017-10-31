@@ -97,7 +97,7 @@
 <div class="page gray-page mh100">
     <div class="container pt1_5" align="center">
         <c:if test="${empty users}">
-            <form:form cssClass="buttonText" method="post" commandName="userDataForSearch"
+            <form:form cssClass="buttonText" method="get" commandName="userDataForSearch"
                        action="searchUser">
                 <span class="fontSize180 silver">Search user:</span><br><br><br>
                 <table class="active">
@@ -118,7 +118,7 @@
     </div>
     <div class="container pt1_5" align="center">
         <c:if test="${!empty users}">
-            <form:form method="post" commandName="userIdForCertificate"
+            <form:form method="get" commandName="userIdForCertificate"
                        action="selectUser">
                 <span class="fontSize180 silver">Select user:</span><br><br><br>
                 <table class="active" cols="5" width="500">

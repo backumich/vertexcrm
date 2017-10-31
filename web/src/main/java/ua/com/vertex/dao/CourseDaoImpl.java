@@ -14,6 +14,7 @@ import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.dao.interfaces.CourseDaoInf;
+import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
@@ -42,46 +43,78 @@ public class CourseDaoImpl implements CourseDaoInf {
     private static final String SEARCH_PARAM = "searchParam";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final Logger LOGGER = LogManager.getLogger(CourseDaoImpl.class);
+    private static final Logger logger = LogManager.getLogger(CourseDaoImpl.class);
+
+    private DaoUtilInf daoUtil;
 
     @Override
-    public List<Course> getAllCourses(DataNavigator dataNavigator) {
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator) {
 
-        LOGGER.debug("Get all courses list");
+        logger.debug("Get all courses list");
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
-                "u.first_name, u.last_name, u.email FROM Courses c  INNER JOIN Users u ON u.user_id = c.teacher_id " +
+                "u.first_name, u.last_name, u.email " +
+                "FROM Courses c  INNER JOIN Users u ON u.user_id = c.teacher_id " +
                 "LIMIT :from, :offset";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1) * dataNavigator.getRowPerPage());
-        parameters.addValue("offset", dataNavigator.getRowPerPage());
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
 
         List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
 
-        String allCourses = courses.stream().map(Course::getName).collect(Collectors.joining("|"));
-        LOGGER.debug("Quantity courses -" + courses.size());
-        LOGGER.debug("All courses list -" + allCourses);
+        logger.debug("Quantity courses: {}; Courses list: {}",
+                () -> courses.size(), () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
+
+        return courses;
+    }
+
+    @Override
+    public List<Course> getCoursesPerPage(DataNavigator dataNavigator, User teacher) {
+
+        logger.debug("Get courses list, where teacher is {}", teacher);
+
+        String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
+                "u.first_name, u.last_name, u.email " +
+                "FROM Courses c INNER JOIN Users u ON c.teacher_id = :teacher_id AND u.user_id = :teacher_id " +
+                "LIMIT :from, :offset";
+
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
+        parameters.addValue("teacher_id", teacher.getUserId());
+
+        List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
+
+        logger.debug("Quantity courses: {}; Courses list: {}",
+                () -> courses.size(), () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
 
         return courses;
     }
 
     @Override
     public int getQuantityCourses() {
-        LOGGER.debug("Get count courses");
+        logger.debug("Get count courses");
         String query = "SELECT count(*) FROM Courses";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
 
     @Override
+    public int getQuantityCourses(User teacher) {
+        logger.debug("Get count courses, where teacher is {}", teacher);
+        String query = "SELECT count(*) FROM Courses WHERE teacher_id = :teacher_id";
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("teacher_id", teacher.getUserId());
+
+        return jdbcTemplate.queryForObject(query, parameters, int.class);
+    }
+
+    @Override
     public int addCourse(Course course) {
-        LOGGER.debug(String.format("Call - CourseDaoImpl.addCourse(%s)", course));
+        logger.debug("Call - CourseDaoImpl.addCourse({})", course);
 
         String query = "INSERT INTO Courses(name, start, finished, price, teacher_id, schedule, notes) " +
                 "VALUES (:name, :start, :finished, :price, :teacher_id, :schedule, :notes)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        LOGGER.debug("Try adding a new course into database");
+        logger.debug("Try adding a new course into database");
         jdbcTemplate.update(query, getCourseParameters(course), keyHolder);
 
         Number id = keyHolder.getKey();
@@ -102,13 +135,13 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public List<Course> getAllCoursesWithDept() {
-        LOGGER.debug("Call - courseDaoInf.getAllCoursesWithDept()");
+        logger.debug("Call - courseDaoInf.getAllCoursesWithDept()");
 
         String query = "SELECT DISTINCT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.notes, u.first_name," +
                 " u.last_name, u.email FROM Courses c  INNER JOIN Users u ON u.user_id = c.teacher_id " +
                 "INNER JOIN Accounting a ON  a.course_id = c.id WHERE a.debt > 0";
 
-        LOGGER.debug("Try select all courses where user has dept.");
+        logger.debug("Try select all courses where user has dept.");
         return jdbcTemplate.query(query, (resultSet, i) -> new Course.Builder()
                 .setId(resultSet.getInt(ID))
                 .setName(resultSet.getString(NAME))
@@ -125,7 +158,7 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public List<Course> searchCourseByNameAndStatus(String name, boolean isFinished) {
-        LOGGER.debug(String.format("Call courseDaoInf.searchCourseByNameAndStatus(%s, %s)", name, isFinished));
+        logger.debug("Call courseDaoInf.searchCourseByNameAndStatus({}, {})", name, isFinished);
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes, " +
                 "u.first_name, u.last_name, u.email FROM Courses c INNER JOIN Users u ON c.teacher_id = u.user_id " +
@@ -133,13 +166,13 @@ public class CourseDaoImpl implements CourseDaoInf {
         MapSqlParameterSource source = new MapSqlParameterSource(FINISHED, isFinished ? 1 : 0);
         source.addValue("courseName", "%" + name + "%");
 
-        LOGGER.debug(String.format("Search course by name - (%s) and finished - (%s).", name, isFinished));
+        logger.debug(String.format("Search course by name - (%s) and finished - (%s).", name, isFinished));
         return jdbcTemplate.query(query, source, (resultSet, i) -> mapCourses(resultSet));
     }
 
     @Override
     public int updateCourseExceptPrice(Course course) {
-        LOGGER.debug(String.format("Call courseDaoInf.updateCourseExceptPrice(%s)", course));
+        logger.debug("Call courseDaoInf.updateCourseExceptPrice({})", course);
 
         String query = "UPDATE Courses SET name=:name, start=:start, finished=:finished, teacher_id=:teacher_id," +
                 "schedule=:schedule, notes=:notes WHERE id=:id";
@@ -153,19 +186,19 @@ public class CourseDaoImpl implements CourseDaoInf {
         source.addValue(SCHEDULE, course.getSchedule());
         source.addValue(NOTES, course.getNotes());
 
-        LOGGER.debug(String.format("Try update course except price by id -(%s)", course.getId()));
+        logger.debug("Try update course except price by id -({})", course.getId());
         return jdbcTemplate.update(query, source);
     }
 
     @Override
     public Optional<Course> getCourseById(int courseId) {
-        LOGGER.debug(String.format("Call courseDaoInf.getCourseById(%s)", courseId));
+        logger.debug("Call courseDaoInf.getCourseById({})", courseId);
 
         String query = "SELECT c.id, c.name, c.start, c.finished, c.price, c.teacher_id, c.schedule, c.notes " +
                 "FROM Courses c WHERE id=:id";
         Course course = null;
 
-        LOGGER.debug(String.format("Try get course by id -(%s)", courseId));
+        logger.debug(String.format("Try get course by id -(%s)", courseId));
         try {
             course = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(ID, courseId),
                     (resultSet, i) -> new Course.Builder().setId(resultSet.getInt(ID))
@@ -178,7 +211,7 @@ public class CourseDaoImpl implements CourseDaoInf {
                             .setSchedule(resultSet.getString(SCHEDULE))
                             .setNotes(resultSet.getString(NOTES)).getInstance());
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("The course with id - %s was not found.", courseId));
+            logger.warn("The course with id - {} was not found.", courseId);
         }
 
         return Optional.ofNullable(course);
@@ -201,14 +234,14 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public List<User> getUsersAssignedToCourse(int courseId) {
-        LOGGER.debug(String.format("Retrieving users assigned to the course (id=%d)", courseId));
+        logger.debug("Retrieving users assigned to the course (id={})", courseId);
 
         List<User> users;
         String query = "SELECT cu.user_id, u.email, u.first_name, u.last_name, u.phone FROM Course_users cu " +
                 "INNER JOIN Users u ON cu.user_id=u.user_id WHERE course_id=:courseId";
 
         users = jdbcTemplate.query(query, new MapSqlParameterSource(COURSE_ID, courseId), this::mapUser);
-        LOGGER.debug(String.format("Users retrieved with email=(%s)", userIdsToString(users)));
+        logger.debug("Users retrieved with email=({})", userIdsToString(users));
 
         return users;
     }
@@ -229,8 +262,8 @@ public class CourseDaoImpl implements CourseDaoInf {
 
     @Override
     public void removeUserFromCourse(DtoCourseUser dto) {
-        LOGGER.debug(String.format("Removing the user id=%d from the course id=%d",
-                dto.getUserId(), dto.getCourseId()));
+        logger.debug("Removing the user id={} from the course id={}",
+                dto.getUserId(), dto.getCourseId());
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue(COURSE_ID, dto.getCourseId());
@@ -239,13 +272,13 @@ public class CourseDaoImpl implements CourseDaoInf {
         String query = "DELETE FROM Course_users WHERE user_id=:userId AND course_id=:courseId";
         jdbcTemplate.update(query, mapSqlParameterSource);
 
-        LOGGER.debug("User was removed");
+        logger.debug("User was removed");
     }
 
     @Override
     public void assignUserToCourse(DtoCourseUser dto) {
-        LOGGER.debug(String.format("Assigning the user id=%d to the course id=%d",
-                dto.getUserId(), dto.getCourseId()));
+        logger.debug("Assigning the user id=%d to the course id={}",
+                dto.getUserId(), dto.getCourseId());
 
         String query = "INSERT INTO Course_users (course_id, user_id) VALUES (:courseId, :userId)";
 
@@ -255,13 +288,13 @@ public class CourseDaoImpl implements CourseDaoInf {
 
         jdbcTemplate.update(query, mapSqlParameterSource);
 
-        LOGGER.debug("User was assigned to the course");
+        logger.debug("User was assigned to the course");
     }
 
     @Override
     public List<User> searchForUsersToAssign(DtoCourseUser dto) {
-        LOGGER.debug(String.format("Searching for users to assign to the course by search param=%s",
-                dto.getSearchParam()));
+        logger.debug("Searching for users to assign to the course by search param={}",
+                dto.getSearchParam());
 
         List<User> users;
         String query = "";
@@ -289,13 +322,14 @@ public class CourseDaoImpl implements CourseDaoInf {
         mapSqlParameterSource.addValue(COURSE_ID, dto.getCourseId());
 
         users = jdbcTemplate.query(query, mapSqlParameterSource, this::mapUser);
-        LOGGER.debug(String.format("Users retrieved with email=(%s)", userIdsToString(users)));
+        logger.debug("Users retrieved with email=({})", userIdsToString(users));
 
         return users;
     }
 
     @Autowired
-    public CourseDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
+    public CourseDaoImpl(@Qualifier(value = "DS") DataSource dataSource, DaoUtilInf daoUtil) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.daoUtil = daoUtil;
     }
 }

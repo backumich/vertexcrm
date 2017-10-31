@@ -116,7 +116,7 @@
 
         <div>
             <span class="formHeaderText1">Add certificate with user id:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
+            <form:form cssClass="buttonText" method="get" action="addCertificateWithUserId">
                 <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
             </form:form>
         </div>
@@ -126,7 +126,7 @@
 
         <div>
             <span class="formHeaderText1">Add certificate and create new user:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="addCertificateAndCreateUser">
+            <form:form cssClass="buttonText" method="get" action="addCertificateAndCreateUser">
                 <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
             </form:form>
         </div>
@@ -136,7 +136,7 @@
 
         <div>
             <span class="formHeaderText1">Create new payment:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="createPayment">
+            <form:form cssClass="buttonText" method="get" action="createPayment">
                 <input class="black" type="submit" name="createPayment" value="Create new payment"/>
             </form:form>
         </div>
@@ -156,7 +156,7 @@
 
         <div>
             <span class="formHeaderText1">Course info:</span><br><br>
-            <form:form cssClass="buttonText" method="post" action="/searchCourseJsp">
+            <form:form cssClass="buttonText" method="get" action="/searchCourseJsp">
                 <input class="black" type="submit" name="courseInfo" value="Course info"/>
             </form:form>
         </div>

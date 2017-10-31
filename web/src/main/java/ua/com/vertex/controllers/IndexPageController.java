@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexPageController {
-    private static final Logger LOGGER = LogManager.getLogger(IndexPageController.class);
+    private static final Logger logger = LogManager.getLogger(IndexPageController.class);
     private static final String INDEX = "index";
 
     @RequestMapping(value = "/")
     public String showIndexPage() {
-        LOGGER.debug(INDEX + " page accessed");
+        logger.debug(INDEX + " page accessed");
         return INDEX;
     }
 }

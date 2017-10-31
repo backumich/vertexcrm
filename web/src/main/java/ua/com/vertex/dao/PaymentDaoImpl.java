@@ -24,7 +24,7 @@ import static ua.com.vertex.dao.AccountingDaoImpl.USER_ID;
 @Repository
 public class PaymentDaoImpl implements PaymentDaoInf {
 
-    private static final Logger LOGGER = LogManager.getLogger(PaymentDaoImpl.class);
+    private static final Logger logger = LogManager.getLogger(PaymentDaoImpl.class);
     private static final String PAYMENT_ID = "payment_id";
     private static final String DEAL_ID = "deal_id";
     private static final String AMOUNT = "amount";
@@ -34,7 +34,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
     @Override
     @Transactional
     public int createNewPayment(int courseId, int userId, Payment payment) {
-        LOGGER.debug(String.format("Call - paymentDaoInf.createNewPayment((%s), (%s) , (%s)) ;",
+        logger.debug(String.format("Call - paymentDaoInf.createNewPayment((%s), (%s) , (%s)) ;",
                 courseId, userId, payment));
 
         String query = "INSERT INTO Payments (deal_id, amount) VALUES ((SELECT deal_id FROM Accounting " +
@@ -45,7 +45,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
         source.addValue(AMOUNT, payment.getAmount().doubleValue());
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        LOGGER.debug(String.format("Try create new Payment = (%s), by courseId = (%s) and userId - (%s)",
+        logger.debug(String.format("Try create new Payment = (%s), by courseId = (%s) and userId - (%s)",
                 payment, courseId, userId));
         jdbcTemplate.update(query, source, keyHolder);
         return keyHolder.getKey().intValue();
@@ -53,19 +53,19 @@ public class PaymentDaoImpl implements PaymentDaoInf {
 
     @Override
     public Optional<Payment> getPaymentByIdWithOutDate(int paymentId) {
-        LOGGER.debug(String.format("Call - paymentDaoInf.getPaymentByIdWithOutDate(%s) ;", paymentId));
+        logger.debug(String.format("Call - paymentDaoInf.getPaymentByIdWithOutDate(%s) ;", paymentId));
         String query = "SELECT payment_id, deal_id, amount FROM Payments WHERE payment_id = :payment_id";
         Payment result = null;
 
-        LOGGER.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
+        logger.debug(String.format("Try get payment by paymentId = (%s)", paymentId));
         try {
             result = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(PAYMENT_ID, paymentId),
                     (resultSet, i) -> new Payment.Builder().setPaymentId(resultSet.getInt(PAYMENT_ID))
                             .setDealId(resultSet.getInt(DEAL_ID))
                             .setAmount(BigDecimal.valueOf(resultSet.getDouble(AMOUNT))).getInstance());
-            LOGGER.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
+            logger.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
+            logger.warn(String.format("No payment in DB, where id = (%s)", paymentId));
         }
 
         return Optional.ofNullable(result);

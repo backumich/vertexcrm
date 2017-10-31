@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,13 +28,13 @@ public class CreateCertificateAndUserController {
     static final String CERTIFICATE_WITH_USER_FORM = "certificateWithUserForm";
     static final String MSG = "msg";
 
-    private static final Logger LOGGER = LogManager.getLogger(CreateCertificateAndUserController.class);
+    private static final Logger logger = LogManager.getLogger(CreateCertificateAndUserController.class);
     private final CertificateLogic certificateLogic;
 
-    @PostMapping(value = "/addCertificateAndCreateUser")
+    @GetMapping(value = "/addCertificateAndCreateUser")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView addCertificateAndCreateUser() {
-        LOGGER.debug("Request to '/addCertificateAndCreateUser' " + ADD_CERTIFICATE_AND_USER_JSP);
+        logger.debug("Request to '/addCertificateAndCreateUser' " + ADD_CERTIFICATE_AND_USER_JSP);
         return new ModelAndView(ADD_CERTIFICATE_AND_USER_JSP, CERTIFICATE_WITH_USER_FORM, new CertificateWithUserForm());
     }
 
@@ -44,30 +45,30 @@ public class CreateCertificateAndUserController {
                                           BindingResult bindingResult, @Valid Model model) {
 
         String returnPage;
-        LOGGER.debug("Request to '/addCertificateAndCreateUser' ");
+        logger.debug("Request to '/addCertificateAndCreateUser' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
             returnPage = ADD_CERTIFICATE_AND_USER_JSP;
-            LOGGER.warn("The data have not been validated!!!");
+            logger.warn("The data have not been validated!!!");
         } else {
             try {
                 int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
                         , certificateWithUserForm.getUser());
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
                 returnPage = ADMIN_JSP;
-                LOGGER.info("Certificate added. Certificate id = " + result);
+                logger.info("Certificate added. Certificate id = " + result);
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(MSG, "A person with this e-mail already exists, try again.");
                 returnPage = ADD_CERTIFICATE_AND_USER_JSP;
-                LOGGER.warn(e);
+                logger.warn(e);
             } catch (Exception e) {
                 returnPage = ERROR;
-                LOGGER.warn(e);
+                logger.warn(e);
             }
         }
 
-        LOGGER.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));
+        logger.debug(String.format("Request to '/addCertificateAndCreateUser' return (%s).jsp", returnPage));
         return returnPage;
     }
 

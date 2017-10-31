@@ -28,25 +28,25 @@ import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CourseDetailsController {
-
     static final String COURSE_DETAILS_JSP = "courseDetails";
     static final String SEARCH_COURSE_JSP = "searchCourse";
     static final String COURSE_DATA = "courseForInfo";
     static final String COURSE = "course";
     static final String COURSES = "courses";
-    private static final String COURSE_ID = "courseId";
+    static final String COURSE_ID = "courseId";
     static final String TEACHERS = "teachers";
+    static final String LISTENERS = "listeners";
     static final String LOGGER_SERVER_EXCEPTION = "Problems with the server, try again later.";
 
-    private static final Logger LOGGER = LogManager.getLogger(CourseDetailsController.class);
+    private static final Logger logger = LogManager.getLogger(CourseDetailsController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
 
-    @PostMapping(value = "/searchCourseJsp")
+    @GetMapping(value = "/searchCourseJsp")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView searchCourseJsp() {
-        LOGGER.debug("Show search page for courses");
+        logger.debug("Show search page for courses");
         return new ModelAndView(SEARCH_COURSE_JSP, COURSE_DATA, new Course());
     }
 
@@ -54,7 +54,7 @@ public class CourseDetailsController {
     @PreAuthorize("hasRole('ADMIN')")
     public String searchCourse(@Validated @ModelAttribute(COURSE_DATA) Course course,
                                BindingResult bindingResult, Model model) {
-        LOGGER.debug(String.format("Search user by name - (%s) and finished - (%s).",
+        logger.debug(String.format("Search user by name - (%s) and finished - (%s).",
                 course.getName(), course.isFinished()));
         String result = SEARCH_COURSE_JSP;
 
@@ -68,10 +68,10 @@ public class CourseDetailsController {
                     model.addAttribute("courses", courses);
                 }
             } catch (DataAccessException e) {
-                LOGGER.warn(e);
+                logger.warn(e);
                 model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
             } catch (Exception e) {
-                LOGGER.warn(e);
+                logger.warn(e);
                 result = ERROR;
             }
         }
@@ -82,7 +82,7 @@ public class CourseDetailsController {
     @GetMapping(value = "/courseDetails")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView courseDetails(@RequestParam(COURSE_ID) int courseId) {
-        LOGGER.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
+        logger.debug(String.format("Go to the course information page. Course ID -: - (%s)", courseId));
 
         ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
 
@@ -90,7 +90,7 @@ public class CourseDetailsController {
             result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow((NoSuchElementException::new)));
             result.addObject(TEACHERS, userLogic.getTeachers());
         } catch (Exception e) {
-            LOGGER.warn(e);
+            logger.warn(e);
             result.setViewName(ERROR);
         }
 
@@ -100,24 +100,41 @@ public class CourseDetailsController {
     @PostMapping(value = "/updateCourse")
     @PreAuthorize("hasRole('ADMIN')")
     public String updateCourse(@Valid @ModelAttribute(COURSE) Course course, BindingResult bindingResult, Model model) {
-        LOGGER.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
+        logger.debug(String.format("Update course with course ID - (%s). Course details: - (%s)", course.getId(), course));
         String result = ADMIN_JSP;
         if (!bindingResult.hasErrors()) {
             try {
                 model.addAttribute(MSG, String.format("Course with id - (%s) updated.",
                         courseLogic.updateCourseExceptPrice(course)));
             } catch (DataAccessException e) {
-                LOGGER.warn(e);
+                logger.warn(e);
                 model.addAttribute(MSG, LOGGER_SERVER_EXCEPTION);
                 result = SEARCH_COURSE_JSP;
             } catch (Exception e) {
-                LOGGER.warn(e);
+                logger.warn(e);
                 result = ERROR;
             }
         } else {
             result = COURSE_DETAILS_JSP;
             model.addAttribute(TEACHERS, userLogic.getTeachers());
         }
+        return result;
+    }
+
+    @GetMapping(value = "/teacherCourseDetails")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ModelAndView teacherCourseDetails(@RequestParam(COURSE_ID) int courseId) {
+
+        logger.debug(String.format("Call teacherCourseDetails(%s)", courseId));
+        ModelAndView result = new ModelAndView(COURSE_DETAILS_JSP);
+
+        logger.debug(String.format("Try add course details by id - (%s).", courseId));
+        result.addObject(COURSE, courseLogic.getCourseById(courseId).orElseThrow(NoSuchElementException::new));
+
+        logger.debug(String.format("Try add course listeners by id - (%s).", courseId));
+        result.addObject(LISTENERS, userLogic.getCourseUsers(courseId));
+
+        logger.debug(String.format("Return new ModelAndView - %s", result));
         return result;
     }
 
