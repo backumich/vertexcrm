@@ -4,9 +4,9 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import ua.com.vertex.utils.ReCaptchaService;
 import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.utils.MailService;
-import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.sql.DataSource;
 

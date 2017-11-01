@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 public class SpringDataUserDetailsService implements UserDetailsService {
-    private LoggingLogic loggingLogic;
+    private final LoggingLogic loggingLogic;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

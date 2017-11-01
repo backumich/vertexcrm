@@ -33,7 +33,8 @@ public class ReCaptchaService {
         try {
             LOGGER.debug("Trying to verify the validity of the captcha");
             URL url = new URL(reCaptchaUrl);
-            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse + "&remoteip=" + reCaptchaRemoteAddr;
+            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse +
+                    "&remoteip=" + reCaptchaRemoteAddr;
 
             connection = getConnection(url);
             StringBuilder outputString = getResponseData(connection, postParams);

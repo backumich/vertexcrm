@@ -34,8 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class AuthenticationTest {
+    private static final String USER_EMAIL = "44@test.com";
     private static final String CORRECT_PASSWORD = "123456";
-    private static final String EXISTING_EMAIL = "44@test.com";
     private static final String INCORRECT_DATA = "incorrect";
     private static final String ADMIN_EMAIL = "33@test.com";
 
@@ -57,10 +57,10 @@ public class AuthenticationTest {
     public void userTestFormLoginWithCorrectLoginAndPassword() throws Exception {
         Collection<? extends GrantedAuthority> authorities = Collections
                 .singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(CORRECT_PASSWORD))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/loggedIn"))
-                .andExpect(authenticated().withUsername(EXISTING_EMAIL))
+        mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(CORRECT_PASSWORD))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/loggedIn"))
+                .andExpect(authenticated().withUsername(USER_EMAIL))
                 .andExpect(authenticated().withAuthorities(authorities));
     }
 
@@ -70,8 +70,8 @@ public class AuthenticationTest {
         Collection<? extends GrantedAuthority> authorities = Collections
                 .singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         mockMvc.perform(formLogin("/logIn").user(ADMIN_EMAIL).password(CORRECT_PASSWORD))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/loggedIn"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/loggedIn"))
                 .andExpect(authenticated().withUsername(ADMIN_EMAIL))
                 .andExpect(authenticated().withAuthorities(authorities));
     }
@@ -79,7 +79,7 @@ public class AuthenticationTest {
     @Test
     @WithAnonymousUser
     public void testFormLoginWithIncorrectPassword() throws Exception {
-        mockMvc.perform(formLogin("/logIn").user(EXISTING_EMAIL).password(INCORRECT_DATA))
+        mockMvc.perform(formLogin("/logIn").user(USER_EMAIL).password(INCORRECT_DATA))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/logIn?error"))
                 .andExpect(unauthenticated());
@@ -98,11 +98,11 @@ public class AuthenticationTest {
     @WithAnonymousUser
     public void loginWithValidCsrf() throws Exception {
         mockMvc.perform(post("/logIn")
-                .param("username", EXISTING_EMAIL)
+                .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
                 .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/loggedIn"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/loggedIn"))
                 .andExpect(authenticated());
     }
 
@@ -110,7 +110,7 @@ public class AuthenticationTest {
     @WithAnonymousUser
     public void loginWithInvalidCsrf() throws Exception {
         mockMvc.perform(post("/logIn")
-                .param("username", EXISTING_EMAIL)
+                .param("username", USER_EMAIL)
                 .param("password", CORRECT_PASSWORD)
                 .with(csrf().useInvalidToken()))
                 .andExpect(status().isForbidden())
