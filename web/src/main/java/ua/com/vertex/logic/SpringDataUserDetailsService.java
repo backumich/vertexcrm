@@ -21,6 +21,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = loggingLogic.logIn(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
+
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 

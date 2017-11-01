@@ -50,6 +50,12 @@ public class GlobalExceptionHandler {
         return ERROR;
     }
 
+    @ExceptionHandler(UpdatedPasswordNotSaved.class)
+    public String handleUpdatedPasswordNotSaved(UpdatedPasswordNotSaved e, Model model) {
+        LOGGER.debug(e, e);
+        model.addAttribute(ERROR_MESSAGE, "The new password was not saved. Please, try again");
+        return ERROR;
+    }
 
     @ExceptionHandler({AccessDeniedException.class, PreAuthenticatedCredentialsNotFoundException.class})
     public String handleAccessOrAuthenticationException(AccessDeniedException e) {

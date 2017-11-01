@@ -31,7 +31,7 @@ public class RegistrationController {
     static final String REGISTRATION_ERROR_PAGE = "registrationError";
     static final String NAME_MODEL = "userFormRegistration";
     static final String CAPTCHA = "captcha";
-    private static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
+    static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
     private final MailService mailService;
     private RegistrationUserLogic registrationUserLogic;
