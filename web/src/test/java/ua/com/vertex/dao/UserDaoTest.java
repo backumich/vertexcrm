@@ -44,9 +44,11 @@ public class UserDaoTest {
 
     private static final int EXISTING_ID1 = 22;
     private static final int EXISTING_ID2 = 34;
+    private static final int EXISTING_ID3 = 2;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     @SuppressWarnings("WeakerAccess")
     static final String EXISTING_EMAIL = "22@test.com";
+    static final String EXISTING_EMAIL3 = "email1@test.com";
     private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
     private static final String EXISTING_LAST_NAME = "LastName";
@@ -88,8 +90,8 @@ public class UserDaoTest {
     @Test
     @WithMockUser
     public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL);
-        assertEquals(EXISTING_ID1, optional.orElse(new User.Builder().setUserId(EXISTING_ID1).getInstance())
+        Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL3);
+        assertEquals(EXISTING_ID3, optional.orElse(new User.Builder().setUserId(EXISTING_ID3).getInstance())
                 .getUserId());
     }
 
@@ -102,8 +104,8 @@ public class UserDaoTest {
 
     @Test
     public void logInReturnsUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
-        assertEquals(EXISTING_EMAIL, optional.orElse(new User.Builder().setUserId(EXISTING_ID1).getInstance())
+        Optional<User> optional = userDao.logIn(EXISTING_EMAIL3);
+        assertEquals(EXISTING_EMAIL3, optional.orElse(new User.Builder().setUserId(EXISTING_ID3).getInstance())
                 .getEmail());
     }
 

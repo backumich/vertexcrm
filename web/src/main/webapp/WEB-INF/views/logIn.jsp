@@ -24,8 +24,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -140,6 +140,9 @@
                 <td><input id="remember_me" name="remember-me" type="checkbox"/></td>
             </tr>
             <tr>
+                <td><br><br></td>
+            </tr>
+            <tr>
                 <td class="buttonPaddingTop"><input type="submit" value="Log in" class="black"></td>
             </tr>
         </table>
@@ -212,6 +215,7 @@
 <script src="../../javascript/typed.js"></script>
 <script src="../../javascript/slick.min.js"></script>
 <script type="text/javascript" src="../../javascript/main.js"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>
 </html>

@@ -93,9 +93,11 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug(String.format("Call -  logIn(%s) ;", email));
 
         String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id " +
-                "WHERE u.email=:email";
+                "WHERE u.email=:email AND u.is_active=:is_active";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue(EMAIL, email);
+        parameters.addValue(IS_ACTIVE, 1);
         User user = null;
 
         try {
