@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
+
+import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.ERROR_MESSAGE;
 
 @Controller
 public class ImageController {
@@ -62,15 +65,16 @@ public class ImageController {
     @PostMapping(value = "/uploadImage")
     @PreAuthorize("(principal.username).equals(#user.email)")
     public String uploadImage(@ModelAttribute(USER) User user,
-                              @RequestPart(value = IMAGE, required = false) byte[] image,
+                              @RequestPart(value = IMAGE) MultipartFile file,
                               @RequestParam(IMAGE_TYPE) String imageType, Model model) {
         String view = USER_PROFILE;
 
-        if (image == null) {
+        if (file.isEmpty()) {
             view = IMAGE_ERROR;
+            model.addAttribute(ERROR_MESSAGE, "You did not select any image!");
             LOGGER.debug("no image selected");
         } else {
-            userLogic.saveImage(user.getEmail(), image, imageType);
+            userLogic.saveImage(user.getEmail(), file, imageType);
             model.addAttribute(user);
         }
         return view;

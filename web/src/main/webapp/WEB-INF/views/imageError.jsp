@@ -104,7 +104,7 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
 
-    <span class="fontSize200 red">You did not select any image</span><br><br>
+    <span class="fontSize200 red">${errorMessage}</span><br><br>
 
     <div class="href">
         <a href="<c:url value="/logIn"/>">Back</a> |

@@ -1,5 +1,6 @@
 package ua.com.vertex.logic.interfaces;
 
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
 
@@ -15,7 +16,7 @@ public interface UserLogic {
 
     Optional<User> getUserByEmail(String email);
 
-    void saveImage(String email, byte[] image, String imageType);
+    void saveImage(String email, MultipartFile file, String imageType);
 
     Optional<byte[]> getImage(String email, String imageType);
 

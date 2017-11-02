@@ -37,7 +37,6 @@ public class UserLogicImplTest {
     private static final String EMAIL = "33@test.com";
     private static final String NAME = "test";
     private static final String PHOTO = "photo";
-    private static final String PASSPORT_SCAN = "passportScan";
     private static final int EXISTING_ID = 33;
 
     @Before
@@ -57,13 +56,6 @@ public class UserLogicImplTest {
     public void getUserByEmailInvokesDao() throws SQLException {
         logic.getUserByEmail(EMAIL);
         verify(dao, times(1)).getUserByEmail(EMAIL);
-    }
-
-    @Test
-    public void saveImageInvokesDao() throws Exception {
-        byte[] image = new byte[]{1, 2, 3};
-        logic.saveImage(EMAIL, image, PASSPORT_SCAN);
-        verify(dao, times(1)).saveImage(EMAIL, image, PASSPORT_SCAN);
     }
 
     @Test

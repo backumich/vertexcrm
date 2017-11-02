@@ -3,25 +3,36 @@ package ua.com.vertex.logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
-
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+    public static final String FILE_SIZE_EXCEEDED = "Multipart file size exceeded";
+    public static final String FILE_TYPE_INVALID = "Invalid multipart file type";
+
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${image.size.bytes}")
+    private int fileSizeInBytes;
 
     @Override
     public List<String> getAllUserIds() {
@@ -39,8 +50,25 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public void saveImage(String email, byte[] image, String imageType) {
+    public void saveImage(String email, MultipartFile file, String imageType) {
+        byte[] image;
+        validateMultipartFile(file);
+        try {
+            image = file.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         userDao.saveImage(email, image, imageType);
+    }
+
+    private void validateMultipartFile(MultipartFile file) {
+        if (!file.isEmpty()) {
+            if (file.getSize() > fileSizeInBytes) {
+                throw new MultipartValidationException(FILE_SIZE_EXCEEDED);
+            } else if (!file.getContentType().split("/")[0].equals("image")) {
+                throw new MultipartValidationException(FILE_TYPE_INVALID);
+            }
+        }
     }
 
     @Override

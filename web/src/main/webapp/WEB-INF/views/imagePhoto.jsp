@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
@@ -112,7 +113,6 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-
     <c:if test="${photo != null}">
         <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
     </c:if>
@@ -128,7 +128,7 @@
         <input type="hidden" name="imageType" value="photo"/>
         <table>
             <tr>
-                <td class="silver"><input type="file" name="image" accept="image/jpeg, image/png"/></td>
+                <td class="silver"><input type="file" name="image" accept="image/*"/></td>
             </tr>
             <tr>
                 <td><input class="black" type="submit" value="Upload New Photo"></td>
@@ -138,9 +138,13 @@
 
     <br><br>
 
-
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
+        <sec:authorize access="isAuthenticated()">
+            <a href="<c:url value="/logIn"/>">Back</a> |
+        </sec:authorize>
+        <sec:authorize access="isAnonymous()">
+            <a href="javascript:history.back();">Back</a> |
+        </sec:authorize>
         <a href="<c:url value="/"/>">Home</a>
     </div>
 
