@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
+import ua.com.vertex.utils.UtilFunctions;
 
 import java.net.SocketTimeoutException;
 
@@ -52,7 +53,8 @@ public class GlobalExceptionHandler {
     public String handleMultipartValidationException(MultipartValidationException e, Model model) {
         if (FILE_SIZE_EXCEEDED.equals(e.getMessage())) {
             LOGGER.debug(e, e);
-            model.addAttribute(ERROR_MESSAGE, "File size exceeded, max allowed is " + fileSizeInBytes + " bytes");
+            model.addAttribute(ERROR_MESSAGE, "File size exceeded, max allowed is "
+                    + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
         } else if (FILE_TYPE_INVALID.equals(e.getMessage())) {
             LOGGER.debug(e, e);
             model.addAttribute(ERROR_MESSAGE, "You have chosen a file of invalid type!");
