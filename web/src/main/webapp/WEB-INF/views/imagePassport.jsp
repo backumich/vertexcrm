@@ -121,7 +121,8 @@
 
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal.username" var="username"/>
-        <c:if test="${username.equals(user.email)}">
+        <sec:authentication property="principal.authorities" var="auth"/>
+        <c:if test="${username.equals(user.email) || auth.iterator().next().toString().equals('ROLE_ADMIN')}">
             <sf:form method="post" action="/uploadImage" enctype="multipart/form-data" commandName="user">
                 <sf:hidden path="userId" value="${user.userId}"/>
                 <sf:hidden path="firstName" value="${user.firstName}"/>

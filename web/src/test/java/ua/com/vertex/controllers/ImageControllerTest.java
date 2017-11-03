@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -26,9 +27,9 @@ import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidatio
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.ERROR_MESSAGE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -47,7 +48,8 @@ public class ImageControllerTest {
     private User user;
 
     private static final String EXISTING_EMAIL = "22@test.com";
-    private static final byte[] IMAGE_RETRIEVED = {100};
+    private static final String NOT_EXISTING_EMAIL = "@test.com";
+    private static final byte[] IMAGE_AS_BYTES = {100};
     private static final String PHOTO = "photo";
 
     @Value("${image.size.bytes}")
@@ -62,14 +64,14 @@ public class ImageControllerTest {
     @Test
     public void showImagePhotoAddsModelAttributePhoto() throws SQLException {
         controller.showImagePhoto(user, PHOTO, model);
-        verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(IMAGE_RETRIEVED));
+        verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(IMAGE_AS_BYTES));
     }
 
     @Test
     @WithMockUser(username = EXISTING_EMAIL)
     public void showImagePassportAddsModelAttributePhoto() throws SQLException {
         controller.showImagePassport(user, PHOTO, model);
-        verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(IMAGE_RETRIEVED));
+        verify(model, times(1)).addAttribute(PHOTO, Base64.encodeBase64String(IMAGE_AS_BYTES));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -80,18 +82,33 @@ public class ImageControllerTest {
 
     @Test
     @WithMockUser(username = EXISTING_EMAIL)
-    public void uploadImageAddsModelAttributeUser() throws Exception {
-        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", new byte[]{1, 1, 1, 1, 1});
-        controller.uploadImage(user, file, PHOTO, model);
-        verify(model, times(1)).addAttribute(user);
+    public void uploadImageReturnsViewForUserOwner() throws Exception {
+        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
+        String view = controller.uploadImage(user, file, PHOTO, model);
+        assertEquals("index", view);
     }
 
     @Test
     @WithMockUser(username = EXISTING_EMAIL)
-    public void uploadImageAddsModelErrorForEmptyFile() throws Exception {
+    public void uploadImage() throws Exception {
+        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
+        String view = controller.uploadImage(user, file, PHOTO, model);
+        assertEquals("index", view);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void uploadImageAddsModelAttributeUser() throws Exception {
+        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
+        String view = controller.uploadImage(user, file, PHOTO, model);
+        assertEquals("index", view);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(username = NOT_EXISTING_EMAIL)
+    public void uploadImageThrowsAccessDeniedForWrongUser() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", new byte[]{});
         controller.uploadImage(user, file, PHOTO, model);
-        verify(model, times(1)).addAttribute(ERROR_MESSAGE, "You did not select any image!");
     }
 
     @Test(expected = MultipartValidationException.class)
@@ -106,14 +123,14 @@ public class ImageControllerTest {
     @Test(expected = MultipartValidationException.class)
     @WithMockUser(username = EXISTING_EMAIL)
     public void uploadImageThrowsExceptionIfInvalidFileType() throws Exception {
-        MultipartFile file = new MockMultipartFile("file", "file", "wrongFileType/jpg", new byte[]{1});
+        MultipartFile file = new MockMultipartFile("file", "file", "wrongFileType/jpg", IMAGE_AS_BYTES);
         controller.uploadImage(user, file, PHOTO, model);
     }
 
     @Test(expected = IllegalArgumentException.class)
     @WithAnonymousUser
     public void uploadImageAddsModelFailsForAnonymousUser() throws Exception {
-        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", new byte[]{1});
+        MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
         controller.uploadImage(user, file, PHOTO, model);
     }
 }

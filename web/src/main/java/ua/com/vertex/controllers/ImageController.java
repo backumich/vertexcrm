@@ -22,12 +22,12 @@ import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler
 @Controller
 public class ImageController {
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
-    private static final String USER_PROFILE = "userProfile";
     private static final String IMAGE = "image";
     private static final String IMAGE_PHOTO = "imagePhoto";
     private static final String IMAGE_PASSPORT = "imagePassport";
     private static final String IMAGE_TYPE = "imageType";
     private static final String USER = "user";
+    private static final String INDEX = "index";
     private static final String IMAGE_ERROR = "imageError";
 
     private final UserLogic userLogic;
@@ -63,11 +63,11 @@ public class ImageController {
     }
 
     @PostMapping(value = "/uploadImage")
-    @PreAuthorize("(principal.username).equals(#user.email)")
+    @PreAuthorize("(principal.username).equals(#user.email) || hasRole('ADMIN')")
     public String uploadImage(@ModelAttribute(USER) User user,
                               @RequestPart(value = IMAGE) MultipartFile file,
                               @RequestParam(IMAGE_TYPE) String imageType, Model model) {
-        String view = USER_PROFILE;
+        String view;
 
         if (file.isEmpty()) {
             view = IMAGE_ERROR;
@@ -75,7 +75,7 @@ public class ImageController {
             LOGGER.debug("no image selected");
         } else {
             userLogic.saveImage(user.getEmail(), file, imageType);
-            model.addAttribute(user);
+            view = INDEX;
         }
         return view;
     }
