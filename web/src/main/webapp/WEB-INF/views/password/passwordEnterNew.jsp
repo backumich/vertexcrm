@@ -18,8 +18,8 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="../../../javascript/watch.js"></script>
+    <script async="" src="../../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -109,48 +109,69 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize200 silver">Log into the system</span><br><br><br>
+    <span class="fontSize200 silver">Enter New Password</span><br><br><br>
 
-    <c:if test="${param.error != null}">
-        <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
+    <c:if test="${expired == true}">
+        <div class="red fontSize180">
+            The link to change your password has expired!
+            If you still need to change your password,
+            <a href="<c:url value="http://localhost:8080/resetPassword"/>">get a new link</a>
+        </div>
+        <br><br>
     </c:if>
+    <c:if test="${empty expired}">
 
-    <sf:form action="logIn" method="post">
-        <table>
-            <tr>
-                <td class="labelWidth150"><span class="fontSize125 bold silver">E-mail:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="text" name="username"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="text" name="username" class="errorField"/></td>
-                </c:if>
-            </tr>
-            <tr>
-                <td><span class="fontSize125 bold silver">Password:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="password" name="password"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="password" name="password" class="errorField"/></td>
-                </c:if>
-            </tr>
-            <tr>
-                <td><label for="remember_me" class="fontSize125 bold silver">Remember me</label></td>
-                <td><input id="remember_me" name="remember-me" type="checkbox"/></td>
-            </tr>
-            <tr>
-                <td><br><br></td>
-            </tr>
-            <tr>
-                <td class="buttonPaddingTop"><input type="submit" value="Log in" class="black"></td>
-            </tr>
-        </table>
-    </sf:form>
+        <c:if test="${passwordInvalid == true}">
+            <div class="red fontSize180">
+                Invalid password format! Try again!
+            </div>
+            <br><br>
+        </c:if>
+
+        <c:if test="${passwordMismatch == true}">
+            <div class="red fontSize180">
+                Passwords do not match! Try again!
+            </div>
+            <br><br>
+        </c:if>
+
+        <c:if test="${captcha == true}">
+            <div class="red fontSize180">
+                You missed captcha!
+            </div>
+            <br><br>
+        </c:if>
+
+        <sf:form action="/passwordSaveNew" method="post" commandName="passwordDto">
+            <sf:hidden path="email" value="${passwordDto.email}"/>
+            <table>
+                <tr>
+                    <td><sf:label path="rawPassword">
+                        <span class="fontSize140 bold silver">New password:</span></sf:label></td>
+                    <td><sf:input path="rawPassword" placeholder="5-30 symbols long" type="password"
+                                  class="width300" maxlength="30"/></td>
+                </tr>
+                <tr>
+                    <td><sf:label path="repeatPassword">
+                        <span class="fontSize140 bold silver">Repeat password:</span></sf:label></td>
+                    <td><sf:input path="repeatPassword" placeholder="5-30 symbols long" type="password"
+                                  class="width300" maxlength="30"/></td>
+                </tr>
+                <tr>
+                    <td><br><br><br>
+                        <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
+                        <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="buttonPaddingTop"><input type="submit" value="Save" class="black"></td>
+                </tr>
+            </table>
+        </sf:form>
+    </c:if>
 
     <br><br>
     <div class="href">
-        <a href="<c:url value="/resetPassword"/>">Forgot password?</a><br><br>
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
@@ -211,11 +232,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="../../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../../javascript/bootstrap.min.js"></script>
+<script src="../../../javascript/typed.js"></script>
+<script src="../../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../../javascript/main.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>
