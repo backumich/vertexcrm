@@ -24,19 +24,17 @@ public class ReCaptchaService {
     @Value("${reCaptcha.secretKey}")
     private String secretKey;
 
-    @Value("${reCaptcha.siteKey}")
-    private String siteKey;
-
     private static final Logger LOGGER = LogManager.getLogger(ReCaptchaService.class);
 
-    public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddr) throws IOException {
+    public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddr) {
         Boolean verified = false;
         HttpsURLConnection connection = null;
 
         try {
             LOGGER.debug("Trying to verify the validity of the captcha");
             URL url = new URL(reCaptchaUrl);
-            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse + "&remoteip=" + reCaptchaRemoteAddr;
+            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse +
+                    "&remoteip=" + reCaptchaRemoteAddr;
 
             connection = getConnection(url);
             StringBuilder outputString = getResponseData(connection, postParams);

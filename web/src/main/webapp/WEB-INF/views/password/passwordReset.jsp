@@ -18,8 +18,8 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="../../../javascript/watch.js"></script>
+    <script async="" src="../../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -109,48 +109,54 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
-    <span class="fontSize200 silver">Log into the system</span><br><br><br>
+    <span class="fontSize200 silver">Reset Your Password</span><br><br><br>
 
-    <c:if test="${param.error != null}">
-        <p><span class="fontSize140 red">Invalid E-mail or Password</span></p>
+    <c:if test="${captcha == true}">
+        <div class="red fontSize180">
+            You missed captcha!
+        </div>
+        <br><br>
     </c:if>
 
-    <sf:form action="logIn" method="post">
+    <c:if test="${emailInvalid == true}">
+        <div class="red fontSize180">
+            Invalid email!
+        </div>
+        <br><br>
+    </c:if>
+
+    <c:if test="${emailNotFound == true}">
+        <div class="red fontSize180">
+            This email is not registered or has not been activated yet. Make sure you enter the correct email!
+        </div>
+        <br><br>
+    </c:if>
+
+    <sf:form action="sendEmail" method="get" commandName="passwordResetDto">
         <table>
             <tr>
-                <td class="labelWidth150"><span class="fontSize125 bold silver">E-mail:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="text" name="username"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="text" name="username" class="errorField"/></td>
-                </c:if>
+                <td><span class="fontSize140 bold silver">
+                        Enter your email address and we will send you the link to reset your password</span><br><br>
+                </td>
             </tr>
             <tr>
-                <td><span class="fontSize125 bold silver">Password:</span></td>
-                <c:if test="${param.error == null}">
-                    <td><input type="password" name="password"/></td>
-                </c:if>
-                <c:if test="${param.error != null}">
-                    <td><input type="password" name="password" class="errorField"/></td>
-                </c:if>
+                <td><input type="text" name="email" value="${email}"
+                           placeholder="email@example.com" class="width400"></td>
             </tr>
             <tr>
-                <td><label for="remember_me" class="fontSize125 bold silver">Remember me</label></td>
-                <td><input id="remember_me" name="remember-me" type="checkbox"/></td>
+                <td><br><br><br>
+                    <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
+                    <br>
+                </td>
             </tr>
             <tr>
-                <td><br><br></td>
-            </tr>
-            <tr>
-                <td class="buttonPaddingTop"><input type="submit" value="Log in" class="black"></td>
+                <td class="buttonPaddingTop"><input type="submit" value="Reset" class="black"></td>
             </tr>
         </table>
     </sf:form>
 
     <br><br>
     <div class="href">
-        <a href="<c:url value="/resetPassword"/>">Forgot password?</a><br><br>
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
@@ -211,11 +217,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="../../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../../javascript/bootstrap.min.js"></script>
+<script src="../../../javascript/typed.js"></script>
+<script src="../../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../../javascript/main.js"></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>

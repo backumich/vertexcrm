@@ -24,7 +24,7 @@ public class RootConfig {
         return new BasicDataSource();
     }
 
-    @Bean
+    @Bean(name = "mailSender")
     @ConfigurationProperties(prefix = "spring.mail")
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -45,7 +45,7 @@ public class RootConfig {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "bcrypt")
+    @ConfigurationProperties(prefix = "encryption.strength")
     public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
         return new BCryptPasswordEncoder();
     }

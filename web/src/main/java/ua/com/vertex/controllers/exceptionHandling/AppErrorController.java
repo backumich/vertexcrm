@@ -2,7 +2,9 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,27 +13,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static ua.com.vertex.context.SecurityWebConfig.LOGIN_ATTEMPTS;
 import static ua.com.vertex.context.SecurityWebConfig.UNKNOWN_ERROR;
 
 @Controller
+@PropertySource("classpath:application.properties")
 public class AppErrorController implements ErrorController {
+    private static final Logger LOGGER = LogManager.getLogger(AppErrorController.class);
     private static final String ERROR = "error";
     private static final String ERROR_MESSAGE = "errorMessage";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String NOT_FOUND = "404 — unfortunately, the page you requested has not been found";
-    private static final Logger LOGGER = LogManager.getLogger(AppErrorController.class);
+
+    @Value("${login.blocking.time.seconds}")
+    private int blockingPeriod;
 
     @RequestMapping(value = "/error")
     public String handleError(HttpServletRequest request, HttpServletResponse response, Model model) {
         Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
 
         if (response.getStatus() == HttpStatus.NOT_FOUND.value()) {
-            LOGGER.debug(NOT_FOUND);
             model.addAttribute(ERROR_MESSAGE, NOT_FOUND);
 
         } else if (UNKNOWN_ERROR.equals(throwable.getMessage())) {
             LOGGER.warn(UNKNOWN_ERROR, throwable);
             model.addAttribute(ERROR_MESSAGE, UNKNOWN_ERROR);
+
+        } else if (LOGIN_ATTEMPTS.equals(throwable.getMessage())) {
+            LOGGER.debug(LOGIN_ATTEMPTS);
+            model.addAttribute(ERROR_MESSAGE, LOGIN_ATTEMPTS +
+                    String.format(" The username has been blocked for %d minutes!", blockingPeriod / 60));
 
         } else {
             LOGGER.warn(INTERNAL_SERVER_ERROR, throwable);
