@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
-import java.sql.SQLException;
-
 import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.ERROR_MESSAGE;
 
 @Controller
@@ -34,7 +32,7 @@ public class ImageController {
 
     @PostMapping(value = "/showImagePhoto")
     public String showImagePhoto(@ModelAttribute(USER) User user,
-                            @RequestParam(IMAGE_TYPE) String imageType, Model model) throws SQLException {
+                                 @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         LOGGER.debug(IMAGE_PHOTO + " page accessed");
         encode(model, user.getEmail(), imageType);
@@ -47,7 +45,7 @@ public class ImageController {
     @PostMapping(value = "/showImagePassport")
     @PreAuthorize("(principal.username).equals(#user.email) || hasRole('ADMIN')")
     public String showImagePassport(@ModelAttribute(USER) User user,
-                                    @RequestParam(IMAGE_TYPE) String imageType, Model model) throws SQLException {
+                                    @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         LOGGER.debug(IMAGE_PASSPORT + " page accessed");
         encode(model, user.getEmail(), imageType);
@@ -57,7 +55,7 @@ public class ImageController {
         return IMAGE_PASSPORT;
     }
 
-    private void encode(Model model, String email, String imageType) throws SQLException {
+    private void encode(Model model, String email, String imageType) {
         String encoded = Base64.encodeBase64String(userLogic.getImage(email, imageType).orElse(new byte[]{}));
         model.addAttribute(imageType, encoded);
     }
