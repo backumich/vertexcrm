@@ -15,14 +15,18 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.UpdatedPasswordNotSaved;
+import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,6 +50,8 @@ public class UserDaoImpl implements UserDaoInf {
     private static final String DISCOUNT = "discount";
     private static final String ROLE_NAME = "name";
     private static final String IS_ACTIVE = "is_active";
+
+    private DaoUtilInf daoUtil;
 
     @Override
     public Optional<User> getUser(int userId) {
@@ -90,9 +96,11 @@ public class UserDaoImpl implements UserDaoInf {
         LOGGER.debug(String.format("Call -  logIn(%s) ;", email));
 
         String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id " +
-                "WHERE u.email=:email";
+                "WHERE u.email=:email AND u.is_active=:is_active";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue(EMAIL, email);
+        parameters.addValue(IS_ACTIVE, 1);
         User user = null;
 
         try {
@@ -195,12 +203,10 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
         LOGGER.debug("Get all user list");
 
-        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u LIMIT :from, :offset";
+        String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
+                "LIMIT :from, :offset";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("from", (dataNavigator.getCurrentNumberPage() - 1)
-                * dataNavigator.getRowPerPage());
-        parameters.addValue("offset", dataNavigator.getRowPerPage());
+        MapSqlParameterSource parameters = daoUtil.getPagingSQLParameters(dataNavigator);
 
         List<User> users = jdbcTemplate.query(query, parameters, (resultSet, i) -> new User.Builder().
                 setUserId(resultSet.getInt(USER_ID)).
@@ -332,6 +338,60 @@ public class UserDaoImpl implements UserDaoInf {
                 .getInstance());
     }
 
+    @Override
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        String query = "INSERT INTO Password_reset (email, uuid, creation_time) VALUES (:email, :uuid, :creationTime)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("uuid", uuid);
+        source.addValue("creationTime", creationTime);
+
+        jdbcTemplate.update(query, source, keyHolder);
+        LOGGER.debug(String.format("Params to restore password for email=%s were saved", email));
+
+        return keyHolder.getKey().longValue();
+    }
+
+    @Override
+    public PasswordResetDto getEmailByUuid(long id, String uuid) {
+        String query = "SELECT email, creation_time FROM Password_reset WHERE id =:id AND uuid =:uuid";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("id", id);
+        source.addValue("uuid", uuid);
+        PasswordResetDto dto;
+
+        try {
+            dto = jdbcTemplate.queryForObject(query, source, this::mapPasswordResetDto);
+            LOGGER.debug(String.format("Password reset email %s was retrieved from DB", dto.getEmail()));
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("Password reset email address was not found by ID and UUID");
+        }
+        return dto;
+    }
+
+    private PasswordResetDto mapPasswordResetDto(ResultSet resultSet, int i) throws SQLException {
+        return PasswordResetDto.builder()
+                .email(resultSet.getString("email"))
+                .creationTime(resultSet.getTimestamp("creation_time").toLocalDateTime())
+                .build();
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        String query = "UPDATE Users SET password =:password WHERE email=:email";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("password", password);
+
+        int count = jdbcTemplate.update(query, source);
+        if (count == 0) throw new UpdatedPasswordNotSaved("Updated password was not saved");
+        LOGGER.debug(String.format("New password for email=%s was saved", email));
+    }
+
     private MapSqlParameterSource getRegistrationParameters(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue(EMAIL, user.getEmail());
@@ -374,7 +434,8 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Autowired
-    public UserDaoImpl(@Qualifier(value = "DS") DataSource dataSource) {
+    public UserDaoImpl(@Qualifier(value = "DS") DataSource dataSource, DaoUtilInf daoUtil) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+        this.daoUtil = daoUtil;
     }
 }

@@ -24,7 +24,7 @@ import static ua.com.vertex.controllers.CourseDetailsController.TEACHERS;
 @PreAuthorize("hasRole('ADMIN')")
 public class AddCourseController {
     private static final String PAGE_JSP = "addCourse";
-    private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewAllCourses";
+    private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewCourses/all";
     private static final String COURSE = "course";
 
     private static final Logger LOGGER = LogManager.getLogger(AddCourseController.class);

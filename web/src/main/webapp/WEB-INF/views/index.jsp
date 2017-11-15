@@ -120,7 +120,7 @@
         </sec:authorize>
 
         <div class="href">
-            <c:if test="${user == null && admin == null}">
+            <c:if test="${user == null && admin == null && teacher == null}">
                 <a href="<c:url value="/registration"/>">Register</a> |
                 <a href="<c:url value="/logIn"/>">Log in</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
@@ -132,13 +132,21 @@
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
             </c:if>
 
+            <c:if test="${teacher != null}">
+                <a href="<c:url value="/logIn"/>">User page</a> |
+                <a href="<c:url value="/logOut"/>">Log out</a><br><br>
+                <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
+                <a href="<c:url value="/viewCourses/teacher"/>">View courses that I teach</a>
+            </c:if>
+
             <c:if test="${admin != null}">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a> |
-                <a href="<c:url value="/viewAllCourses"/>">View all courses</a>
+                <a href="<c:url value="/viewCourses/all"/>">View all courses</a>
             </c:if>
+
         </div>
     </div>
 </div>
