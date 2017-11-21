@@ -151,11 +151,7 @@
                 <td><span class="fontSize125">Select type of search:</span></td>
                 <td>
                     <label class="black">
-                        <select name="searchType" id="searchType">
-                            <option selected value="first_name">By first name</option>
-                            <option value="last_name">By last name</option>
-                            <option value="email">By email</option>
-                        </select>
+                        <sf:select path="searchType" items="${selection}"/>
                     </label>
                 </td>
             </tr>
@@ -292,17 +288,6 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var input = document.getElementById('searchType');
-        if (localStorage['searchType']) {
-            input.value = localStorage['searchType'];
-        }
-        input.onchange = function () {
-            localStorage['searchType'] = this.value;
-        }
-    });
-</script>
 
 </body>
 </html>

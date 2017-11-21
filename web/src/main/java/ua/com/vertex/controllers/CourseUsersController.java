@@ -25,6 +25,8 @@ public class CourseUsersController {
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
     private static final String DTO = "dtoCourseUser";
+    private static final String SELECTION = "selection";
+    private static final String[] SELECTION_PARAMS = {"First Name", "Last Name", "Email"};
 
     private final CourseLogic courseLogic;
 
@@ -41,6 +43,7 @@ public class CourseUsersController {
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(new User());
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -56,6 +59,7 @@ public class CourseUsersController {
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -75,6 +79,7 @@ public class CourseUsersController {
         model.addAttribute(FREE_USERS, freeUsers);
         model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -94,6 +99,7 @@ public class CourseUsersController {
         model.addAttribute(FREE_USERS, freeUsers);
         model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -107,6 +113,7 @@ public class CourseUsersController {
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
