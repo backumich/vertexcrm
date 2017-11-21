@@ -157,7 +157,7 @@
                 <td>Certificate Link:</td>
                 <td class="fontSize70">
                     <a href="<c:url value="/getCertificate/${certificate.certificateUid}"/>">
-                        localhost:8080/getCertificate/${certificate.certificateUid}</a></td>
+                            ${pageContext.request.contextPath}/getCertificate/${certificate.certificateUid}</a></td>
             </tr>
         </table>
         <br>

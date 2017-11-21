@@ -62,12 +62,10 @@ public class UserLogicImpl implements UserLogic {
     }
 
     private void validateMultipartFile(MultipartFile file) {
-        if (!file.isEmpty()) {
-            if (file.getSize() > fileSizeInBytes) {
-                throw new MultipartValidationException(FILE_SIZE_EXCEEDED);
-            } else if (!file.getContentType().split("/")[0].equals("image")) {
-                throw new MultipartValidationException(FILE_TYPE_INVALID);
-            }
+        if (file.getSize() > fileSizeInBytes) {
+            throw new MultipartValidationException(FILE_SIZE_EXCEEDED);
+        } else if (!file.getContentType().split("/")[0].equals("image")) {
+            throw new MultipartValidationException(FILE_TYPE_INVALID);
         }
     }
 
