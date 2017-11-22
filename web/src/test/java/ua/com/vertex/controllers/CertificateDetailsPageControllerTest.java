@@ -22,6 +22,7 @@ import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
+import ua.com.vertex.utils.EmailExtractor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -43,6 +44,9 @@ public class CertificateDetailsPageControllerTest {
 
     @Autowired
     private CertificateLogic certLogic;
+
+    @Autowired
+    private EmailExtractor emailExtractor;
 
     @Mock
     private Model model;
@@ -67,7 +71,7 @@ public class CertificateDetailsPageControllerTest {
         MockitoAnnotations.initMocks(this);
         controller = new CertificateDetailsPageController(certLogic);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new GlobalExceptionHandler())
+                .setControllerAdvice(new GlobalExceptionHandler(emailExtractor))
                 .build();
         certificate = new Certificate.Builder()
                 .setCertificationId(EXISTING_CERT_ID)

@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
@@ -16,6 +17,7 @@ import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class UserLogicImpl implements UserLogic {
 
     @Value("${image.size.bytes}")
     private int fileSizeInBytes;
+
+    @Value("${passwordLinkExpire}")
+    private int passwordLinkExpire;
 
     @Override
     public List<String> getAllUserIds() {
@@ -144,5 +149,28 @@ public class UserLogicImpl implements UserLogic {
 
         LOGGER.debug(String.format("Call - accountingDaoInf.getCourseUsers(%s)", courseId));
         return userDao.getCourseUsers(courseId);
+    }
+
+    @Override
+    public boolean isUserRegisteredAndActive(String email) {
+        User user = userDao.userForRegistrationCheck(email).orElse(User.EMPTY_USER);
+        return user.isActive();
+    }
+
+    @Override
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        return userDao.setParamsToRestorePassword(email, uuid, creationTime);
+    }
+
+    @Override
+    public String getEmailByUuid(long id, String uuid) {
+        PasswordResetDto dto = userDao.getEmailByUuid(id, uuid);
+        LOGGER.debug("Checking if link to restore password has expired");
+        return dto.getCreationTime().plusMinutes(passwordLinkExpire).isAfter(LocalDateTime.now()) ? dto.getEmail() : "";
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        userDao.savePassword(email, bCryptPasswordEncoder.encode(password));
     }
 }

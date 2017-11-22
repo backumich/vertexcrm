@@ -8,7 +8,5 @@ import java.util.Optional;
 @Profile("test")
 public interface AccountingDaoImplForTest {
 
-    int createAccounting(Accounting accounting);
-
     Optional<Accounting> getAccountingByCourseIdAndUserId(int courseId, int userId);
 }

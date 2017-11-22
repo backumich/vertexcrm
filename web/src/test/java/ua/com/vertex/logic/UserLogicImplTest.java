@@ -13,8 +13,10 @@ import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -141,4 +143,31 @@ public class UserLogicImplTest {
         logic.getTeachers();
     }
 
+    @Test
+    public void isUserRegisteredAndActiveReturnsTrue() {
+        when(dao.userForRegistrationCheck(EMAIL))
+                .thenReturn(Optional.of(new User.Builder().setIsActive(true).getInstance()));
+        boolean result = logic.isUserRegisteredAndActive(EMAIL);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void isUserRegisteredAndActiveReturnsFalse() {
+        when(dao.userForRegistrationCheck(EMAIL))
+                .thenReturn(Optional.of(new User.Builder().setIsActive(false).getInstance()));
+        boolean result = logic.isUserRegisteredAndActive(EMAIL);
+
+        assertEquals(false, result);
+    }
+
+    @Test
+    public void setParamsToRestorePasswordInvokesUserDao() {
+        final String email = "someEmail";
+        final String uuid = "uuid";
+        final LocalDateTime dateTime = LocalDateTime.now();
+
+        logic.setParamsToRestorePassword(email, uuid, dateTime);
+        verify(dao, times(1)).setParamsToRestorePassword(email, uuid, dateTime);
+    }
 }
