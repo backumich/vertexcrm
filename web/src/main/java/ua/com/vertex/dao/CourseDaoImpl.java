@@ -301,19 +301,19 @@ public class CourseDaoImpl implements CourseDaoInf {
         List<User> users;
         String query = "";
         switch (dto.getSearchType()) {
-            case "first_name":
+            case "First Name":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.first_name LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +
                         "WHERE cu.course_id=:courseId AND cu.user_id=u.user_id) = 0";
                 break;
-            case "last_name":
+            case "Last Name":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.last_name LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +
                         "WHERE cu.course_id=:courseId AND cu.user_id=u.user_id) = 0";
                 break;
-            case "email":
+            case "Email":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.email LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +

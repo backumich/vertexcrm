@@ -143,18 +143,15 @@
             <tr>
                 <td><label for="searchParam" class="fontSize125 labelWidth300">
                     Enter first name, or last name, or email:</label></td>
-                <td><input type="text" name="searchParam" id="searchParam" maxlength="255"
+                <td><input type="text" name="searchParam" value="${dtoCourseUser.searchParam}"
+                           id="searchParam" maxlength="255"
                            placeholder="First name, or last name, or email" class="labelWidth200 black"/></td>
             </tr>
             <tr>
                 <td><span class="fontSize125">Select type of search:</span></td>
                 <td>
                     <label class="black">
-                        <select name="searchType">
-                            <option selected value="first_name">By first name</option>
-                            <option value="last_name">By last name</option>
-                            <option value="email">By email</option>
-                        </select>
+                        <sf:select path="searchType" items="${selection}"/>
                     </label>
                 </td>
             </tr>
