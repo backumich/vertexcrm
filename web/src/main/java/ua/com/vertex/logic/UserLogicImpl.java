@@ -15,6 +15,7 @@ import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidatio
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
+import ua.com.vertex.utils.UtilFunctions;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -27,8 +28,6 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
-    public static final String FILE_SIZE_EXCEEDED = "Multipart file size exceeded";
-    public static final String FILE_TYPE_INVALID = "Invalid multipart file type";
 
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -68,9 +67,10 @@ public class UserLogicImpl implements UserLogic {
 
     private void validateMultipartFile(MultipartFile file) {
         if (file.getSize() > fileSizeInBytes) {
-            throw new MultipartValidationException(FILE_SIZE_EXCEEDED);
+            throw new MultipartValidationException("File size exceeded, max allowed is " +
+                    UtilFunctions.humanReadableByteCount(fileSizeInBytes));
         } else if (!file.getContentType().split("/")[0].equals("image")) {
-            throw new MultipartValidationException(FILE_TYPE_INVALID);
+            throw new MultipartValidationException("You have chosen a file of invalid type!");
         }
     }
 

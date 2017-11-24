@@ -35,7 +35,8 @@ public class ImageController {
                                  @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         LOGGER.debug(IMAGE_PHOTO + " page accessed");
-        encode(model, user.getEmail(), imageType);
+        String encodedImage = encode(user.getEmail(), imageType);
+        model.addAttribute(imageType, encodedImage);
         model.addAttribute(USER, user);
         LOGGER.debug("Passing imagePhoto to JSP");
 
@@ -48,16 +49,16 @@ public class ImageController {
                                     @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
         LOGGER.debug(IMAGE_PASSPORT + " page accessed");
-        encode(model, user.getEmail(), imageType);
+        String encodedImage = encode(user.getEmail(), imageType);
+        model.addAttribute(imageType, encodedImage);
         model.addAttribute(USER, user);
         LOGGER.debug("Passing imagePassport to JSP");
 
         return IMAGE_PASSPORT;
     }
 
-    private void encode(Model model, String email, String imageType) {
-        String encoded = Base64.encodeBase64String(userLogic.getImage(email, imageType).orElse(new byte[]{}));
-        model.addAttribute(imageType, encoded);
+    private String encode(String email, String imageType) {
+        return Base64.encodeBase64String(userLogic.getImage(email, imageType).orElse(new byte[]{}));
     }
 
     @PostMapping(value = "/uploadImage")
