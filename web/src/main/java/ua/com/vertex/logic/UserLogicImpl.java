@@ -70,7 +70,7 @@ public class UserLogicImpl implements UserLogic {
             throw new MultipartValidationException("File size exceeded, max allowed is " +
                     UtilFunctions.humanReadableByteCount(fileSizeInBytes));
         } else if (!file.getContentType().split("/")[0].equals("image")) {
-            throw new MultipartValidationException("You have chosen a file of invalid type!");
+            throw new MultipartValidationException("You have chosen a file of invalid type");
         }
     }
 
