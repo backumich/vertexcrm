@@ -50,6 +50,7 @@ public class UserDaoTest {
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     @SuppressWarnings("WeakerAccess")
     static final String EXISTING_EMAIL = "22@test.com";
+    static final String EXISTING_EMAIL2 = "33@test.com";
     static final String EXISTING_EMAIL3 = "email1@test.com";
     private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
@@ -127,53 +128,53 @@ public class UserDaoTest {
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPhotoSave() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, PHOTO);
+        userDao.saveImage(EXISTING_EMAIL, image, PHOTO);
     }
 
     @Test
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPassportSave() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
+        userDao.saveImage(EXISTING_EMAIL, image, PASSPORT_SCAN);
     }
 
     @Test(expected = RuntimeException.class)
     @WithMockUser
     public void saveImageThrowsExceptionIfWrongImageType() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, WRONG_IMAGE_TYPE);
+        userDao.saveImage(EXISTING_EMAIL, image, WRONG_IMAGE_TYPE);
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPhoto() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PHOTO);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL, PHOTO);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPassportScan() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PASSPORT_SCAN);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL, PASSPORT_SCAN);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsNullOptionalIfNotExistingImage() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID2, PHOTO);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL2, PHOTO);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @WithMockUser
     public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() {
-        userDao.getImage(NOT_EXISTING_ID, PHOTO);
+        userDao.getImage(NOT_EXISTING_EMAIL, PHOTO);
     }
 
     @Test(expected = RuntimeException.class)
     public void getImageThrowsExceptionIfWrongImageType() throws Exception {
-        userDao.getImage(EXISTING_ID1, WRONG_IMAGE_TYPE);
+        userDao.getImage(EXISTING_EMAIL, WRONG_IMAGE_TYPE);
     }
 
     @Test

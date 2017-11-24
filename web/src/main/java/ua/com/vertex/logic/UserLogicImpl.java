@@ -8,12 +8,16 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.UserLogic;
 import ua.com.vertex.utils.DataNavigator;
+import ua.com.vertex.utils.UtilFunctions;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +28,12 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${image.size.bytes}")
+    private int fileSizeInBytes;
 
     @Value("${passwordLinkExpire}")
     private int passwordLinkExpire;
@@ -46,13 +54,29 @@ public class UserLogicImpl implements UserLogic {
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) {
-        userDao.saveImage(userId, image, imageType);
+    public void saveImage(String email, MultipartFile file, String imageType) {
+        byte[] image;
+        validateMultipartFile(file);
+        try {
+            image = file.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        userDao.saveImage(email, image, imageType);
+    }
+
+    private void validateMultipartFile(MultipartFile file) {
+        if (file.getSize() > fileSizeInBytes) {
+            throw new MultipartValidationException("File size exceeded, max allowed is " +
+                    UtilFunctions.humanReadableByteCount(fileSizeInBytes));
+        } else if (!file.getContentType().split("/")[0].equals("image")) {
+            throw new MultipartValidationException("You have chosen a file of invalid type");
+        }
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) {
-        return userDao.getImage(userId, imageType);
+    public Optional<byte[]> getImage(String email, String imageType) {
+        return userDao.getImage(email, imageType);
     }
 
     public int getQuantityUsers() {
