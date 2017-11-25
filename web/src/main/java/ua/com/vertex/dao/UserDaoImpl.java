@@ -126,19 +126,19 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) {
+    public void saveImage(String email, byte[] image, String imageType) {
         String query;
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue(USER_ID, userId);
+        parameters.addValue(EMAIL, email);
 
         if (PHOTO.equals(imageType)) {
-            query = "UPDATE Users SET photo=:photo WHERE user_id=:user_id";
+            query = "UPDATE Users SET photo=:photo WHERE email=:email";
             parameters.addValue(PHOTO, image);
         } else if (IMAGE_PASSPORT_SCAN.equals(imageType)) {
-            query = "UPDATE Users SET passport_scan=:passport_scan WHERE user_id=:user_id";
+            query = "UPDATE Users SET passport_scan=:passport_scan WHERE email=:email";
             parameters.addValue(PASSPORT_SCAN, image);
         } else {
-            throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
+            throw new RuntimeException("Image was not saved: wrong image type description = " + imageType);
         }
 
         LOGGER.debug("Image saved");
@@ -146,23 +146,23 @@ public class UserDaoImpl implements UserDaoInf {
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) {
+    public Optional<byte[]> getImage(String email, String imageType) {
         byte[] image;
         String query;
 
         if (PHOTO.equals(imageType)) {
-            query = "SELECT photo FROM Users WHERE user_id=:user_id";
+            query = "SELECT photo FROM Users WHERE email=:email";
 
         } else if (IMAGE_PASSPORT_SCAN.equals(imageType)) {
-            query = "SELECT passport_scan FROM Users WHERE user_id=:user_id";
+            query = "SELECT passport_scan FROM Users WHERE email=:email";
 
         } else {
             throw new RuntimeException("Wrong image type description: " + imageType);
         }
 
-        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
+        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), byte[].class);
 
-        LOGGER.debug("Image of userId=" + userId + " retrieved");
+        LOGGER.debug("Image of user email=" + email + " retrieved");
 
         return Optional.ofNullable(image);
     }
@@ -290,8 +290,8 @@ public class UserDaoImpl implements UserDaoInf {
     public List<User> searchUser(String userData) {
         LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
 
-        String query = "SELECT user_id, email, first_name, last_name FROM Users WHERE email LIKE :userData " +
-                "OR first_name LIKE :userData OR last_name LIKE :userData";
+        String query = "SELECT user_id, email, first_name, last_name, phone FROM Users WHERE email LIKE :userData " +
+                "OR first_name LIKE :userData OR last_name LIKE :userData OR phone LIKE :userData";
 
         LOGGER.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "%" + userData + "%"),
@@ -299,6 +299,7 @@ public class UserDaoImpl implements UserDaoInf {
                         .setEmail(rs.getString(EMAIL))
                         .setFirstName(rs.getString(FIRST_NAME))
                         .setLastName(rs.getString(LAST_NAME))
+                        .setPhone(rs.getString(PHONE))
                         .getInstance());
     }
 

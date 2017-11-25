@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
@@ -62,7 +63,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
 
         LOGGER.debug("Quantity courses: {}; Courses list: {}",
-                () -> courses.size(), () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
+                courses::size, () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
 
         return courses;
     }
@@ -83,7 +84,7 @@ public class CourseDaoImpl implements CourseDaoInf {
         List<Course> courses = jdbcTemplate.query(query, parameters, (resultSet, i) -> mapCourses(resultSet));
 
         LOGGER.debug("Quantity courses: {}; Courses list: {}",
-                () -> courses.size(), () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
+                courses::size, () -> courses.stream().map(Course::getName).collect(Collectors.joining("|")));
 
         return courses;
     }
@@ -276,8 +277,9 @@ public class CourseDaoImpl implements CourseDaoInf {
     }
 
     @Override
+    @Transactional
     public void assignUserToCourse(DtoCourseUser dto) {
-        LOGGER.debug("Assigning the user id=%d to the course id={}",
+        LOGGER.debug("Assigning the user id={} to the course id={}",
                 dto.getUserId(), dto.getCourseId());
 
         String query = "INSERT INTO Course_users (course_id, user_id) VALUES (:courseId, :userId)";
@@ -299,19 +301,19 @@ public class CourseDaoImpl implements CourseDaoInf {
         List<User> users;
         String query = "";
         switch (dto.getSearchType()) {
-            case "first_name":
+            case "First Name":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.first_name LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +
                         "WHERE cu.course_id=:courseId AND cu.user_id=u.user_id) = 0";
                 break;
-            case "last_name":
+            case "Last Name":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.last_name LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +
                         "WHERE cu.course_id=:courseId AND cu.user_id=u.user_id) = 0";
                 break;
-            case "email":
+            case "Email":
                 query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                         "WHERE u.email LIKE :searchParam AND " +
                         "(SELECT count(*) FROM Course_users cu " +
