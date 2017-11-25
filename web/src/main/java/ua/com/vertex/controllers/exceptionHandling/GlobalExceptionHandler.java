@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
 import ua.com.vertex.utils.EmailExtractor;
 
 import java.net.SocketTimeoutException;
@@ -19,7 +21,8 @@ import java.net.SocketTimeoutException;
 public class GlobalExceptionHandler {
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionHandler.class);
     private static final String ERROR = "error";
-    private static final String ERROR_MESSAGE = "errorMessage";
+    public static final String ERROR_MESSAGE = "errorMessage";
+    private static final String IMAGE_ERROR = "imageError";
     private static final String CERTIFICATE_DETAILS = "certificateDetails";
     private static final String LOGIN = "logIn";
     private static final String ACCESS_DENIED = "403";
@@ -49,6 +52,13 @@ public class GlobalExceptionHandler {
         LOGGER.warn(e, e);
         model.addAttribute(ERROR_MESSAGE, "Oops, something went wrong. Try in a minute please.");
         return ERROR;
+    }
+
+    @ExceptionHandler(MultipartValidationException.class)
+    public String handleMultipartValidationException(MultipartValidationException e, Model model) {
+        LOGGER.debug(e, e);
+        model.addAttribute(ERROR_MESSAGE, e.getMessage());
+        return IMAGE_ERROR;
     }
 
     @ExceptionHandler(UpdatedPasswordNotSaved.class)

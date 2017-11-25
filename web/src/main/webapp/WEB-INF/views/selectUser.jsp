@@ -102,7 +102,8 @@
                 <span class="fontSize180 silver">Search user:</span><br><br><br>
                 <table class="active">
                     <tr>
-                        <td style="color: black"><input placeholder="E-mail" type="text" name="userDataForSearch"/>
+                        <td style="color: black"><input placeholder="E-mail or phone or first name or last name"
+                                                        type="text" name="userDataForSearch" size="50"/>
                         </td>
                     </tr>
                 </table>
@@ -120,14 +121,15 @@
         <c:if test="${!empty users}">
             <form:form method="post" commandName="userIdForCertificate"
                        action="selectUser">
-                <span class="fontSize180 silver">Select user:</span><br><br><br>
+                <span class="fontSize180 black">Select user:</span><br><br><br>
                 <table class="active" cols="5" width="500">
                     <tr style="color: #2aabd2">
                         <th>Select user</th>
                         <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
+                        <th>E-mail</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Phone</th>
                     </tr>
                     <c:forEach items="${users}" var="user">
                         <tr>
@@ -137,6 +139,7 @@
                             <td>${user.email}</td>
                             <td>${user.firstName}</td>
                             <td>${user.lastName}</td>
+                            <td>${user.phone}</td>
                             <td>
                             </td>
                         </tr>

@@ -20,7 +20,7 @@ import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler;
-import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.utils.EmailExtractor;
 

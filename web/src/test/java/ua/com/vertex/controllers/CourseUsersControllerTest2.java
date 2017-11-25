@@ -35,9 +35,9 @@ public class CourseUsersControllerTest2 {
     private static final String ASSIGNED_USERS = "assignedUsers";
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
-    private static final String SEARCH_TYPE_FIRST_NAME = "first_name";
-    private static final String SEARCH_TYPE_LAST_NAME = "last_name";
-    private static final String SEARCH_TYPE_EMAIL = "email";
+    private static final String SEARCH_TYPE_FIRST_NAME = "First Name";
+    private static final String SEARCH_TYPE_LAST_NAME = "Last Name";
+    private static final String SEARCH_TYPE_EMAIL = "Email";
     private static final String DTO = "dtoCourseUser";
     private static final int COURSE_ID = 1;
 

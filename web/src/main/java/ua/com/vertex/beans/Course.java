@@ -2,6 +2,8 @@ package ua.com.vertex.beans;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -14,10 +16,8 @@ public class Course {
 
     private int id;
 
-    //    @Digits(message = "Incorrect price. Must be like '99,99'.", integer = 19, fraction = 2)
-//    @DecimalMin(message = "Incorrect price. The price should be greater than or equal to zero", value = "0.00")
-//    @DecimalMax(message = "Incorrect price. The price should be less than 99999999.00.", value = "99999999.00")
-//    @NotNull
+    @Digits(integer = 8, fraction = 2)
+    @DecimalMin("0.00")
     private BigDecimal price;
 
     @Size(min = 1, max = 256, message = COURSE_NAME_MSG)

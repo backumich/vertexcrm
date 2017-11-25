@@ -129,13 +129,13 @@
         </tr>
         <tr>
             <td>My certificates:</td>
-            <td><a href="<c:url value="/getCertificateByUserId?userId=${user.userId}"/>">Go to certificates page</a>
+            <td><a href="<c:url value="/getCertificatesByUserEmail"/>">Go to certificates page</a>
             </td>
         </tr>
         <tr>
             <td>Photo:</td>
             <td>
-                <sf:form method="get" action="/showImage" commandName="user">
+                <sf:form method="post" action="/showImagePhoto" commandName="user">
                     <input type="hidden" name="userId" value="${user.userId}"/>
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
@@ -150,7 +150,7 @@
         <tr>
             <td>Passport scan:</td>
             <td>
-                <sf:form method="get" action="/showImage" commandName="user">
+                <sf:form method="post" action="/showImagePassport" commandName="user">
                     <input type="hidden" name="userId" value="${user.userId}"/>
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
