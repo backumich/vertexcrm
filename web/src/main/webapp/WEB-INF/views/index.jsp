@@ -109,44 +109,33 @@
             </div>
         </main>
 
-        <sec:authorize access="hasRole('ADMIN')">
-            <sec:authentication property="principal.username" var="admin"/>
-        </sec:authorize>
-        <sec:authorize access="hasRole('USER')">
-            <sec:authentication property="principal.username" var="user"/>
-        </sec:authorize>
-        <sec:authorize access="hasRole('TEACHER')">
-            <sec:authentication property="principal.username" var="teacher"/>
-        </sec:authorize>
-
         <div class="href">
-            <c:if test="${user == null && admin == null && teacher == null}">
+            <sec:authorize access="isAnonymous()">
                 <a href="<c:url value="/registration"/>">Register</a> |
                 <a href="<c:url value="/logIn"/>">Log in</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
-            </c:if>
+            </sec:authorize>
 
-            <c:if test="${user != null}">
+            <sec:authorize access="hasRole('USER')">
                 <a href="<c:url value="/logIn"/>">User page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a>
-            </c:if>
+            </sec:authorize>
 
-            <c:if test="${teacher != null}">
+            <sec:authorize access="hasRole('TEACHER')">
                 <a href="<c:url value="/logIn"/>">User page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewCourses/teacher"/>">View courses that I teach</a>
-            </c:if>
+            </sec:authorize>
 
-            <c:if test="${admin != null}">
+            <sec:authorize access="hasRole('ADMIN')">
                 <a href="<c:url value="/admin"/>">Admin page</a> |
                 <a href="<c:url value="/logOut"/>">Log out</a><br><br>
                 <a href="<c:url value="/certificateDetails"/>">Certificate details by ID</a><br><br>
                 <a href="<c:url value="/viewAllUsers"/>">View all users</a> |
                 <a href="<c:url value="/viewCourses/all"/>">View all courses</a>
-            </c:if>
-
+            </sec:authorize>
         </div>
     </div>
 </div>
