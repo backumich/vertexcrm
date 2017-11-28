@@ -1,5 +1,4 @@
 $("#phone").intlTelInput({
-    autoHideDialCode: false,
     initialCountry: "auto",
     geoIpLookup: function (callback) {
         $.get('https://ipinfo.io', function () {
