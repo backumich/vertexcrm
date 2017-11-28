@@ -43,27 +43,41 @@ public class PhoneVerificationValidatorTest {
 
     @Test
     public void testCountriesFormatValid3() {
-        form.setPhone("+38050-123-45-67");
+        form.setPhone("+38 050 123 4567");
         boolean result = validator.isValid(form, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid4() {
-        form.setPhone("050-123-45-67");
+        form.setPhone("+(38050) 123 4567");
         boolean result = validator.isValid(form, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid5() {
-        form.setPhone("+48 123 456 789");
+        form.setPhone("+38050-123-45-67");
         boolean result = validator.isValid(form, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid6() {
+        form.setPhone("050-123-45-67");
+        boolean result = validator.isValid(form, context);
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void testCountriesFormatValid7() {
+        form.setPhone("+48 123 456 789");
+        boolean result = validator.isValid(form, context);
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void testCountriesFormatValid8() {
         form.setPhone("+370 528 594 06");
         boolean result = validator.isValid(form, context);
         assertEquals(true, result);
@@ -79,6 +93,13 @@ public class PhoneVerificationValidatorTest {
     @Test
     public void testCountriesFormatInvalid2() {
         form.setPhone("+48 123 456 78");
+        boolean result = validator.isValid(form, context);
+        assertEquals(false, result);
+    }
+
+    @Test
+    public void testCountriesFormatInvalid3() {
+        form.setPhone("123 456 789");
         boolean result = validator.isValid(form, context);
         assertEquals(false, result);
     }
