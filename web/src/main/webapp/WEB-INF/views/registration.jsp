@@ -19,6 +19,7 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
+    <link href="<c:url value='/css/intlTelInput.css' />" rel="stylesheet"/>
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
@@ -139,7 +140,8 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><form:input class="buttonText" placeholder="Phone" path="phone"/></td>
+                        <td><input class="buttonText" type="tel" id="phone"/></td>
+                        <td><form:hidden path="phone" id="phoneHidden"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
                     <tr>
@@ -179,7 +181,6 @@
                 <a href="<c:url value="/" />">Home</a>
             </div>
         </div>
-
     </div>
 </div>
 <div class="footer">
@@ -242,6 +243,9 @@
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../../javascript/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
 
 </body>
 </html>
