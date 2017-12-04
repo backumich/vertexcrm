@@ -6,7 +6,7 @@ import ua.com.vertex.validators.interfaces.PasswordVerification;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@PasswordVerification(message = "Password and password confirmation fields don't match!!!")
+@PasswordVerification(message = "Password and password confirmation fields don't match")
 public class UserFormRegistration {
     @Size(min = 5, max = 256, message = "E-mail must be longer than 5 and less than 256 characters")
     @Email(message = "E-mail address format is incorrect")
@@ -26,7 +26,7 @@ public class UserFormRegistration {
 
     @Size(min = 1, max = 15, message = "This field should not be longer than 15 characters")
     @Pattern(regexp = "(^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{0,3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$)",
-            message = "Invalid telephone number format!")
+            message = "Invalid telephone number format")
     /* regex to validate phone numbers   ^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$
         18005551234
         1 800 555 1234

@@ -241,8 +241,8 @@ public class UserDaoImpl implements UserDaoInf {
                 "photo = :photo, " +
                 "discount = :discount, " +
                 "phone = :phone, " +
-                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name= :role)" +
-                " WHERE user_id = :user_id";
+                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name = :name) " +
+                "WHERE user_id = :user_id";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(EMAIL, user.getEmail());
@@ -252,7 +252,7 @@ public class UserDaoImpl implements UserDaoInf {
         parameters.addValue(PHOTO, user.getPhoto());
         parameters.addValue(DISCOUNT, user.getDiscount());
         parameters.addValue(PHONE, user.getPhone());
-        parameters.addValue(ROLE_NAME, user.getRole());
+        parameters.addValue(ROLE_NAME, user.getRole().name());
         parameters.addValue(USER_ID, user.getUserId());
 
         return jdbcTemplate.update(query, parameters);
