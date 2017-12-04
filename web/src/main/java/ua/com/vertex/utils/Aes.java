@@ -43,7 +43,7 @@ public class Aes {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             encrypted = cipher.doFinal(value.getBytes("UTF-8"));
         } catch (Exception e) {
-            throw new RuntimeException("Encrypt failed for - " + value, e);
+            throw new RuntimeException("Encryption failed for - " + value, e);
         }
         return hex(encrypted);
     }
@@ -71,7 +71,7 @@ public class Aes {
             byte[] decrypted = cipher.doFinal(encypted);
             toReturn = new String(decrypted, "UTF-8");
         } catch (Exception e) {
-            throw new RuntimeException("Decrypt failed for - " + value, e);
+            throw new RuntimeException("Decryption failed for - " + value, e);
         }
         return toReturn;
     }
