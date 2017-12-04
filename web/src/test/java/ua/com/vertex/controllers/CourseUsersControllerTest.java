@@ -4,15 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.view.InternalResourceView;
 import ua.com.vertex.beans.Course;
 import ua.com.vertex.beans.DtoCourseUser;
 import ua.com.vertex.beans.User;
@@ -25,13 +26,19 @@ import java.util.List;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
 @Transactional
-public class CourseUsersControllerTest2 {
+public class CourseUsersControllerTest {
+    private static final String COURSE_USERS = "courseUsers";
+    private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
     private static final String ASSIGNED_USERS = "assignedUsers";
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
@@ -41,20 +48,26 @@ public class CourseUsersControllerTest2 {
     private static final String DTO = "dtoCourseUser";
     private static final int COURSE_ID = 1;
 
+    @Mock
+    private CourseLogic courseLogicMocked;
+
     @Autowired
     private CourseLogic courseLogic;
 
     @Mock
     private Model model;
-
+    private MockMvc mockMvc;
     private CourseUsersController controller;
     private User user1, user2, user3, user4, user5, user6, user7, user8, user9;
     private DtoCourseUser dto;
     private List<User> assignedUsers;
 
     @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
+        mockMvc = standaloneSetup(new CourseUsersController(courseLogicMocked))
+                .setSingleView(new InternalResourceView(COURSE_USERS))
+                .build();
+
         controller = new CourseUsersController(courseLogic);
         user1 = new User.Builder().setUserId(401).setEmail("user1@email.com")
                 .setFirstName("Name1").setLastName("Surname1").setPhone("+38050 111 1111").getInstance();
@@ -75,6 +88,42 @@ public class CourseUsersControllerTest2 {
         user9 = new User.Builder().setUserId(44).setEmail("44@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
         dto = new DtoCourseUser();
+    }
+
+    @Test
+    public void showCourseAndUsersPageReturnsCorrectView() throws Exception {
+        mockMvc.perform(get("/showCourseAndUsers"))
+                .andExpect(view().name(COURSE_USERS));
+    }
+
+    @Test
+    public void removeUserFromAssignedReturnsCorrectView() throws Exception {
+        mockMvc.perform(post("/removeUserFromCourse"))
+                .andExpect(view().name(COURSE_USERS));
+    }
+
+    @Test
+    public void assignUserToCourseReturnsCorrectView() throws Exception {
+        mockMvc.perform(post("/assignUser"))
+                .andExpect(view().name(COURSE_USERS));
+    }
+
+    @Test
+    public void searchForUsersToAssignReturnsCorrectView() throws Exception {
+        mockMvc.perform(get("/searchForUsersToAssign"))
+                .andExpect(view().name(COURSE_USERS));
+    }
+
+    @Test
+    public void clearSearchResultsReturnsCorrectView() throws Exception {
+        mockMvc.perform(get("/clearSearchResults"))
+                .andExpect(view().name(COURSE_USERS));
+    }
+
+    @Test
+    public void confirmUserRemovalFromCourseReturnsCorrectView() throws Exception {
+        mockMvc.perform(post("/confirmUserRemovalFromCourse"))
+                .andExpect(view().name(REMOVAL_CONFIRM));
     }
 
     @Test
