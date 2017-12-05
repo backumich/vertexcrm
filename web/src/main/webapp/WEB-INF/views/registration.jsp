@@ -243,7 +243,6 @@
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="../../javascript/intlTelInput.js"></script>
 <script src="../../javascript/phoneNumberFormat.js"></script>
 

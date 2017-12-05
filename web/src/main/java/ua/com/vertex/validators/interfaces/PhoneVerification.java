@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneVerification {
-    String message() default "{Wrong phone number format!}";
+    String message() default "ua.com.vertex.validators.interfaces.PhoneVerification.message";
 
     Class<?>[] groups() default {};
 
