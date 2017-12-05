@@ -26,15 +26,15 @@ public class ReCaptchaService {
 
     private static final Logger LOGGER = LogManager.getLogger(ReCaptchaService.class);
 
-    public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddr) {
+    public Boolean verify(String reCaptchaResponse, String reCaptchaRemoteAddress) {
         Boolean verified = false;
         HttpsURLConnection connection = null;
 
         try {
             LOGGER.debug("Trying to verify the validity of the captcha");
             URL url = new URL(reCaptchaUrl);
-            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse +
-                    "&remoteip=" + reCaptchaRemoteAddr;
+            String postParams = "secret=" + secretKey + "&response=" + reCaptchaResponse
+                    + "&remoteip=" + reCaptchaRemoteAddress;
 
             connection = getConnection(url);
             StringBuilder outputString = getResponseData(connection, postParams);

@@ -8,10 +8,6 @@ public class Captcha {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
     @Override
     public String toString() {
         return "Captcha{" +

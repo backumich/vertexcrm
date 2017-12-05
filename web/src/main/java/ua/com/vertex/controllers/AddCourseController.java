@@ -25,7 +25,6 @@ import static ua.com.vertex.controllers.CourseDetailsController.TEACHERS;
 public class AddCourseController {
     private static final String PAGE_JSP = "addCourse";
     private static final String ALL_COURSE_PAGE_JSP = "redirect:/viewCourses/all";
-    private static final String ERROR_JSP = "error";
     private static final String COURSE = "course";
 
     private static final Logger LOGGER = LogManager.getLogger(AddCourseController.class);
@@ -49,14 +48,9 @@ public class AddCourseController {
             LOGGER.debug("The user entered incorrect course data -" + course);
             modelAndView.setViewName(PAGE_JSP);
         } else {
-            try {
-                course.setId(courseLogic.addCourse(course));
-                LOGGER.debug("Added a new course into DB" + course);
-                modelAndView.setViewName(ALL_COURSE_PAGE_JSP);
-            } catch (Exception e) {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.warn("Could not save data to database", e);
-            }
+            course.setId(courseLogic.addCourse(course));
+            LOGGER.debug("Added a new course into DB" + course);
+            modelAndView.setViewName(ALL_COURSE_PAGE_JSP);
         }
         return modelAndView;
     }

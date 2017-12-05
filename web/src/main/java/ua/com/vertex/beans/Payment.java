@@ -14,7 +14,7 @@ public class Payment {
 
     @Digits(message = "Incorrect amount. Must be like '99,99'.", integer = 19, fraction = 2)
     @DecimalMin(message = "Incorrect amount. Must be greater than zero.", value = "0.01")
-    @DecimalMax(message = "Incorrect amount. Must be less than 10000.00 .", value = "10000.00")
+    @DecimalMax(message = "Incorrect amount. Must be less than 99999999.00 .", value = "99999999.00")
     @NotNull
     private BigDecimal amount;
     private LocalDateTime paymentDate;

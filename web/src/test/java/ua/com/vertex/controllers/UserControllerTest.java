@@ -19,7 +19,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.UserController.CERTIFICATES;
 import static ua.com.vertex.controllers.UserController.USER_JSP;
 
@@ -56,13 +55,6 @@ public class UserControllerTest {
     @Test
     public void getAllCertificateByUserEmailShouldReturnAppropriateString() {
         assertEquals("Return wrong view", "user", underTest.getAllCertificatesByUserEmail(model));
-    }
-
-    @Test
-    public void getAllCertificateByUserEmailShouldReturnAppropriateStringWhenException() {
-        //noinspection unchecked
-        when(emailExtractor.getEmailFromAuthentication()).thenThrow(Exception.class);
-        assertEquals("Return wrong view", ERROR, underTest.getAllCertificatesByUserEmail(model));
     }
 
     @Test
