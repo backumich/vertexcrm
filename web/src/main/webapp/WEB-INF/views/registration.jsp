@@ -158,20 +158,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center"><input class="buttonText" type="submit" value="Register"/></td>
+                        <td colspan="2" align="center">
+                            <input class="buttonText" type="submit" value="Register"
+                                   onclick="document.getElementById('wait').style.display='block'"/></td>
                     </tr>
                 </table>
             </form:form>
         </div>
         <br>
         <br>
-        <br>
-        <div class="container pt1_5" align="center">
-            <div align="center">
-                <form:errors path="userFormRegistration"/>
-            </div>
+        <div align="center">
+            <form:errors path="userFormRegistration"/>
+            <p id="wait" style="font-size: 180%; display:none">Подождите...</p>
         </div>
-        <br>
         <br>
         <br>
 
