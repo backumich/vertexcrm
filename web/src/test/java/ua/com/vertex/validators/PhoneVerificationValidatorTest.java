@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringRunner;
-import ua.com.vertex.beans.UserFormRegistration;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -19,88 +18,86 @@ public class PhoneVerificationValidatorTest {
 
     @Mock
     private ConstraintValidatorContext context;
-    private UserFormRegistration form;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        form = new UserFormRegistration();
     }
 
     @Test
     public void testCountriesFormatValid1() {
-        form.setPhone("+380501234567");
-        boolean result = validator.isValid(form, context);
+        String number = "+380501234567";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid2() {
-        form.setPhone("+38050 123 4567");
-        boolean result = validator.isValid(form, context);
+        String number = "+38050 123 4567";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid3() {
-        form.setPhone("+38 050 123 4567");
-        boolean result = validator.isValid(form, context);
+        String number = "+38 050 123 4567";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid4() {
-        form.setPhone("+(38050) 123 4567");
-        boolean result = validator.isValid(form, context);
+        String number = "+(38050) 123 4567";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid5() {
-        form.setPhone("+38050-123-45-67");
-        boolean result = validator.isValid(form, context);
+        String number = "+38050-123-45-67";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid6() {
-        form.setPhone("050-123-45-67");
-        boolean result = validator.isValid(form, context);
+        String number = "050-123-45-67";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid7() {
-        form.setPhone("+48 123 456 789");
-        boolean result = validator.isValid(form, context);
+        String number = "+48 123 456 789";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatValid8() {
-        form.setPhone("+370 528 594 06");
-        boolean result = validator.isValid(form, context);
+        String number = "+370 528 594 06";
+        boolean result = validator.isValid(number, context);
         assertEquals(true, result);
     }
 
     @Test
     public void testCountriesFormatInvalid1() {
-        form.setPhone("+38050-123-45");
-        boolean result = validator.isValid(form, context);
+        String number = "+38050-123-45";
+        boolean result = validator.isValid(number, context);
         assertEquals(false, result);
     }
 
     @Test
     public void testCountriesFormatInvalid2() {
-        form.setPhone("+48 123 456 78");
-        boolean result = validator.isValid(form, context);
+        String number = "+48 123 456 78";
+        boolean result = validator.isValid(number, context);
         assertEquals(false, result);
     }
 
     @Test
     public void testCountriesFormatInvalid3() {
-        form.setPhone("123 456 789");
-        boolean result = validator.isValid(form, context);
+        String number = "123 456 789";
+        boolean result = validator.isValid(number, context);
         assertEquals(false, result);
     }
 }

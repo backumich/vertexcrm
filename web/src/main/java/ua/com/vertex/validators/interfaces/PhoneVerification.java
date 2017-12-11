@@ -10,10 +10,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Constraint(validatedBy = PhoneVerificationValidator.class)
-@Target({ElementType.TYPE})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneVerification {
-    String message() default "ua.com.vertex.validators.interfaces.PhoneVerification.message";
+    String message() default "Wrong phone number format";
 
     Class<?>[] groups() default {};
 
