@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/sva.css">
+    <link href="<c:url value='/css/intlTelInput.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <link href="<c:url value='/css/intlTelInput.css' />" rel="stylesheet"/>
     <script type="text/javascript" async="" src="javascript/watch.js"></script>
     <script async="" src="javascript/analytics.js"></script>
     <%--suppress CommaExpressionJS --%>
