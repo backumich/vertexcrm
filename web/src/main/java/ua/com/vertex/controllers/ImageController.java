@@ -70,4 +70,5 @@ public class ImageController {
     public ImageController(UserLogic userLogic) {
         this.userLogic = userLogic;
     }
+
 }
