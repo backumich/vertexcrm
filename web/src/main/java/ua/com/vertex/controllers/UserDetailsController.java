@@ -65,8 +65,8 @@ public class UserDetailsController {
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
             boolean passportValid = userLogic
-                    .validateMultipartFileAndSetResult(imagePassportScan, bindingResult, "passportScan");
-            boolean photoValid = userLogic.validateMultipartFileAndSetResult(imagePhoto, bindingResult, "photo");
+                    .validateMultipartFileWithBindingResult(imagePassportScan, bindingResult, "passportScan");
+            boolean photoValid = userLogic.validateMultipartFileWithBindingResult(imagePhoto, bindingResult, "photo");
 
             if (passportValid && !imagePassportScan.isEmpty()) {
                 user.setPassportScan(imagePassportScan.getBytes());
@@ -99,4 +99,3 @@ public class UserDetailsController {
         this.certificateLogic = certificateLogic;
     }
 }
-

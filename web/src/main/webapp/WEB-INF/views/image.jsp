@@ -114,7 +114,10 @@
 
 <div align="center" class="page gray-page mh100 up-padding">
     <c:if test="${photo != null}">
-        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
+        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no image">
+    </c:if>
+    <c:if test="${passportScan != null}">
+        <img src="data:image/jpeg;base64,${passportScan}" width="auto" height="600" alt="no image">
     </c:if>
 
     <br><br>
@@ -129,13 +132,19 @@
                 <sf:hidden path="lastName" value="${user.lastName}"/>
                 <sf:hidden path="email" value="${user.email}"/>
                 <sf:hidden path="discount" value="${user.discount}"/>
-                <input type="hidden" name="imageType" value="photo"/>
                 <table>
                     <tr>
                         <td class="silver"><input type="file" name="image" accept="image/*"/></td>
                     </tr>
                     <tr>
-                        <td><input class="black" type="submit" value="Upload New Photo"></td>
+                        <c:if test="${photo != null}">
+                            <input type="hidden" name="imageType" value="photo"/>
+                            <td><input class="black" type="submit" value="Upload New Photo"></td>
+                        </c:if>
+                        <c:if test="${passportScan != null}">
+                            <input type="hidden" name="imageType" value="passportScan"/>
+                            <td><input class="black" type="submit" value="Upload New Passport Scan"></td>
+                        </c:if>
                     </tr>
                 </table>
             </sf:form>

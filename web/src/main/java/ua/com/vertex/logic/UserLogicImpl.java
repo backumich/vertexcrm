@@ -68,18 +68,19 @@ public class UserLogicImpl implements UserLogic {
         userDao.saveImage(email, image, imageType);
     }
 
-    @Override
-    public void validateMultipartFile(MultipartFile file) {
-        if (file.getSize() > fileSizeInBytes) {
-            throw new MultipartValidationException("File size exceeded, max allowed is " +
-                    UtilFunctions.humanReadableByteCount(fileSizeInBytes));
-        } else if (!file.getContentType().split("/")[0].equals("image")) {
-            throw new MultipartValidationException("You have chosen a file of invalid type");
+    private void validateMultipartFile(MultipartFile file) {
+        if (!file.isEmpty()) {
+            if (file.getSize() > fileSizeInBytes) {
+                throw new MultipartValidationException("File size exceeded, max allowed is " +
+                        UtilFunctions.humanReadableByteCount(fileSizeInBytes));
+            } else if (!file.getContentType().split("/")[0].equals("image")) {
+                throw new MultipartValidationException("You have chosen a file of invalid type");
+            }
         }
     }
 
     @Override
-    public boolean validateMultipartFileAndSetResult(MultipartFile file, BindingResult result, String image) {
+    public boolean validateMultipartFileWithBindingResult(MultipartFile file, BindingResult result, String image) {
         boolean validation = true;
         if (!file.isEmpty()) {
             if (file.getSize() > fileSizeInBytes) {

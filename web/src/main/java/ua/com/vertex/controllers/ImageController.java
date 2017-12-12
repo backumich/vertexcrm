@@ -15,18 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
-import static ua.com.vertex.controllers.exceptionHandling.GlobalExceptionHandler.ERROR_MESSAGE;
-
 @Controller
 public class ImageController {
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
     private static final String IMAGE = "image";
-    private static final String IMAGE_PHOTO = "imagePhoto";
-    private static final String IMAGE_PASSPORT = "imagePassport";
     private static final String IMAGE_TYPE = "imageType";
     private static final String USER = "user";
-    private static final String INDEX = "index";
-    private static final String IMAGE_ERROR = "imageError";
+    private static final String USER_PROFILE = "userProfile";
 
     private final UserLogic userLogic;
 
@@ -34,13 +29,13 @@ public class ImageController {
     public String showImagePhoto(@ModelAttribute(USER) User user,
                                  @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
-        LOGGER.debug(IMAGE_PHOTO + " page accessed");
+        LOGGER.debug(IMAGE + " page accessed");
         String encodedImage = encode(user.getEmail(), imageType);
         model.addAttribute(imageType, encodedImage);
         model.addAttribute(USER, user);
         LOGGER.debug("Passing imagePhoto to JSP");
 
-        return IMAGE_PHOTO;
+        return IMAGE;
     }
 
     @PostMapping(value = "/showImagePassport")
@@ -48,13 +43,13 @@ public class ImageController {
     public String showImagePassport(@ModelAttribute(USER) User user,
                                     @RequestParam(IMAGE_TYPE) String imageType, Model model) {
 
-        LOGGER.debug(IMAGE_PASSPORT + " page accessed");
+        LOGGER.debug(IMAGE + " page accessed");
         String encodedImage = encode(user.getEmail(), imageType);
         model.addAttribute(imageType, encodedImage);
         model.addAttribute(USER, user);
         LOGGER.debug("Passing imagePassport to JSP");
 
-        return IMAGE_PASSPORT;
+        return IMAGE;
     }
 
     private String encode(String email, String imageType) {
@@ -65,18 +60,10 @@ public class ImageController {
     @PreAuthorize("(principal.username).equals(#user.email) || hasRole('ADMIN')")
     public String uploadImage(@ModelAttribute(USER) User user,
                               @RequestPart(value = IMAGE) MultipartFile file,
-                              @RequestParam(IMAGE_TYPE) String imageType, Model model) {
-        String view;
+                              @RequestParam(IMAGE_TYPE) String imageType) {
 
-        if (file.isEmpty()) {
-            view = IMAGE_ERROR;
-            model.addAttribute(ERROR_MESSAGE, "You did not select any image!");
-            LOGGER.debug("no image selected");
-        } else {
-            userLogic.saveImage(user.getEmail(), file, imageType);
-            view = INDEX;
-        }
-        return view;
+        userLogic.saveImage(user.getEmail(), file, imageType);
+        return USER_PROFILE;
     }
 
     @Autowired

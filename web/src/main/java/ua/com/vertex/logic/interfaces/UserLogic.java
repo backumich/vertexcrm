@@ -20,9 +20,7 @@ public interface UserLogic {
 
     void saveImage(String email, MultipartFile file, String imageType);
 
-    void validateMultipartFile(MultipartFile file);
-
-    boolean validateMultipartFileAndSetResult(MultipartFile file, BindingResult result, String image);
+    boolean validateMultipartFileWithBindingResult(MultipartFile file, BindingResult result, String image);
 
     Optional<byte[]> getImage(String email, String imageType);
 

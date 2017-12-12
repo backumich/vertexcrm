@@ -4,8 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +25,7 @@ import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.UtilFunctions;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,13 +38,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+import static ua.com.vertex.logic.UserLogicImpl.FILE_SIZE;
+import static ua.com.vertex.logic.UserLogicImpl.FILE_TYPE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+@PropertySource("classpath:application.properties")
 @Transactional
-
 public class UserDetailsControllerTest {
 
     @Autowired
@@ -59,6 +65,9 @@ public class UserDetailsControllerTest {
 
     private User user;
     private Optional<User> optional;
+
+    @Value("${image.size.bytes}")
+    private int fileSizeInBytes;
 
     @Before
     public void setUp() throws Exception {
@@ -162,5 +171,36 @@ public class UserDetailsControllerTest {
 
         User updatedUser = logicWired.getUserById(1).get();
         assertTrue(Arrays.equals(bytes, updatedUser.getPhoto()));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void tooBigToSave() throws IOException {
+        User user = new User.Builder().setUserId(1).setRole(Role.ROLE_USER).setEmail("1@1.com")
+                .setFirstName("F").setLastName("L").getInstance();
+        byte[] bytes = new byte[fileSizeInBytes + 1];
+        BindingResult result = mock(BindingResult.class);
+
+        controllerWired.saveUserData(new MockMultipartFile("file", "file", "image/jpg", bytes),
+                new MockMultipartFile("file", "file", "image/jpg", new byte[]{}), user, result,
+                new ModelAndView());
+
+        Mockito.verify(result).rejectValue("passportScan", "error.passportScan",
+                FILE_SIZE + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void wrongImageType() throws IOException {
+        User user = new User.Builder().setUserId(1).setRole(Role.ROLE_USER).setEmail("1@1.com")
+                .setFirstName("F").setLastName("L").getInstance();
+        byte[] bytes = {1};
+        BindingResult result = mock(BindingResult.class);
+
+        controllerWired.saveUserData(new MockMultipartFile("file", "file", "wrong/jpg", bytes),
+                new MockMultipartFile("file", "file", "wrong/jpg", new byte[]{}), user, result,
+                new ModelAndView());
+
+        Mockito.verify(result).rejectValue("passportScan", "error.passportScan", FILE_TYPE);
     }
 }

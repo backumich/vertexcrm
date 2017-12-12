@@ -141,7 +141,6 @@
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
-                    <input type="hidden" name="pageToDisplay" value="imagePhoto"/>
                     <input type="hidden" name="imageType" value="photo"/>
                     <input class="black" type="submit" value="Show Photo">
                 </sf:form><br>
@@ -156,7 +155,6 @@
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
-                    <input type="hidden" name="pageToDisplay" value="imagePassport"/>
                     <input type="hidden" name="imageType" value="passportScan"/>
                     <input class="black" type="submit" value="Show Passport Scan">
                 </sf:form><br>
