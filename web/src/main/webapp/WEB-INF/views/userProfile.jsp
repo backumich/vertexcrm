@@ -124,6 +124,10 @@
             <td>${user.email}</td>
         </tr>
         <tr>
+            <td>Phone:</td>
+            <td>${user.phone}</td>
+        </tr>
+        <tr>
             <td>Discount:</td>
             <td>${user.discount}</td>
         </tr>
