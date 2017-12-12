@@ -5,13 +5,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
+import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
@@ -21,6 +29,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,8 +40,12 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @ContextConfiguration(classes = TestConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
+@Transactional
 
 public class UserDetailsControllerTest {
+
+    @Autowired
+    private UserDetailsController controllerWired;
 
     @Mock
     private UserLogic logic;
@@ -118,5 +131,49 @@ public class UserDetailsControllerTest {
 
         Optional<User> optional = logic.getUserById(-1);
         assertEquals(null, optional.orElse(null));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void getUserDetailsValidAuthorization() {
+        String view = controllerWired.getUserDetails(1).getViewName();
+        assertNotNull(view);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(roles = "USER")
+    public void getUserDetailsInvalidAuthorization() {
+        controllerWired.getUserDetails(1);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithAnonymousUser
+    public void getUserDetailsUnauthorized() {
+        controllerWired.getUserDetails(1);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void saveUserDataValidAuthorization() {
+        User user = new User.Builder().setUserId(1).setRole(Role.ROLE_USER).setEmail("1@1.com")
+                .setFirstName("F").setLastName("L").getInstance();
+
+        String view = controllerWired.saveUserData(new MockMultipartFile("name", new byte[]{}),
+                new MockMultipartFile("name", new byte[]{}), user, mock(BindingResult.class),
+                new ModelAndView()).getViewName();
+
+        assertNotNull(view);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(roles = "USER")
+    public void saveUserDataInvalidAuthorization() {
+        controllerWired.saveUserData(null, null, user, mock(BindingResult.class), new ModelAndView());
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(roles = "USER")
+    public void saveUserDataUnauthorized() {
+        controllerWired.saveUserData(null, null, user, mock(BindingResult.class), new ModelAndView());
     }
 }
