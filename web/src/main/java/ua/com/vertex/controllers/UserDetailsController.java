@@ -56,36 +56,32 @@ public class UserDetailsController {
             @RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
             @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
             @Valid @ModelAttribute(USERDATA_MODEL) User user,
-            BindingResult bindingResult, ModelAndView modelAndView) {
+            BindingResult bindingResult, ModelAndView modelAndView) throws IOException {
 
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("msg", "WARNING!!! User data is updated, but not saved");
+            modelAndView.addObject("msg",
+                    "WARNING!!! User data is updated, but not saved. One or more fields are invalid");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
-            try {
-                if (checkImageFile(imagePassportScan)) {
-                    user.setPassportScan(imagePassportScan.getBytes());
-                    LOGGER.debug("Checked passportScan file for user ID - " + user.getUserId());
-                } else {
-                    LOGGER.debug("Checked passportScan file is not image for user ID - " + user.getUserId());
-                }
-                if (checkImageFile(imagePhoto)) {
-                    user.setPhoto(imagePhoto.getBytes());
-                    LOGGER.debug("Checked photo file for user ID - " + user.getUserId());
-                } else {
-                    LOGGER.debug("Checked photo file is not image for user ID - " + user.getUserId());
-                }
-            } catch (IOException e) {
-                LOGGER.warn("An error occurred when working with image for user ID - " + user.getUserId(), e);
-            }
+            boolean passportValid = userLogic
+                    .validateMultipartFileAndSetResult(imagePassportScan, bindingResult, "passportScan");
+            boolean photoValid = userLogic.validateMultipartFileAndSetResult(imagePhoto, bindingResult, "photo");
 
-            if (userLogic.saveUserData(user) == 1) {
-                modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-                LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-            } else {
-                modelAndView.setViewName(ERROR_JSP);
-                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+            if (passportValid && !imagePassportScan.isEmpty()) {
+                user.setPassportScan(imagePassportScan.getBytes());
+            }
+            if (photoValid && !imagePhoto.isEmpty()) {
+                user.setPhoto(imagePhoto.getBytes());
+            }
+            if (passportValid && photoValid) {
+                if (userLogic.saveUserData(user) == 1) {
+                    modelAndView.addObject("msg", "Congratulations! Your data is saved!");
+                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+                } else {
+                    modelAndView.setViewName(ERROR_JSP);
+                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
+                }
             }
         }
 
@@ -97,15 +93,10 @@ public class UserDetailsController {
         return modelAndView;
     }
 
-    private boolean checkImageFile(MultipartFile file) {
-        return !file.isEmpty() && file.getContentType().split("/")[0].equals("image");
-    }
-
     @Autowired
     public UserDetailsController(UserLogic userLogic, CertificateLogic certificateLogic) {
         this.userLogic = userLogic;
         this.certificateLogic = certificateLogic;
     }
-
 }
 

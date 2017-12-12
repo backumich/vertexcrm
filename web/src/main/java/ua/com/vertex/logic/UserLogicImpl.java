@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.User;
@@ -28,6 +29,8 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
+    public static final String FILE_TYPE = "Invalid file type!";
+    public static final String FILE_SIZE = "Image size must be < ";
 
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -65,13 +68,33 @@ public class UserLogicImpl implements UserLogic {
         userDao.saveImage(email, image, imageType);
     }
 
-    private void validateMultipartFile(MultipartFile file) {
+    @Override
+    public void validateMultipartFile(MultipartFile file) {
         if (file.getSize() > fileSizeInBytes) {
             throw new MultipartValidationException("File size exceeded, max allowed is " +
                     UtilFunctions.humanReadableByteCount(fileSizeInBytes));
         } else if (!file.getContentType().split("/")[0].equals("image")) {
             throw new MultipartValidationException("You have chosen a file of invalid type");
         }
+    }
+
+    @Override
+    public boolean validateMultipartFileAndSetResult(MultipartFile file, BindingResult result, String image) {
+        boolean validation = true;
+        if (!file.isEmpty()) {
+            if (file.getSize() > fileSizeInBytes) {
+                result.rejectValue(image, "error." + image,
+                        FILE_SIZE + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
+                LOGGER.debug("Image size invalid: too big");
+                validation = false;
+
+            } else if (!file.getContentType().split("/")[0].equals("image")) {
+                result.rejectValue(image, "error." + image, FILE_TYPE);
+                LOGGER.debug("Image type invalid: not image");
+                validation = false;
+            }
+        }
+        return validation;
     }
 
     @Override

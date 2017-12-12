@@ -1,5 +1,6 @@
 package ua.com.vertex.logic.interfaces;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.utils.DataNavigator;
@@ -18,6 +19,10 @@ public interface UserLogic {
     Optional<User> getUserByEmail(String email);
 
     void saveImage(String email, MultipartFile file, String imageType);
+
+    void validateMultipartFile(MultipartFile file);
+
+    boolean validateMultipartFileAndSetResult(MultipartFile file, BindingResult result, String image);
 
     Optional<byte[]> getImage(String email, String imageType);
 

@@ -136,46 +136,48 @@
                     <td>E-mail</td>
                     <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
                                     path="email"/>
-                    <td><form:errors path="email"/></td>
+                    <td><form:errors path="email" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Last name</td>
                     <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
                                     path="lastName"/></td>
-                    <td><form:errors path="lastName"/></td>
+                    <td><form:errors path="lastName" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>First name</td>
                     <td><form:input id="firstName" class="buttonText" type="text" size="40"
                                     value="${user.firstName}" path="firstName"/></td>
-                    <td><form:errors path="firstName"/></td>
+                    <td><form:errors path="firstName" cssClass="red"/></td>
 
                 </tr>
                 <tr>
                     <td>Passport scan</td>
                     <td class="block"><img src="data:image/jpeg;base64,${user.passportScanAsString}"
-                                           alt="No scan passport"></td>
+                                           alt="No passport scan"></td>
                     <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
                     <form:hidden path="passportScan"/>
+                    <td><form:errors path="passportScan" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
                     <td class="block"><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
                     <td><input type="file" name="imagePhoto" accept="image/*"/></td>
                     <form:hidden path="photo"/>
+                    <td><form:errors path="photo" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Discount</td>
                     <td><form:input id="discount" class="buttonText" type="number" size="40"
                                     value="${user.discount}" path="discount"/></td>
-                    <td><form:errors path="discount"/></td>
+                    <td><form:errors path="discount" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Phone</td>
                     <td>
                         <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
                                     path="phone"/></td>
-                    <td><form:errors path="phone"/></td>
+                    <td><form:errors path="phone" cssClass="red"/></td>
                 </tr>
             </table>
             <br/>
