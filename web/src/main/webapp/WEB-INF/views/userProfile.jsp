@@ -124,6 +124,10 @@
             <td>${user.email}</td>
         </tr>
         <tr>
+            <td>Phone:</td>
+            <td>${user.phone}</td>
+        </tr>
+        <tr>
             <td>Discount:</td>
             <td>${user.discount}</td>
         </tr>
@@ -140,6 +144,7 @@
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="phone" value="${user.phone}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
                     <input type="hidden" name="pageToDisplay" value="imagePhoto"/>
                     <input type="hidden" name="imageType" value="photo"/>
@@ -155,6 +160,7 @@
                     <input type="hidden" name="firstName" value="${user.firstName}"/>
                     <input type="hidden" name="lastName" value="${user.lastName}"/>
                     <input type="hidden" name="email" value="${user.email}"/>
+                    <input type="hidden" name="phone" value="${user.phone}"/>
                     <input type="hidden" name="discount" value="${user.discount}"/>
                     <input type="hidden" name="pageToDisplay" value="imagePassport"/>
                     <input type="hidden" name="imageType" value="passportScan"/>
