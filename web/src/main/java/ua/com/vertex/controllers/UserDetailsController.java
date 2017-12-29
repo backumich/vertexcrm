@@ -30,7 +30,7 @@ public class UserDetailsController {
     private static final Logger LOGGER = LogManager.getLogger(UserDetailsController.class);
 
     @RequestMapping(value = "/userDetails", method = RequestMethod.GET)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getUserDetails(@RequestParam("userId") int userId) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -51,7 +51,7 @@ public class UserDetailsController {
     }
 
     @RequestMapping(value = "/saveUserData", method = RequestMethod.POST)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView saveUserData(
             @RequestPart(value = "imagePassportScan", required = false) MultipartFile imagePassportScan,
             @RequestPart(value = "imagePhoto", required = false) MultipartFile imagePhoto,
