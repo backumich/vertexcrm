@@ -12,5 +12,5 @@ $("#phone").intlTelInput({
 });
 
 $("form").submit(function () {
-    $("#phoneHidden").val($("#phone").intlTelInput("getNumber"));
+    document.querySelector("#phone").value = $("#phone").intlTelInput("getNumber");
 });

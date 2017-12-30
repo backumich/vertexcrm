@@ -173,8 +173,7 @@
                 </tr>
                 <tr>
                     <td>Phone:</td>
-                    <td><input class="buttonText" type="tel" id="phone" value="${user.phone}"/></td>
-                    <td><form:hidden path="phone" id="phoneHidden"/></td>
+                    <td><form:input class="buttonText" path="phone" id="phone" value="${user.phone}"/></td>
                     <td><form:errors path="phone"/></td>
                 </tr>
             </table>
