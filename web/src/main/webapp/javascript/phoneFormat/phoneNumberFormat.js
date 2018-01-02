@@ -1,7 +1,7 @@
 $("#phone").intlTelInput({
     initialCountry: "auto",
     preferredCountries: ['ua'],
-    utilsScript: "../../javascript/utils.js",
+    utilsScript: "../../javascript/phoneFormat/utils.js",
     geoIpLookup: function (callback) {
         $.get('https://ipinfo.io', function () {
         }, "jsonp").always(function (resp) {
@@ -12,5 +12,5 @@ $("#phone").intlTelInput({
 });
 
 $("form").submit(function () {
-    document.querySelector("#phone").value = $("#phone").intlTelInput("getNumber");
+    $("#phoneHidden").val($("#phone").intlTelInput("getNumber"));
 });

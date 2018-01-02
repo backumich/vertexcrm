@@ -173,7 +173,8 @@
                 </tr>
                 <tr>
                     <td>Phone:</td>
-                    <td><form:input class="buttonText" path="phone" id="phone" value="${user.phone}"/></td>
+                    <td><input type="text" id="phone" value="${user.phone}" class="buttonText"/></td>
+                    <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                     <td><form:errors path="phone"/></td>
                 </tr>
             </table>
@@ -305,8 +306,8 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
-<script src="../../javascript/intlTelInput.js"></script>
-<script src="../../javascript/phoneNumberFormat.js"></script>
+<script src="../../javascript/phoneFormat/intlTelInput.js"></script>
+<script src="../../javascript/phoneFormat/phoneNumberFormat.js"></script>
 
 </body>
 </html>

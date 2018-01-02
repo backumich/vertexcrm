@@ -142,7 +142,9 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><form:input class="buttonText" id="phone" path="phone"/></td>
+                        <td><input type="text" id="phone" value="${userFormRegistration.phone}"
+                                   class="buttonText"/></td>
+                        <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
                     </tr>
                     <tr>
@@ -244,8 +246,8 @@
 <script type="text/javascript" src="javascript/main.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="../../javascript/intlTelInput.js"></script>
-<script src="../../javascript/phoneNumberFormat.js"></script>
+<script src="../../javascript/phoneFormat/intlTelInput.js"></script>
+<script src="../../javascript/phoneFormat/phoneNumberFormat.js"></script>
 
 </body>
 </html>
