@@ -18,7 +18,6 @@ import ua.com.vertex.logic.interfaces.CertificateLogic;
 import javax.validation.Valid;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 
 @Controller
 public class CreateCertificateAndUserController {
@@ -43,26 +42,21 @@ public class CreateCertificateAndUserController {
                                                   CertificateWithUserForm certificateWithUserForm,
                                           BindingResult bindingResult, @Valid Model model) {
 
-        String returnPage;
+        String returnPage = ADD_CERTIFICATE_AND_USER_JSP;
         LOGGER.debug("Request to '/addCertificateAndCreateUser' ");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute(MSG, "The data have not been validated!!!");
-            returnPage = ADD_CERTIFICATE_AND_USER_JSP;
             LOGGER.warn("The data have not been validated!!!");
         } else {
             try {
                 int result = certificateLogic.addCertificateAndCreateUser(certificateWithUserForm.getCertificate()
                         , certificateWithUserForm.getUser());
                 model.addAttribute(MSG, "Certificate added. Certificate id = " + result);
-                returnPage = ADMIN_JSP;
                 LOGGER.info("Certificate added. Certificate id = " + result);
+                returnPage = ADMIN_JSP;
             } catch (DataIntegrityViolationException e) {
                 model.addAttribute(MSG, "A person with this e-mail already exists, try again.");
-                returnPage = ADD_CERTIFICATE_AND_USER_JSP;
-                LOGGER.warn(e);
-            } catch (Exception e) {
-                returnPage = ERROR;
                 LOGGER.warn(e);
             }
         }

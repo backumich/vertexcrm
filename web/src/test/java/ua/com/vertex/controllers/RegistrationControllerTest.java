@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.UserFormRegistration;
@@ -71,29 +70,6 @@ public class RegistrationControllerTest {
         ModelAndView modelAndView = registrationController.processRegistration(userFormRegistration, bindingResult,
                 new ModelAndView(), httpServletRequest);
         assertEquals(MSG, RegistrationController.REGISTRATION_PAGE, modelAndView.getViewName());
-    }
-
-    @Test
-    public void processRegistrationReturnCorrectViewWhenDataAccessException() throws Exception {
-        String reCaptchaResponse = httpServletRequest.getParameter("g-recaptcha-response");
-        String reCaptchaRemoteAddr = httpServletRequest.getRemoteAddr();
-        when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);
-
-        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)).thenThrow(new DataIntegrityViolationException(NAME));
-        ModelAndView modelAndView = registrationController.processRegistration(userFormRegistration, bindingResult,
-                new ModelAndView(), httpServletRequest);
-        assertEquals(MSG, RegistrationController.REGISTRATION_ERROR_PAGE, modelAndView.getViewName());
-    }
-
-    @Test
-    public void processRegistrationReturnCorrectViewWhenException() throws Exception {
-        when(registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)).thenThrow(new RuntimeException(NAME));
-        String reCaptchaResponse = httpServletRequest.getParameter("g-recaptcha-response");
-        String reCaptchaRemoteAddr = httpServletRequest.getRemoteAddr();
-        when(reCaptchaService.verify(reCaptchaResponse, reCaptchaRemoteAddr)).thenReturn(true);
-        ModelAndView modelAndView = registrationController.processRegistration(userFormRegistration, bindingResult,
-                new ModelAndView(), httpServletRequest);
-        assertEquals(MSG, CertificateDetailsPageController.ERROR, modelAndView.getViewName());
     }
 
     @Test

@@ -3,6 +3,7 @@ package ua.com.vertex.controllers.exceptionHandling;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.utils.EmailExtractor;
 
 import java.net.SocketTimeoutException;
@@ -46,10 +48,10 @@ public class GlobalExceptionHandler {
         return CERTIFICATE_DETAILS;
     }
 
-    @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class})
-    public String handleCannotGetJdbcConnectionException(Exception e, Model model) {
+    @ExceptionHandler({CannotGetJdbcConnectionException.class, SocketTimeoutException.class, DataAccessException.class})
+    public String handleConnectionException(Exception e, Model model) {
         LOGGER.warn(e, e);
-        model.addAttribute(ERROR_MESSAGE, "Database might temporarily be unavailable");
+        model.addAttribute(ERROR_MESSAGE, "Oops, something went wrong. Try in a minute please.");
         return ERROR;
     }
 

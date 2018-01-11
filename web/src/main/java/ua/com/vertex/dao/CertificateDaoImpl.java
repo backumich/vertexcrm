@@ -93,18 +93,17 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certification_id =:certification_id";
 
-        Certificate certificate;
+        Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATION_ID, certificateId), new CertificateRowMapper());
         } catch (EmptyResultDataAccessException e) {
-            certificate = null;
+            LOGGER.debug("No certificate in DB, ID = " + certificateId);
         }
-
-        LOGGER.debug((certificate == null ? "No certificate in DB, ID=" : "Retrieved certificate ID=") + certificateId);
-
+        LOGGER.debug("Retrieved certificate ID=" + certificateId);
         return Optional.ofNullable(certificate);
     }
+
 
     @Override
     public Optional<Certificate> getCertificateByUid(String certificateUid) {
@@ -112,16 +111,15 @@ public class CertificateDaoImpl implements CertificateDaoInf {
         String query = "SELECT certification_id, certificate_uid, user_id, certification_date, course_name, language "
                 + "FROM Certificate WHERE certificate_uid =:certificate_uid";
 
-        Certificate certificate;
+        Certificate certificate = null;
         try {
             certificate = jdbcTemplate.queryForObject(query,
                     new MapSqlParameterSource(CERTIFICATE_UID, certificateUid), new CertificateRowMapper());
         } catch (IncorrectResultSizeDataAccessException | DataIntegrityViolationException e) {
-            certificate = null;
+            LOGGER.debug("No certificate in DB, UID = " + certificateUid);
         }
 
-        LOGGER.debug((certificate == null ? "No certificate in DB, UID=" : "Retrieved certificate UID=")
-                + certificateUid);
+        LOGGER.debug("Retrieved certificate UID=" + certificateUid);
 
         return Optional.ofNullable(certificate);
     }

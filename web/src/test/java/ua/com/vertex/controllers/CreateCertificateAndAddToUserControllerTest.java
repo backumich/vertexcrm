@@ -23,7 +23,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.*;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
@@ -105,12 +104,6 @@ public class CreateCertificateAndAddToUserControllerTest {
     }
 
     @Test
-    public void searchUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-        when(userLogic.searchUser("Test")).thenThrow(new RuntimeException("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.searchUser("Test", model), ERROR);
-    }
-
-    @Test
     public void selectUserHasCorrectDataInModelAndView() throws Exception {
         ModelAndView result = underTest.selectUser(333);
         assertEquals(MSG_INVALID_VIEW, result.getViewName(), ADD_CERTIFICATE_WITH_USER_ID_JSP);
@@ -127,17 +120,9 @@ public class CreateCertificateAndAddToUserControllerTest {
     @Test
     public void checkCertificateWithUserIdHasCorrectDataInModelAndReturnCorrectView() throws Exception {
         when(certificateLogic.addCertificate(certificate)).thenReturn(333);
-        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
-                , ADMIN_JSP);
+        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model), ADMIN_JSP);
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("Certificate added. Certificate id = " + "333"));
-    }
-
-    @Test
-    public void checkCertificateWithUserIdReturnCorrectViewWhenException() throws Exception {
-        when(certificateLogic.addCertificate(certificate)).thenThrow(new RuntimeException("Test"));
-        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateWithUserId(certificate, bindingResult, model)
-                , ERROR);
     }
 
     @Test

@@ -115,7 +115,7 @@
     <div class="container pt1_5">
 
         <div>
-            <span class="formHeaderText1">Add certificate with user id:</span><br><br>
+            <span class="formHeaderText1">Add certificate:</span><br><br>
             <form:form cssClass="buttonText" method="post" action="addCertificateWithUserId">
                 <input class="black" type="submit" name="addCertificate" value="Add Certificate"/>
             </form:form>

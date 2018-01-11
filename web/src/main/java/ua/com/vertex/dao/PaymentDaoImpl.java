@@ -65,7 +65,7 @@ public class PaymentDaoImpl implements PaymentDaoInf {
                             .setAmount(BigDecimal.valueOf(resultSet.getDouble(AMOUNT))).getInstance());
             LOGGER.debug(String.format("getPaymentById(%s) return - (%s)", paymentId, result));
         } catch (EmptyResultDataAccessException e) {
-            LOGGER.warn(String.format("No payment in DB, where id = (%s)", paymentId));
+            LOGGER.warn(String.format("No payment in DB, where id - (%s)", paymentId));
         }
 
         return Optional.ofNullable(result);
