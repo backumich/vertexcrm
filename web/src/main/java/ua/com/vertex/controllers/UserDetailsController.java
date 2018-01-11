@@ -64,24 +64,18 @@ public class UserDetailsController {
                     "WARNING!!! User data is updated, but not saved. One or more fields are invalid");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
-            boolean passportValid = userLogic
-                    .validateMultipartFileWithBindingResult(imagePassportScan, bindingResult, "passportScan");
-            boolean photoValid = userLogic.validateMultipartFileWithBindingResult(imagePhoto, bindingResult, "photo");
-
-            if (passportValid && !imagePassportScan.isEmpty()) {
+            if (userLogic.validateMultipartFileWithBindingResult(imagePassportScan, bindingResult, "passportScan")) {
                 user.setPassportScan(imagePassportScan.getBytes());
             }
-            if (photoValid && !imagePhoto.isEmpty()) {
+            if (userLogic.validateMultipartFileWithBindingResult(imagePhoto, bindingResult, "photo")) {
                 user.setPhoto(imagePhoto.getBytes());
             }
-            if (passportValid && photoValid) {
-                if (userLogic.saveUserData(user) == 1) {
-                    modelAndView.addObject("msg", "Congratulations! Your data is saved!");
-                    LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
-                } else {
-                    modelAndView.setViewName(ERROR_JSP);
-                    LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
-                }
+            if (userLogic.saveUserData(user) == 1) {
+                modelAndView.addObject("msg", "Congratulations! Your data is saved!");
+                LOGGER.debug("Update user data successful for user ID - " + user.getUserId());
+            } else {
+                modelAndView.setViewName(ERROR_JSP);
+                LOGGER.debug("Update user data failed for user ID - " + user.getUserId());
             }
         }
 

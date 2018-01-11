@@ -82,18 +82,19 @@ public class UserLogicImpl implements UserLogic {
     @Override
     public boolean validateMultipartFileWithBindingResult(MultipartFile file, BindingResult result, String image) {
         boolean validation = true;
-        if (!file.isEmpty()) {
-            if (file.getSize() > fileSizeInBytes) {
-                result.rejectValue(image, "error." + image,
-                        FILE_SIZE + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
-                LOGGER.debug("Image size invalid: too big");
-                validation = false;
+        if (file.isEmpty()) {
+            validation = false;
 
-            } else if (!file.getContentType().split("/")[0].equals("image")) {
-                result.rejectValue(image, "error." + image, FILE_TYPE);
-                LOGGER.debug("Image type invalid: not image");
-                validation = false;
-            }
+        } else if (file.getSize() > fileSizeInBytes) {
+            result.rejectValue(image, "error." + image,
+                    FILE_SIZE + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
+            LOGGER.debug("Image size invalid: too big");
+            validation = false;
+
+        } else if (!file.getContentType().split("/")[0].equals("image")) {
+            result.rejectValue(image, "error." + image, FILE_TYPE);
+            LOGGER.debug("Image type invalid: not image");
+            validation = false;
         }
         return validation;
     }
