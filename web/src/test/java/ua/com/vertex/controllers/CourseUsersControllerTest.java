@@ -58,7 +58,7 @@ public class CourseUsersControllerTest {
     private Model model;
     private MockMvc mockMvc;
     private CourseUsersController controller;
-    private User user1, user2, user3, user4, user5, user6, user7, user8, user9;
+    private User user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12;
     private DtoCourseUser dto;
     private List<User> assignedUsers;
 
@@ -86,6 +86,12 @@ public class CourseUsersControllerTest {
         user8 = new User.Builder().setUserId(34).setEmail("34@test.com").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
         user9 = new User.Builder().setUserId(44).setEmail("44@test.com").setFirstName("FirstName")
+                .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
+        user10 = new User.Builder().setUserId(501).setEmail("forBruteTest_1").setFirstName("FirstName")
+                .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
+        user11 = new User.Builder().setUserId(502).setEmail("forBruteTest_2").setFirstName("FirstName")
+                .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
+        user12 = new User.Builder().setUserId(503).setEmail("forBruteTest_3").setFirstName("FirstName")
                 .setLastName("LastName").setPhone("38066 000 00 00").getInstance();
         dto = new DtoCourseUser();
     }
@@ -175,7 +181,7 @@ public class CourseUsersControllerTest {
         dto.setSearchType(SEARCH_TYPE_FIRST_NAME);
         dto.setSearchParam("FirstName");
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9);
+        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9, user10, user11, user12);
 
         controller.searchForUsersToAssign(dto, model);
 
@@ -192,7 +198,7 @@ public class CourseUsersControllerTest {
         dto.setSearchType(SEARCH_TYPE_LAST_NAME);
         dto.setSearchParam("LastName");
         assignedUsers = Arrays.asList(user1, user2);
-        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9);
+        List<User> freeUsers = Arrays.asList(user4, user5, user6, user7, user8, user9, user10, user11, user12);
 
         controller.searchForUsersToAssign(dto, model);
 

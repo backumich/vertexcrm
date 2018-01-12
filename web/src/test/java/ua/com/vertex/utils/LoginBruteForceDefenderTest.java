@@ -13,7 +13,6 @@ import ua.com.vertex.context.TestConfig;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,23 +23,21 @@ import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 public class LoginBruteForceDefenderTest {
 
     @Value("${login.attempts}")
-    private int propertiesLoginAttemptsValue;
-    private static final int MIN_ALLOWED = 2;
+    private int loginAttempts;
+
+    @Value("${login.blocking.time.seconds}")
+    private int blockingTime;
 
     private LoginBruteForceDefender defender;
-    private int maxAttempts;
-    private int loginBlockingTime;
 
     @Test
     public void verifyUsernameIncrementsCorrectly() {
-        maxAttempts = 10;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(loginAttempts, blockingTime);
 
         int count = 0;
-        for (int i = 1; i <= 10; i++) {
-            count = defender.verifyUsername("username");
-            if (i < 10) {
+        for (int i = 1; i <= loginAttempts; i++) {
+            count = defender.setCounter("username");
+            if (i < loginAttempts) {
                 assertEquals(i, count);
             }
         }
@@ -49,26 +46,22 @@ public class LoginBruteForceDefenderTest {
 
     @Test
     public void clearEntryWorksCorrectly() {
-        maxAttempts = 5;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(loginAttempts, blockingTime);
 
         int count = 0;
-        for (int i = 1; i < 4; i++) {
-            count = defender.verifyUsername("username");
+        for (int i = 0; i < 3; i++) {
+            count = defender.setCounter("username");
         }
 
         assertEquals(3, count);
         defender.clearEntry("username");
-        count = defender.verifyUsername("username");
+        count = defender.setCounter("username");
         assertEquals(1, count);
     }
 
     @Test
     public void multithreadingWorksCorrectly() throws InterruptedException {
-        maxAttempts = 10;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(loginAttempts, blockingTime);
 
         Thread thread1 = new Thread(() -> multithreadingWorksCorrectlyHelper("username1"));
         Thread thread2 = new Thread(() -> multithreadingWorksCorrectlyHelper("username2"));
@@ -80,14 +73,13 @@ public class LoginBruteForceDefenderTest {
     private void multithreadingWorksCorrectlyHelper(String username) {
         int count = 0;
         for (int i = 1; i <= 10; i++) {
-            count = defender.verifyUsername(username);
+            count = defender.setCounter(username);
             if (i < 10) {
                 assertEquals(i, count);
             }
             try {
                 TimeUnit.MILLISECONDS.sleep(200);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         assertEquals(BLOCKED_NUMBER, count);
@@ -95,19 +87,12 @@ public class LoginBruteForceDefenderTest {
 
     @Test
     public void entryGetsClearedAfterTimeElapsed() throws InterruptedException {
-        maxAttempts = 10;
-        loginBlockingTime = 1;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(loginAttempts, blockingTime);
 
-        int count = defender.verifyUsername("username");
+        int count = defender.setCounter("username");
         assertEquals(1, count);
-        TimeUnit.SECONDS.sleep(2);
-        count = defender.verifyUsername("username");
+        TimeUnit.SECONDS.sleep(blockingTime + 1);
+        count = defender.setCounter("username");
         assertEquals(1, count);
-    }
-
-    @Test
-    public void checkPropertiesLoginAttemptsValue() {
-        assertTrue(propertiesLoginAttemptsValue >= MIN_ALLOWED);
     }
 }

@@ -40,12 +40,23 @@ public class LoginBruteForceDefender {
                 );
     }
 
-    public synchronized int verifyUsername(String username) {
-        int counter = BLOCKED_NUMBER;
-        if (!loginAttempts.containsKey(username) || loginAttempts.get(username) < maxAttempts - 1) {
+    public synchronized int setCounter(String username) {
+        loginAttempts.putIfAbsent(username, 0);
+        int counter = loginAttempts.get(username);
+        if (counter != BLOCKED_NUMBER) {
             counter = loginAttempts.merge(username, 1, Integer::sum);
         }
+        if (counter == maxAttempts) {
+            counter = loginAttempts.compute(username, (unused1, unused2) -> BLOCKED_NUMBER);
+        }
+        LOGGER.debug(String.format("Login defender set: username=%s, counter=%d", username, counter));
         return counter;
+    }
+
+    public synchronized int checkCounter(String username) {
+        int counter = loginAttempts.getOrDefault(username, 0);
+        LOGGER.debug(String.format("Login defender check: username=%s, counter=%d", username, counter));
+        return counter < maxAttempts ? counter : BLOCKED_NUMBER;
     }
 
     public synchronized void clearEntry(String username) {

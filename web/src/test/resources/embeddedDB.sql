@@ -126,6 +126,21 @@ VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'Goodman', NULL, NULL, '
 INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
 VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
 
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('501', 'forBruteTest_1', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('502', 'forBruteTest_2', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('503', 'forBruteTest_3', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java', '1492779828793891');
 
