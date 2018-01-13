@@ -41,8 +41,7 @@ public class LoginBruteForceDefender {
     }
 
     public synchronized int setCounter(String username) {
-        loginAttempts.putIfAbsent(username, 0);
-        int counter = loginAttempts.get(username);
+        int counter = loginAttempts.computeIfAbsent(username, (unused) -> 0);
         if (counter != BLOCKED_NUMBER) {
             counter = loginAttempts.merge(username, 1, Integer::sum);
         }
