@@ -36,6 +36,7 @@ public class BruteForceTest {
     private static final String USERNAME_1 = "forBruteTest_1";
     private static final String USERNAME_2 = "forBruteTest_2";
     private static final String USERNAME_3 = "forBruteTest_3";
+    private static final String USERNAME_4 = "forBruteTest_4";
 
     @Autowired
     private WebApplicationContext context;
@@ -74,12 +75,31 @@ public class BruteForceTest {
         mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD));
     }
 
+    @Test
+    public void loginOkAfterWrongAttemptsAndThenCorrectOne() throws Exception {
+        /* these are fine */
+        try {
+            for (int i = 0; i < loginAttempts - 2; i++) {
+                mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(INCORRECT_PASSWORD))
+                        .andExpect(status().isFound())
+                        .andExpect(redirectedUrl("/logIn?error"))
+                        .andExpect(unauthenticated());
+            }
+        } catch (Exception e) {
+            throw new Exception("This exception should not be here!");
+        }
+
+        /* this one logs in */
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(CORRECT_PASSWORD))
+                .andExpect(authenticated());
+    }
+
     @Test(expected = InternalAuthenticationServiceException.class)
     public void loginFailureHandlerThrowsExceptionOnLoggingInWhenBlocked() throws Exception {
         /* these trigger blocking after reaching limit */
         try {
             for (int i = 0; i < loginAttempts; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(INCORRECT_PASSWORD))
+                mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
                         .andExpect(redirectedUrl("/logIn?error"))
                         .andExpect(unauthenticated());
             }
@@ -88,7 +108,7 @@ public class BruteForceTest {
         }
 
         /* this one fails to log in with correct credentials while being blocked */
-        mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(CORRECT_PASSWORD));
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD));
     }
 
     @Test
@@ -96,7 +116,7 @@ public class BruteForceTest {
         /* these trigger blocking after reaching limit */
         try {
             for (int i = 0; i < loginAttempts; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
+                mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(INCORRECT_PASSWORD))
                         .andExpect(redirectedUrl("/logIn?error"))
                         .andExpect(unauthenticated());
             }
@@ -107,7 +127,7 @@ public class BruteForceTest {
         TimeUnit.SECONDS.sleep(blockingTime + 1);
 
         /* this one logs in with correct credentials */
-        mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD))
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(CORRECT_PASSWORD))
                 .andExpect(authenticated());
     }
 }
