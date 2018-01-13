@@ -63,26 +63,18 @@ public class LoginBruteForceDefenderTest {
     public void multithreadingWorksCorrectly() throws InterruptedException {
         defender = new LoginBruteForceDefender(loginAttempts, blockingTime);
 
-        Thread thread1 = new Thread(() -> multithreadingWorksCorrectlyHelper("username1"));
-        Thread thread2 = new Thread(() -> multithreadingWorksCorrectlyHelper("username2"));
-        thread1.start();
-        TimeUnit.MILLISECONDS.sleep(200);
-        thread2.start();
-    }
+        int count1;
+        int count2;
 
-    private void multithreadingWorksCorrectlyHelper(String username) {
-        int count = 0;
-        for (int i = 1; i <= 10; i++) {
-            count = defender.setCounter(username);
-            if (i < 10) {
-                assertEquals(i, count);
-            }
-            try {
-                TimeUnit.MILLISECONDS.sleep(200);
-            } catch (InterruptedException e) {
-            }
-        }
-        assertEquals(BLOCKED_NUMBER, count);
+        defender.setCounter("counter1");
+        defender.setCounter("counter1");
+        count1 = defender.setCounter("counter1");
+        assertEquals(3, count1);
+
+        defender.setCounter("counter2");
+        count2 = defender.setCounter("counter2");
+        assertEquals(3, count1);
+        assertEquals(2, count2);
     }
 
     @Test
