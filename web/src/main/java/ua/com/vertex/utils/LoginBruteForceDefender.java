@@ -55,7 +55,7 @@ public class LoginBruteForceDefender {
     public synchronized int checkCounter(String username) {
         int counter = loginAttempts.getOrDefault(username, 0);
         LOGGER.debug(String.format("Login defender check: username=%s, counter=%d", username, counter));
-        return counter < maxAttempts ? counter : BLOCKED_NUMBER;
+        return counter;
     }
 
     public synchronized void clearEntry(String username) {
