@@ -27,7 +27,7 @@ import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 @EnableWebSecurity
 @PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
+    public static final String UNKNOWN_ERROR = "Unknown error during logging in";
     public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
 
     private final SpringDataUserDetailsService userDetailsService;

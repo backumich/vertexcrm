@@ -2,7 +2,6 @@ package ua.com.vertex.utils;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,10 +24,10 @@ public class LoginBruteForceDefender {
                                    @Value("${login.blocking.time.seconds}") int loginBlockingTime) {
         this.maxAttempts = maxAttempts;
         this.loginBlockingTime = loginBlockingTime;
-        loginAttempts = initializeLoadingCache().asMap();
+        loginAttempts = initializeLoadingCache();
     }
 
-    private LoadingCache<String, Integer> initializeLoadingCache() {
+    private Map<String, Integer> initializeLoadingCache() {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(loginBlockingTime, TimeUnit.SECONDS).build(
                         new CacheLoader<String, Integer>() {
@@ -37,7 +36,7 @@ public class LoginBruteForceDefender {
                                 return 1;
                             }
                         }
-                );
+                ).asMap();
     }
 
     public synchronized int setCounter(String username) {
