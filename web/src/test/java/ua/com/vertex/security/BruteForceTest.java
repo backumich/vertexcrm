@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,12 +17,14 @@ import ua.com.vertex.context.TestConfig;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ua.com.vertex.context.SecurityWebConfig.LOGIN_ATTEMPTS;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -57,7 +58,7 @@ public class BruteForceTest {
                 .build();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void loginFailureHandlerThrowsExceptionOnReachingMaxLimit() throws Exception {
         /* these are fine */
         try {
@@ -72,7 +73,11 @@ public class BruteForceTest {
         }
 
         /* this one throws exception after reaching max attempts number */
-        mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD));
+        try {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD));
+        } catch (Exception e) {
+            assertEquals(LOGIN_ATTEMPTS, e.getMessage());
+        }
     }
 
     @Test
@@ -94,8 +99,8 @@ public class BruteForceTest {
                 .andExpect(authenticated());
     }
 
-    @Test(expected = InternalAuthenticationServiceException.class)
-    public void loginFailureHandlerThrowsExceptionOnLoggingInWhenBlocked() throws Exception {
+    @Test
+    public void loginFailureHandlerThrowsExceptionOnLoggingInWhenBlocked() {
         /* these trigger blocking after reaching limit */
         try {
             for (int i = 0; i < loginAttempts; i++) {
@@ -108,7 +113,11 @@ public class BruteForceTest {
         }
 
         /* this one fails to log in with correct credentials while being blocked */
-        mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD));
+        try {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD));
+        } catch (Exception e) {
+            assertEquals(LOGIN_ATTEMPTS, e.getMessage());
+        }
     }
 
     @Test
