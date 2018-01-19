@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.LoginAttemptsException;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 import ua.com.vertex.utils.LoginBruteForceDefender;
 
@@ -72,9 +73,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 }))
                 .failureHandler((request, response, e) -> {
                     if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
-                        throw e;
+                        throw new LoginAttemptsException(LOGIN_ATTEMPTS);
                     } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
-                        throw new RuntimeException(LOGIN_ATTEMPTS);
+                        throw new LoginAttemptsException(LOGIN_ATTEMPTS);
                     } else if (e instanceof BadCredentialsException) {
                         response.sendRedirect("/logIn?error");
                     } else {

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.LoginAttemptsException;
 import ua.com.vertex.logic.interfaces.LoggingLogic;
 import ua.com.vertex.utils.LoginBruteForceDefender;
 
@@ -25,7 +26,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (defender.checkCounter(username) == BLOCKED_NUMBER) {
-            throw new RuntimeException(LOGIN_ATTEMPTS);
+            throw new LoginAttemptsException(LOGIN_ATTEMPTS);
         }
         User user = loggingLogic.logIn(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
