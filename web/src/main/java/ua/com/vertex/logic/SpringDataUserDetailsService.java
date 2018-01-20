@@ -15,7 +15,7 @@ import ua.com.vertex.utils.LoginBruteForceDefender;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ua.com.vertex.context.SecurityWebConfig.LOGIN_ATTEMPTS;
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.LOGIN_ATTEMPTS;
 import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Service

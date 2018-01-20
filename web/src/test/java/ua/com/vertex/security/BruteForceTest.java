@@ -17,14 +17,12 @@ import ua.com.vertex.context.TestConfig;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ua.com.vertex.context.SecurityWebConfig.LOGIN_ATTEMPTS;
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.ATTEMPTS;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -59,39 +57,27 @@ public class BruteForceTest {
     }
 
     @Test
-    public void loginFailureHandlerThrowsExceptionOnReachingMaxLimit() throws Exception {
+    public void loginFailureHandlerRedirectsToErrorPageOnReachingMaxLimit() throws Exception {
         /* these are fine */
-        try {
-            for (int i = 0; i < loginAttempts - 1; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD))
-                        .andExpect(status().isFound())
-                        .andExpect(redirectedUrl("/logIn?error"))
-                        .andExpect(unauthenticated());
-            }
-        } catch (Exception e) {
-            throw new Exception("This exception should not be here!");
+        for (int i = 0; i < loginAttempts - 1; i++) {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD))
+                    .andExpect(redirectedUrl("/logIn?error"))
+                    .andExpect(unauthenticated());
         }
 
-        /* this one throws exception after reaching max attempts number */
-        try {
-            mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD));
-        } catch (Exception e) {
-            assertEquals(LOGIN_ATTEMPTS, e.getMessage());
-        }
+        /* this one is redirected to error page after reaching max attempts number */
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD))
+                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(unauthenticated());
     }
 
     @Test
     public void loginOkAfterWrongAttemptsAndThenCorrectOne() throws Exception {
         /* these are fine */
-        try {
-            for (int i = 0; i < loginAttempts - 2; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(INCORRECT_PASSWORD))
-                        .andExpect(status().isFound())
-                        .andExpect(redirectedUrl("/logIn?error"))
-                        .andExpect(unauthenticated());
-            }
-        } catch (Exception e) {
-            throw new Exception("This exception should not be here!");
+        for (int i = 0; i < loginAttempts - 2; i++) {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_2).password(INCORRECT_PASSWORD))
+                    .andExpect(redirectedUrl("/logIn?error"))
+                    .andExpect(unauthenticated());
         }
 
         /* this one logs in */
@@ -100,37 +86,38 @@ public class BruteForceTest {
     }
 
     @Test
-    public void loginFailureHandlerThrowsExceptionOnLoggingInWhenBlocked() {
-        /* these trigger blocking after reaching limit */
-        try {
-            for (int i = 0; i < loginAttempts; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
-                        .andExpect(redirectedUrl("/logIn?error"))
-                        .andExpect(unauthenticated());
-            }
-        } catch (Exception e) {
-            /* nothing to do here */
+    public void loginFailureHandlerRedirectsToErrorPageOnLoggingInWhenBlocked() throws Exception {
+        /* these are fine */
+        for (int i = 0; i < loginAttempts - 1; i++) {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
+                    .andExpect(redirectedUrl("/logIn?error"))
+                    .andExpect(unauthenticated());
         }
 
+        /* this one triggers blocking after reaching limit */
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
+                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(unauthenticated());
+
         /* this one fails to log in with correct credentials while being blocked */
-        try {
-            mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD));
-        } catch (Exception e) {
-            assertEquals(LOGIN_ATTEMPTS, e.getMessage());
-        }
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD))
+                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(unauthenticated());
     }
 
     @Test
     public void loginOkAfterBlockingTimeElapsed() throws Exception {
-        /* these trigger blocking after reaching limit */
-        try {
-            for (int i = 0; i < loginAttempts; i++) {
-                mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(INCORRECT_PASSWORD))
-                        .andExpect(redirectedUrl("/logIn?error"))
-                        .andExpect(unauthenticated());
-            }
-        } catch (Exception e) {
+        /* these are fine */
+        for (int i = 0; i < loginAttempts - 1; i++) {
+            mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(INCORRECT_PASSWORD))
+                    .andExpect(redirectedUrl("/logIn?error"))
+                    .andExpect(unauthenticated());
         }
+
+        /* this one triggers blocking after reaching limit */
+        mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(INCORRECT_PASSWORD))
+                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(unauthenticated());
 
         /* wait for blocking time to elapse */
         TimeUnit.SECONDS.sleep(blockingTime + 1);

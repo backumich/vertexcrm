@@ -1,5 +1,7 @@
 package ua.com.vertex.context;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,21 +18,19 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import ua.com.vertex.controllers.exceptionHandling.exceptions.LoginAttemptsException;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 import ua.com.vertex.utils.LoginBruteForceDefender;
 
 import javax.sql.DataSource;
 
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.*;
 import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Configuration
 @EnableWebSecurity
 @PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    public static final String UNKNOWN_ERROR = "Unknown error during logging in";
-    public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
-
+    private static final Logger logger = LogManager.getLogger(SecurityWebConfig.class);
     private final SpringDataUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginBruteForceDefender defender;
@@ -73,13 +73,15 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 }))
                 .failureHandler((request, response, e) -> {
                     if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
-                        throw new LoginAttemptsException(LOGIN_ATTEMPTS);
+                        response.sendRedirect("/error?reason=" + ATTEMPTS);
                     } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
-                        throw new LoginAttemptsException(LOGIN_ATTEMPTS);
+                        response.sendRedirect("/error?reason=" + ATTEMPTS);
                     } else if (e instanceof BadCredentialsException) {
+                        logger.debug(e);
                         response.sendRedirect("/logIn?error");
                     } else {
-                        throw new RuntimeException(UNKNOWN_ERROR, e);
+                        logger.error(e);
+                        response.sendRedirect("/error?reason=" + UNKNOWN);
                     }
                 })
                 .permitAll()
