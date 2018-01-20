@@ -34,8 +34,6 @@ public class AppErrorController implements ErrorController {
     public String handleError(HttpServletRequest request, HttpServletResponse response, Model model,
                               @RequestParam(required = false, name = "reason") String reason) {
 
-        Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
-
         if (response.getStatus() == HttpStatus.NOT_FOUND.value()) {
             LOGGER.debug(NOT_FOUND);
             model.addAttribute(ERROR_MESSAGE, NOT_FOUND);
@@ -49,6 +47,7 @@ public class AppErrorController implements ErrorController {
                     String.format(" The username has been blocked for %d minutes!", blockingPeriod / 60));
 
         } else {
+            Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
             LOGGER.warn(INTERNAL_SERVER_ERROR, throwable);
             model.addAttribute(ERROR_MESSAGE, INTERNAL_SERVER_ERROR);
         }

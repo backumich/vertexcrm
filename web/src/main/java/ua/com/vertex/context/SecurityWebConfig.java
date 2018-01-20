@@ -74,11 +74,14 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler((request, response, e) -> {
                     if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
                         response.sendRedirect("/error?reason=" + ATTEMPTS);
+
                     } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
                         response.sendRedirect("/error?reason=" + ATTEMPTS);
+
                     } else if (e instanceof BadCredentialsException) {
                         logger.debug(e);
                         response.sendRedirect("/logIn?error");
+
                     } else {
                         logger.error(e);
                         response.sendRedirect("/error?reason=" + UNKNOWN);
