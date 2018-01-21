@@ -21,7 +21,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 import ua.com.vertex.utils.LoginBruteForceDefender;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.*;
 import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
@@ -71,22 +74,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                     defender.clearEntry(authentication.getName());
                     response.sendRedirect("/loggedIn");
                 }))
-                .failureHandler((request, response, e) -> {
-                    if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
-                        response.sendRedirect("/error?reason=" + ATTEMPTS);
-
-                    } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
-                        response.sendRedirect("/error?reason=" + ATTEMPTS);
-
-                    } else if (e instanceof BadCredentialsException) {
-                        logger.debug(e);
-                        response.sendRedirect("/logIn?error");
-
-                    } else {
-                        logger.error(e);
-                        response.sendRedirect("/error?reason=" + UNKNOWN);
-                    }
-                })
+                .failureHandler(this::handleFailure)
                 .permitAll()
 
                 .and()
@@ -102,6 +90,29 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
+    }
+
+    private void handleFailure(HttpServletRequest request, HttpServletResponse response, Exception e) throws IOException {
+        String username = request.getParameter("username");
+
+        if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
+            response.sendRedirect(getLink(username));
+
+        } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
+            response.sendRedirect(getLink(username));
+
+        } else if (e instanceof BadCredentialsException) {
+            logger.debug(() -> e);
+            response.sendRedirect("/logIn?error");
+
+        } else {
+            logger.error(() -> e);
+            response.sendRedirect("/error?reason=" + UNKNOWN);
+        }
+    }
+
+    private String getLink(String username) {
+        return String.format("/error?reason=%s&username=%s", ATTEMPTS, username);
     }
 
     @Bean

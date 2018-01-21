@@ -67,7 +67,7 @@ public class BruteForceTest {
 
         /* this one is redirected to error page after reaching max attempts number */
         mockMvc.perform(formLogin("/logIn").user(USERNAME_1).password(INCORRECT_PASSWORD))
-                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(redirectedUrl(String.format("/error?reason=%s&username=%s", ATTEMPTS, USERNAME_1)))
                 .andExpect(unauthenticated());
     }
 
@@ -96,12 +96,12 @@ public class BruteForceTest {
 
         /* this one triggers blocking after reaching limit */
         mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(INCORRECT_PASSWORD))
-                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(redirectedUrl(String.format("/error?reason=%s&username=%s", ATTEMPTS, USERNAME_3)))
                 .andExpect(unauthenticated());
 
         /* this one fails to log in with correct credentials while being blocked */
         mockMvc.perform(formLogin("/logIn").user(USERNAME_3).password(CORRECT_PASSWORD))
-                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(redirectedUrl(String.format("/error?reason=%s&username=%s", ATTEMPTS, USERNAME_3)))
                 .andExpect(unauthenticated());
     }
 
@@ -116,7 +116,7 @@ public class BruteForceTest {
 
         /* this one triggers blocking after reaching limit */
         mockMvc.perform(formLogin("/logIn").user(USERNAME_4).password(INCORRECT_PASSWORD))
-                .andExpect(redirectedUrl("/error?reason=" + ATTEMPTS))
+                .andExpect(redirectedUrl(String.format("/error?reason=%s&username=%s", ATTEMPTS, USERNAME_4)))
                 .andExpect(unauthenticated());
 
         /* wait for blocking time to elapse */
