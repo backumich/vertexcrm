@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 
 import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.*;
-import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +40,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${remember.me.validity.seconds}")
     private int validityTime;
+
+    @Value("${login.attempts}")
+    private int maxAttempts;
 
     @Autowired
     public SecurityWebConfig(SpringDataUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
@@ -98,7 +100,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
             response.sendRedirect(getLink(username));
 
-        } else if (defender.setCounter(request.getParameter("username")) == BLOCKED_NUMBER) {
+        } else if (defender.setCounter(request.getParameter("username")) >= maxAttempts) {
             response.sendRedirect(getLink(username));
 
         } else if (e instanceof BadCredentialsException) {

@@ -1,6 +1,8 @@
 package ua.com.vertex.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,16 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.LOGIN_ATTEMPTS;
-import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class SpringDataUserDetailsService implements UserDetailsService {
     private final LoggingLogic loggingLogic;
     private final LoginBruteForceDefender defender;
 
+    @Value("${login.attempts}")
+    private int maxAttempts;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (defender.checkCounter(username) == BLOCKED_NUMBER) {
+        if (defender.checkCounter(username) >= maxAttempts) {
             throw new LoginAttemptsException(LOGIN_ATTEMPTS);
         }
         User user = loggingLogic.logIn(username)
