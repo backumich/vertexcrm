@@ -70,14 +70,12 @@ public class LoginBruteForceDefenderTest {
         ExecutorService exec1 = Executors.newFixedThreadPool(6);
         exec1.invokeAll(tasks1);
         exec1.shutdown();
-        exec1.awaitTermination(5, TimeUnit.SECONDS);
 
         List<Callable<Object>> tasks2 = prepareTasks2(numOfTasks);
 
         ExecutorService exec2 = Executors.newFixedThreadPool(6);
         exec2.invokeAll(tasks2);
         exec2.shutdown();
-        exec2.awaitTermination(5, TimeUnit.SECONDS);
 
         assertEquals(defender.checkCounter("count1"), numOfTasks);
         assertEquals(defender.checkCounter("count2"), numOfTasks * 2);
