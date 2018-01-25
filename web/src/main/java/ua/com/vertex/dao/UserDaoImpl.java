@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.UpdatedPasswordNotSaved;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;

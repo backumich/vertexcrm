@@ -2,8 +2,8 @@ package ua.com.vertex.controllers.exceptionHandling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.dao.DataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedCredentialsNotFoundException;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.MultipartValidationException;
 import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.utils.EmailExtractor;
 
 import java.net.SocketTimeoutException;

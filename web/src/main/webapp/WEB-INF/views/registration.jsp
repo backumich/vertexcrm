@@ -118,14 +118,12 @@
                         <td>Password:</td>
                         <td><form:password class="buttonText" placeholder="Password" path="password"/></td>
                         <td><form:errors path="password"/></td>
-                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>Repeat password:</td>
                         <td><form:password class="buttonText" placeholder="Confirm password"
                                            path="verifyPassword"/></td>
                         <td><form:errors path="verifyPassword"/></td>
-                        <td><form:errors path="*"/></td>
                     </tr>
                     <tr>
                         <td>First name:</td>
