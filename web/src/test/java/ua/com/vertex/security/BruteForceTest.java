@@ -1,5 +1,7 @@
 package ua.com.vertex.security;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,11 +12,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.utils.LoginBruteForceDefender;
 
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -40,10 +45,11 @@ public class BruteForceTest {
     @Autowired
     private WebApplicationContext context;
 
+    @Autowired
+    private LoginBruteForceDefender defender;
+
     @Value("${login.attempts}")
     private int loginAttempts;
-
-    @Value("${login.blocking.time.seconds}")
     private int blockingTime;
 
     private MockMvc mockMvc;
@@ -54,6 +60,19 @@ public class BruteForceTest {
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
+
+        final int testBlockingTime = 3;
+        ConcurrentMap<String, Integer> map = CacheBuilder.newBuilder()
+                .expireAfterWrite(testBlockingTime, TimeUnit.SECONDS).build(
+                        new CacheLoader<String, Integer>() {
+                            @Override
+                            public Integer load(String s) throws Exception {
+                                return 1;
+                            }
+                        }
+                ).asMap();
+        ReflectionTestUtils.setField(defender, "loginAttempts", map);
+        blockingTime = testBlockingTime;
     }
 
     @Test

@@ -1,5 +1,7 @@
 package ua.com.vertex.utils;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,14 +10,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.util.ReflectionTestUtils;
 import ua.com.vertex.context.TestConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,9 +28,7 @@ public class LoginBruteForceDefenderTest {
 
     @Value("${login.attempts}")
     private int loginAttempts;
-
-    @Value("${login.blocking.time.seconds}")
-    private int blockingTime;
+    private final int blockingTime = 3;
 
     private LoginBruteForceDefender defender;
 
@@ -109,10 +107,24 @@ public class LoginBruteForceDefenderTest {
     @Test
     public void entryGetsClearedAfterTimeElapsed() throws InterruptedException {
         defender = new LoginBruteForceDefender(blockingTime);
+        changeDefenderBlockingTime();
 
         defender.setCounter("username");
         assertEquals(1, defender.checkCounter("username"));
         TimeUnit.SECONDS.sleep(blockingTime + 1);
         assertEquals(0, defender.checkCounter("username"));
+    }
+
+    private void changeDefenderBlockingTime() {
+        ConcurrentMap<String, Integer> map = CacheBuilder.newBuilder()
+                .expireAfterWrite(blockingTime, TimeUnit.SECONDS).build(
+                        new CacheLoader<String, Integer>() {
+                            @Override
+                            public Integer load(String s) throws Exception {
+                                return 1;
+                            }
+                        }
+                ).asMap();
+        ReflectionTestUtils.setField(defender, "loginAttempts", map);
     }
 }

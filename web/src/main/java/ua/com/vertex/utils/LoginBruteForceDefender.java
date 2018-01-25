@@ -15,15 +15,13 @@ import java.util.concurrent.TimeUnit;
 @PropertySource("classpath:application.properties")
 public class LoginBruteForceDefender {
     private static final Logger LOGGER = LogManager.getLogger(LoginBruteForceDefender.class);
-    private final int loginBlockingTime;
     private final ConcurrentMap<String, Integer> loginAttempts;
 
     public LoginBruteForceDefender(@Value("${login.blocking.time.seconds}") int loginBlockingTime) {
-        this.loginBlockingTime = loginBlockingTime;
-        loginAttempts = initializeLoadingCache();
+        loginAttempts = initializeLoadingCache(loginBlockingTime);
     }
 
-    private ConcurrentMap<String, Integer> initializeLoadingCache() {
+    private ConcurrentMap<String, Integer> initializeLoadingCache(int loginBlockingTime) {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(loginBlockingTime, TimeUnit.SECONDS).build(
                         new CacheLoader<String, Integer>() {
