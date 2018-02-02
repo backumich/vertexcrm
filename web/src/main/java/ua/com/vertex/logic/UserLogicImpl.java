@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 @PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
-    public static final String FILE_TYPE = "Invalid file type!";
-    public static final String FILE_SIZE = "Image size must be < ";
+    public static final String FILE_TYPE = "Invalid file type";
+    public static final String FILE_SIZE = "File size exceeded, max allowed is ";
 
     private final UserDaoInf userDao;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -71,10 +71,10 @@ public class UserLogicImpl implements UserLogic {
     private void validateMultipartFile(MultipartFile file) {
         if (!file.isEmpty()) {
             if (file.getSize() > fileSizeInBytes) {
-                throw new MultipartValidationException("File size exceeded, max allowed is " +
+                throw new MultipartValidationException(FILE_SIZE +
                         UtilFunctions.humanReadableByteCount(fileSizeInBytes));
             } else if (!file.getContentType().split("/")[0].equals("image")) {
-                throw new MultipartValidationException("You have chosen a file of invalid type");
+                throw new MultipartValidationException(FILE_TYPE);
             }
         }
     }
