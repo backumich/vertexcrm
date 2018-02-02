@@ -100,7 +100,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
             response.sendRedirect(getLink(username));
 
-        } else if (defender.setCounter(request.getParameter("username")) >= maxAttempts) {
+        } else if (defender.setCounter(username) >= maxAttempts) {
             response.sendRedirect(getLink(username));
 
         } else if (e instanceof BadCredentialsException) {
