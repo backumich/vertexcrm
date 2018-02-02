@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/sva.css">
-    <link href="<c:url value='/css/intlTelInput.css' />" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -142,8 +142,8 @@
                         <td>Phone:</td>
                         <td><input type="text" id="phone" value="${userFormRegistration.phone}"
                                    class="buttonText"/></td>
-                        <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                         <td><form:errors path="phone"/></td>
+                        <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -244,8 +244,8 @@
 <script type="text/javascript" src="javascript/main.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="../../javascript/phoneFormat/intlTelInput.js"></script>
-<script src="../../javascript/phoneFormat/phoneNumberFormat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
 
 </body>
 </html>
