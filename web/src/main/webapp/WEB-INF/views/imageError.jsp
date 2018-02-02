@@ -14,7 +14,7 @@
     <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
     <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/additional.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
