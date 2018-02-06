@@ -62,6 +62,7 @@ public class ImageController {
                               @RequestPart(value = IMAGE) MultipartFile file,
                               @RequestParam(IMAGE_TYPE) String imageType) {
 
+        LOGGER.debug("Saving new " + imageType);
         userLogic.saveImage(user.getEmail(), file, imageType);
         return USER_PROFILE;
     }

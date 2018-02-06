@@ -131,6 +131,7 @@
                 <sf:hidden path="firstName" value="${user.firstName}"/>
                 <sf:hidden path="lastName" value="${user.lastName}"/>
                 <sf:hidden path="email" value="${user.email}"/>
+                <sf:hidden path="phone" value="${user.phone}"/>
                 <sf:hidden path="discount" value="${user.discount}"/>
                 <table>
                     <tr>

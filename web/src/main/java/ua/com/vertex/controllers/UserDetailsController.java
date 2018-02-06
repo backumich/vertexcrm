@@ -61,7 +61,7 @@ public class UserDetailsController {
         modelAndView.setViewName(PAGE_JSP);
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("msg",
-                    "WARNING!!! User data is updated, but not saved. One or more fields are invalid");
+                    "We'd like to save your changes but we can't while one or more fields are invalid");
             LOGGER.debug("Requested data are invalid for user ID - " + user.getUserId());
         } else {
             if (userLogic.validateMultipartFileWithBindingResult(imagePassportScan, bindingResult, "passportScan")) {

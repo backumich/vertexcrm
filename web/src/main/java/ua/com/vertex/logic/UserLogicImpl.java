@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@PropertySource("classpath:application.properties")
 public class UserLogicImpl implements UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogicImpl.class);
     public static final String FILE_TYPE = "Invalid file type";
@@ -66,15 +64,22 @@ public class UserLogicImpl implements UserLogic {
             throw new RuntimeException(e);
         }
         userDao.saveImage(email, image, imageType);
+        LOGGER.debug("Image saved");
     }
 
     private void validateMultipartFile(MultipartFile file) {
         if (!file.isEmpty()) {
             if (file.getSize() > fileSizeInBytes) {
-                throw new MultipartValidationException(FILE_SIZE +
-                        UtilFunctions.humanReadableByteCount(fileSizeInBytes));
-            } else if (!file.getContentType().split("/")[0].equals("image")) {
-                throw new MultipartValidationException(FILE_TYPE);
+                String maxSize = UtilFunctions.humanReadableByteCount(fileSizeInBytes);
+                String actualSize = UtilFunctions.humanReadableByteCount(file.getSize());
+                throw new MultipartValidationException(
+                        String.format("Image size invalid: max size is %s; actual size is %s", maxSize, actualSize));
+            } else {
+                String[] contentType = file.getContentType().split("/");
+                if (!contentType[0].equals("image")) {
+                    throw new MultipartValidationException(
+                            String.format("Invalid file type: expected 'image' but was '%s'", contentType[0]));
+                }
             }
         }
     }
@@ -86,15 +91,19 @@ public class UserLogicImpl implements UserLogic {
             validation = false;
 
         } else if (file.getSize() > fileSizeInBytes) {
-            result.rejectValue(image, "error." + image,
-                    FILE_SIZE + UtilFunctions.humanReadableByteCount(fileSizeInBytes));
-            LOGGER.debug("Image size invalid: too big");
+            String maxSize = UtilFunctions.humanReadableByteCount(fileSizeInBytes);
+            String actualSize = UtilFunctions.humanReadableByteCount(file.getSize());
+            result.rejectValue(image, "error." + image, FILE_SIZE + maxSize);
+            LOGGER.debug(String.format("Image size invalid: max size is %s; actual size is %s", maxSize, actualSize));
             validation = false;
 
-        } else if (!file.getContentType().split("/")[0].equals("image")) {
-            result.rejectValue(image, "error." + image, FILE_TYPE);
-            LOGGER.debug("Image type invalid: not image");
-            validation = false;
+        } else {
+            String[] contentType = file.getContentType().split("/");
+            if (!contentType[0].equals("image")) {
+                result.rejectValue(image, "error." + image, FILE_TYPE);
+                LOGGER.debug(String.format("Invalid file type: expected 'image' but was '%s'", contentType[0]));
+                validation = false;
+            }
         }
         return validation;
     }
