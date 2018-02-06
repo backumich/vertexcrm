@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/sva.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -136,48 +137,45 @@
                     <td>E-mail</td>
                     <td><form:input id="email" class="buttonText" type="text" size="40" value="${user.email}"
                                     path="email"/>
-                    <td><form:errors path="email" cssClass="red"/></td>
+                    <td><form:errors path="email"/></td>
                 </tr>
                 <tr>
                     <td>Last name</td>
                     <td><form:input id="lastName" class="buttonText" type="text" size="40" value="${user.lastName}"
                                     path="lastName"/></td>
-                    <td><form:errors path="lastName" cssClass="red"/></td>
+                    <td><form:errors path="lastName"/></td>
                 </tr>
                 <tr>
                     <td>First name</td>
                     <td><form:input id="firstName" class="buttonText" type="text" size="40"
                                     value="${user.firstName}" path="firstName"/></td>
-                    <td><form:errors path="firstName" cssClass="red"/></td>
+                    <td><form:errors path="firstName"/></td>
 
                 </tr>
                 <tr>
                     <td>Passport scan</td>
                     <td class="block"><img src="data:image/jpeg;base64,${user.passportScanAsString}"
-                                           alt="No passport scan"></td>
+                                           alt="No scan passport"></td>
                     <td><input type="file" name="imagePassportScan" accept="image/*"/></td>
                     <form:hidden path="passportScan"/>
-                    <td><form:errors path="passportScan" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
                     <td class="block"><img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo"></td>
                     <td><input type="file" name="imagePhoto" accept="image/*"/></td>
                     <form:hidden path="photo"/>
-                    <td><form:errors path="photo" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Discount</td>
                     <td><form:input id="discount" class="buttonText" type="number" size="40"
                                     value="${user.discount}" path="discount"/></td>
-                    <td><form:errors path="discount" cssClass="red"/></td>
+                    <td><form:errors path="discount"/></td>
                 </tr>
                 <tr>
-                    <td>Phone</td>
-                    <td>
-                        <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
-                                    path="phone"/></td>
-                    <td><form:errors path="phone" cssClass="red"/></td>
+                    <td>Phone:</td>
+                    <td><input type="text" id="phone" value="${user.phone}" class="buttonText"/></td>
+                    <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
+                    <td><form:errors path="phone"/></td>
                 </tr>
             </table>
             <br/>
@@ -308,6 +306,8 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
 
 </body>
 </html>
