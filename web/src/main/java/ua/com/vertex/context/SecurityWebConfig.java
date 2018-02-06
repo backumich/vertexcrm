@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,11 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 
-import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.*;
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.LOGIN_ATTEMPTS;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     private static final Logger logger = LogManager.getLogger(SecurityWebConfig.class);
     private final SpringDataUserDetailsService userDetailsService;
@@ -109,12 +107,12 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
         } else {
             logger.error(() -> e);
-            response.sendRedirect("/error?reason=" + UNKNOWN);
+            response.sendRedirect("/error?reason=unknown");
         }
     }
 
     private String getLink(String username) {
-        return String.format("/error?reason=%s&username=%s", ATTEMPTS, username);
+        return "/error?reason=attempts&username=" + username;
     }
 
     @Bean

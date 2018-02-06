@@ -5,14 +5,12 @@ import com.google.common.cache.CacheLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@PropertySource("classpath:application.properties")
 public class LoginBruteForceDefender {
     private static final Logger LOGGER = LogManager.getLogger(LoginBruteForceDefender.class);
     private final ConcurrentMap<String, Integer> loginAttempts;

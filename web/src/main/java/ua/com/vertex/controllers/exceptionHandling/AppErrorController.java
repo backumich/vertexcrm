@@ -25,8 +25,6 @@ public class AppErrorController implements ErrorController {
     private static final String NOT_FOUND_MSG = "404 — unfortunately, the page you requested has not been found";
     private static final String UNKNOWN_ERROR = "Unknown error during logging in";
     public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username.";
-    public static final String ATTEMPTS = "attempts";
-    public static final String UNKNOWN = "unknown";
 
     @Value("${login.blocking.time.seconds}")
     private int blockingPeriod;
@@ -40,11 +38,11 @@ public class AppErrorController implements ErrorController {
             LOGGER.debug(NOT_FOUND_LOG);
             model.addAttribute(ERROR_MESSAGE, NOT_FOUND_MSG);
 
-        } else if (ATTEMPTS.equals(reason)) {
+        } else if ("attempts".equals(reason)) {
             LOGGER.warn(getLogAttempts(username));
             model.addAttribute(ERROR_MESSAGE, getMsgAttempts());
 
-        } else if (UNKNOWN.equals(reason)) {
+        } else if ("unknown".equals(reason)) {
             model.addAttribute(ERROR_MESSAGE, UNKNOWN_ERROR);
 
         } else {
