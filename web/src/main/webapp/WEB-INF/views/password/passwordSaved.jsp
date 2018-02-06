@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page session="false" %>
 <!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
 <html>
 <head>
@@ -18,14 +18,14 @@
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="../../javascript/watch.js"></script>
-    <script async="" src="../../javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="../../../javascript/watch.js"></script>
+    <script async="" src="../../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -51,9 +51,6 @@
         margin-left: 0px !important;
     }
 
-    .hrefText {
-        font-size: 120%;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -112,23 +109,15 @@
 
 
 <div align="center" class="page gray-page mh100 up-padding">
+    <div class="fontSize180 width600">The new password has been successfully saved!</div>
 
-    <c:if test="${photo != null}">
-        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no photo">
-    </c:if>
-
-    <br><br>
-
+    <br><br><br>
     <div class="href">
-        <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>
 </div>
 
 
-<div class="wrapper">
-
-</div>
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -183,11 +172,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
-<script src="../../javascript/typed.js"></script>
-<script src="../../javascript/slick.min.js"></script>
-<script type="text/javascript" src="../../javascript/main.js"></script>
+<script type="text/javascript" src="../../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../../javascript/bootstrap.min.js"></script>
+<script src="../../../javascript/typed.js"></script>
+<script src="../../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../../javascript/main.js"></script>
 
 </body>
 </html>

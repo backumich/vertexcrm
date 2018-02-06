@@ -1,25 +1,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!DOCTYPE html>
-<html lang="en" charset="UTF-8">
+<%@ page session="false" %>
+<!-- saved from url=(0048)https://vertex-academy.com/lecturer-bakumov.html -->
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <title>Vertex Crm</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="./css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/sva.css">
+    <link href="<c:url value='/css' />" rel="stylesheet" type="text/css">
+    <link href="<c:url value='/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/bootstrap-theme.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/slick.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='/css/sva.css' />" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
-    <script type="text/javascript" async="" src="javascript/watch.js"></script>
-    <script async="" src="javascript/analytics.js"></script>
+    <script type="text/javascript" async="" src="../../../javascript/watch.js"></script>
+    <script async="" src="../../../javascript/analytics.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -51,14 +51,6 @@
         margin-left: 0px !important;
     }
 
-    .colortext {
-        background-color: #ffe; /* Цвет фона */
-        color: black; /* Цвет текста */
-    }
-
-    .buttonText {
-        color: black;
-    }
     </style>
 </head>
 <body class="inside footer-under">
@@ -114,49 +106,78 @@
         </div>
     </div>
 </div>
-<div class="page gray-page mh100">
-    <div class="container pt1_5">
-        <div align="center">
-            <span class="fontSize180 silver">Student details</span><br><br><br>
 
-            <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
-            <table class="table fontSize120" cols="2" width="600">
+
+<div align="center" class="page gray-page mh100 up-padding">
+    <span class="fontSize200 silver">Enter New Password</span><br><br><br>
+
+    <c:if test="${expired == true}">
+        <div class="red fontSize180">
+            The link to change your password has expired!
+            If you still need to change your password,
+            <a href="<c:url value="http://localhost:8080/resetPassword"/>">get a new link</a>
+        </div>
+        <br><br>
+    </c:if>
+    <c:if test="${empty expired}">
+
+        <c:if test="${passwordInvalid == true}">
+            <div class="red fontSize180">
+                Invalid password format! Try again!
+            </div>
+            <br><br>
+        </c:if>
+
+        <c:if test="${passwordMismatch == true}">
+            <div class="red fontSize180">
+                Passwords do not match! Try again!
+            </div>
+            <br><br>
+        </c:if>
+
+        <c:if test="${captcha == true}">
+            <div class="red fontSize180">
+                You missed captcha!
+            </div>
+            <br><br>
+        </c:if>
+
+        <sf:form action="/passwordSaveNew" method="post" commandName="passwordDto">
+            <sf:hidden path="email" value="${passwordDto.email}"/>
+            <table>
                 <tr>
-                    <td>User Id:</td>
-                    <td>${user.userId}</td>
+                    <td><sf:label path="rawPassword">
+                        <span class="fontSize140 bold silver">New password:</span></sf:label></td>
+                    <td><sf:input path="rawPassword" placeholder="5-30 symbols long" type="password"
+                                  class="width300" maxlength="30"/></td>
                 </tr>
                 <tr>
-                    <td>E-mail:</td>
-                    <td>${user.email}</td>
+                    <td><sf:label path="repeatPassword">
+                        <span class="fontSize140 bold silver">Repeat password:</span></sf:label></td>
+                    <td><sf:input path="repeatPassword" placeholder="5-30 symbols long" type="password"
+                                  class="width300" maxlength="30"/></td>
                 </tr>
                 <tr>
-                    <td>Last name:</td>
-                    <td>${user.lastName}</td>
+                    <td><br><br><br>
+                        <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
+                        <br>
+                    </td>
                 </tr>
                 <tr>
-                    <td>First name:</td>
-                    <td>${user.firstName}</td>
-                </tr>
-                <tr>
-                    <td>Discount:</td>
-                    <td>${user.discount}</td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td>${user.phone}</td>
+                    <td class="buttonPaddingTop"><input type="submit" value="Save" class="black"></td>
                 </tr>
             </table>
-            <br/>
-            <br/>
-            <br/>
-            <div class="href">
-                <a href="javascript:history.back();">Back</a> |
-                <a href="<c:url value="/" />">Home</a>
-            </div>
-        </div>
+        </sf:form>
+    </c:if>
 
+    <br><br>
+    <div class="href">
+        <a href="javascript:history.back();">Back</a> |
+        <a href="<c:url value="/"/>">Home</a>
     </div>
 </div>
+
+
 <div class="footer">
     <div class="container">
         <div class="right">
@@ -211,11 +232,12 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="javascript/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
-<script src="./javascript/typed.js"></script>
-<script src="javascript/slick.min.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="../../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../../javascript/bootstrap.min.js"></script>
+<script src="../../../javascript/typed.js"></script>
+<script src="../../../javascript/slick.min.js"></script>
+<script type="text/javascript" src="../../../javascript/main.js"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 
 </body>
 </html>
