@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sva.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -46,6 +48,7 @@
     .buttonText {
         color: black;
     }
+
     </style>
 </head>
 <body class="inside footer-under">
@@ -137,8 +140,10 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><form:input class="buttonText" placeholder="Phone (123)456-7890" path="phone"/></td>
+                        <td><input type="text" id="phone" value="${userFormRegistration.phone}"
+                                   class="buttonText"/></td>
                         <td><form:errors path="phone"/></td>
+                        <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -154,20 +159,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="center"><input class="buttonText" type="submit" value="Register"/></td>
+                        <td colspan="2" align="center">
+                            <input class="buttonText" type="submit" value="Register"
+                                   onclick="document.getElementById('wait').style.display='block'"/></td>
                     </tr>
                 </table>
             </form:form>
         </div>
         <br>
         <br>
-        <br>
-        <div class="container pt1_5" align="center">
-            <div align="center">
-                <form:errors path="userFormRegistration"/>
-            </div>
+        <div align="center">
+            <form:errors path="userFormRegistration"/>
+            <p id="wait" style="display:none" class="loader"></p>
         </div>
-        <br>
         <br>
         <br>
 
@@ -177,7 +181,6 @@
                 <a href="<c:url value="/" />">Home</a>
             </div>
         </div>
-
     </div>
 </div>
 <div class="footer">
@@ -240,6 +243,9 @@
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
 
 </body>
 </html>

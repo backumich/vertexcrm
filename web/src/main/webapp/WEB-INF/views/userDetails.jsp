@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/slick.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/sva.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css" rel="stylesheet"/>
     <link rel="icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="https://vertex-academy.com/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://vertex-academy.com/apple-touch-icon.png">
@@ -171,10 +172,9 @@
                     <td><form:errors path="discount"/></td>
                 </tr>
                 <tr>
-                    <td>Phone</td>
-                    <td>
-                        <form:input id="phone" class="buttonText" type="text" size="40" value="${user.phone}"
-                                    path="phone"/></td>
+                    <td>Phone:</td>
+                    <td><input type="text" id="phone" value="${user.phone}" class="buttonText"/></td>
+                    <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
                     <td><form:errors path="phone"/></td>
                 </tr>
             </table>
@@ -306,6 +306,8 @@
 <script src="./javascript/typed.js"></script>
 <script src="javascript/slick.min.js"></script>
 <script type="text/javascript" src="javascript/main.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
 
 </body>
 </html>
