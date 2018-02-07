@@ -84,31 +84,31 @@ public class ImageControllerTest {
     @WithMockUser(username = EXISTING_EMAIL)
     public void uploadImageReturnsViewForUserOwner() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
-        String view = controller.uploadImage(user, file, PHOTO, model);
-        assertEquals("index", view);
+        String view = controller.uploadImage(user, file, PHOTO);
+        assertEquals("userProfile", view);
     }
 
     @Test
     @WithMockUser(username = EXISTING_EMAIL)
     public void uploadImage() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
-        String view = controller.uploadImage(user, file, PHOTO, model);
-        assertEquals("index", view);
+        String view = controller.uploadImage(user, file, PHOTO);
+        assertEquals("userProfile", view);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     public void uploadImageAddsModelAttributeUser() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
-        String view = controller.uploadImage(user, file, PHOTO, model);
-        assertEquals("index", view);
+        String view = controller.uploadImage(user, file, PHOTO);
+        assertEquals("userProfile", view);
     }
 
     @Test(expected = AccessDeniedException.class)
     @WithMockUser(username = NOT_EXISTING_EMAIL)
     public void uploadImageThrowsAccessDeniedForWrongUser() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", new byte[]{});
-        controller.uploadImage(user, file, PHOTO, model);
+        controller.uploadImage(user, file, PHOTO);
     }
 
     @Test(expected = MultipartValidationException.class)
@@ -117,20 +117,20 @@ public class ImageControllerTest {
         byte[] image = new byte[fileSizeInBytes + 1];
         Arrays.fill(image, (byte) 1);
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", image);
-        controller.uploadImage(user, file, PHOTO, model);
+        controller.uploadImage(user, file, PHOTO);
     }
 
     @Test(expected = MultipartValidationException.class)
     @WithMockUser(username = EXISTING_EMAIL)
     public void uploadImageThrowsExceptionIfInvalidFileType() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "wrongFileType/jpg", IMAGE_AS_BYTES);
-        controller.uploadImage(user, file, PHOTO, model);
+        controller.uploadImage(user, file, PHOTO);
     }
 
     @Test(expected = IllegalArgumentException.class)
     @WithAnonymousUser
     public void uploadImageAddsModelFailsForAnonymousUser() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "file", "image/jpg", IMAGE_AS_BYTES);
-        controller.uploadImage(user, file, PHOTO, model);
+        controller.uploadImage(user, file, PHOTO);
     }
 }

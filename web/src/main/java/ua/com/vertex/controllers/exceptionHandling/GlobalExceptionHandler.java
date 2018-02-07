@@ -16,6 +16,7 @@ import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateExcep
 import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.utils.EmailExtractor;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.SocketTimeoutException;
 
 @ControllerAdvice
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoCertificateException.class)
     public String handleNoCertificateException(Exception e, Model model) {
-        LOGGER.warn(e, e);
+        LOGGER.warn(e);
         model.addAttribute(ERROR_MESSAGE, "No certificate with this ID");
         return CERTIFICATE_DETAILS;
     }
@@ -57,14 +58,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MultipartValidationException.class)
     public String handleMultipartValidationException(MultipartValidationException e, Model model) {
-        LOGGER.debug(e, e);
+        LOGGER.debug(e);
         model.addAttribute(ERROR_MESSAGE, e.getMessage());
         return IMAGE_ERROR;
     }
 
     @ExceptionHandler(UpdatedPasswordNotSaved.class)
     public String handleUpdatedPasswordNotSaved(UpdatedPasswordNotSaved e, Model model) {
-        LOGGER.debug(e, e);
+        LOGGER.debug(e);
         model.addAttribute(ERROR_MESSAGE, "The new password was not saved. Please, try again");
         return ERROR;
     }
@@ -82,13 +83,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public String handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public String handleHttpRequestMethodNotSupportedException(HttpServletRequest request) {
         String view;
         if (emailExtractor.getEmailFromAuthentication() == null) {
             view = LOGIN;
         } else {
-            view = ERROR;
-            LOGGER.warn(e, e);
+            view = request.getServletPath();
         }
         return view;
     }
