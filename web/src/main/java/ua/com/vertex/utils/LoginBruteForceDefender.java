@@ -2,32 +2,24 @@ package ua.com.vertex.utils;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@PropertySource("classpath:application.properties")
 public class LoginBruteForceDefender {
     private static final Logger LOGGER = LogManager.getLogger(LoginBruteForceDefender.class);
-    public static final int BLOCKED_NUMBER = -1;
-    private final int maxAttempts;
-    private final int loginBlockingTime;
-    private LoadingCache<String, Integer> loginAttempts;
+    private final ConcurrentMap<String, Integer> loginAttempts;
 
-    public LoginBruteForceDefender(@Value("${login.attempts}") int maxAttempts,
-                                   @Value("${login.blocking.time.seconds}") int loginBlockingTime) {
-        this.maxAttempts = maxAttempts;
-        this.loginBlockingTime = loginBlockingTime;
-        loginAttempts = initializeLoadingCache();
+    public LoginBruteForceDefender(@Value("${login.blocking.time.seconds}") int loginBlockingTime) {
+        loginAttempts = initializeLoadingCache(loginBlockingTime);
     }
 
-    private LoadingCache<String, Integer> initializeLoadingCache() {
+    private ConcurrentMap<String, Integer> initializeLoadingCache(int loginBlockingTime) {
         return CacheBuilder.newBuilder()
                 .expireAfterWrite(loginBlockingTime, TimeUnit.SECONDS).build(
                         new CacheLoader<String, Integer>() {
@@ -36,35 +28,23 @@ public class LoginBruteForceDefender {
                                 return 1;
                             }
                         }
-                );
+                ).asMap();
     }
 
-    public synchronized int verifyUsername(String username) {
-        int counter;
-        if (loginAttempts.asMap().containsKey(username)) {
-            counter = incrementCounterOrBlockUsername(username);
-        } else {
-            loginAttempts.put(username, 1);
-            counter = 1;
-            LOGGER.debug(String.format("Login defender incremented for username=%s, counter=%d", username, counter));
-        }
+    public int setCounter(String username) {
+        int counter = loginAttempts.merge(username, 1, Integer::sum);
+        LOGGER.debug(String.format("Login defender set: username=%s, counter=%d", username, counter));
         return counter;
     }
 
-    private int incrementCounterOrBlockUsername(String username) {
-        int counter = loginAttempts.asMap().get(username);
-        if (++counter < maxAttempts) {
-            loginAttempts.put(username, counter);
-            LOGGER.debug(String.format("Login defender incremented for username=%s, counter=%d", username, counter));
-        } else {
-            counter = BLOCKED_NUMBER;
-            LOGGER.debug(String.format("Username=%s is being blocked by login defender", username));
-        }
+    public int checkCounter(String username) {
+        int counter = loginAttempts.getOrDefault(username, 0);
+        LOGGER.debug(String.format("Login defender check: username=%s, counter=%d", username, counter));
         return counter;
     }
 
-    public synchronized void clearEntry(String username) {
-        loginAttempts.asMap().remove(username);
+    public void clearEntry(String username) {
+        loginAttempts.remove(username);
         LOGGER.debug("Login defender cleared username=" + username);
     }
 }

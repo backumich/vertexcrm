@@ -1,11 +1,12 @@
 package ua.com.vertex.context;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,17 +20,17 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
 import ua.com.vertex.utils.LoginBruteForceDefender;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
-import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.LOGIN_ATTEMPTS;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource("classpath:application.properties")
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
-    public static final String LOGIN_ATTEMPTS = "Login attempts counter has been exceeded for this username!";
-
+    private static final Logger logger = LogManager.getLogger(SecurityWebConfig.class);
     private final SpringDataUserDetailsService userDetailsService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final LoginBruteForceDefender defender;
@@ -37,6 +38,9 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${remember.me.validity.seconds}")
     private int validityTime;
+
+    @Value("${login.attempts}")
+    private int maxAttempts;
 
     @Autowired
     public SecurityWebConfig(SpringDataUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
@@ -70,16 +74,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                     defender.clearEntry(authentication.getName());
                     response.sendRedirect("/loggedIn");
                 }))
-                .failureHandler((request, response, e) -> {
-                    if (e instanceof BadCredentialsException) {
-                        if (defender.verifyUsername(request.getParameter("username")) == BLOCKED_NUMBER) {
-                            throw new RuntimeException(LOGIN_ATTEMPTS);
-                        }
-                        response.sendRedirect("/logIn?error");
-                    } else {
-                        throw new RuntimeException(UNKNOWN_ERROR, e);
-                    }
-                })
+                .failureHandler(this::handleFailure)
                 .permitAll()
 
                 .and()
@@ -95,6 +90,29 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
+    }
+
+    private void handleFailure(HttpServletRequest request, HttpServletResponse response, Exception e) throws IOException {
+        String username = request.getParameter("username");
+
+        if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
+            response.sendRedirect(getLink(username));
+
+        } else if (defender.setCounter(username) >= maxAttempts) {
+            response.sendRedirect(getLink(username));
+
+        } else if (e instanceof BadCredentialsException) {
+            logger.debug(() -> e);
+            response.sendRedirect("/logIn?error");
+
+        } else {
+            logger.error(() -> e);
+            response.sendRedirect("/error?reason=unknown");
+        }
+    }
+
+    private String getLink(String username) {
+        return "/error?reason=attempts&username=" + username;
     }
 
     @Bean

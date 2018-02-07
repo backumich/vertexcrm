@@ -1,5 +1,7 @@
 package ua.com.vertex.utils;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,13 +10,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.util.ReflectionTestUtils;
 import ua.com.vertex.context.TestConfig;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -24,90 +27,104 @@ import static ua.com.vertex.utils.LoginBruteForceDefender.BLOCKED_NUMBER;
 public class LoginBruteForceDefenderTest {
 
     @Value("${login.attempts}")
-    private int propertiesLoginAttemptsValue;
-    private static final int MIN_ALLOWED = 2;
+    private int loginAttempts;
+    private final int blockingTime = 3;
 
     private LoginBruteForceDefender defender;
-    private int maxAttempts;
-    private int loginBlockingTime;
 
     @Test
     public void verifyUsernameIncrementsCorrectly() {
-        maxAttempts = 10;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(blockingTime);
 
-        int count = 0;
-        for (int i = 1; i <= 10; i++) {
-            count = defender.verifyUsername("username");
-            if (i < 10) {
-                assertEquals(i, count);
-            }
+        int count;
+        for (int i = 1; i <= loginAttempts; i++) {
+            count = defender.setCounter("username");
+            assertEquals(i, count);
         }
-        assertEquals(BLOCKED_NUMBER, count);
     }
 
     @Test
     public void clearEntryWorksCorrectly() {
-        maxAttempts = 5;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(blockingTime);
 
-        int count = 0;
-        for (int i = 1; i < 4; i++) {
-            count = defender.verifyUsername("username");
+        for (int i = 0; i < 3; i++) {
+            defender.setCounter("username");
         }
 
-        assertEquals(3, count);
+        assertEquals(3, defender.checkCounter("username"));
         defender.clearEntry("username");
-        count = defender.verifyUsername("username");
-        assertEquals(1, count);
+        defender.setCounter("username");
+        assertEquals(1, defender.checkCounter("username"));
     }
 
     @Test
     public void multithreadingWorksCorrectly() throws InterruptedException {
-        maxAttempts = 10;
-        loginBlockingTime = 60;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(blockingTime);
 
-        Thread thread1 = new Thread(() -> multithreadingWorksCorrectlyHelper("username1"));
-        Thread thread2 = new Thread(() -> multithreadingWorksCorrectlyHelper("username2"));
-        thread1.start();
-        TimeUnit.MILLISECONDS.sleep(200);
-        thread2.start();
+        final int numOfTasks = 100;
+
+        List<Callable<Object>> tasks1 = prepareTasks1(numOfTasks);
+
+        ExecutorService exec1 = Executors.newFixedThreadPool(6);
+        exec1.invokeAll(tasks1);
+        exec1.shutdown();
+
+        List<Callable<Object>> tasks2 = prepareTasks2(numOfTasks);
+
+        ExecutorService exec2 = Executors.newFixedThreadPool(6);
+        exec2.invokeAll(tasks2);
+        exec2.shutdown();
+
+        assertEquals(defender.checkCounter("count1"), numOfTasks);
+        assertEquals(defender.checkCounter("count2"), numOfTasks * 2);
     }
 
-    private void multithreadingWorksCorrectlyHelper(String username) {
-        int count = 0;
-        for (int i = 1; i <= 10; i++) {
-            count = defender.verifyUsername(username);
-            if (i < 10) {
-                assertEquals(i, count);
-            }
-            try {
-                TimeUnit.MILLISECONDS.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    private List<Callable<Object>> prepareTasks1(int number) {
+        Callable<Object> task = () -> {
+            defender.setCounter("count1");
+            defender.setCounter("count2");
+            return null;
+        };
+        return fillTaskList(task, number);
+    }
+
+    private List<Callable<Object>> fillTaskList(Callable<Object> task, int number) {
+        List<Callable<Object>> tasks = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            tasks.add(task);
         }
-        assertEquals(BLOCKED_NUMBER, count);
+        return tasks;
+    }
+
+    private List<Callable<Object>> prepareTasks2(int number) {
+        Callable<Object> task = () -> {
+            defender.setCounter("count2");
+            return null;
+        };
+        return fillTaskList(task, number);
     }
 
     @Test
     public void entryGetsClearedAfterTimeElapsed() throws InterruptedException {
-        maxAttempts = 10;
-        loginBlockingTime = 1;
-        defender = new LoginBruteForceDefender(maxAttempts, loginBlockingTime);
+        defender = new LoginBruteForceDefender(blockingTime);
+        changeDefenderBlockingTime();
 
-        int count = defender.verifyUsername("username");
-        assertEquals(1, count);
-        TimeUnit.SECONDS.sleep(2);
-        count = defender.verifyUsername("username");
-        assertEquals(1, count);
+        defender.setCounter("username");
+        assertEquals(1, defender.checkCounter("username"));
+        TimeUnit.SECONDS.sleep(blockingTime + 1);
+        assertEquals(0, defender.checkCounter("username"));
     }
 
-    @Test
-    public void checkPropertiesLoginAttemptsValue() {
-        assertTrue(propertiesLoginAttemptsValue >= MIN_ALLOWED);
+    private void changeDefenderBlockingTime() {
+        ConcurrentMap<String, Integer> map = CacheBuilder.newBuilder()
+                .expireAfterWrite(blockingTime, TimeUnit.SECONDS).build(
+                        new CacheLoader<String, Integer>() {
+                            @Override
+                            public Integer load(String s) throws Exception {
+                                return 1;
+                            }
+                        }
+                ).asMap();
+        ReflectionTestUtils.setField(defender, "loginAttempts", map);
     }
 }
