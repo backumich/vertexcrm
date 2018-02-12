@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp" packages="">
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="logs/vertex-app.log"
+                     filePattern="logs/$${date:yyyy-MM}/vertex-app-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} (%F:%L) - %m%n</Pattern>
+                <!--<Pattern>%d{HH:mm:ss.SSS} [%t] %-5level - %m%n</Pattern>-->
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="500 KB"/>
+            </Policies>
+        </RollingFile>
+        <!--  -->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} (%F:%L) - %m%n"/>
+        </Console>
+        <!--  -->
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework.jdbc" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="ua.com.vertex" level="DEBUG" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+        <!--TRACE < DEBUG < INFO < WARN < ERROR < FATAL-->
