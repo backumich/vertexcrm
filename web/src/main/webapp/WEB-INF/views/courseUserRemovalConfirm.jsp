@@ -3,6 +3,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page session="false" %>
+
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
 <mt:header title="Remove user from course"> </mt:header>

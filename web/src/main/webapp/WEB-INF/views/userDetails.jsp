@@ -4,8 +4,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
+<<<<<<< HEAD
 <mt:header title="User Details"> </mt:header>
-
 
 <div class="container">
     <div class="crm-form mt60 full-width course-users">
@@ -35,9 +35,8 @@
                     <td>E-mail</td>
                     <td><form:input id="email" class="form-control" type="email" value="${user.email}"
                                     path="email"/>
-                    <td><form:errors path="email"/></td>
+                    <td><form:errors path="email" cssClass="red"/></td>
                 </tr>
-
                 <tr>
                     <td>First name</td>
                     <td><form:input id="firstName" class="form-control" type="text"
@@ -58,6 +57,7 @@
                     </td>
 
                     <form:hidden path="passportScan"/>
+                    <td><form:errors path="passportScan" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Photo</td>
@@ -66,6 +66,7 @@
                         <input type="file" name="imagePhoto" accept="image/*"/>
                     </td>
                     <form:hidden path="photo"/>
+                    <td><form:errors path="photo" cssClass="red"/></td>
                 </tr>
                 <tr>
                     <td>Discount</td>

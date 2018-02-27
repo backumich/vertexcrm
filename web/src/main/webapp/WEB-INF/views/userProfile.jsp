@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
 <mt:header title="User Details"> </mt:header>
@@ -39,13 +40,13 @@
             <tr>
                 <td>Photo:</td>
                 <td>
-                    <sf:form method="get" action="/showImage" commandName="user">
+                    <sf:form method="post" action="/showImagePhoto" commandName="user">
                         <input type="hidden" name="userId" value="${user.userId}"/>
                         <input type="hidden" name="firstName" value="${user.firstName}"/>
                         <input type="hidden" name="lastName" value="${user.lastName}"/>
                         <input type="hidden" name="email" value="${user.email}"/>
+                        <input type="hidden" name="phone" value="${user.phone}"/>
                         <input type="hidden" name="discount" value="${user.discount}"/>
-                        <input type="hidden" name="pageToDisplay" value="imagePhoto"/>
                         <input type="hidden" name="imageType" value="photo"/>
                         <input class="black" type="submit" value="Show Photo">
                     </sf:form><br>
@@ -54,13 +55,13 @@
             <tr>
                 <td>Passport scan:</td>
                 <td>
-                    <sf:form method="get" action="/showImage" commandName="user">
+                    <sf:form method="post" action="/showImagePassport" commandName="user">
                         <input type="hidden" name="userId" value="${user.userId}"/>
                         <input type="hidden" name="firstName" value="${user.firstName}"/>
                         <input type="hidden" name="lastName" value="${user.lastName}"/>
                         <input type="hidden" name="email" value="${user.email}"/>
+                        <input type="hidden" name="phone" value="${user.phone}"/>
                         <input type="hidden" name="discount" value="${user.discount}"/>
-                        <input type="hidden" name="pageToDisplay" value="imagePassport"/>
                         <input type="hidden" name="imageType" value="passportScan"/>
                         <input class="black" type="submit" value="Show Passport Scan">
                     </sf:form><br>

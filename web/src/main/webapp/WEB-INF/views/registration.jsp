@@ -7,7 +7,6 @@
 
 <mt:header title="Registration"> </mt:header>
 
-
 <div class="container">
     <div class="crm-form">
         <h1>Registration</h1>

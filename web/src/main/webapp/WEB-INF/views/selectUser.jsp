@@ -24,9 +24,10 @@
                     <tr>
                         <th></th>
                         <th>User Id</th>
-                        <th>User E-mail</th>
-                        <th>User first name</th>
-                        <th>User last name</th>
+                        <th>E-mail</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Phone</th>
                     </tr>
                     <c:forEach items="${users}" var="user">
                         <tr>
@@ -36,6 +37,7 @@
                             <td>${user.email}</td>
                             <td>${user.firstName}</td>
                             <td>${user.lastName}</td>
+                            <td>${user.phone}</td>
                             <td>
                             </td>
                         </tr>
