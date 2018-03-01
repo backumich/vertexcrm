@@ -10,5 +10,5 @@ public interface RegistrationUserLogic {
 
     boolean isEmailAlreadyExists(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<User> user);
 
-    boolean isRegisteredUser(UserFormRegistration userFormRegistration, BindingResult bindingResult);
+    boolean registerUser(UserFormRegistration userFormRegistration, BindingResult bindingResult);
 }
