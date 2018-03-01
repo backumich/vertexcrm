@@ -9,8 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.UserFormRegistration;
 import ua.com.vertex.logic.RegistrationUserLogicImpl;
-import ua.com.vertex.logic.interfaces.EmailLogic;
-import ua.com.vertex.utils.MailService;
 import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +26,6 @@ public class RegistrationControllerTest {
 
     @Mock
     private RegistrationUserLogicImpl registrationUserLogic;
-
-    @Mock
-    private EmailLogic emailLogic;
-
-    @Mock
-    private MailService mailService;
 
     @Mock
     private ReCaptchaService reCaptchaService;
