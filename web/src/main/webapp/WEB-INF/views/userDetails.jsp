@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-<<<<<<< HEAD
+
 <mt:header title="User Details"> </mt:header>
 
 <div class="container">

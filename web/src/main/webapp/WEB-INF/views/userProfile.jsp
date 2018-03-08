@@ -34,7 +34,7 @@
             </tr>
             <tr>
                 <td>My certificates:</td>
-                <td><a href="<c:url value="/getCertificateByUserId?userId=${user.userId}"/>">Go to certificates page</a>
+                <td><a href="<c:url value="/myCertificates"/>">Go to certificates page</a>
                 </td>
             </tr>
             <tr>

@@ -39,8 +39,10 @@
             </div>
             <div class="form-group">
                 <label for="crm-phone">Phone</label>
-                <form:input class="form-control" id="crm-phone" placeholder="Phone" path="phone"/>
+                <input class="form-control" id="crm-phone" placeholder="Phone"
+                            value="${userFormRegistration.phone}"/>
                 <form:errors path="phone"/>
+                <form:hidden class="buttonText" id="phoneHidden" path="phone"/>
             </div>
 
             <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
@@ -63,4 +65,14 @@
     </div>
 </div>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
+<script type="text/javascript">
+	let link = document.createElement('link');
+    link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css');
+    link.setAttribute('rel', 'stylesheet');
+    document.head.appendChild(link);
+</script>
 <mt:footer> </mt:footer>
