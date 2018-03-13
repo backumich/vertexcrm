@@ -4,7 +4,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-
 <mt:header title="User Details"> </mt:header>
 
 <div class="container">
@@ -52,7 +51,8 @@
                 <tr>
                     <td>Passport scan</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport">
+                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" width="800" height="auto"
+                             alt="No scan passport">
                         <input type="file" name="imagePassportScan" accept="image/*"/>
                     </td>
 
@@ -62,7 +62,8 @@
                 <tr>
                     <td>Photo</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
+                        <img src="data:image/jpeg;base64,${user.photoAsString}" width="400" height="auto"
+                             alt="No photo">
                         <input type="file" name="imagePhoto" accept="image/*"/>
                     </td>
                     <form:hidden path="photo"/>
@@ -78,11 +79,9 @@
                 </tr>
                 <tr>
                     <td>Phone</td>
-                    <td>
-                        <form:input id="phone" class="form-control" type="text" value="${user.phone}"
-                                    path="phone"/>
-                        <form:errors path="phone"/>
-                    </td>
+                    <td><input id="crm-phone" class="form-control" type="text" value="${user.phone}"/>
+                    <td><form:hidden class="buttonText" id="phoneHidden" path="phone"/></td>
+                    <td><form:errors path="phone"/></td>
                 </tr>
                 <tr>
                     <td>User roles</td>
@@ -137,5 +136,14 @@
     </div>
 </div>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
+<script type="text/javascript">
+    let link = document.createElement('link');
+    link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css');
+    link.setAttribute('rel', 'stylesheet');
+    document.head.appendChild(link);
+</script>
 
 <mt:footer> </mt:footer>
