@@ -11,14 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.vertex.beans.UserFormRegistration;
-import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.RegistrationUserLogic;
-import ua.com.vertex.utils.MailService;
 import ua.com.vertex.utils.ReCaptchaService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @Controller
 @RequestMapping(value = "/registration")
@@ -27,12 +24,9 @@ public class RegistrationController {
     static final String REGISTRATION_SUCCESS_PAGE = "registrationSuccess";
     static final String NAME_MODEL = "userFormRegistration";
     private static final String CAPTCHA = "captcha";
-    static final String OUR_EMAIL = "vertex.academy.robot@gmail.com";
     private static final Logger LOGGER = LogManager.getLogger(RegistrationController.class);
-    private final MailService mailService;
-    private RegistrationUserLogic registrationUserLogic;
-    private EmailLogic emailLogic;
-    private ReCaptchaService reCaptchaService;
+    private final RegistrationUserLogic registrationUserLogic;
+    private final ReCaptchaService reCaptchaService;
 
     @GetMapping
     public ModelAndView viewRegistrationForm() {
@@ -44,7 +38,7 @@ public class RegistrationController {
     public ModelAndView processRegistration(@Valid @ModelAttribute(NAME_MODEL)
                                                     UserFormRegistration userFormRegistration,
                                             BindingResult bindingResult, ModelAndView modelAndView,
-                                            HttpServletRequest request) throws IOException {
+                                            HttpServletRequest request) {
 
         LOGGER.debug("Request to /processRegistration by " + userFormRegistration.getEmail());
 
@@ -54,11 +48,8 @@ public class RegistrationController {
 
         modelAndView.setViewName(REGISTRATION_PAGE);
         if (isVerified && !bindingResult.hasErrors()) {
-            if (registrationUserLogic.isRegisteredUser(userFormRegistration, bindingResult)) {
+            if (registrationUserLogic.registerUser(userFormRegistration, bindingResult)) {
                 modelAndView.setViewName(REGISTRATION_SUCCESS_PAGE);
-                LOGGER.debug("Sending a message to the user - " + userFormRegistration.getEmail());
-                mailService.sendMail(OUR_EMAIL, userFormRegistration.getEmail(), "Confirmation of registration",
-                        emailLogic.createRegistrationMessage(userFormRegistration));
             }
         } else {
             modelAndView.addObject(CAPTCHA, isVerified);
@@ -67,11 +58,8 @@ public class RegistrationController {
     }
 
     @Autowired
-    public RegistrationController(RegistrationUserLogic registrationUserLogic,
-                                  EmailLogic emailLogic, MailService mailService, ReCaptchaService reCaptchaService) {
+    public RegistrationController(RegistrationUserLogic registrationUserLogic, ReCaptchaService reCaptchaService) {
         this.registrationUserLogic = registrationUserLogic;
-        this.emailLogic = emailLogic;
-        this.mailService = mailService;
         this.reCaptchaService = reCaptchaService;
     }
 }
