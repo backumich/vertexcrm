@@ -2,6 +2,8 @@ package ua.com.vertex.beans;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -13,6 +15,9 @@ public class Course {
     private final String NOTES_MSG = "The notes must be up to 256 characters long";
 
     private int id;
+
+    @Digits(integer = 8, fraction = 2)
+    @DecimalMin("0.00")
     private BigDecimal price;
 
     @Size(min = 1, max = 256, message = COURSE_NAME_MSG)

@@ -1,6 +1,10 @@
 package ua.com.vertex.context;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,24 +13,47 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ua.com.vertex.logic.SpringDataUserDetailsService;
+import ua.com.vertex.utils.LoginBruteForceDefender;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.io.IOException;
+
+import static ua.com.vertex.controllers.exceptionHandling.AppErrorController.LOGIN_ATTEMPTS;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
-    private BCryptPasswordEncoder passwordEncoder;
-    private static final int VALIDITY_SECONDS = 604800;
-    public static final String UNKNOWN_ERROR = "Unknown error during logging in. Database might be offline";
-    @Bean
-    public SpringDataUserDetailsService springDataUserDetailsService() {
-        return new SpringDataUserDetailsService();
-    }
+    private static final Logger logger = LogManager.getLogger(SecurityWebConfig.class);
+    private final SpringDataUserDetailsService userDetailsService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final LoginBruteForceDefender defender;
+    private final DataSource dataSource;
+
+    @Value("${remember.me.validity.seconds}")
+    private int validityTime;
+
+    @Value("${login.attempts}")
+    private int maxAttempts;
 
     @Autowired
-    public SecurityWebConfig(BCryptPasswordEncoder passwordEncoder) {
+    public SecurityWebConfig(SpringDataUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
+                             LoginBruteForceDefender defender, @Qualifier("DS") DataSource dataSource) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.defender = defender;
+        this.dataSource = dataSource;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -36,20 +63,18 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter, CsrfFilter.class);
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .anyRequest().permitAll()
 
                 .and()
                 .formLogin()
                 .loginPage("/logIn")
-                .successForwardUrl("/loggedIn")
-                .failureHandler((request, response, e) -> {
-                    if (e instanceof BadCredentialsException) {
-                        response.sendRedirect("/logIn?error");
-                    } else {
-                        throw new RuntimeException(UNKNOWN_ERROR, e);
-                    }
-                })
+                .successHandler(((request, response, authentication) -> {
+                    defender.clearEntry(authentication.getName());
+                    response.sendRedirect("/loggedIn");
+                }))
+                .failureHandler(this::handleFailure)
                 .permitAll()
 
                 .and()
@@ -59,16 +84,41 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .rememberMe()
-                .tokenValiditySeconds(VALIDITY_SECONDS)
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(validityTime)
 
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
         ;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(springDataUserDetailsService())
-                .passwordEncoder(passwordEncoder);
+    private void handleFailure(HttpServletRequest request, HttpServletResponse response, Exception e) throws IOException {
+        String username = request.getParameter("username");
+
+        if (e.getMessage().equals(LOGIN_ATTEMPTS)) {
+            response.sendRedirect(getLink(username));
+
+        } else if (defender.setCounter(username) >= maxAttempts) {
+            response.sendRedirect(getLink(username));
+
+        } else if (e instanceof BadCredentialsException) {
+            logger.debug(() -> e);
+            response.sendRedirect("/logIn?error");
+
+        } else {
+            logger.error(() -> e);
+            response.sendRedirect("/error?reason=unknown");
+        }
+    }
+
+    private String getLink(String username) {
+        return "/error?reason=attempts&username=" + username;
+    }
+
+    @Bean
+    PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
+        repository.setDataSource(dataSource);
+        return repository;
     }
 }

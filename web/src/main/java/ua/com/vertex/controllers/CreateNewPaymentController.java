@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,14 +16,13 @@ import ua.com.vertex.logic.interfaces.PaymentLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
 
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndAddToUserController.USERS;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.MSG;
 
 @Controller
 public class CreateNewPaymentController {
 
-    private static final Logger logger = LogManager.getLogger(CreateNewPaymentController.class);
+    private static final Logger LOGGER = LogManager.getLogger(CreateNewPaymentController.class);
 
     private final CourseLogic courseLogic;
     private final UserLogic userLogic;
@@ -44,17 +42,12 @@ public class CreateNewPaymentController {
         this.paymentLogic = paymentLogic;
     }
 
-    @GetMapping(value = "/createPayment")
+    @PostMapping(value = "/createPayment")
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectCourseForPayment() {
-        logger.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
+        LOGGER.debug("Request to '/createPayments' . Redirect to " + SELECT_COURSE_FOR_PAYMENT_JSP);
         ModelAndView result = new ModelAndView(SELECT_COURSE_FOR_PAYMENT_JSP);
-        try {
-            result.addObject(COURSES, courseLogic.getAllCoursesWithDept());
-        } catch (Exception e) {
-            logger.warn(e);
-            result.setViewName(ERROR);
-        }
+        result.addObject(COURSES, courseLogic.getAllCoursesWithDept());
         return result;
     }
 
@@ -64,15 +57,10 @@ public class CreateNewPaymentController {
                                       BindingResult bindingResult, ModelAndView modelAndView) {
         modelAndView.setViewName(SELECT_USER_FOR_PAYMENT_JSP);
         if (!bindingResult.hasErrors()) {
-            try {
-                int paymentId = paymentLogic.createNewPaymentAndUpdateAccounting(payment);
-                modelAndView.setViewName(ADMIN_JSP);
-                modelAndView.addObject(MSG, "Payment create successful!!!");
-                logger.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
-            } catch (Exception e) {
-                logger.warn(e);
-                modelAndView.setViewName(ERROR);
-            }
+            int paymentId = paymentLogic.createNewPaymentAndUpdateAccounting(payment);
+            modelAndView.setViewName(ADMIN_JSP);
+            modelAndView.addObject(MSG, "Payment create successful!!!");
+            LOGGER.debug(String.format("Payment create successful, payment id = (%s)", paymentId));
         } else {
             modelAndView.addObject(COURSE_ID_FOR_PAY, payment.getCourseId());
             modelAndView.addObject(USER_ID_FOR_PAY, payment.getUserID());
@@ -84,14 +72,9 @@ public class CreateNewPaymentController {
     @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView selectUserForPayment(@SuppressWarnings("SameParameterValue") @ModelAttribute(COURSE_ID_FOR_PAY) int courseId) {
         ModelAndView result = new ModelAndView(SELECT_USER_FOR_PAYMENT_JSP);
-        try {
-            result.addObject(USERS, userLogic.getCourseUsers(courseId));
-            result.addObject(COURSE_ID_FOR_PAY, courseId);
-            result.addObject(PAYMENT, new PaymentForm());
-        } catch (Exception e) {
-            logger.warn(e);
-            result.setViewName(ERROR);
-        }
+        result.addObject(USERS, userLogic.getCourseUsers(courseId));
+        result.addObject(COURSE_ID_FOR_PAY, courseId);
+        result.addObject(PAYMENT, new PaymentForm());
         return result;
     }
 }

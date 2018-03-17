@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.vertex.beans.Certificate;
 import ua.com.vertex.beans.User;
-import ua.com.vertex.controllers.exceptionHandling.NoCertificateException;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.NoCertificateException;
 import ua.com.vertex.dao.interfaces.CertificateDaoInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.logic.interfaces.CertificateLogic;
@@ -18,7 +18,7 @@ import java.util.*;
 @Service
 public class CertificateLogicImpl implements CertificateLogic {
 
-    private static final Logger logger = LogManager.getLogger(CertificateLogicImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(CertificateLogicImpl.class);
 
     private final UserDaoInf userDaoInf;
     private final CertificateDaoInf certificateDaoInf;
@@ -27,35 +27,35 @@ public class CertificateLogicImpl implements CertificateLogic {
     private static final String CERTIFICATE = "certificate";
 
     public List<Certificate> getAllCertificatesByUserEmail(String eMail) {
-        logger.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", eMail));
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificateByUserId(%s);", eMail));
         return certificateDaoInf.getAllCertificatesByUserEmail(eMail);
     }
 
     public List<Certificate> getAllCertificatesByUserIdFullData(int userId) {
-        logger.debug(String.format("Call - certificateDao.getAllCertificatesByUserIdFullData(%s);"
+        LOGGER.debug(String.format("Call - certificateDao.getAllCertificatesByUserIdFullData(%s);"
                 , Integer.toString(userId)));
         return certificateDaoInf.getAllCertificatesByUserIdFullData(userId);
     }
 
     public Optional<Certificate> getCertificateById(int certificateId) {
-        logger.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
+        LOGGER.debug(String.format("Call - certificateDao.getCertificateById(%s);", Integer.toString(certificateId)));
         return certificateDaoInf.getCertificateById(certificateId);
     }
 
     public int addCertificate(Certificate certificate) {
-        logger.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
+        LOGGER.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
         certificate.setCertificateUid(generateCertificateUid());
         return certificateDaoInf.addCertificate(certificate);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public int addCertificateAndCreateUser(Certificate certificate, User user) {
-        logger.debug(String.format("Call - userDaoInf.addUserForCreateCertificate(%s) ;", user));
+        LOGGER.debug(String.format("Call - userDaoInf.addUserForCreateCertificate(%s) ;", user));
         int userID = userDaoInf.addUserForCreateCertificate(user);
         certificate.setUserId(userID);
         certificate.setCertificateUid(generateCertificateUid());
 
-        logger.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
+        LOGGER.debug(String.format("Call - certificateDaoInf.addCertificate(%s) ;", certificate));
         return certificateDaoInf.addCertificate(certificate);
     }
 
@@ -69,7 +69,7 @@ public class CertificateLogicImpl implements CertificateLogic {
 
     @Override
     public Map<String, Object> getUserAndCertificate(String certificateUid) {
-        logger.debug("Processing request with certificateId=" + certificateUid);
+        LOGGER.debug("Processing request with certificateId=" + certificateUid);
 
         Map<String, Object> attributes = new HashMap<>();
         Certificate certificate = certificateDaoInf.getCertificateByUid(certificateUid)

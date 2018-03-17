@@ -24,8 +24,6 @@ public class TestConfig {
 
     @Bean
     public Validator validator() {
-
         return new org.springframework.validation.beanvalidation.LocalValidatorFactoryBean();
-
     }
 }

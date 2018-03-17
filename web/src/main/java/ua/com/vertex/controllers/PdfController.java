@@ -17,7 +17,7 @@ import java.io.File;
 
 @Controller
 public class PdfController {
-    private static final Logger logger = LogManager.getLogger(PdfController.class);
+    private static final Logger LOGGER = LogManager.getLogger(PdfController.class);
     private final PdfGenerator pdfGenerator;
     private final PdfDownloader pdfDownloader;
     private final EmailExtractor emailExtractor;
@@ -26,7 +26,7 @@ public class PdfController {
     @PreAuthorize("(principal.username).equals(#dto.email)")
     public void generatePdf(@ModelAttribute PdfDto dto, HttpServletResponse response) throws Exception {
 
-        logger.debug("GeneratePdf page accessed");
+        LOGGER.debug("GeneratePdf page accessed");
         String pdfFileName = emailExtractor.getEmailFromAuthentication() + "_certificate.pdf";
         File pdfFile = new File(pdfFileName);
 
