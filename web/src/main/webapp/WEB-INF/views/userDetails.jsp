@@ -4,7 +4,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-<<<<<<< HEAD
 <mt:header title="User Details"> </mt:header>
 
 <div class="container">
@@ -52,7 +51,8 @@
                 <tr>
                     <td>Passport scan</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport">
+                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" width="800" height="auto"
+                             alt="No scan passport">
                         <input type="file" name="imagePassportScan" accept="image/*"/>
                     </td>
 
@@ -62,7 +62,8 @@
                 <tr>
                     <td>Photo</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
+                        <img src="data:image/jpeg;base64,${user.photoAsString}" width="400" height="auto"
+                             alt="No photo">
                         <input type="file" name="imagePhoto" accept="image/*"/>
                     </td>
                     <form:hidden path="photo"/>
@@ -137,5 +138,40 @@
     </div>
 </div>
 
+<footer class="footer">
+    <div class="container">
+        <div class="right">
+        </div>
 
-<mt:footer> </mt:footer>
+        <div class="left">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="copyright"><a href="https://vertex-academy.com" class="logo"></a>©
+                        2015, Все права защищены
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="cont"><span>г. Киев, ул. Мечникова, 16, оф. 4-1</span>|<span>(050) 205 77 99, (098) 205 77 99</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="../../javascript/main.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
+<script type="text/javascript">
+    let link = document.createElement('link');
+    link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css');
+    link.setAttribute('rel', 'stylesheet');
+    document.head.appendChild(link);
+</script>
+
+</body>
+</html>

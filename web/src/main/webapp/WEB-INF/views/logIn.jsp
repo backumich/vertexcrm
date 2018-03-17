@@ -43,6 +43,7 @@
 
 
     <div class="links">
+         <a href="<c:url value="/resetPassword"/>">Forgot password?</a>
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>
     </div>

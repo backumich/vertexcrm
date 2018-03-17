@@ -4,12 +4,12 @@
 <%@ page session="false" %>
 <%@ taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-<mt:header title="Passport Saved"> </mt:header>
+<mt:header title="Reset Password"> </mt:header>
 
 
 <div class="container">
-    <span class="fontSize200 silver">Reset Your Password</span><br><br><br>
-
+    <div class="crm-form">
+        <h1>Reset Your Password</h1>
     <c:if test="${captcha == true}">
         <div class="red fontSize180">
             You missed captcha!
@@ -40,7 +40,7 @@
             </tr>
             <tr>
                 <td><input type="text" name="email" value="${email}"
-                           placeholder="email@example.com" class="width400"></td>
+                           placeholder="email@example.com" class="form-control"></td>
             </tr>
             <tr>
                 <td><br><br><br>
@@ -49,11 +49,10 @@
                 </td>
             </tr>
             <tr>
-                <td class="buttonPaddingTop"><input type="submit" value="Reset" class="black"></td>
+                <td class="buttonPaddingTop"><input type="submit" value="Reset" class="submit-link"></td>
             </tr>
         </table>
     </sf:form>
-
     <div class="links">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>

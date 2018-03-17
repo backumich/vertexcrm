@@ -28,19 +28,21 @@
                 <form:errors path="verifyPassword"/>
             </div>
             <div class="form-group">
-                <label for="crm-name">First name</label>
-                <form:input class="form-control" id="crm-name" placeholder="First name" path="firstName"/>
+                <label for="crm-first-name">First name</label>
+                <form:input class="form-control" id="crm-first-name" placeholder="First name" path="firstName"/>
                 <form:errors path="firstName"/>
             </div>
             <div class="form-group">
-                <label for="crm-name">Last name</label>
-                <form:input class="form-control" id="crm-name" placeholder="Last name" path="lastName"/>
+                <label for="crm-last-name">Last name</label>
+                <form:input class="form-control" id="crm-last-name" placeholder="Last name" path="lastName"/>
                 <form:errors path="lastName"/>
             </div>
             <div class="form-group">
                 <label for="crm-phone">Phone</label>
-                <form:input class="form-control" id="crm-phone" placeholder="Phone" path="phone"/>
+                <input class="form-control" id="phone" placeholder="Phone"
+                            value="${userFormRegistration.phone}"/>
                 <form:errors path="phone"/>
+                <form:hidden class="buttonText" id="phoneHidden" path="phone"/>
             </div>
 
             <div class="g-recaptcha" data-sitekey="6LfuoCkUAAAAAJpyVDEXxqh-YgwfcV-V0C285XBM"></div>
@@ -62,5 +64,41 @@
         </div>
     </div>
 </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="right">
+        </div>
 
-<mt:footer> </mt:footer>
+        <div class="left">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="copyright"><a href="https://vertex-academy.com" class="logo"></a>©
+                        2015, Все права защищены
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="cont"><span>г. Киев, ул. Мечникова, 16, оф. 4-1</span>|<span>(050) 205 77 99, (098) 205 77 99</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" src="../../javascript/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../javascript/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="../../javascript/main.js"></script>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/intlTelInput.js"></script>
+<script src="../../javascript/phoneNumberFormat.js"></script>
+<script type="text/javascript">
+    let link = document.createElement('link');
+    link.setAttribute('href', 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/css/intlTelInput.css');
+    link.setAttribute('rel', 'stylesheet');
+    document.head.appendChild(link);
+</script>
+</body>
+</html>

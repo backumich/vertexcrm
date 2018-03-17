@@ -350,7 +350,7 @@ a.link-text {
 
 .footer .logo {
     display: inline-block;
-    background: url("../img/logo-w.png") no-repeat;
+    background: url("https://vertex-academy.com/img/logo-w.png") no-repeat;
     background-size: 100% auto;
     width: 68px;
     height: 12px;
@@ -762,7 +762,7 @@ h3.inside-title {
 }
 
 .inside .navbar-hide .logo {
-    background: url("../img/logo.png") no-repeat;
+    background: url("https://vertex-academy.com/img/logo.png") no-repeat;
     background-size: 146px auto;
 }
 
@@ -947,7 +947,7 @@ body {
 }
 
 .navbar-hide .logo {
-    background: url("../img/logo-w.png") no-repeat;
+    background: url("https://vertex-academy.com/img/logo-w.png") no-repeat;
     background-size: 146px auto;
 }
 
