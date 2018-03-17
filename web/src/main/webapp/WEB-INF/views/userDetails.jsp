@@ -51,7 +51,8 @@
                 <tr>
                     <td>Passport scan</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" alt="No scan passport">
+                        <img src="data:image/jpeg;base64,${user.passportScanAsString}" width="800" height="auto"
+                             alt="No scan passport">
                         <input type="file" name="imagePassportScan" accept="image/*"/>
                     </td>
 
@@ -61,7 +62,8 @@
                 <tr>
                     <td>Photo</td>
                     <td class="block">
-                        <img src="data:image/jpeg;base64,${user.photoAsString}" alt="No photo">
+                        <img src="data:image/jpeg;base64,${user.photoAsString}" width="400" height="auto"
+                             alt="No photo">
                         <input type="file" name="imagePhoto" accept="image/*"/>
                     </td>
                     <form:hidden path="photo"/>
@@ -170,5 +172,6 @@
     link.setAttribute('rel', 'stylesheet');
     document.head.appendChild(link);
 </script>
+
 </body>
 </html>

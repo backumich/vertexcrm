@@ -10,7 +10,6 @@
 <div class="container">
     <div class="crm-form">
         <h1>Reset Your Password</h1>
-
     <c:if test="${captcha == true}">
         <div class="red fontSize180">
             You missed captcha!
@@ -54,7 +53,6 @@
             </tr>
         </table>
     </sf:form>
-
     <div class="links">
         <a href="javascript:history.back();">Back</a> |
         <a href="<c:url value="/"/>">Home</a>

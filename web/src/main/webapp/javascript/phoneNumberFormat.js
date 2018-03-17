@@ -1,4 +1,4 @@
-$("#phone").intlTelInput({
+$("#crm-phone").intlTelInput({
     initialCountry: "auto",
     preferredCountries: ['ua'],
     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.8/js/utils.js",
@@ -12,5 +12,5 @@ $("#phone").intlTelInput({
 });
 
 $("form").submit(function () {
-    $("#phoneHidden").val($("#phone").intlTelInput("getNumber"));
+    $("#phoneHidden").val($("#crm-phone").intlTelInput("getNumber"));
 });
