@@ -8,7 +8,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.beans.UserFormRegistration;
+import ua.com.vertex.logic.interfaces.EmailLogic;
 import ua.com.vertex.logic.interfaces.UserLogic;
+import ua.com.vertex.utils.MailService;
 
 import java.util.Optional;
 
@@ -18,13 +20,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RegistrationUserLogicImplTest {
+public class RegistrationUserLogicImplMockTest {
 
     private final String MSG = "Maybe method was changed";
     private final String EMAIL = "test@test.com";
 
     private RegistrationUserLogicImpl registrationUserLogic;
-
     private UserFormRegistration userFormRegistrationCorrect, userFormRegistrationIncorrect;
 
     @Mock
@@ -33,9 +34,15 @@ public class RegistrationUserLogicImplTest {
     @Mock
     private UserLogic userLogic;
 
+    @Mock
+    private MailService mailService;
+
+    @Mock
+    private EmailLogic emailLogic;
+
     @Before
-    public void setUp() throws Exception {
-        registrationUserLogic = new RegistrationUserLogicImpl(userLogic);
+    public void setUp() {
+        registrationUserLogic = new RegistrationUserLogicImpl(userLogic, mailService, emailLogic);
         userFormRegistrationCorrect = new UserFormRegistration();
         userFormRegistrationCorrect.setEmail(EMAIL);
         String PASSWORD = "111111";
@@ -49,7 +56,7 @@ public class RegistrationUserLogicImplTest {
     }
 
     @Test
-    public void isEmailAlreadyExists() throws Exception {
+    public void isEmailAlreadyExists() {
         assertTrue(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(true).getInstance())));
         assertFalse(MSG, registrationUserLogic.isEmailAlreadyExists(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
@@ -57,24 +64,24 @@ public class RegistrationUserLogicImplTest {
     }
 
     @Test
-    public void isRegisteredUserEmailAlreadyExists() throws Exception {
+    public void isRegisteredUserEmailAlreadyExists() {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(true).getInstance()));
-        assertFalse(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationIncorrect, bindingResult));
+        assertFalse(MSG, registrationUserLogic.registerUser(userFormRegistrationIncorrect, bindingResult));
     }
 
     @Test
-    public void isRegisteredUserEmailAlreadyExistsButNotActive() throws Exception {
+    public void isRegisteredUserEmailAlreadyExistsButNotActive() {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.ofNullable(new User.Builder().setEmail(EMAIL)
                 .setIsActive(false).getInstance()));
-        assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));
+        assertTrue(MSG, registrationUserLogic.registerUser(userFormRegistrationCorrect, bindingResult));
         verify(userLogic).registrationUserUpdate(new User(userFormRegistrationCorrect));
     }
 
     @Test
-    public void isRegisteredUserWhenEmailNotExists() throws Exception {
+    public void isRegisteredUserWhenEmailNotExists() {
         when(userLogic.userForRegistrationCheck(EMAIL)).thenReturn(Optional.empty());
-        assertTrue(MSG, registrationUserLogic.isRegisteredUser(userFormRegistrationCorrect, bindingResult));
+        assertTrue(MSG, registrationUserLogic.registerUser(userFormRegistrationCorrect, bindingResult));
         verify(userLogic).registrationUserInsert(new User(userFormRegistrationCorrect));
     }
 }

@@ -36,7 +36,7 @@ public class UserController {
         return new ModelAndView(USER_JSP);
     }
 
-    @RequestMapping(value = "/getCertificatesByUserEmail", method = RequestMethod.GET)
+    @RequestMapping(value = "/myCertificates", method = RequestMethod.GET)
     @PreAuthorize("isAuthenticated()")
     public String getAllCertificatesByUserEmail(Model model) {
 
