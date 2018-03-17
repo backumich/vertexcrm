@@ -17,7 +17,7 @@ import ua.com.vertex.utils.ReCaptchaService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import static ua.com.vertex.controllers.RegistrationController.OUR_EMAIL;
+import static ua.com.vertex.logic.RegistrationUserLogicImpl.OUR_EMAIL;
 
 @Controller
 public class PasswordResetEmailController {
