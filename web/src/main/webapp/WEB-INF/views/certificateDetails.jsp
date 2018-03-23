@@ -75,7 +75,7 @@
             <br>
 
             <sf:form method="post" action="/showImagePhoto" commandName="user">
-                <input type="hidden" name="userId" value="${user.userId}"/>
+                <input type="hidden" name="email" value="${user.email}"/>
                 <input type="hidden" name="pageToDisplay" value="image"/>
                 <input type="hidden" name="imageType" value="photo"/>
                 <input class="submit-link" type="submit" value="Show Certificate Holder Photo">
