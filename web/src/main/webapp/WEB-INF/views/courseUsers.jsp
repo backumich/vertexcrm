@@ -45,8 +45,8 @@
                         <p>Enter first name, or last name, or email:</p>
                     </td>
                     <td>
-                        <input type="text" name="searchParam" id="searchParam" maxlength="255"
-                               placeholder="First name, or last name, or email" class="form-control"/>
+                        <input type="text" name="searchParam" value="${dtoCourseUser.searchParam}" id="searchParam"
+                               maxlength="255" placeholder="First name, or last name, or email" class="form-control"/>
                     </td>
                 </tr>
                 <tr>
@@ -54,16 +54,21 @@
                         <p>Select type of search:</p>
                     </td>
                     <td>
-                        <select name="searchType" class="form-control">
-                            <option selected value="first_name">By first name</option>
-                            <option value="last_name">By last name</option>
-                            <option value="email">By email</option>
-                        </select>
+                        <label class="form-control">
+                            <sf:select path="searchType" items="${selection}"/>
+                        </label>
                     </td>
                 </tr>
             </table>
             <input type="submit" value="Search" class="submit-link">
         </sf:form>
+
+        <c:if test="${!empty search}">
+            <sf:form action="clearSearchResults" method="get" class="mbt-20" commandName="dtoCourseUser">
+                <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
+                <input type="submit" value="Clear search results" class="plane-link"></td>
+            </sf:form>
+        </c:if>
 
         <c:if test="${!empty freeUsers and !empty search}">
             <hr>
@@ -104,13 +109,7 @@
             <h2 class="mt60">Search results:</h2>
             <p>No users found</p>
         </c:if>
-        <c:if test="${!empty search}">
 
-            <sf:form action="clearSearchResults" method="get" class="mbt-20" commandName="dtoCourseUser">
-                <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}">
-                <input type="submit" value="Clear search results" class="plane-link"></td>
-            </sf:form>
-        </c:if>
         <sf:form action="courseDetails" method="get">
             <input type="hidden" name="courseId" value="${dtoCourseUser.courseId}"/>
             <input type="submit" value="Back to course details" class="submit-link outline mbt-20"/>
