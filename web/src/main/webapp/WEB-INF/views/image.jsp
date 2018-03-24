@@ -10,10 +10,10 @@
 
 <div class="container">
     <c:if test="${photo != null}">
-        <img src="data:image/jpeg;base64,${photo}" width="auto" height="400" alt="no image">
+        <img src="data:image/jpeg;base64,${photo}" alt="no image">
     </c:if>
     <c:if test="${passportScan != null}">
-        <img src="data:image/jpeg;base64,${passportScan}" width="auto" height="600" alt="no image">
+        <img src="data:image/jpeg;base64,${passportScan}" alt="no image">
     </c:if>
 
     <br><br>
