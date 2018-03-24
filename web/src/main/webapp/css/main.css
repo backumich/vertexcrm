@@ -2566,3 +2566,8 @@ body.desct .home-page {
 .result-text {
     color: #27ae60;
 }
+
+img {
+    max-width: 800px;
+    max-height: 600px;
+}
