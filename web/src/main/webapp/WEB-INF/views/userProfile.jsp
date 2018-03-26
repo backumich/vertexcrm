@@ -69,11 +69,6 @@
             </tr>
         </table>
 
-        <div class="href">
-            <a href="javascript:history.back();">Back</a> |
-            <a href="<c:url value="/" />">Home</a>
-        </div>
-
     </div></div>
 
 <div class="container mb-20" align="center">
