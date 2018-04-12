@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ua.com.vertex.controllers.AdminController.ADMIN_JSP;
-import static ua.com.vertex.controllers.CertificateDetailsPageController.ERROR;
 import static ua.com.vertex.controllers.CreateCertificateAndUserController.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -96,15 +95,6 @@ public class CreateCertificateAndUserControllerTest {
     }
 
     @Test
-    public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenException() throws Exception {
-        when(certificateLogic.addCertificateAndCreateUser(certificate
-                , user)).thenThrow(new RuntimeException("Test"));
-
-        assertEquals(MSG_INVALID_VIEW, underTest.checkCertificateAndUser(certificateWithUserForm, bindingResult, model)
-                , ERROR);
-    }
-
-    @Test
     public void checkCertificateAndUserHasCorrectDataInModelAndReturnCorrectViewWhenBindingResultHasError()
             throws Exception {
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -114,5 +104,4 @@ public class CreateCertificateAndUserControllerTest {
         assertTrue(MSG_INVALID_DATA, model.containsAttribute(MSG));
         assertTrue(MSG_INVALID_DATA, model.asMap().containsValue("The data have not been validated!!!"));
     }
-
 }

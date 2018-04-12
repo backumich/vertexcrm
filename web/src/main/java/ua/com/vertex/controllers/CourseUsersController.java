@@ -18,14 +18,15 @@ import java.util.List;
 
 @Controller
 public class CourseUsersController {
-    private static final Logger logger = LogManager.getLogger(CourseUsersController.class);
-
+    private static final Logger LOGGER = LogManager.getLogger(CourseUsersController.class);
     private static final String COURSE_USERS = "courseUsers";
     private static final String ASSIGNED_USERS = "assignedUsers";
     private static final String REMOVAL_CONFIRM = "courseUserRemovalConfirm";
     private static final String FREE_USERS = "freeUsers";
     private static final String SEARCH = "search";
     private static final String DTO = "dtoCourseUser";
+    private static final String SELECTION = "selection";
+    private static final String[] SELECTION_PARAMS = {"First Name", "Last Name", "Email"};
 
     private final CourseLogic courseLogic;
 
@@ -33,7 +34,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String showCourseAndUsersPage(@ModelAttribute Course course, Model model) {
 
-        logger.debug("Show users assigned to course id=" + course.getId());
+        LOGGER.debug(String.format("Show users assigned to course id=%d", course.getId()));
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(course.getId());
         DtoCourseUser dtoCourseUser = new DtoCourseUser();
@@ -42,6 +43,7 @@ public class CourseUsersController {
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(new User());
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -50,13 +52,14 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String removeUserFromAssigned(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        logger.debug(String.format("Remove user=%d from course id=%d", dtoCourseUser.getUserId(),
+        LOGGER.debug(String.format("Remove user=%d from course id=%d", dtoCourseUser.getUserId(),
                 dtoCourseUser.getCourseId()));
 
         courseLogic.removeUserFromCourse(dtoCourseUser);
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -65,7 +68,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String assignUserToCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        logger.debug(String.format("Assign user=%d to course id=%d", dtoCourseUser.getUserId(),
+        LOGGER.debug(String.format("Assign user=%d to course id=%d", dtoCourseUser.getUserId(),
                 dtoCourseUser.getCourseId()));
 
         courseLogic.assignUserToCourse(dtoCourseUser);
@@ -76,6 +79,7 @@ public class CourseUsersController {
         model.addAttribute(FREE_USERS, freeUsers);
         model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -84,7 +88,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String searchForUsersToAssign(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        logger.debug(String.format("Search for users that can be assigned to course id=%d" +
+        LOGGER.debug(String.format("Search for users that can be assigned to course id=%d" +
                         "by searchType=%s and searchParam=%s", dtoCourseUser.getCourseId(), dtoCourseUser.getSearchType(),
                 dtoCourseUser.getSearchParam()));
 
@@ -95,6 +99,7 @@ public class CourseUsersController {
         model.addAttribute(FREE_USERS, freeUsers);
         model.addAttribute(DTO, dtoCourseUser);
         model.addAttribute(SEARCH, true);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -103,11 +108,12 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String clearSearchResults(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        logger.debug("Clear free users search results");
+        LOGGER.debug("Clear free users search results");
 
         List<User> assignedUsers = courseLogic.getUsersAssignedToCourse(dtoCourseUser.getCourseId());
         model.addAttribute(ASSIGNED_USERS, assignedUsers);
         model.addAttribute(DTO, dtoCourseUser);
+        model.addAttribute(SELECTION, SELECTION_PARAMS);
 
         return COURSE_USERS;
     }
@@ -116,7 +122,7 @@ public class CourseUsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public String confirmUserRemovalFromCourse(@ModelAttribute DtoCourseUser dtoCourseUser, Model model) {
 
-        logger.debug(String.format("Confirm removing user id=%d from course id=%d",
+        LOGGER.debug(String.format("Confirm removing user id=%d from course id=%d",
                 dtoCourseUser.getUserId(), dtoCourseUser.getCourseId()));
 
         model.addAttribute(new Course());

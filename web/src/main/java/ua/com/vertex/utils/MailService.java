@@ -1,6 +1,7 @@
 package ua.com.vertex.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +12,7 @@ public class MailService {
     private final MailSender mailSender;
 
     @Autowired
-    MailService(JavaMailSender javaMailSender) {
+    MailService(@Qualifier(value = "mailSender") JavaMailSender javaMailSender) {
         this.mailSender = javaMailSender;
     }
 

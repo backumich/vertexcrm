@@ -21,8 +21,8 @@ public class Certificate {
 
     private String certificateUid;
 
-    @Min(value = 1, message = "Entered value must be a positive integer!")
-    @Max(value = Integer.MAX_VALUE, message = "Invalid value!")
+    @Min(value = 1, message = "Entered value must be a positive integer")
+    @Max(value = Integer.MAX_VALUE, message = "Invalid value")
     private int userId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -20,7 +20,7 @@ public class ActivationUserController {
     private static final String PAGE_JSP = "successActivation";
     private static final String DECRYPT_KEY = "VeRtEx AcAdeMy";
 
-    private static final Logger logger = LogManager.getLogger(ActivationUserController.class);
+    private static final Logger LOGGER = LogManager.getLogger(ActivationUserController.class);
 
     private UserLogic userLogic;
 
@@ -31,28 +31,15 @@ public class ActivationUserController {
 
     @GetMapping
     public ModelAndView activateUser(@RequestParam("activeUser") String encodedEmail) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(PAGE_JSP);
-        String email = "";
+        ModelAndView modelAndView = new ModelAndView(PAGE_JSP);
 
-        try {
-            email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
-            logger.debug("Encrypted email " + encodedEmail);
-        } catch (Exception e) {
-            modelAndView.addObject("errorMessage", "Your link is not correct");
-            modelAndView.setViewName(ERROR_JSP);
-            logger.debug("Decrypt email failed", e);
-        }
+        String email = Aes.decrypt(encodedEmail, DECRYPT_KEY);
+        LOGGER.debug("Encrypted email " + encodedEmail);
 
-        try {
-            if (userLogic.activateUser(email) != 1) {
-                modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
-                logger.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
-                modelAndView.setViewName(ERROR_JSP);
-            }
-        } catch (Exception e) {
+        if (userLogic.activateUser(email) != 1) {
+            modelAndView.addObject("errorMessage", "This user is not registered |" + encodedEmail + "|");
+            LOGGER.debug("Unsuccessful user activation for email |" + encodedEmail + "|");
             modelAndView.setViewName(ERROR_JSP);
-            logger.debug("Activate user failed", e);
         }
         return modelAndView;
     }

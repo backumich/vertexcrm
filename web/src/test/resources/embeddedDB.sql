@@ -69,6 +69,15 @@ CREATE TABLE Course_users
   PRIMARY KEY (id)
 );
 
+CREATE TABLE Password_reset
+(
+  id            BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  email         VARCHAR(255) NOT NULL,
+  uuid          VARCHAR(50)  NOT NULL,
+  creation_time TIMESTAMP    NOT NULL,
+  PRIMARY KEY (id)
+);
+
 INSERT INTO Roles (role_id, name)
 VALUES (1, 'ROLE_ADMIN');
 
@@ -87,17 +96,17 @@ VALUES ('2', 'email1@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0'
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('22', '22@test.com', 'password', 'FirstName', 'LastName', 64, 64, '0', '38066 000 00 00', '2');
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
 VALUES ('33', '33@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
-        NULL, NULL, '0', '38066 000 00 00', '1');
+              NULL, NULL, '0', '38066 000 00 00', '1', '1');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('34', '34@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
         NULL, NULL, '0', '38066 000 00 00', '1');
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
 VALUES ('44', '44@test.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
-        'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2');
+              'FirstName', 'LastName', NULL, NULL, '0', '38066 000 00 00', '2', '1');
 
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('401', 'user1@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
@@ -110,6 +119,32 @@ VALUES ('402', 'user2@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc
 INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
 VALUES ('403', 'user3@email.com', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS',
         'Name3', 'Surname3', NULL, NULL, '0', '+38050 333 3333', '2');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
+VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'Goodman', NULL, NULL, '0', '38073 777 00 00', '3');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
+VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('501', 'forBruteTest_1', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('502', 'forBruteTest_2', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('503', 'forBruteTest_3', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
+
+INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id, is_active)
+VALUES
+  ('504', 'forBruteTest_4', '$2a$12$lJElN7.2IR4YCueJNTPp9eUbRlXrYlP3M71dHc1czmKaqtJCvzhtS', 'FirstName', 'LastName',
+          NULL, NULL, '0', '38066 000 00 00', '1', '1');
 
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('1', '1', '2016-12-1', 'Java Professional', 'Java', '1492779828793891');
@@ -129,10 +164,9 @@ VALUES ('333', '33', '2016-12-1', 'Java Professional', 'Java', '1492779828793889
 INSERT INTO Certificate (certification_id, user_id, certification_date, course_name, language, certificate_uid)
 VALUES ('500', NULL, '2016-12-1', 'Java Professional', 'Java', '1492779828793890');
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, discount, phone, role_id)
-VALUES (10, 'emailTest', '2222222', 'first_name', 'last_name', 0, '666666666', 1);
-
 INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (1, 1, 1, 4000, 4000);
+
+INSERT INTO Accounting (deal_id, user_id, course_id, course_coast, debt) VALUES (2, 2, 1, 4000, 4000);
 
 INSERT INTO Courses (id, name, start, finished, price, teacher_id, notes)
 VALUES (1, 'JavaPro', '2017-02-01', 0, 4000, 1, 'Test');
@@ -147,6 +181,9 @@ INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, not
   (111, 'Super JAVA', '2017-04-01', 0, 999999.99, 1, 'Sat, Sun', 'Welcome, we don''t expect you (='),
   (222, 'MEGA Java', '2017-02-01', 1, 100.11, 1, 'Sat, Sun', 'Come, the courses are over.');
 
+INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
+VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 850.09, 7, 'Sat, Sun', 'Welcome (=');
+
 INSERT INTO Course_users (course_id, user_id)
 VALUES (1, 401);
 
@@ -156,8 +193,8 @@ VALUES (1, 402);
 INSERT INTO Course_users (course_id, user_id)
 VALUES (2, 403);
 
-INSERT INTO Users (user_id, email, password, first_name, last_name, passport_scan, photo, discount, phone, role_id)
-VALUES ('7', 'teacher@test.com', 'password', 'Teacher', 'Goodman', NULL, NULL, '0', '38073 777 00 00', '3');
+INSERT INTO Password_reset (id, email, uuid, creation_time)
+VALUES ('1', 'email1@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c5', '2017-10-09 00:00:00');
 
-INSERT INTO Courses (id, name, start, finished, price, teacher_id, schedule, notes)
-VALUES (7, 'Teacher JAVA', '2017-04-01', 0, 850.09, 7, 'Sat, Sun', 'Welcome (=');
+INSERT INTO Password_reset (id, email, uuid, creation_time)
+VALUES ('2', 'email2@email.com', '06e668ba-d4c1-4f3e-8bea-5935929120c6', '2017-10-09 11:00:00');

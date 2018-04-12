@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,13 +15,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.IllegalTransactionStateException;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
 import ua.com.vertex.context.TestConfig;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +46,12 @@ public class UserDaoTest {
 
     private static final int EXISTING_ID1 = 22;
     private static final int EXISTING_ID2 = 34;
+    private static final int EXISTING_ID3 = 2;
     private static final int NOT_EXISTING_ID = Integer.MIN_VALUE;
     @SuppressWarnings("WeakerAccess")
     static final String EXISTING_EMAIL = "22@test.com";
+    static final String EXISTING_EMAIL2 = "33@test.com";
+    static final String EXISTING_EMAIL3 = "email1@test.com";
     private static final String EXISTING_PASSWORD = "111111";
     private static final String EXISTING_FIRST_NAME = "FirstName";
     private static final String EXISTING_LAST_NAME = "LastName";
@@ -88,8 +93,8 @@ public class UserDaoTest {
     @Test
     @WithMockUser
     public void getUserByEmailReturnsUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL);
-        assertEquals(EXISTING_ID1, optional.orElse(new User.Builder().setUserId(EXISTING_ID1).getInstance())
+        Optional<User> optional = userDao.getUserByEmail(EXISTING_EMAIL3);
+        assertEquals(EXISTING_ID3, optional.orElse(new User.Builder().setUserId(EXISTING_ID3).getInstance())
                 .getUserId());
     }
 
@@ -102,8 +107,8 @@ public class UserDaoTest {
 
     @Test
     public void logInReturnsUserOptionalForUserExistingInDatabase() {
-        Optional<User> optional = userDao.logIn(EXISTING_EMAIL);
-        assertEquals(EXISTING_EMAIL, optional.orElse(new User.Builder().setUserId(EXISTING_ID1).getInstance())
+        Optional<User> optional = userDao.logIn(EXISTING_EMAIL3);
+        assertEquals(EXISTING_EMAIL3, optional.orElse(new User.Builder().setUserId(EXISTING_ID3).getInstance())
                 .getEmail());
     }
 
@@ -123,53 +128,53 @@ public class UserDaoTest {
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPhotoSave() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, PHOTO);
+        userDao.saveImage(EXISTING_EMAIL, image, PHOTO);
     }
 
     @Test
     @WithMockUser
     public void saveImageNotThrowsExceptionIfSuccessfulPassportSave() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, PASSPORT_SCAN);
+        userDao.saveImage(EXISTING_EMAIL, image, PASSPORT_SCAN);
     }
 
     @Test(expected = RuntimeException.class)
     @WithMockUser
     public void saveImageThrowsExceptionIfWrongImageType() {
         byte[] image = {1};
-        userDao.saveImage(EXISTING_ID1, image, WRONG_IMAGE_TYPE);
+        userDao.saveImage(EXISTING_EMAIL, image, WRONG_IMAGE_TYPE);
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPhoto() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PHOTO);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL, PHOTO);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsImageOptionalIfSuccessfulPassportScan() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID1, PASSPORT_SCAN);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL, PASSPORT_SCAN);
         assertNotNull(optional.orElse(null));
     }
 
     @Test
     @WithMockUser
     public void getImageReturnsNullOptionalIfNotExistingImage() {
-        Optional<byte[]> optional = userDao.getImage(EXISTING_ID2, PHOTO);
+        Optional<byte[]> optional = userDao.getImage(EXISTING_EMAIL2, PHOTO);
         assertEquals(null, optional.orElse(null));
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @WithMockUser
     public void getImageThrowsEmptyResultDataAccessExceptionIfNotExistingUser() {
-        userDao.getImage(NOT_EXISTING_ID, PHOTO);
+        userDao.getImage(NOT_EXISTING_EMAIL, PHOTO);
     }
 
     @Test(expected = RuntimeException.class)
     public void getImageThrowsExceptionIfWrongImageType() throws Exception {
-        userDao.getImage(EXISTING_ID1, WRONG_IMAGE_TYPE);
+        userDao.getImage(EXISTING_EMAIL, WRONG_IMAGE_TYPE);
     }
 
     @Test
@@ -220,7 +225,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void registrationUserInsertCorrectInsert() throws Exception {
         User userForInsert = new User.Builder().setEmail("testInsert@Test.com").setPassword(EXISTING_PASSWORD).
                 setFirstName(EXISTING_FIRST_NAME).setLastName(EXISTING_LAST_NAME).setDiscount(0).setPhone("0933333333")
@@ -233,7 +237,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void registrationUserCorrectUpdate() throws Exception {
         User userForUpdate = new User.Builder().setUserId(EXISTING_ID2).setEmail("34@test.com").setPassword("test")
                 .setFirstName("test").setLastName("test").setPhone("0933333333").setRole(Role.ROLE_USER).setIsActive(false).getInstance();
@@ -251,7 +254,6 @@ public class UserDaoTest {
     }
 
     @Test
-    @WithAnonymousUser
     public void getTeachersReturnCorrectData() throws Exception {
         List<User> teachers = userDao.getTeachers();
         assertFalse(MSG, teachers.isEmpty());
@@ -259,5 +261,60 @@ public class UserDaoTest {
             System.out.println(teacher1);
             assertTrue(teacher1.getRole().equals(Role.ROLE_TEACHER) && teacher1.isActive());
         });
+    }
+
+    @Test
+    @Transactional
+    public void setParamsToRestorePasswordReturnsGeneratedId() {
+        final String email = "email@email.com";
+        final String uuid = "uuid";
+        final LocalDateTime dateTime = LocalDateTime.now();
+
+        long result = userDao.setParamsToRestorePassword(email, uuid, dateTime);
+        assertTrue(result > 2);
+    }
+
+    @Test
+    public void getEmailByUuidReturnsPasswordResetDto() {
+        final int id = 1;
+        final String email = "email1@email.com";
+        final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
+        final LocalDateTime dateTime = LocalDateTime.of(2017, 10, 9, 0, 0, 0);
+        final PasswordResetDto dto = passwordResetDtoHelper(email, dateTime);
+
+        PasswordResetDto result = userDao.getEmailByUuid(id, uuid);
+        assertEquals(dto, result);
+    }
+
+    private PasswordResetDto passwordResetDtoHelper(String email, LocalDateTime dateTime) {
+        return PasswordResetDto.builder()
+                .email(email)
+                .creationTime(dateTime)
+                .build();
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void getEmailByUuidThrowsException() {
+        final int notExistingId = 100;
+        final String uuid = "06e668ba-d4c1-4f3e-8bea-5935929120c5";
+
+        userDao.getEmailByUuid(notExistingId, uuid);
+    }
+
+    @Test
+    @Transactional
+    public void savePasswordOk() {
+        final String email = "email1";
+        final String password = "new password";
+
+        userDao.savePassword(email, password);
+    }
+
+    @Test(expected = UpdatedPasswordNotSaved.class)
+    public void savePasswordThrowsException() {
+        final String email = "not existing email";
+        final String password = "new password";
+
+        userDao.savePassword(email, password);
     }
 }

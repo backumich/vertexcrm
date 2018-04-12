@@ -1,6 +1,6 @@
 package ua.com.vertex.context;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class RootConfig {
         return new BasicDataSource();
     }
 
-    @Bean
+    @Bean(name = "mailSender")
     @ConfigurationProperties(prefix = "spring.mail")
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -45,7 +45,7 @@ public class RootConfig {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "bcrypt")
+    @ConfigurationProperties(prefix = "encryption.strength")
     public BCryptPasswordEncoder bCryptPasswordEncoder() throws Exception {
         return new BCryptPasswordEncoder();
     }

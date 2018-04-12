@@ -48,9 +48,9 @@ public class CourseDaoImplTest {
     private DtoCourseUser dto;
 
     private static final int COURSE_ID = 1;
-    private static final String SEARCH_TYPE_FIRST_NAME = "first_name";
-    private static final String SEARCH_TYPE_LAST_NAME = "last_name";
-    private static final String SEARCH_TYPE_EMAIL = "email";
+    private static final String SEARCH_TYPE_FIRST_NAME = "First Name";
+    private static final String SEARCH_TYPE_LAST_NAME = "Last Name";
+    private static final String SEARCH_TYPE_EMAIL = "Email";
 
     @Before
     public void setUp() throws Exception {

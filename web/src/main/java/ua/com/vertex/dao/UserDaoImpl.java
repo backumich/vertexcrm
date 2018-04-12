@@ -15,8 +15,10 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.vertex.beans.PasswordResetDto;
 import ua.com.vertex.beans.Role;
 import ua.com.vertex.beans.User;
+import ua.com.vertex.controllers.exceptionHandling.exceptions.UpdatedPasswordNotSaved;
 import ua.com.vertex.dao.interfaces.DaoUtilInf;
 import ua.com.vertex.dao.interfaces.UserDaoInf;
 import ua.com.vertex.utils.DataNavigator;
@@ -24,6 +26,7 @@ import ua.com.vertex.utils.DataNavigator;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,7 +36,7 @@ import static ua.com.vertex.dao.AccountingDaoImpl.COURSE_ID;
 @Repository
 public class UserDaoImpl implements UserDaoInf {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(UserDaoImpl.class);
 
     static final String EMAIL = "email";
     static final String FIRST_NAME = "first_name";
@@ -52,7 +55,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUser(int userId) {
-        logger.debug(String.format("Call -  getUser(%s) ;", userId));
+        LOGGER.debug(String.format("Call -  getUser(%s) ;", userId));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
@@ -61,9 +64,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), new UserRowMapping());
-            logger.debug("Retrieved user, id=" + userId);
+            LOGGER.debug("Retrieved user, id=" + userId);
         } catch (EmptyResultDataAccessException e) {
-            logger.warn("No user id=" + userId);
+            LOGGER.warn("No user id=" + userId);
         }
 
         return Optional.ofNullable(user);
@@ -71,7 +74,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> getUserByEmail(String email) {
-        logger.debug(String.format("Call -  getUserByEmail(%s) ;", email));
+        LOGGER.debug(String.format("Call -  getUserByEmail(%s) ;", email));
 
         String query = "SELECT u.user_id, u.email, u.password, u.first_name, u.last_name, u.passport_scan, u.photo, " +
                 "u.discount, u.phone, r.name FROM Users u INNER JOIN Roles r  ON u.role_id = r.role_id" +
@@ -80,9 +83,9 @@ public class UserDaoImpl implements UserDaoInf {
 
         try {
             user = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), new UserRowMapping());
-            logger.debug("Retrieved user, email=" + email);
+            LOGGER.debug("Retrieved user, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            logger.warn("No user email=" + email);
+            LOGGER.warn("No user email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -90,12 +93,14 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public Optional<User> logIn(String email) {
-        logger.debug(String.format("Call -  logIn(%s) ;", email));
+        LOGGER.debug(String.format("Call -  logIn(%s) ;", email));
 
         String query = "SELECT u.email, u.password, r.name FROM Users u INNER JOIN Roles r ON u.role_id = r.role_id " +
-                "WHERE u.email=:email";
+                "WHERE u.email=:email AND u.is_active=:is_active";
 
-        MapSqlParameterSource parameters = new MapSqlParameterSource(EMAIL, email);
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue(EMAIL, email);
+        parameters.addValue(IS_ACTIVE, 1);
         User user = null;
 
         try {
@@ -104,9 +109,9 @@ public class UserDaoImpl implements UserDaoInf {
                     .setPassword(resultSet.getString(PASSWORD))
                     .setRole(Role.valueOf(resultSet.getString(ROLE_NAME)))
                     .getInstance());
-            logger.debug("Retrieved user password, role, email=" + email);
+            LOGGER.debug("Retrieved user password, role, email=" + email);
         } catch (EmptyResultDataAccessException e) {
-            logger.warn("No email=" + email);
+            LOGGER.warn("No email=" + email);
         }
 
         return Optional.ofNullable(user);
@@ -114,57 +119,57 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<Integer> getAllUserIds() {
-        logger.debug("Call - userDao.getAllUserIds() ;");
+        LOGGER.debug("Call - userDao.getAllUserIds() ;");
         String query = "SELECT user_id FROM Users ORDER BY user_id";
         return jdbcTemplate.query(query, new MapSqlParameterSource(),
                 (resultSet, i) -> resultSet.getInt(USER_ID));
     }
 
     @Override
-    public void saveImage(int userId, byte[] image, String imageType) {
+    public void saveImage(String email, byte[] image, String imageType) {
         String query;
         MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue(USER_ID, userId);
+        parameters.addValue(EMAIL, email);
 
         if (PHOTO.equals(imageType)) {
-            query = "UPDATE Users SET photo=:photo WHERE user_id=:user_id";
+            query = "UPDATE Users SET photo=:photo WHERE email=:email";
             parameters.addValue(PHOTO, image);
         } else if (IMAGE_PASSPORT_SCAN.equals(imageType)) {
-            query = "UPDATE Users SET passport_scan=:passport_scan WHERE user_id=:user_id";
+            query = "UPDATE Users SET passport_scan=:passport_scan WHERE email=:email";
             parameters.addValue(PASSPORT_SCAN, image);
         } else {
-            throw new RuntimeException("Image not saved: wrong image type description: " + imageType);
+            throw new RuntimeException("Image was not saved: wrong image type description = " + imageType);
         }
 
-        logger.debug("Image saved");
+        LOGGER.debug("Image saved");
         jdbcTemplate.update(query, parameters);
     }
 
     @Override
-    public Optional<byte[]> getImage(int userId, String imageType) {
+    public Optional<byte[]> getImage(String email, String imageType) {
         byte[] image;
         String query;
 
         if (PHOTO.equals(imageType)) {
-            query = "SELECT photo FROM Users WHERE user_id=:user_id";
+            query = "SELECT photo FROM Users WHERE email=:email";
 
         } else if (IMAGE_PASSPORT_SCAN.equals(imageType)) {
-            query = "SELECT passport_scan FROM Users WHERE user_id=:user_id";
+            query = "SELECT passport_scan FROM Users WHERE email=:email";
 
         } else {
             throw new RuntimeException("Wrong image type description: " + imageType);
         }
 
-        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(USER_ID, userId), byte[].class);
+        image = jdbcTemplate.queryForObject(query, new MapSqlParameterSource(EMAIL, email), byte[].class);
 
-        logger.debug("Image of userId=" + userId + " retrieved");
+        LOGGER.debug("Image of user email=" + email + " retrieved");
 
         return Optional.ofNullable(image);
     }
 
     @Override
     public Optional<User> userForRegistrationCheck(String userEmail) {
-        logger.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
+        LOGGER.debug(String.format("Call - userForRegistrationCheck(%s) ;", userEmail));
 
         String query = "SELECT email, is_active FROM Users WHERE email =:email";
         User user = null;
@@ -175,9 +180,9 @@ public class UserDaoImpl implements UserDaoInf {
                             .setEmail(resultSet.getString(EMAIL))
                             .setIsActive(resultSet.getInt(IS_ACTIVE) == 1)
                             .getInstance()));
-            logger.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
+            LOGGER.debug(String.format("isRegisteredEmail(%s) return (%s)", userEmail, user));
         } catch (EmptyResultDataAccessException e) {
-            logger.debug("isRegisteredEmail(%s) return empty user");
+            LOGGER.debug("isRegisteredEmail(%s) return empty user");
         }
 
         return Optional.ofNullable(user);
@@ -185,7 +190,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getAllUsers() {
-        logger.debug("Get a list of all users");
+        LOGGER.debug("Get a list of all users");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u";
         return jdbcTemplate.query(query, (resultSet, i) -> new User.Builder().
@@ -198,7 +203,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getUsersPerPages(DataNavigator dataNavigator) {
-        logger.debug("Get all user list");
+        LOGGER.debug("Get all user list");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name, u.phone FROM Users u " +
                 "LIMIT :from, :offset";
@@ -213,15 +218,15 @@ public class UserDaoImpl implements UserDaoInf {
                 setPhone(resultSet.getString(PHONE)).getInstance());
 
         String allUsersEmail = users.stream().map(User::getEmail).collect(Collectors.joining("|"));
-        logger.debug("Quantity users -" + users.size());
-        logger.debug("All users list -" + allUsersEmail);
+        LOGGER.debug("Quantity users -" + users.size());
+        LOGGER.debug("All users list -" + allUsersEmail);
 
         return users;
     }
 
     @Override
     public int getQuantityUsers() {
-        logger.debug("Get all users list");
+        LOGGER.debug("Get all users list");
         String query = "SELECT count(*) FROM Users";
         return jdbcTemplate.queryForObject(query, new MapSqlParameterSource(), int.class);
     }
@@ -236,8 +241,8 @@ public class UserDaoImpl implements UserDaoInf {
                 "photo = :photo, " +
                 "discount = :discount, " +
                 "phone = :phone, " +
-                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name= :role)" +
-                " WHERE user_id = :user_id";
+                "role_id = (SELECT r.role_id FROM Roles r WHERE r.name = :name) " +
+                "WHERE user_id = :user_id";
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue(EMAIL, user.getEmail());
@@ -247,7 +252,7 @@ public class UserDaoImpl implements UserDaoInf {
         parameters.addValue(PHOTO, user.getPhoto());
         parameters.addValue(DISCOUNT, user.getDiscount());
         parameters.addValue(PHONE, user.getPhone());
-        parameters.addValue(ROLE_NAME, user.getRole());
+        parameters.addValue(ROLE_NAME, user.getRole().name());
         parameters.addValue(USER_ID, user.getUserId());
 
         return jdbcTemplate.update(query, parameters);
@@ -267,7 +272,7 @@ public class UserDaoImpl implements UserDaoInf {
         String query = "INSERT INTO Users  (email, first_name, last_name, role_id) " +
                 "VALUES (:email, :first_name, :last_name, (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER'))";
 
-        logger.debug(String.format("Try add user -(%s) ;", user));
+        LOGGER.debug(String.format("Try add user -(%s) ;", user));
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue(EMAIL, user.getEmail());
@@ -276,30 +281,31 @@ public class UserDaoImpl implements UserDaoInf {
 
         jdbcTemplate.update(query, source, keyHolder);
 
-        logger.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
+        LOGGER.debug(String.format("User added, user id -(%s) ;", keyHolder.getKey().toString()));
         return keyHolder.getKey().intValue();
     }
 
 
     @Override
     public List<User> searchUser(String userData) {
-        logger.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
+        LOGGER.debug(String.format("Call - userDao.searchUser(%s) ;", userData));
 
-        String query = "SELECT user_id, email, first_name, last_name FROM Users WHERE email LIKE :userData " +
-                "OR first_name LIKE :userData OR last_name LIKE :userData";
+        String query = "SELECT user_id, email, first_name, last_name, phone FROM Users WHERE email LIKE :userData " +
+                "OR first_name LIKE :userData OR last_name LIKE :userData OR phone LIKE :userData";
 
-        logger.debug(String.format("Search users by -(%s) ;", userData));
+        LOGGER.debug(String.format("Search users by -(%s) ;", userData));
         return jdbcTemplate.query(query, new MapSqlParameterSource("userData", "%" + userData + "%"),
                 (rs, i) -> new User.Builder().setUserId(rs.getInt(USER_ID))
                         .setEmail(rs.getString(EMAIL))
                         .setFirstName(rs.getString(FIRST_NAME))
                         .setLastName(rs.getString(LAST_NAME))
+                        .setPhone(rs.getString(PHONE))
                         .getInstance());
     }
 
     @Override
     public void registrationUserInsert(User user) {
-        logger.info("Adding a new user into database");
+        LOGGER.info("Adding a new user into database");
 
         String query = "INSERT INTO Users (email, password, first_name, last_name, phone, role_id) " +
                 "VALUES (:email, :password, :first_name, :last_name, :phone, " +
@@ -310,7 +316,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public void registrationUserUpdate(User user) {
-        logger.info("Update not active user .");
+        LOGGER.info("Update not active user .");
 
         String query = "UPDATE  Users SET password =:password, first_name =:first_name, last_name = :last_name, " +
                 "phone =:phone, role_id = (SELECT r.role_id FROM Roles r WHERE r.name='ROLE_USER') WHERE email =:email";
@@ -320,7 +326,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getTeachers() {
-        logger.debug("Trying to pull out all users with the role is a teacher.");
+        LOGGER.debug("Trying to pull out all users with the role is a teacher.");
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name,u.is_active, r.name FROM Users u " +
                 "INNER JOIN Roles r  ON u.role_id = r.role_id WHERE r.name='ROLE_TEACHER' AND is_active=1";
@@ -335,6 +341,60 @@ public class UserDaoImpl implements UserDaoInf {
                 .getInstance());
     }
 
+    @Override
+    public long setParamsToRestorePassword(String email, String uuid, LocalDateTime creationTime) {
+        String query = "INSERT INTO Password_reset (email, uuid, creation_time) VALUES (:email, :uuid, :creationTime)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("uuid", uuid);
+        source.addValue("creationTime", creationTime);
+
+        jdbcTemplate.update(query, source, keyHolder);
+        LOGGER.debug(String.format("Params to restore password for email=%s were saved", email));
+
+        return keyHolder.getKey().longValue();
+    }
+
+    @Override
+    public PasswordResetDto getEmailByUuid(long id, String uuid) {
+        String query = "SELECT email, creation_time FROM Password_reset WHERE id =:id AND uuid =:uuid";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("id", id);
+        source.addValue("uuid", uuid);
+        PasswordResetDto dto;
+
+        try {
+            dto = jdbcTemplate.queryForObject(query, source, this::mapPasswordResetDto);
+            LOGGER.debug(String.format("Password reset email %s was retrieved from DB", dto.getEmail()));
+        } catch (EmptyResultDataAccessException e) {
+            throw new RuntimeException("Password reset email address was not found by ID and UUID");
+        }
+        return dto;
+    }
+
+    private PasswordResetDto mapPasswordResetDto(ResultSet resultSet, int i) throws SQLException {
+        return PasswordResetDto.builder()
+                .email(resultSet.getString("email"))
+                .creationTime(resultSet.getTimestamp("creation_time").toLocalDateTime())
+                .build();
+    }
+
+    @Override
+    public void savePassword(String email, String password) {
+        String query = "UPDATE Users SET password =:password WHERE email=:email";
+
+        MapSqlParameterSource source = new MapSqlParameterSource();
+        source.addValue("email", email);
+        source.addValue("password", password);
+
+        int count = jdbcTemplate.update(query, source);
+        if (count == 0) throw new UpdatedPasswordNotSaved("Updated password was not saved");
+        LOGGER.debug(String.format("New password for email=%s was saved", email));
+    }
+
     private MapSqlParameterSource getRegistrationParameters(User user) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue(EMAIL, user.getEmail());
@@ -347,7 +407,7 @@ public class UserDaoImpl implements UserDaoInf {
 
     @Override
     public List<User> getCourseUsers(int courseId) {
-        logger.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
+        LOGGER.debug(String.format("Try select all users by course id = (%s), from db.Accounting", courseId));
 
         String query = "SELECT u.user_id, u.email, u.first_name, u.last_name FROM Users u" +
                 "  INNER JOIN Accounting a ON u.user_id = a.user_id WHERE course_id = :course_id";
