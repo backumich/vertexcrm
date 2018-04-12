@@ -41,7 +41,7 @@
             <a id="${dataNavigator.lastPage}" class="page" >&gt;&gt;</a>
         </c:if>
 
-        <form:form action="viewAllUsers" method="post" commandName="dataNavigator">
+        <form:form action="viewAllUsers" method="get" commandName="dataNavigator">
             <form:select id="perPage" class="buttonText" path="rowPerPage"
                          items="${dataNavigator.countRowPerPage}"/>
 

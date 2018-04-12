@@ -67,7 +67,7 @@ public class AccountingDaoImpl implements AccountingDaoInf {
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public int insertAccountingRow(Accounting accounting) {
-        LOGGER.debug("Call - accountingDaoInf.insertAccountingRow({});", accounting);
+        logger.debug("Call - accountingDaoInf.insertAccountingRow({});", accounting);
 
         String query = "INSERT INTO  Accounting (user_id, course_id, course_coast, debt) " +
                 "VALUES (:user_id, :course_id, :course_coast, :debt)";
@@ -78,7 +78,7 @@ public class AccountingDaoImpl implements AccountingDaoInf {
         source.addValue(COURSE_ID, accounting.getCourseId());
         source.addValue(USER_ID, accounting.getUserId());
 
-        LOGGER.debug("Try to create accounting row with course id = ({}), user id = ({}), course coast and debt({})",
+        logger.debug("Try to create accounting row with course id = ({}), user id = ({}), course coast and debt({})",
                 accounting.getCourseId(), accounting.getUserId(), accounting.getCourseCoast());
         jdbcTemplate.update(query, source, keyHolder);
 

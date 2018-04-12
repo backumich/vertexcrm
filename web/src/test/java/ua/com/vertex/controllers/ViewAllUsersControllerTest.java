@@ -17,7 +17,6 @@ import java.util.TreeMap;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -69,7 +68,7 @@ public class ViewAllUsersControllerTest {
         MockMvc mockMvc = standaloneSetup(new ViewAllUsersController(logic))
                 .setSingleView(new InternalResourceView("viewAllUsers"))
                 .build();
-        mockMvc.perform(post("/viewAllUsers"))
+        mockMvc.perform(get("/viewAllUsers"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("viewAllUsers"))
                 .andExpect(forwardedUrl("viewAllUsers"))

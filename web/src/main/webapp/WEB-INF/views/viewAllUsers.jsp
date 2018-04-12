@@ -8,7 +8,7 @@
 <div class="container">
     <div class="crm-form mt60 full-width">
         <div class="d-flex align-right">
-            <form:form action="viewAllUsers" method="post" commandName="dataNavigator">
+            <form:form action="viewAllUsers" method="get" commandName="dataNavigator">
                 <form:select id="perPage" class="buttonText" path="rowPerPage"
                              items="${dataNavigator.countRowPerPage}"/>
 
